@@ -66,31 +66,104 @@ export function getEngagementRate(): number {
   return sent > 0 ? Math.round((engaged / sent) * 100) : 0;
 }
 
-export function getWeeklyActivity(): { day: string; emails: number; opens: number; clicks: number }[] {
-  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  return days.map(day => ({
-    day,
-    emails: 5 + Math.floor(Math.random() * 20),
-    opens: 2 + Math.floor(Math.random() * 15),
-    clicks: Math.floor(Math.random() * 8),
-  }));
+// Detailed activity breakdown counts
+export function getActivityBreakdown() {
+  const counts: Record<string, number> = {};
+  for (const a of activities) {
+    counts[a.type] = (counts[a.type] || 0) + 1;
+  }
+  return {
+    emailsSent: counts['email_sent'] || 0,
+    emailsOpened: counts['email_opened'] || 0,
+    emailsClicked: counts['email_clicked'] || 0,
+    repliesReceived: counts['reply_received'] || 0,
+    infoRequested: counts['info_requested'] || 0,
+    appointmentsBooked: counts['appointment_scheduled'] || 0,
+    campaignEnrollments: counts['campaign_enrolled'] || 0,
+  };
+}
+
+// Weekly outreach volume for chart (last 4 weeks)
+export function getWeeklyOutreach(): { week: string; sent: number; opened: number; clicked: number; replies: number }[] {
+  // Deterministic fake weekly data
+  return [
+    { week: '4 wks ago', sent: 142, opened: 48, clicked: 18, replies: 5 },
+    { week: '3 wks ago', sent: 168, opened: 61, clicked: 24, replies: 8 },
+    { week: '2 wks ago', sent: 195, opened: 74, clicked: 31, replies: 11 },
+    { week: 'Last week', sent: 221, opened: 89, clicked: 38, replies: 14 },
+  ];
+}
+
+// Per-campaign detailed performance
+export function getCampaignDetailedMetrics(campaignId: string) {
+  const campActivities = activities.filter(a => a.campaignId === campaignId);
+  const campContacts = contacts.filter(c => c.campaigns.includes(campaignId));
+
+  const sent = campActivities.filter(a => a.type === 'email_sent').length;
+  const opened = campActivities.filter(a => a.type === 'email_opened').length;
+  const clicked = campActivities.filter(a => a.type === 'email_clicked').length;
+  const replied = campActivities.filter(a => a.type === 'reply_received').length;
+  const requested = campActivities.filter(a => a.type === 'info_requested').length;
+  const booked = campActivities.filter(a => a.type === 'appointment_scheduled').length;
+
+  // Stage breakdown
+  const stageBreakdown: Record<PipelineStage, number> = { dormant:0, education:0, intent:0, qualified:0, licensed_rep:0 };
+  campContacts.forEach(c => stageBreakdown[c.stage]++);
+
+  // Avg intent score
+  const avgIntent = campContacts.length > 0
+    ? Math.round(campContacts.reduce((s, c) => s + c.intentScore, 0) / campContacts.length)
+    : 0;
+
+  return { sent, opened, clicked, replied, requested, booked, stageBreakdown, avgIntent, totalContacts: campContacts.length };
+}
+
+// Contact engagement details
+export function getContactEngagement(contactId: string) {
+  const contactActivities = activities.filter(a => a.contactId === contactId);
+  return {
+    totalActions: contactActivities.length,
+    emailsSent: contactActivities.filter(a => a.type === 'email_sent').length,
+    emailsOpened: contactActivities.filter(a => a.type === 'email_opened').length,
+    emailsClicked: contactActivities.filter(a => a.type === 'email_clicked').length,
+    replies: contactActivities.filter(a => a.type === 'reply_received').length,
+    infoRequests: contactActivities.filter(a => a.type === 'info_requested').length,
+    appointments: contactActivities.filter(a => a.type === 'appointment_scheduled').length,
+    lastActivity: contactActivities.length > 0 ? contactActivities[0].timestamp : null,
+  };
+}
+
+// Get last activity for a contact
+export function getContactLastActivity(contactId: string): Activity | null {
+  const act = activities.find(a => a.contactId === contactId);
+  return act || null;
 }
 
 export function getDashboardMetrics() {
   const stats = getPipelineStats();
   const totalContacts = contacts.length;
   const activeCampaigns = campaigns.filter(c => c.status === 'active').length;
+  const breakdown = getActivityBreakdown();
   const recentIntentSignals = activities.filter(a => {
     const daysAgo = (Date.now() - new Date(a.timestamp).getTime()) / 86400000;
     return daysAgo <= 7 && ['email_clicked','reply_received','info_requested'].includes(a.type);
   }).length;
-  const appointmentsScheduled = activities.filter(a => a.type === 'appointment_scheduled').length;
-  const emailsSent = getEmailsSentCount();
-  const engagementRate = getEngagementRate();
+
+  const dormantWithOldDates = contacts.filter(c => {
+    const daysAgo = (Date.now() - new Date(c.lastContactDate).getTime()) / 86400000;
+    return c.stage === 'dormant' && daysAgo > 365;
+  }).length;
 
   return {
     totalContacts, activeCampaigns, recentIntentSignals,
-    appointmentsScheduled, pipelineStats: stats,
-    emailsSent, engagementRate,
+    appointmentsScheduled: breakdown.appointmentsBooked,
+    pipelineStats: stats,
+    emailsSent: breakdown.emailsSent,
+    emailsOpened: breakdown.emailsOpened,
+    emailsClicked: breakdown.emailsClicked,
+    repliesReceived: breakdown.repliesReceived,
+    engagementRate: getEngagementRate(),
+    dormantOver1Year: dormantWithOldDates,
+    totalCampaigns: campaigns.length,
   };
 }

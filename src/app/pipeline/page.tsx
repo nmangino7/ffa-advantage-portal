@@ -1,109 +1,233 @@
 'use client';
 
-import { useState } from 'react';
-import { getContacts, getCampaigns } from '@/lib/data';
-import { PIPELINE_STAGES, PipelineStage, Contact } from '@/lib/types';
+import { useState, useMemo } from 'react';
+import { getContacts, getCampaigns, getActivities, getContactEngagement } from '@/lib/data';
+import { PIPELINE_STAGES, PipelineStage, SERVICE_LINE_CONFIG } from '@/lib/types';
 import Link from 'next/link';
 
 export default function PipelinePage() {
   const allContacts = getContacts();
   const campaigns = getCampaigns();
+  const allActivities = getActivities();
   const [campaignFilter, setCampaignFilter] = useState<string>('all');
+  const [stageFilter, setStageFilter] = useState<PipelineStage | 'all'>('all');
   const [contactStages, setContactStages] = useState<Record<string, PipelineStage>>(() => {
     const map: Record<string, PipelineStage> = {};
     allContacts.forEach(c => { map[c.id] = c.stage; });
     return map;
   });
 
-  const filteredContacts = allContacts.filter(c => {
-    if (campaignFilter !== 'all' && !c.campaigns.includes(campaignFilter)) return false;
-    return true;
-  });
+  const filteredContacts = useMemo(() => {
+    let result = allContacts;
+    if (campaignFilter !== 'all') result = result.filter(c => c.campaigns.includes(campaignFilter));
+    return result;
+  }, [allContacts, campaignFilter]);
+
+  // Pipeline-level metrics
+  const totalInPipeline = filteredContacts.length;
+  const avgIntentScore = totalInPipeline > 0 ? Math.round(filteredContacts.reduce((s, c) => s + c.intentScore, 0) / totalInPipeline) : 0;
+  const highIntentCount = filteredContacts.filter(c => c.intentScore >= 50).length;
+  const recentlyActive = filteredContacts.filter(c => {
+    const days = (Date.now() - new Date(c.lastContactDate).getTime()) / 86400000;
+    return days <= 30;
+  }).length;
 
   function moveContact(contactId: string, newStage: PipelineStage) {
     setContactStages(prev => ({ ...prev, [contactId]: newStage }));
   }
 
+  // Get last activity for a contact (quick lookup)
+  function getLastActivity(contactId: string) {
+    return allActivities.find(a => a.contactId === contactId);
+  }
+
   return (
     <div>
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-[28px] font-extrabold text-slate-900 tracking-tight">Pipeline Board</h1>
-          <p className="text-slate-500 mt-1 text-[15px]">Drag leads through the outreach lifecycle</p>
+          <p className="text-slate-500 mt-1 text-[15px]">Track leads through the outreach lifecycle &bull; {totalInPipeline.toLocaleString()} contacts</p>
         </div>
-        <select value={campaignFilter} onChange={e => setCampaignFilter(e.target.value)}
-          className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <option value="all">All Campaigns</option>
-          {campaigns.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-        </select>
+        <div className="flex gap-3">
+          <select value={campaignFilter} onChange={e => setCampaignFilter(e.target.value)}
+            className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="all">All Campaigns</option>
+            {campaigns.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+        </div>
       </div>
 
-      {/* Funnel summary */}
-      <div className="flex items-center gap-2 mb-6">
-        {PIPELINE_STAGES.map((stage, i) => {
-          const count = filteredContacts.filter(c => contactStages[c.id] === stage.key).length;
-          return (
-            <div key={stage.key} className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold"
-                style={{ backgroundColor: stage.bgColor, color: stage.color }}>
-                <span>{stage.icon}</span>
-                <span>{stage.label}</span>
-                <span className="ml-1 bg-white/80 px-1.5 py-0.5 rounded-full text-xs">{count}</span>
+      {/* Pipeline Summary Stats */}
+      <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
+          <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Total in Pipeline</p>
+          <p className="text-2xl font-extrabold text-slate-900 mt-1">{totalInPipeline.toLocaleString()}</p>
+          <p className="text-[11px] text-slate-400 mt-1">{campaigns.length} campaigns active</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
+          <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Avg Intent Score</p>
+          <p className={`text-2xl font-extrabold mt-1 ${avgIntentScore >= 50 ? 'text-amber-600' : 'text-slate-900'}`}>{avgIntentScore}<span className="text-sm text-slate-400">/100</span></p>
+          <p className="text-[11px] text-slate-400 mt-1">Across all stages</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
+          <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">High Intent</p>
+          <p className="text-2xl font-extrabold text-emerald-600 mt-1">{highIntentCount}</p>
+          <p className="text-[11px] text-slate-400 mt-1">Score ≥ 50</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
+          <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Active Last 30d</p>
+          <p className="text-2xl font-extrabold text-blue-600 mt-1">{recentlyActive}</p>
+          <p className="text-[11px] text-slate-400 mt-1">{totalInPipeline > 0 ? Math.round(recentlyActive / totalInPipeline * 100) : 0}% of pipeline</p>
+        </div>
+      </div>
+
+      {/* Funnel summary with conversion rates */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 mb-6">
+        <div className="flex items-center gap-1">
+          {PIPELINE_STAGES.map((stage, i) => {
+            const count = filteredContacts.filter(c => contactStages[c.id] === stage.key).length;
+            const prevCount = i > 0 ? filteredContacts.filter(c => contactStages[c.id] === PIPELINE_STAGES[i - 1].key).length : 0;
+            const convRate = i > 0 && prevCount > 0 ? Math.round((count / prevCount) * 100) : 0;
+            return (
+              <div key={stage.key} className="flex items-center gap-1 flex-1">
+                <button
+                  onClick={() => setStageFilter(stageFilter === stage.key ? 'all' : stage.key)}
+                  className={`flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                    stageFilter === stage.key ? 'ring-2 ring-offset-1 shadow-sm' : 'hover:shadow-sm'
+                  }`}
+                  style={{
+                    backgroundColor: stage.bgColor,
+                    color: stage.color,
+                    ...(stageFilter === stage.key ? { ringColor: stage.color } : {}),
+                  }}>
+                  <span className="text-base">{stage.icon}</span>
+                  <div className="text-left min-w-0">
+                    <p className="text-[11px] font-bold truncate">{stage.label}</p>
+                    <p className="text-lg font-extrabold leading-tight">{count}</p>
+                  </div>
+                </button>
+                {i < PIPELINE_STAGES.length - 1 && (
+                  <div className="flex flex-col items-center px-1">
+                    <span className="text-slate-300 text-sm">&rarr;</span>
+                    {i > 0 && <span className="text-[9px] font-bold text-slate-400">{convRate}%</span>}
+                  </div>
+                )}
               </div>
-              {i < PIPELINE_STAGES.length - 1 && <span className="text-slate-300 text-lg">&rarr;</span>}
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {/* Board */}
       <div className="flex gap-4 overflow-x-auto pb-6">
         {PIPELINE_STAGES.map((stage, stageIndex) => {
-          const stageContacts = filteredContacts.filter(c => contactStages[c.id] === stage.key);
+          if (stageFilter !== 'all' && stageFilter !== stage.key) return null;
+          const stageContacts = filteredContacts
+            .filter(c => contactStages[c.id] === stage.key)
+            .sort((a, b) => b.intentScore - a.intentScore);
+          const stageAvgIntent = stageContacts.length > 0
+            ? Math.round(stageContacts.reduce((s, c) => s + c.intentScore, 0) / stageContacts.length)
+            : 0;
+
           return (
-            <div key={stage.key} className="flex-shrink-0 w-[260px]">
+            <div key={stage.key} className={`flex-shrink-0 ${stageFilter !== 'all' ? 'w-full max-w-[600px]' : 'w-[280px]'}`}>
               <div className="rounded-2xl border border-slate-200/80 bg-white shadow-sm overflow-hidden">
-                <div className="p-3 border-b border-slate-100" style={{ borderTopWidth: '3px', borderTopColor: stage.color }}>
-                  <div className="flex items-center justify-between">
+                {/* Column header */}
+                <div className="p-4 border-b border-slate-100" style={{ borderTopWidth: '3px', borderTopColor: stage.color }}>
+                  <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-base">{stage.icon}</span>
+                      <span className="text-lg">{stage.icon}</span>
                       <span className="text-sm font-bold text-slate-900">{stage.label}</span>
                     </div>
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: stage.bgColor, color: stage.color }}>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ backgroundColor: stage.bgColor, color: stage.color }}>
                       {stageContacts.length}
                     </span>
                   </div>
+                  <div className="flex gap-3 text-[10px] text-slate-400">
+                    <span>Avg intent: <strong className={stageAvgIntent >= 50 ? 'text-amber-600' : 'text-slate-600'}>{stageAvgIntent}</strong></span>
+                    <span>&bull;</span>
+                    <span>{stageContacts.filter(c => c.intentScore >= 50).length} hot leads</span>
+                  </div>
                 </div>
-                <div className="p-2 space-y-2 max-h-[calc(100vh-300px)] overflow-y-auto bg-slate-50/50">
-                  {stageContacts.slice(0, 15).map(contact => (
-                    <div key={contact.id} className="bg-white rounded-xl border border-slate-100 p-3 hover:shadow-sm transition-shadow">
-                      <Link href={`/contacts/${contact.id}`}>
-                        <div className="flex items-center justify-between mb-1">
-                          <p className="text-[13px] font-semibold text-slate-900 truncate">{contact.firstName} {contact.lastName}</p>
-                          {contact.intentScore > 0 && (
-                            <span className={`text-[11px] font-bold px-1.5 py-0.5 rounded-md ${
-                              contact.intentScore >= 70 ? 'bg-emerald-100 text-emerald-700' :
-                              contact.intentScore >= 30 ? 'bg-amber-100 text-amber-700' :
-                              'bg-slate-100 text-slate-500'
-                            }`}>{contact.intentScore}</span>
+
+                {/* Contact cards */}
+                <div className="p-2 space-y-2 max-h-[calc(100vh-380px)] overflow-y-auto bg-slate-50/50">
+                  {stageContacts.slice(0, 20).map(contact => {
+                    const contactCampaigns = campaigns.filter(c => contact.campaigns.includes(c.id));
+                    const lastAct = getLastActivity(contact.id);
+                    const daysSince = Math.floor((Date.now() - new Date(contact.lastContactDate).getTime()) / 86400000);
+
+                    return (
+                      <div key={contact.id} className="bg-white rounded-xl border border-slate-100 p-3 hover:shadow-md hover:border-blue-200 transition-all">
+                        <Link href={`/contacts/${contact.id}`}>
+                          {/* Name + Intent */}
+                          <div className="flex items-center justify-between mb-1.5">
+                            <p className="text-[13px] font-semibold text-slate-900 truncate">{contact.firstName} {contact.lastName}</p>
+                            {contact.intentScore > 0 && (
+                              <span className={`text-[11px] font-bold px-1.5 py-0.5 rounded-md ${
+                                contact.intentScore >= 70 ? 'bg-emerald-100 text-emerald-700' :
+                                contact.intentScore >= 30 ? 'bg-amber-100 text-amber-700' :
+                                'bg-slate-100 text-slate-500'
+                              }`}>{contact.intentScore}</span>
+                            )}
+                          </div>
+
+                          {/* Company + Email */}
+                          {contact.company && <p className="text-[11px] text-slate-600 font-medium truncate">{contact.company}</p>}
+                          <p className="text-[10px] text-slate-400 truncate">{contact.email}</p>
+
+                          {/* Campaign badges */}
+                          {contactCampaigns.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-2">
+                              {contactCampaigns.map(c => {
+                                const cfg = SERVICE_LINE_CONFIG[c.serviceLine];
+                                return (
+                                  <span key={c.id} className="text-[9px] px-1.5 py-0.5 rounded-md font-semibold"
+                                    style={{ backgroundColor: cfg.bgColor, color: cfg.color }}>
+                                    {cfg.icon} {c.serviceLine.split(' ')[0]}
+                                  </span>
+                                );
+                              })}
+                            </div>
                           )}
-                        </div>
-                        <p className="text-[11px] text-slate-400 truncate">{contact.email}</p>
-                        {contact.company && <p className="text-[11px] text-slate-400 truncate">{contact.company}</p>}
-                      </Link>
-                      {stageIndex < PIPELINE_STAGES.length - 1 && (
-                        <button onClick={() => moveContact(contact.id, PIPELINE_STAGES[stageIndex + 1].key)}
-                          className="mt-2 w-full text-[11px] py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-500 hover:text-blue-600 font-medium transition-colors">
-                          Move to {PIPELINE_STAGES[stageIndex + 1].label} &rarr;
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                  {stageContacts.length > 15 && (
-                    <p className="text-[11px] text-slate-400 text-center py-2">+{stageContacts.length - 15} more</p>
+
+                          {/* Last activity + days since */}
+                          <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-50">
+                            <span className={`text-[10px] ${daysSince > 180 ? 'text-red-500 font-semibold' : daysSince > 90 ? 'text-amber-500' : 'text-slate-400'}`}>
+                              {daysSince > 365 ? `${Math.floor(daysSince / 365)}y ${daysSince % 365}d` : `${daysSince}d`} ago
+                            </span>
+                            {lastAct && (
+                              <span className="text-[9px] text-slate-400 truncate max-w-[120px]">
+                                {lastAct.type.replace(/_/g, ' ')}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Assigned rep */}
+                          {contact.assignedRep && (
+                            <p className="text-[9px] text-blue-500 font-medium mt-1">👤 {contact.assignedRep}</p>
+                          )}
+                        </Link>
+
+                        {/* Stage transition button */}
+                        {stageIndex < PIPELINE_STAGES.length - 1 && (
+                          <button onClick={(e) => { e.preventDefault(); moveContact(contact.id, PIPELINE_STAGES[stageIndex + 1].key); }}
+                            className="mt-2 w-full text-[11px] py-1.5 rounded-lg bg-slate-50 hover:bg-blue-50 text-slate-500 hover:text-blue-600 font-medium transition-colors border border-slate-100">
+                            Advance to {PIPELINE_STAGES[stageIndex + 1].label} &rarr;
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                  {stageContacts.length > 20 && (
+                    <p className="text-[11px] text-slate-400 text-center py-2">+{stageContacts.length - 20} more contacts</p>
                   )}
                   {stageContacts.length === 0 && (
-                    <p className="text-[11px] text-slate-400 text-center py-10">Empty</p>
+                    <div className="text-center py-10">
+                      <p className="text-2xl mb-2">🏜️</p>
+                      <p className="text-[11px] text-slate-400">No contacts in this stage</p>
+                    </div>
                   )}
                 </div>
               </div>
