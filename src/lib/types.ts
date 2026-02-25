@@ -51,6 +51,8 @@ export interface Activity {
 export interface EmailStep {
   id: string;
   subject: string;
+  previewText: string;
+  body: string;
   sendDay: number;
   status: 'draft' | 'active';
 }
@@ -74,14 +76,16 @@ export interface PipelineStageMeta {
   label: string;
   description: string;
   color: string;
+  bgColor: string;
+  icon: string;
 }
 
 export const PIPELINE_STAGES: PipelineStageMeta[] = [
-  { key: 'dormant', label: 'Dormant', description: 'Not yet engaged', color: '#94a3b8' },
-  { key: 'education', label: 'Education', description: 'Enrolled in campaign', color: '#3b82f6' },
-  { key: 'intent', label: 'Intent Signal', description: 'Clicked, replied, or requested', color: '#f59e0b' },
-  { key: 'qualified', label: 'Qualified', description: 'Service associate approved', color: '#8b5cf6' },
-  { key: 'licensed_rep', label: 'Licensed Rep', description: 'Appointment set', color: '#10b981' },
+  { key: 'dormant', label: 'Dormant', description: 'Not yet re-engaged', color: '#64748b', bgColor: '#f1f5f9', icon: '💤' },
+  { key: 'education', label: 'Education', description: 'Receiving campaign emails', color: '#2563eb', bgColor: '#eff6ff', icon: '📧' },
+  { key: 'intent', label: 'Intent Signal', description: 'Opened, clicked, or replied', color: '#d97706', bgColor: '#fffbeb', icon: '🔥' },
+  { key: 'qualified', label: 'Qualified', description: 'Service associate approved', color: '#7c3aed', bgColor: '#f5f3ff', icon: '✅' },
+  { key: 'licensed_rep', label: 'Licensed Rep', description: 'Meeting booked', color: '#059669', bgColor: '#ecfdf5', icon: '🤝' },
 ];
 
 export const SERVICE_LINES: ServiceLine[] = [
@@ -91,3 +95,11 @@ export const SERVICE_LINES: ServiceLine[] = [
   'Investment Planning',
   'Second-Opinion Positioning',
 ];
+
+export const SERVICE_LINE_CONFIG: Record<ServiceLine, { color: string; bgColor: string; icon: string }> = {
+  'Insurance Review': { color: '#2563eb', bgColor: '#eff6ff', icon: '🛡️' },
+  'Under-Serviced Annuities': { color: '#7c3aed', bgColor: '#f5f3ff', icon: '📊' },
+  'Retirement Planning': { color: '#059669', bgColor: '#ecfdf5', icon: '🏖️' },
+  'Investment Planning': { color: '#d97706', bgColor: '#fffbeb', icon: '📈' },
+  'Second-Opinion Positioning': { color: '#dc2626', bgColor: '#fef2f2', icon: '🔍' },
+};

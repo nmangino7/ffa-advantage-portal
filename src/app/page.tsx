@@ -1,179 +1,214 @@
-import { getDashboardMetrics, getCampaigns, getActivities } from '@/lib/data';
-import { PIPELINE_STAGES } from '@/lib/types';
+import { getDashboardMetrics, getCampaigns, getActivities, getHotLeads } from '@/lib/data';
+import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
 import Link from 'next/link';
 
 export default function Dashboard() {
-  const metrics = getDashboardMetrics();
+  const m = getDashboardMetrics();
   const campaigns = getCampaigns();
-  const recentActivity = getActivities(10);
-  const totalInPipeline = Object.values(metrics.pipelineStats).reduce((a, b) => a + b, 0);
+  const recentActivity = getActivities(12);
+  const hotLeads = getHotLeads(8);
+  const total = Object.values(m.pipelineStats).reduce((a, b) => a + b, 0);
 
   return (
-    <div>
-      {/* Header */}
+    <div className="max-w-[1400px]">
+      {/* Hero Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-        <p className="text-slate-500 mt-1">Enterprise Contact &amp; Lead Regeneration Overview</p>
+        <h1 className="text-[28px] font-extrabold text-slate-900 tracking-tight">Marketing Outreach Dashboard</h1>
+        <p className="text-slate-500 mt-1 text-[15px]">Re-engage dormant leads across 5 service lines &mdash; education-only campaigns, compliance-first</p>
       </div>
 
-      {/* Metric Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <MetricCard
-          label="Total Contacts"
-          value={metrics.totalContacts.toLocaleString()}
-          sub="In database"
-          color="bg-blue-50 text-blue-700"
-        />
-        <MetricCard
-          label="Active Campaigns"
-          value={metrics.activeCampaigns.toString()}
-          sub={`of ${campaigns.length} total`}
-          color="bg-amber-50 text-amber-700"
-        />
-        <MetricCard
-          label="Intent Signals"
-          value={metrics.recentIntentSignals.toString()}
-          sub="Last 7 days"
-          color="bg-purple-50 text-purple-700"
-        />
-        <MetricCard
-          label="Appointments"
-          value={metrics.appointmentsScheduled.toString()}
-          sub="Scheduled"
-          color="bg-emerald-50 text-emerald-700"
-        />
+      {/* Top Metrics Row */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <StatCard value={m.totalContacts.toLocaleString()} label="Total Contacts" sub="In HubSpot" accent="blue" />
+        <StatCard value={(total - m.pipelineStats.dormant).toString()} label="Active in Pipeline" sub={`${m.pipelineStats.dormant} still dormant`} accent="indigo" />
+        <StatCard value={m.emailsSent.toString()} label="Emails Sent" sub="All campaigns" accent="sky" />
+        <StatCard value={`${m.engagementRate}%`} label="Engagement Rate" sub="Opens + clicks + replies" accent="amber" />
+        <StatCard value={m.appointmentsScheduled.toString()} label="Appointments" sub="Booked with reps" accent="emerald" />
       </div>
 
-      {/* Pipeline Summary */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-slate-900">Pipeline Overview</h2>
-          <Link href="/pipeline" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-            View Pipeline Board &rarr;
+      {/* Outreach Funnel */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 mb-8">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h2 className="text-[17px] font-bold text-slate-900">Outreach Funnel</h2>
+            <p className="text-xs text-slate-400 mt-0.5">How contacts move from dormant to booked appointments</p>
+          </div>
+          <Link href="/pipeline" className="text-sm text-blue-600 hover:text-blue-800 font-semibold">
+            Open Pipeline Board &rarr;
           </Link>
         </div>
-        <div className="flex rounded-lg overflow-hidden h-10 mb-4">
-          {PIPELINE_STAGES.map(stage => {
-            const count = metrics.pipelineStats[stage.key];
-            const pct = (count / totalInPipeline) * 100;
-            if (pct === 0) return null;
+
+        <div className="space-y-3">
+          {PIPELINE_STAGES.map((stage, i) => {
+            const count = m.pipelineStats[stage.key];
+            const pct = total > 0 ? (count / total) * 100 : 0;
+            const maxPct = Math.max(...Object.values(m.pipelineStats)) / total * 100;
+            const barWidth = maxPct > 0 ? (pct / maxPct) * 100 : 0;
             return (
-              <div
-                key={stage.key}
-                className="flex items-center justify-center text-white text-xs font-medium transition-all"
-                style={{ width: `${pct}%`, backgroundColor: stage.color, minWidth: pct > 3 ? undefined : '2%' }}
-                title={`${stage.label}: ${count}`}
-              >
-                {pct > 8 ? `${count}` : ''}
+              <div key={stage.key} className="flex items-center gap-4">
+                <div className="w-[140px] flex items-center gap-2 flex-shrink-0">
+                  <span className="text-lg">{stage.icon}</span>
+                  <div>
+                    <p className="text-[13px] font-semibold text-slate-700">{stage.label}</p>
+                    <p className="text-[10px] text-slate-400">{stage.description}</p>
+                  </div>
+                </div>
+                <div className="flex-1 flex items-center gap-3">
+                  <div className="flex-1 h-8 bg-slate-100 rounded-lg overflow-hidden">
+                    <div
+                      className="h-full rounded-lg flex items-center px-3 transition-all duration-700"
+                      style={{ width: `${Math.max(barWidth, 2)}%`, backgroundColor: stage.color }}
+                    >
+                      {barWidth > 15 && <span className="text-white text-xs font-bold">{count}</span>}
+                    </div>
+                  </div>
+                  <span className="text-sm font-bold text-slate-700 w-12 text-right">{count}</span>
+                  <span className="text-xs text-slate-400 w-10 text-right">{pct.toFixed(0)}%</span>
+                </div>
+                {i < PIPELINE_STAGES.length - 1 && (
+                  <span className="text-slate-300 text-xs flex-shrink-0">&darr;</span>
+                )}
               </div>
             );
           })}
         </div>
-        <div className="flex flex-wrap gap-4">
-          {PIPELINE_STAGES.map(stage => {
-            const count = metrics.pipelineStats[stage.key];
-            return (
-              <div key={stage.key} className="flex items-center gap-2 text-sm">
-                <span className="w-3 h-3 rounded-full" style={{ backgroundColor: stage.color }} />
-                <span className="text-slate-600">{stage.label}</span>
-                <span className="font-semibold text-slate-900">{count}</span>
-              </div>
-            );
-          })}
+
+        <div className="mt-4 pt-4 border-t border-slate-100 flex items-center gap-6 text-xs text-slate-500">
+          <span>Conversion: Dormant &rarr; Education <strong className="text-blue-600">{total > 0 ? ((m.pipelineStats.education / Math.max(m.pipelineStats.dormant, 1)) * 100).toFixed(0) : 0}%</strong></span>
+          <span>Education &rarr; Intent <strong className="text-amber-600">{m.pipelineStats.education > 0 ? ((m.pipelineStats.intent / m.pipelineStats.education) * 100).toFixed(0) : 0}%</strong></span>
+          <span>Intent &rarr; Appointment <strong className="text-emerald-600">{m.pipelineStats.intent > 0 ? ((m.pipelineStats.licensed_rep / m.pipelineStats.intent) * 100).toFixed(0) : 0}%</strong></span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activity */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Recent Activity</h2>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+        {/* Campaign Performance */}
+        <div className="xl:col-span-2 bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-[17px] font-bold text-slate-900">Campaign Performance</h2>
+            <Link href="/campaigns" className="text-sm text-blue-600 hover:text-blue-800 font-semibold">View All &rarr;</Link>
+          </div>
           <div className="space-y-3">
-            {recentActivity.map(activity => (
-              <div key={activity.id} className="flex items-start gap-3 py-2 border-b border-slate-100 last:border-0">
-                <ActivityIcon type={activity.type} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-slate-700 truncate">{activity.description}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    {new Date(activity.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+            {campaigns.map(camp => {
+              const cfg = SERVICE_LINE_CONFIG[camp.serviceLine];
+              return (
+                <Link key={camp.id} href={`/campaigns/${camp.id}`}
+                  className="flex items-center gap-4 p-4 rounded-xl border border-slate-100 hover:border-blue-200 hover:shadow-sm transition-all group">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style={{ backgroundColor: cfg.bgColor }}>
+                    {cfg.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-slate-900 group-hover:text-blue-700 truncate">{camp.name}</p>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${camp.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+                        {camp.status}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-0.5">{camp.serviceLine} &bull; {camp.emailSequence.length} emails in sequence</p>
+                  </div>
+                  <div className="flex gap-6 flex-shrink-0 text-center">
+                    <div>
+                      <p className="text-lg font-bold text-slate-900">{camp.enrolledCount}</p>
+                      <p className="text-[10px] text-slate-400">Enrolled</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-slate-900">{camp.openRate}%</p>
+                      <p className="text-[10px] text-slate-400">Open Rate</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-slate-900">{camp.clickRate}%</p>
+                      <p className="text-[10px] text-slate-400">CTR</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-amber-600">{camp.intentSignals}</p>
+                      <p className="text-[10px] text-slate-400">Intent</p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Hot Leads */}
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-[17px] font-bold text-slate-900">🔥 Hot Leads</h2>
+            <Link href="/contacts" className="text-sm text-blue-600 hover:text-blue-800 font-semibold">All Contacts &rarr;</Link>
+          </div>
+          <p className="text-xs text-slate-400 mb-4">Highest intent scores — ready for outreach</p>
+          <div className="space-y-2">
+            {hotLeads.map(lead => {
+              const stage = PIPELINE_STAGES.find(s => s.key === lead.stage);
+              return (
+                <Link key={lead.id} href={`/contacts/${lead.id}`}
+                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0"
+                    style={{ backgroundColor: stage?.color || '#94a3b8' }}>
+                    {lead.firstName[0]}{lead.lastName[0]}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-slate-900 truncate">{lead.firstName} {lead.lastName}</p>
+                    <p className="text-[11px] text-slate-400 truncate">{lead.company || lead.email}</p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <div className={`text-sm font-black ${lead.intentScore >= 70 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                      {lead.intentScore}
+                    </div>
+                    <p className="text-[10px] text-slate-400">{stage?.label}</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Activity */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
+        <h2 className="text-[17px] font-bold text-slate-900 mb-4">Recent Activity</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+          {recentActivity.map(act => {
+            const typeConfig: Record<string, { bg: string; icon: string }> = {
+              email_sent: { bg: 'bg-blue-50 text-blue-600', icon: '📤' },
+              email_opened: { bg: 'bg-sky-50 text-sky-600', icon: '👁️' },
+              email_clicked: { bg: 'bg-amber-50 text-amber-600', icon: '🖱️' },
+              reply_received: { bg: 'bg-green-50 text-green-600', icon: '💬' },
+              info_requested: { bg: 'bg-purple-50 text-purple-600', icon: '❓' },
+              appointment_scheduled: { bg: 'bg-emerald-50 text-emerald-600', icon: '📅' },
+              campaign_enrolled: { bg: 'bg-indigo-50 text-indigo-600', icon: '➕' },
+            };
+            const tc = typeConfig[act.type] || { bg: 'bg-slate-50 text-slate-600', icon: '📌' };
+            return (
+              <div key={act.id} className={`flex items-start gap-3 p-3 rounded-xl ${tc.bg}`}>
+                <span className="text-base mt-0.5">{tc.icon}</span>
+                <div className="min-w-0">
+                  <p className="text-[13px] text-slate-800 font-medium truncate">{act.description}</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    {new Date(act.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                   </p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Campaign Performance */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-slate-900">Campaign Performance</h2>
-            <Link href="/campaigns" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-              View All &rarr;
-            </Link>
-          </div>
-          <div className="space-y-3">
-            {campaigns.map(campaign => (
-              <Link
-                key={campaign.id}
-                href={`/campaigns/${campaign.id}`}
-                className="block p-3 rounded-lg border border-slate-100 hover:border-blue-200 hover:bg-blue-50/50 transition-colors"
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-slate-900">{campaign.name}</span>
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${
-                    campaign.status === 'active' ? 'bg-emerald-100 text-emerald-700' :
-                    campaign.status === 'draft' ? 'bg-slate-100 text-slate-600' :
-                    'bg-amber-100 text-amber-700'
-                  }`}>
-                    {campaign.status}
-                  </span>
-                </div>
-                <div className="flex gap-4 text-xs text-slate-500">
-                  <span>{campaign.enrolledCount} enrolled</span>
-                  <span>{campaign.openRate}% open rate</span>
-                  <span>{campaign.clickRate}% CTR</span>
-                  <span className="text-amber-600 font-medium">{campaign.intentSignals} intent signals</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>
   );
 }
 
-function MetricCard({ label, value, sub, color }: {
-  label: string; value: string; sub: string; color: string;
-}) {
-  return (
-    <div className={`rounded-xl p-5 ${color}`}>
-      <p className="text-sm font-medium opacity-80">{label}</p>
-      <p className="text-3xl font-bold mt-1">{value}</p>
-      <p className="text-xs mt-1 opacity-60">{sub}</p>
-    </div>
-  );
-}
-
-function ActivityIcon({ type }: { type: string }) {
+function StatCard({ value, label, sub, accent }: { value: string; label: string; sub: string; accent: string }) {
   const colors: Record<string, string> = {
-    email_sent: 'bg-blue-100 text-blue-600',
-    email_opened: 'bg-sky-100 text-sky-600',
-    email_clicked: 'bg-amber-100 text-amber-600',
-    reply_received: 'bg-green-100 text-green-600',
-    info_requested: 'bg-purple-100 text-purple-600',
-    appointment_scheduled: 'bg-emerald-100 text-emerald-600',
-    campaign_enrolled: 'bg-indigo-100 text-indigo-600',
+    blue: 'from-blue-500 to-blue-700',
+    indigo: 'from-indigo-500 to-indigo-700',
+    sky: 'from-sky-500 to-sky-700',
+    amber: 'from-amber-500 to-amber-600',
+    emerald: 'from-emerald-500 to-emerald-700',
   };
   return (
-    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${colors[type] || 'bg-slate-100 text-slate-600'}`}>
-      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        {type === 'email_sent' && <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />}
-        {type === 'email_opened' && <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />}
-        {type === 'email_clicked' && <path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" />}
-        {(type === 'reply_received' || type === 'info_requested') && <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />}
-        {type === 'appointment_scheduled' && <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />}
-        {type === 'campaign_enrolled' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />}
-      </svg>
+    <div className={`bg-gradient-to-br ${colors[accent]} rounded-2xl p-5 text-white shadow-sm`}>
+      <p className="text-[28px] font-extrabold leading-none">{value}</p>
+      <p className="text-[13px] font-semibold mt-1.5 text-white/90">{label}</p>
+      <p className="text-[11px] mt-0.5 text-white/60">{sub}</p>
     </div>
   );
 }
