@@ -1,9 +1,10 @@
 import { getContact, getCampaigns, getActivities, getContactEngagement } from '@/lib/data';
 import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
+import { PageHeader } from '@/components/ui/PageHeader';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-export default async function ContactDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function AudienceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const contact = getContact(id);
   if (!contact) notFound();
@@ -17,16 +18,32 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
   const stageIndex = PIPELINE_STAGES.findIndex(s => s.key === contact.stage);
 
   return (
-    <div className="max-w-[1200px]">
-      <div className="flex items-center gap-2 text-sm text-slate-400 mb-4">
-        <Link href="/contacts" className="hover:text-blue-600">Contacts</Link>
-        <span>/</span>
-        <span className="text-slate-700 font-medium">{contact.firstName} {contact.lastName}</span>
-      </div>
+    <div className="max-w-[1100px]">
+      <PageHeader
+        title={`${contact.firstName} ${contact.lastName}`}
+        subtitle={contact.company || undefined}
+        breadcrumbs={[
+          { label: 'Audience', href: '/audience' },
+          { label: `${contact.firstName} ${contact.lastName}` },
+        ]}
+        action={
+          <div className="flex gap-2">
+            <button className="px-4 py-2.5 text-sm font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+              Enroll in Campaign
+            </button>
+            <button className="px-4 py-2.5 text-sm font-semibold bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors">
+              Assign Advisor
+            </button>
+            <button className="px-4 py-2.5 text-sm font-semibold bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors">
+              Schedule Call
+            </button>
+          </div>
+        }
+      />
 
       {/* Profile Header */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden mb-6">
-        <div className="h-1.5" style={{ backgroundColor: stageMeta?.color || '#94a3b8' }} />
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+        <div className="h-1" style={{ backgroundColor: stageMeta?.color || '#94a3b8' }} />
         <div className="p-6">
           <div className="flex items-start gap-5">
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-xl font-bold text-white flex-shrink-0"
@@ -34,9 +51,7 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
               {contact.firstName[0]}{contact.lastName[0]}
             </div>
             <div className="flex-1">
-              <h1 className="text-2xl font-extrabold text-slate-900">{contact.firstName} {contact.lastName}</h1>
-              {contact.company && <p className="text-slate-500 font-medium">{contact.company}</p>}
-              <div className="flex items-center gap-3 mt-3 flex-wrap">
+              <div className="flex items-center gap-3 mt-1 flex-wrap">
                 <span className="text-xs px-3 py-1 rounded-full text-white font-semibold" style={{ backgroundColor: stageMeta?.color }}>
                   {stageMeta?.icon} {stageMeta?.label}
                 </span>
@@ -84,19 +99,19 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
 
       {/* Engagement Metrics */}
       <div className="grid grid-cols-3 md:grid-cols-7 gap-3 mb-6">
-        <EngagementBox label="Total Actions" value={engagement.totalActions.toString()} icon="📊" />
-        <EngagementBox label="Emails Sent" value={engagement.emailsSent.toString()} icon="📤" />
-        <EngagementBox label="Emails Opened" value={engagement.emailsOpened.toString()} icon="👁️" />
-        <EngagementBox label="Links Clicked" value={engagement.emailsClicked.toString()} icon="🖱️" />
-        <EngagementBox label="Replies" value={engagement.replies.toString()} icon="💬" highlight />
-        <EngagementBox label="Info Requests" value={engagement.infoRequests.toString()} icon="❓" highlight />
-        <EngagementBox label="Appointments" value={engagement.appointments.toString()} icon="📅" highlight />
+        <EngagementBox label="Total Actions" value={engagement.totalActions} icon="📊" />
+        <EngagementBox label="Emails Sent" value={engagement.emailsSent} icon="📤" />
+        <EngagementBox label="Emails Opened" value={engagement.emailsOpened} icon="👁️" />
+        <EngagementBox label="Links Clicked" value={engagement.emailsClicked} icon="🖱️" />
+        <EngagementBox label="Replies" value={engagement.replies} icon="💬" highlight />
+        <EngagementBox label="Info Requests" value={engagement.infoRequests} icon="❓" highlight />
+        <EngagementBox label="Appointments" value={engagement.appointments} icon="📅" highlight />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Contact Info */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
-          <h2 className="text-[15px] font-bold text-slate-900 mb-4">📋 Contact Info</h2>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+          <h2 className="text-base font-bold text-slate-900 mb-4">Contact Info</h2>
           <div className="space-y-4">
             <InfoField label="Email" value={contact.email} />
             <InfoField label="Phone" value={contact.phone} />
@@ -117,17 +132,17 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
         </div>
 
         {/* Campaigns */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
-          <h2 className="text-[15px] font-bold text-slate-900 mb-4">📧 Campaigns ({contactCampaigns.length})</h2>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+          <h2 className="text-base font-bold text-slate-900 mb-4">Campaigns ({contactCampaigns.length})</h2>
           {contactCampaigns.length > 0 ? (
             <div className="space-y-3">
               {contactCampaigns.map(camp => {
-                const cfg = SERVICE_LINE_CONFIG[camp.serviceLine];
+                const campCfg = SERVICE_LINE_CONFIG[camp.serviceLine];
                 return (
                   <Link key={camp.id} href={`/campaigns/${camp.id}`}
                     className="block p-4 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="text-2xl">{cfg.icon}</span>
+                      <span className="text-2xl">{campCfg.icon}</span>
                       <div className="flex-1 min-w-0">
                         <p className="text-[13px] font-semibold text-slate-900">{camp.name}</p>
                         <p className="text-[11px] text-slate-400">{camp.serviceLine}</p>
@@ -136,12 +151,11 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
                         {camp.status}
                       </span>
                     </div>
-                    {/* Email sequence progress */}
                     <div className="mt-2">
                       <div className="flex gap-1">
-                        {camp.emailSequence.map((step, i) => (
+                        {camp.emailSequence.map((step) => (
                           <div key={step.id} className="flex-1">
-                            <div className="h-1.5 rounded-full" style={{ backgroundColor: step.status === 'active' ? cfg.color : '#e2e8f0' }} />
+                            <div className="h-1.5 rounded-full" style={{ backgroundColor: step.status === 'active' ? campCfg.color : '#e2e8f0' }} />
                             <p className="text-[8px] text-slate-400 mt-0.5 text-center">Day {step.sendDay}</p>
                           </div>
                         ))}
@@ -159,15 +173,18 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
           ) : (
             <div className="text-center py-8">
               <p className="text-2xl mb-2">💤</p>
-              <p className="text-sm text-slate-400">Not enrolled in any campaigns</p>
-              <p className="text-xs text-slate-300 mt-1">This contact is dormant</p>
+              <p className="text-sm text-slate-500">Not enrolled in any campaigns</p>
+              <p className="text-xs text-slate-400 mt-1">This contact is dormant</p>
+              <button className="mt-3 px-4 py-2 text-sm font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+                Enroll in Campaign
+              </button>
             </div>
           )}
         </div>
 
         {/* Activity Timeline */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
-          <h2 className="text-[15px] font-bold text-slate-900 mb-4">📅 Activity Timeline ({activities.length})</h2>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+          <h2 className="text-base font-bold text-slate-900 mb-4">Activity Timeline ({activities.length})</h2>
           {activities.length > 0 ? (
             <div className="space-y-0">
               {activities.map((act, i) => {
@@ -219,9 +236,9 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
   );
 }
 
-function EngagementBox({ label, value, icon, highlight }: { label: string; value: string; icon: string; highlight?: boolean }) {
+function EngagementBox({ label, value, icon, highlight }: { label: string; value: number; icon: string; highlight?: boolean }) {
   return (
-    <div className="bg-white rounded-xl border border-slate-200/80 shadow-sm p-3 text-center">
+    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-3 text-center">
       <p className="text-sm mb-1">{icon}</p>
       <p className={`text-xl font-extrabold ${highlight ? 'text-amber-600' : 'text-slate-900'}`}>{value}</p>
       <p className="text-[9px] text-slate-400 mt-0.5">{label}</p>

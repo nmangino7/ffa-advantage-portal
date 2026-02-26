@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
         <Sidebar />
-        <main className="ml-[220px] min-h-screen p-8">
+        <main className="ml-[240px] min-h-screen p-8 lg:p-10">
           {children}
         </main>
       </body>

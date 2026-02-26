@@ -21,6 +21,8 @@ export type ActivityType =
 
 export type CampaignStatus = 'active' | 'paused' | 'draft' | 'completed';
 
+export type WarmLeadTier = 'replied' | 'info_requested' | 'engaged';
+
 export interface Contact {
   id: string;
   firstName: string;
@@ -80,6 +82,30 @@ export interface PipelineStageMeta {
   icon: string;
 }
 
+export interface WarmLead {
+  contact: Contact;
+  tier: WarmLeadTier;
+  lastAction: Activity;
+  campaignName: string;
+  daysSinceAction: number;
+}
+
+export interface ContentTemplate {
+  template: EmailStep;
+  campaignId: string;
+  campaignName: string;
+  serviceLine: ServiceLine;
+  stepNumber: number;
+}
+
+export interface AudienceSegment {
+  stage: PipelineStageMeta;
+  count: number;
+  avgIntent: number;
+  unassignedCount: number;
+  notInCampaignCount: number;
+}
+
 export const PIPELINE_STAGES: PipelineStageMeta[] = [
   { key: 'dormant', label: 'Dormant', description: 'Not yet re-engaged', color: '#64748b', bgColor: '#f1f5f9', icon: '💤' },
   { key: 'education', label: 'Education', description: 'Receiving campaign emails', color: '#2563eb', bgColor: '#eff6ff', icon: '📧' },
@@ -96,10 +122,10 @@ export const SERVICE_LINES: ServiceLine[] = [
   'Second-Opinion Positioning',
 ];
 
-export const SERVICE_LINE_CONFIG: Record<ServiceLine, { color: string; bgColor: string; icon: string }> = {
-  'Insurance Review': { color: '#2563eb', bgColor: '#eff6ff', icon: '🛡️' },
-  'Under-Serviced Annuities': { color: '#7c3aed', bgColor: '#f5f3ff', icon: '📊' },
-  'Retirement Planning': { color: '#059669', bgColor: '#ecfdf5', icon: '🏖️' },
-  'Investment Planning': { color: '#d97706', bgColor: '#fffbeb', icon: '📈' },
-  'Second-Opinion Positioning': { color: '#dc2626', bgColor: '#fef2f2', icon: '🔍' },
+export const SERVICE_LINE_CONFIG: Record<ServiceLine, { color: string; bgColor: string; icon: string; short: string }> = {
+  'Insurance Review': { color: '#2563eb', bgColor: '#eff6ff', icon: '🛡️', short: 'Insurance' },
+  'Under-Serviced Annuities': { color: '#7c3aed', bgColor: '#f5f3ff', icon: '📊', short: 'Annuities' },
+  'Retirement Planning': { color: '#059669', bgColor: '#ecfdf5', icon: '🏖️', short: 'Retirement' },
+  'Investment Planning': { color: '#d97706', bgColor: '#fffbeb', icon: '📈', short: 'Investment' },
+  'Second-Opinion Positioning': { color: '#dc2626', bgColor: '#fef2f2', icon: '🔍', short: 'Second Opinion' },
 };

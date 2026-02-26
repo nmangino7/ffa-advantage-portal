@@ -1,5 +1,7 @@
-import { getCampaign, getContactsByCampaign, getCampaignDetailedMetrics } from '@/lib/data';
+import { getCampaign, getContactsByCampaign, getCampaignDetailedMetrics, getWarmLeads } from '@/lib/data';
 import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { DripTimeline } from '@/components/ui/DripTimeline';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -12,59 +14,133 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
   const detailed = getCampaignDetailedMetrics(id);
   const cfg = SERVICE_LINE_CONFIG[campaign.serviceLine];
   const stageBreakdown = PIPELINE_STAGES.map(s => ({ ...s, count: detailed.stageBreakdown[s.key] }));
+  const warmLeads = getWarmLeads().filter(l => l.lastAction.campaignId === id);
 
   return (
-    <div className="max-w-[1400px]">
-      <div className="flex items-center gap-2 text-sm text-slate-400 mb-4">
-        <Link href="/campaigns" className="hover:text-blue-600">Campaigns</Link>
-        <span>/</span>
-        <span className="text-slate-700 font-medium">{campaign.name}</span>
-      </div>
+    <div className="max-w-[1100px]">
+      <PageHeader
+        title={campaign.name}
+        subtitle={`${campaign.serviceLine} \u2022 ${campaign.emailSequence.length}-email sequence over ${campaign.emailSequence[campaign.emailSequence.length - 1]?.sendDay} days`}
+        breadcrumbs={[
+          { label: 'Campaigns', href: '/campaigns' },
+          { label: campaign.name },
+        ]}
+        action={
+          <div className="flex gap-2">
+            <button className="px-4 py-2.5 text-sm font-semibold bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors">
+              {campaign.status === 'active' ? 'Pause Campaign' : 'Resume Campaign'}
+            </button>
+            <Link href="/audience"
+              className="px-4 py-2.5 text-sm font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+              Enroll More Contacts
+            </Link>
+          </div>
+        }
+      />
 
-      {/* Header */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden mb-6">
-        <div className="h-1.5" style={{ backgroundColor: cfg.color }} />
+      {/* Status + Service Line Badge */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+        <div className="h-1" style={{ backgroundColor: cfg.color }} />
         <div className="p-6">
-          <div className="flex items-start gap-4 mb-6">
-            <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0" style={{ backgroundColor: cfg.bgColor }}>{cfg.icon}</div>
+          <div className="flex items-start gap-4 mb-5">
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0" style={{ backgroundColor: cfg.bgColor }}>
+              {cfg.icon}
+            </div>
             <div className="flex-1">
-              <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-extrabold text-slate-900">{campaign.name}</h1>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${campaign.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>{campaign.status}</span>
+              <div className="flex items-center gap-3 mb-2">
+                <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider ${
+                  campaign.status === 'active' ? 'bg-emerald-100 text-emerald-700'
+                  : campaign.status === 'draft' ? 'bg-slate-100 text-slate-500'
+                  : 'bg-amber-100 text-amber-700'
+                }`}>{campaign.status}</span>
+                <span className="text-xs text-slate-400">{campaign.enrolledCount} contacts enrolled</span>
               </div>
-              <p className="text-sm text-slate-500 mt-1">{campaign.serviceLine} &bull; {campaign.emailSequence.length}-email sequence over {campaign.emailSequence[campaign.emailSequence.length-1]?.sendDay} days</p>
-              <p className="text-[13px] text-slate-600 mt-2">{campaign.description}</p>
+              <p className="text-sm text-slate-600">{campaign.description}</p>
             </div>
           </div>
 
-          {/* Detailed metrics */}
+          {/* Metrics Row */}
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
-            <MetricBox label="Enrolled" value={campaign.enrolledCount.toString()} />
-            <MetricBox label="Emails Sent" value={detailed.sent.toString()} />
-            <MetricBox label="Opened" value={detailed.opened.toString()} sub={`${detailed.sent > 0 ? Math.round(detailed.opened/detailed.sent*100) : 0}%`} />
-            <MetricBox label="Clicked" value={detailed.clicked.toString()} sub={`${detailed.sent > 0 ? Math.round(detailed.clicked/detailed.sent*100) : 0}%`} />
-            <MetricBox label="Replies" value={detailed.replied.toString()} highlight />
-            <MetricBox label="Info Requested" value={detailed.requested.toString()} highlight />
-            <MetricBox label="Appointments" value={detailed.booked.toString()} highlight />
-            <MetricBox label="Avg Intent" value={detailed.avgIntent.toString()} sub="/100" />
+            <MetricBox label="Enrolled" value={campaign.enrolledCount} />
+            <MetricBox label="Sent" value={detailed.sent} />
+            <MetricBox label="Opened" value={detailed.opened} sub={`${detailed.sent > 0 ? Math.round(detailed.opened / detailed.sent * 100) : 0}%`} />
+            <MetricBox label="Clicked" value={detailed.clicked} sub={`${detailed.sent > 0 ? Math.round(detailed.clicked / detailed.sent * 100) : 0}%`} />
+            <MetricBox label="Replies" value={detailed.replied} highlight />
+            <MetricBox label="Info Req" value={detailed.requested} highlight />
+            <MetricBox label="Appointments" value={detailed.booked} highlight />
+            <MetricBox label="Avg Intent" value={detailed.avgIntent} sub="/100" />
           </div>
         </div>
       </div>
 
-      {/* Email Sequence with per-step metrics */}
+      {/* Drip Timeline Visual */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+        <h2 className="text-base font-bold text-slate-900 mb-4">Email Drip Sequence</h2>
+        <DripTimeline steps={campaign.emailSequence} color={cfg.color} />
+      </div>
+
+      {/* Warm Leads from This Campaign */}
+      {warmLeads.length > 0 && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <span className="text-xl">🔥</span>
+              <h2 className="text-base font-bold text-slate-900">Warm Leads from This Campaign</h2>
+              <span className="text-xs font-bold px-2 py-0.5 bg-amber-200 text-amber-800 rounded-full">{warmLeads.length}</span>
+            </div>
+            <Link href={`/warm-leads`} className="text-sm font-semibold text-blue-600 hover:text-blue-800">
+              View all warm leads &rarr;
+            </Link>
+          </div>
+          <p className="text-sm text-amber-800 mb-3">These contacts responded to this campaign and are ready for personal follow-up.</p>
+          <div className="space-y-2">
+            {warmLeads.slice(0, 3).map(lead => {
+              const tierColors = {
+                replied: { bg: 'bg-red-100', text: 'text-red-700', label: 'Replied' },
+                info_requested: { bg: 'bg-amber-100', text: 'text-amber-700', label: 'Requested Info' },
+                engaged: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'Engaged' },
+              };
+              const tc = tierColors[lead.tier];
+              return (
+                <div key={lead.contact.id} className="bg-white rounded-xl p-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600">
+                      {lead.contact.firstName[0]}{lead.contact.lastName[0]}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">{lead.contact.firstName} {lead.contact.lastName}</p>
+                      <p className="text-xs text-slate-500">{lead.lastAction.description}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${tc.bg} ${tc.text}`}>{tc.label}</span>
+                    <Link href={`/audience/${lead.contact.id}`}
+                      className="text-xs font-semibold text-blue-600 hover:text-blue-800 px-2 py-1 bg-blue-50 rounded-lg">
+                      View
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Full Email Previews */}
       <div className="mb-6">
-        <h2 className="text-[17px] font-bold text-slate-900 mb-4">📧 Email Sequence — Full Previews</h2>
+        <h2 className="text-base font-bold text-slate-900 mb-4">Email Sequence — Full Previews</h2>
         <div className="space-y-4">
           {campaign.emailSequence.map((step, i) => {
-            // Simulated per-email metrics
             const stepSent = Math.round(campaign.enrolledCount * (1 - i * 0.05));
             const stepOpened = Math.round(stepSent * (campaign.openRate / 100) * (1 - i * 0.08));
             const stepClicked = Math.round(stepSent * (campaign.clickRate / 100) * (1 + i * 0.1));
             return (
-              <div key={step.id} className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+              <div key={step.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                 <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
                   <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ backgroundColor: cfg.color }}>{i + 1}</span>
+                    <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ backgroundColor: cfg.color }}>
+                      {i + 1}
+                    </span>
                     <div>
                       <p className="text-sm font-bold text-slate-900">Day {step.sendDay}: {step.subject}</p>
                       <p className="text-xs text-slate-400">{step.previewText}</p>
@@ -74,7 +150,9 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
                     <div><p className="text-sm font-bold text-slate-900">{stepSent}</p><p className="text-[10px] text-slate-400">Sent</p></div>
                     <div><p className="text-sm font-bold text-sky-600">{stepOpened}</p><p className="text-[10px] text-slate-400">Opened</p></div>
                     <div><p className="text-sm font-bold text-amber-600">{stepClicked}</p><p className="text-[10px] text-slate-400">Clicked</p></div>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold self-center ${step.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>{step.status}</span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold self-center ${step.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+                      {step.status}
+                    </span>
                   </div>
                 </div>
                 <div className="p-6">
@@ -97,8 +175,8 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
 
       {/* Stage Breakdown + Enrolled Contacts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
-          <h2 className="text-[17px] font-bold text-slate-900 mb-4">Contact Stage Breakdown</h2>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+          <h2 className="text-base font-bold text-slate-900 mb-4">Contact Stage Breakdown</h2>
           <div className="space-y-3">
             {stageBreakdown.map(stage => (
               <div key={stage.key} className="flex items-center gap-3">
@@ -118,8 +196,8 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
           </div>
         </div>
 
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
-          <h2 className="text-[17px] font-bold text-slate-900 mb-4">Enrolled Contacts ({contacts.length})</h2>
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+          <h2 className="text-base font-bold text-slate-900 mb-4">Enrolled Contacts ({contacts.length})</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -138,17 +216,25 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
                   return (
                     <tr key={contact.id} className="border-b border-slate-50 hover:bg-slate-50/50">
                       <td className="py-2.5 px-3">
-                        <Link href={`/contacts/${contact.id}`} className="font-semibold text-blue-600 hover:text-blue-800 text-[13px]">{contact.firstName} {contact.lastName}</Link>
+                        <Link href={`/audience/${contact.id}`} className="font-semibold text-blue-600 hover:text-blue-800 text-[13px]">
+                          {contact.firstName} {contact.lastName}
+                        </Link>
                       </td>
-                      <td className="py-2.5 px-3 text-slate-500 text-[13px]">{contact.company || '—'}</td>
+                      <td className="py-2.5 px-3 text-slate-500 text-[13px]">{contact.company || '\u2014'}</td>
                       <td className="py-2.5 px-3">
-                        <span className="text-[11px] px-2 py-0.5 rounded-full text-white font-medium" style={{ backgroundColor: sm?.color }}>{sm?.icon} {sm?.label}</span>
+                        <span className="text-[11px] px-2 py-0.5 rounded-full text-white font-medium" style={{ backgroundColor: sm?.color }}>
+                          {sm?.icon} {sm?.label}
+                        </span>
                       </td>
                       <td className="py-2.5 px-3">
-                        <span className={`font-bold text-[13px] ${contact.intentScore >= 70 ? 'text-emerald-600' : contact.intentScore >= 30 ? 'text-amber-600' : 'text-slate-400'}`}>{contact.intentScore}</span>
+                        <span className={`font-bold text-[13px] ${contact.intentScore >= 70 ? 'text-emerald-600' : contact.intentScore >= 30 ? 'text-amber-600' : 'text-slate-400'}`}>
+                          {contact.intentScore}
+                        </span>
                       </td>
                       <td className="py-2.5 px-3 text-[13px]">
-                        <span className={daysSince > 180 ? 'text-red-500' : daysSince > 90 ? 'text-amber-500' : 'text-slate-500'}>{daysSince}d ago</span>
+                        <span className={daysSince > 180 ? 'text-red-500' : daysSince > 90 ? 'text-amber-500' : 'text-slate-500'}>
+                          {daysSince}d ago
+                        </span>
                       </td>
                     </tr>
                   );
@@ -163,7 +249,7 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
   );
 }
 
-function MetricBox({ label, value, sub, highlight }: { label: string; value: string; sub?: string; highlight?: boolean }) {
+function MetricBox({ label, value, sub, highlight }: { label: string; value: number; sub?: string; highlight?: boolean }) {
   return (
     <div className="bg-slate-50 rounded-xl p-3 text-center">
       <p className={`text-xl font-extrabold ${highlight ? 'text-amber-600' : 'text-slate-900'}`}>{value}</p>

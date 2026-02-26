@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { getContacts, getCampaigns, getActivities, getContactEngagement } from '@/lib/data';
+import { getContacts, getCampaigns, getActivities } from '@/lib/data';
 import { PIPELINE_STAGES, PipelineStage, SERVICE_LINE_CONFIG } from '@/lib/types';
+import { PageHeader } from '@/components/ui/PageHeader';
 import Link from 'next/link';
 
 export default function PipelinePage() {
@@ -10,7 +11,6 @@ export default function PipelinePage() {
   const campaigns = getCampaigns();
   const allActivities = getActivities();
   const [campaignFilter, setCampaignFilter] = useState<string>('all');
-  const [stageFilter, setStageFilter] = useState<PipelineStage | 'all'>('all');
   const [contactStages, setContactStages] = useState<Record<string, PipelineStage>>(() => {
     const map: Record<string, PipelineStage> = {};
     allContacts.forEach(c => { map[c.id] = c.stage; });
@@ -23,67 +23,30 @@ export default function PipelinePage() {
     return result;
   }, [allContacts, campaignFilter]);
 
-  // Pipeline-level metrics
-  const totalInPipeline = filteredContacts.length;
-  const avgIntentScore = totalInPipeline > 0 ? Math.round(filteredContacts.reduce((s, c) => s + c.intentScore, 0) / totalInPipeline) : 0;
-  const highIntentCount = filteredContacts.filter(c => c.intentScore >= 50).length;
-  const recentlyActive = filteredContacts.filter(c => {
-    const days = (Date.now() - new Date(c.lastContactDate).getTime()) / 86400000;
-    return days <= 30;
-  }).length;
-
   function moveContact(contactId: string, newStage: PipelineStage) {
     setContactStages(prev => ({ ...prev, [contactId]: newStage }));
   }
 
-  // Get last activity for a contact (quick lookup)
   function getLastActivity(contactId: string) {
     return allActivities.find(a => a.contactId === contactId);
   }
 
   return (
     <div>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-[28px] font-extrabold text-slate-900 tracking-tight">Pipeline Board</h1>
-          <p className="text-slate-500 mt-1 text-[15px]">Track leads through the outreach lifecycle &bull; {totalInPipeline.toLocaleString()} contacts</p>
-        </div>
-        <div className="flex gap-3">
+      <PageHeader
+        title="Pipeline Board"
+        subtitle={`Track leads through the outreach lifecycle \u2022 ${filteredContacts.length.toLocaleString()} contacts`}
+        action={
           <select value={campaignFilter} onChange={e => setCampaignFilter(e.target.value)}
             className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="all">All Campaigns</option>
             {campaigns.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
-        </div>
-      </div>
+        }
+      />
 
-      {/* Pipeline Summary Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
-          <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Total in Pipeline</p>
-          <p className="text-2xl font-extrabold text-slate-900 mt-1">{totalInPipeline.toLocaleString()}</p>
-          <p className="text-[11px] text-slate-400 mt-1">{campaigns.length} campaigns active</p>
-        </div>
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
-          <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Avg Intent Score</p>
-          <p className={`text-2xl font-extrabold mt-1 ${avgIntentScore >= 50 ? 'text-amber-600' : 'text-slate-900'}`}>{avgIntentScore}<span className="text-sm text-slate-400">/100</span></p>
-          <p className="text-[11px] text-slate-400 mt-1">Across all stages</p>
-        </div>
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
-          <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">High Intent</p>
-          <p className="text-2xl font-extrabold text-emerald-600 mt-1">{highIntentCount}</p>
-          <p className="text-[11px] text-slate-400 mt-1">Score ≥ 50</p>
-        </div>
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
-          <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Active Last 30d</p>
-          <p className="text-2xl font-extrabold text-blue-600 mt-1">{recentlyActive}</p>
-          <p className="text-[11px] text-slate-400 mt-1">{totalInPipeline > 0 ? Math.round(recentlyActive / totalInPipeline * 100) : 0}% of pipeline</p>
-        </div>
-      </div>
-
-      {/* Funnel summary with conversion rates */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 mb-6">
+      {/* Funnel Summary */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6">
         <div className="flex items-center gap-1">
           {PIPELINE_STAGES.map((stage, i) => {
             const count = filteredContacts.filter(c => contactStages[c.id] === stage.key).length;
@@ -91,22 +54,14 @@ export default function PipelinePage() {
             const convRate = i > 0 && prevCount > 0 ? Math.round((count / prevCount) * 100) : 0;
             return (
               <div key={stage.key} className="flex items-center gap-1 flex-1">
-                <button
-                  onClick={() => setStageFilter(stageFilter === stage.key ? 'all' : stage.key)}
-                  className={`flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                    stageFilter === stage.key ? 'ring-2 ring-offset-1 shadow-sm' : 'hover:shadow-sm'
-                  }`}
-                  style={{
-                    backgroundColor: stage.bgColor,
-                    color: stage.color,
-                    ...(stageFilter === stage.key ? { ringColor: stage.color } : {}),
-                  }}>
+                <div className="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold"
+                  style={{ backgroundColor: stage.bgColor, color: stage.color }}>
                   <span className="text-base">{stage.icon}</span>
                   <div className="text-left min-w-0">
                     <p className="text-[11px] font-bold truncate">{stage.label}</p>
                     <p className="text-lg font-extrabold leading-tight">{count}</p>
                   </div>
-                </button>
+                </div>
                 {i < PIPELINE_STAGES.length - 1 && (
                   <div className="flex flex-col items-center px-1">
                     <span className="text-slate-300 text-sm">&rarr;</span>
@@ -119,23 +74,29 @@ export default function PipelinePage() {
         </div>
       </div>
 
+      {/* Quick Actions */}
+      <div className="flex gap-3 mb-6">
+        <Link href="/audience" className="text-sm font-semibold text-blue-600 bg-blue-50 border border-blue-200 px-4 py-2 rounded-xl hover:bg-blue-100 transition-colors">
+          Enroll Dormant Contacts
+        </Link>
+        <Link href="/warm-leads" className="text-sm font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-4 py-2 rounded-xl hover:bg-amber-100 transition-colors">
+          View Warm Leads
+        </Link>
+      </div>
+
       {/* Board */}
       <div className="flex gap-4 overflow-x-auto pb-6">
         {PIPELINE_STAGES.map((stage, stageIndex) => {
-          if (stageFilter !== 'all' && stageFilter !== stage.key) return null;
           const stageContacts = filteredContacts
             .filter(c => contactStages[c.id] === stage.key)
             .sort((a, b) => b.intentScore - a.intentScore);
-          const stageAvgIntent = stageContacts.length > 0
-            ? Math.round(stageContacts.reduce((s, c) => s + c.intentScore, 0) / stageContacts.length)
-            : 0;
 
           return (
-            <div key={stage.key} className={`flex-shrink-0 ${stageFilter !== 'all' ? 'w-full max-w-[600px]' : 'w-[280px]'}`}>
-              <div className="rounded-2xl border border-slate-200/80 bg-white shadow-sm overflow-hidden">
+            <div key={stage.key} className="flex-shrink-0 w-[260px]">
+              <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
                 {/* Column header */}
                 <div className="p-4 border-b border-slate-100" style={{ borderTopWidth: '3px', borderTopColor: stage.color }}>
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">{stage.icon}</span>
                       <span className="text-sm font-bold text-slate-900">{stage.label}</span>
@@ -144,24 +105,29 @@ export default function PipelinePage() {
                       {stageContacts.length}
                     </span>
                   </div>
-                  <div className="flex gap-3 text-[10px] text-slate-400">
-                    <span>Avg intent: <strong className={stageAvgIntent >= 50 ? 'text-amber-600' : 'text-slate-600'}>{stageAvgIntent}</strong></span>
-                    <span>&bull;</span>
-                    <span>{stageContacts.filter(c => c.intentScore >= 50).length} hot leads</span>
-                  </div>
+                  {/* Stage-specific actions */}
+                  {stage.key === 'dormant' && (
+                    <Link href="/audience" className="text-[10px] font-semibold text-blue-600 hover:text-blue-800">
+                      Enroll in campaign &rarr;
+                    </Link>
+                  )}
+                  {stage.key === 'intent' && (
+                    <Link href="/warm-leads" className="text-[10px] font-semibold text-amber-600 hover:text-amber-800">
+                      View in Warm Leads &rarr;
+                    </Link>
+                  )}
                 </div>
 
                 {/* Contact cards */}
-                <div className="p-2 space-y-2 max-h-[calc(100vh-380px)] overflow-y-auto bg-slate-50/50">
-                  {stageContacts.slice(0, 20).map(contact => {
+                <div className="p-2 space-y-2 max-h-[calc(100vh-340px)] overflow-y-auto bg-slate-50/50">
+                  {stageContacts.slice(0, 15).map(contact => {
                     const contactCampaigns = campaigns.filter(c => contact.campaigns.includes(c.id));
                     const lastAct = getLastActivity(contact.id);
                     const daysSince = Math.floor((Date.now() - new Date(contact.lastContactDate).getTime()) / 86400000);
 
                     return (
                       <div key={contact.id} className="bg-white rounded-xl border border-slate-100 p-3 hover:shadow-md hover:border-blue-200 transition-all">
-                        <Link href={`/contacts/${contact.id}`}>
-                          {/* Name + Intent */}
+                        <Link href={`/audience/${contact.id}`}>
                           <div className="flex items-center justify-between mb-1.5">
                             <p className="text-[13px] font-semibold text-slate-900 truncate">{contact.firstName} {contact.lastName}</p>
                             {contact.intentScore > 0 && (
@@ -173,11 +139,9 @@ export default function PipelinePage() {
                             )}
                           </div>
 
-                          {/* Company + Email */}
                           {contact.company && <p className="text-[11px] text-slate-600 font-medium truncate">{contact.company}</p>}
                           <p className="text-[10px] text-slate-400 truncate">{contact.email}</p>
 
-                          {/* Campaign badges */}
                           {contactCampaigns.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2">
                               {contactCampaigns.map(c => {
@@ -185,32 +149,29 @@ export default function PipelinePage() {
                                 return (
                                   <span key={c.id} className="text-[9px] px-1.5 py-0.5 rounded-md font-semibold"
                                     style={{ backgroundColor: cfg.bgColor, color: cfg.color }}>
-                                    {cfg.icon} {c.serviceLine.split(' ')[0]}
+                                    {cfg.icon} {cfg.short}
                                   </span>
                                 );
                               })}
                             </div>
                           )}
 
-                          {/* Last activity + days since */}
                           <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-50">
                             <span className={`text-[10px] ${daysSince > 180 ? 'text-red-500 font-semibold' : daysSince > 90 ? 'text-amber-500' : 'text-slate-400'}`}>
-                              {daysSince > 365 ? `${Math.floor(daysSince / 365)}y ${daysSince % 365}d` : `${daysSince}d`} ago
+                              {daysSince > 365 ? `${Math.floor(daysSince / 365)}y ago` : `${daysSince}d ago`}
                             </span>
                             {lastAct && (
-                              <span className="text-[9px] text-slate-400 truncate max-w-[120px]">
+                              <span className="text-[9px] text-slate-400 truncate max-w-[100px]">
                                 {lastAct.type.replace(/_/g, ' ')}
                               </span>
                             )}
                           </div>
 
-                          {/* Assigned rep */}
                           {contact.assignedRep && (
                             <p className="text-[9px] text-blue-500 font-medium mt-1">👤 {contact.assignedRep}</p>
                           )}
                         </Link>
 
-                        {/* Stage transition button */}
                         {stageIndex < PIPELINE_STAGES.length - 1 && (
                           <button onClick={(e) => { e.preventDefault(); moveContact(contact.id, PIPELINE_STAGES[stageIndex + 1].key); }}
                             className="mt-2 w-full text-[11px] py-1.5 rounded-lg bg-slate-50 hover:bg-blue-50 text-slate-500 hover:text-blue-600 font-medium transition-colors border border-slate-100">
@@ -220,8 +181,8 @@ export default function PipelinePage() {
                       </div>
                     );
                   })}
-                  {stageContacts.length > 20 && (
-                    <p className="text-[11px] text-slate-400 text-center py-2">+{stageContacts.length - 20} more contacts</p>
+                  {stageContacts.length > 15 && (
+                    <p className="text-[11px] text-slate-400 text-center py-2">+{stageContacts.length - 15} more contacts</p>
                   )}
                   {stageContacts.length === 0 && (
                     <div className="text-center py-10">
