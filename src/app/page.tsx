@@ -15,7 +15,7 @@ const HOW_IT_WORKS = [
     title: 'Segment Your Audience',
     description: 'Organize your dormant contacts by service line interest.',
     href: '/audience',
-    icon: '\u{1F465}',
+    icon: '👥',
     color: '#2563eb',
   },
   {
@@ -23,7 +23,7 @@ const HOW_IT_WORKS = [
     title: 'Pick Email Templates',
     description: 'Browse 20 ready-to-send templates across 5 service lines.',
     href: '/content',
-    icon: '\u{1F4E7}',
+    icon: '📧',
     color: '#7c3aed',
   },
   {
@@ -31,7 +31,7 @@ const HOW_IT_WORKS = [
     title: 'Launch Drip Campaigns',
     description: 'Enroll contacts in automated 4-email sequences.',
     href: '/campaigns',
-    icon: '\u{1F680}',
+    icon: '🚀',
     color: '#059669',
   },
   {
@@ -39,7 +39,7 @@ const HOW_IT_WORKS = [
     title: 'Engage Warm Leads',
     description: 'When contacts respond, advisors step in personally.',
     href: '/warm-leads',
-    icon: '\u{1F91D}',
+    icon: '🤝',
     color: '#d97706',
   },
 ];
@@ -133,15 +133,15 @@ export default function HomePage() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <StatCard value={stats.totalContacts.toLocaleString()} label="Total Contacts" icon="\u{1F465}" />
-        <StatCard value={stats.activeCampaigns} label="Active Campaigns" icon="\u{1F4E7}" />
+        <StatCard value={stats.totalContacts.toLocaleString()} label="Total Contacts" icon="👥" />
+        <StatCard value={stats.activeCampaigns} label="Active Campaigns" icon="📧" />
         <StatCard
           value={stats.warmLeadsNeedingAttention}
           label="Warm Leads Waiting"
-          icon="\u{1F525}"
+          icon="🔥"
           accentColor={stats.warmLeadsNeedingAttention > 0 ? '#dc2626' : undefined}
         />
-        <StatCard value={stats.appointmentsScheduled} label="Appointments Booked" icon="\u{1F4C5}" accentColor="#059669" />
+        <StatCard value={stats.appointmentsScheduled} label="Appointments Booked" icon="📅" accentColor="#059669" />
       </div>
 
       {/* Action Required */}

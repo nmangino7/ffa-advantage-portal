@@ -8,9 +8,9 @@ import { ActionCard } from '@/components/ui/ActionCard';
 import { StatCard } from '@/components/ui/StatCard';
 
 const TIER_META: Record<WarmLeadTier, { label: string; description: string; color: string; bg: string }> = {
-  replied: { label: 'Replied', description: 'These contacts responded directly \u2014 highest priority', color: '#dc2626', bg: '#fef2f2' },
+  replied: { label: 'Replied', description: 'These contacts responded directly — highest priority', color: '#dc2626', bg: '#fef2f2' },
   info_requested: { label: 'Requested Info', description: 'Asked for more information about a service', color: '#d97706', bg: '#fffbeb' },
-  engaged: { label: 'Engaged', description: 'Multiple opens or clicks \u2014 showing strong interest', color: '#ca8a04', bg: '#fefce8' },
+  engaged: { label: 'Engaged', description: 'Multiple opens or clicks — showing strong interest', color: '#ca8a04', bg: '#fefce8' },
 };
 
 export default function WarmLeadsPage() {
@@ -74,13 +74,13 @@ export default function WarmLeadsPage() {
     <div className="max-w-[1000px]">
       <PageHeader
         title="Warm Leads"
-        subtitle="Contacts who responded to your campaigns \u2014 ready for personal outreach"
+        subtitle="Contacts who responded to your campaigns — ready for personal outreach"
       />
 
       {/* Explanation Banner */}
       <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl flex-shrink-0">{'\u{1F91D}'}</div>
+          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl flex-shrink-0">🤝</div>
           <div>
             <p className="text-sm font-semibold text-blue-900 mb-1">This is where automation stops and you step in.</p>
             <p className="text-sm text-blue-700">
@@ -101,10 +101,10 @@ export default function WarmLeadsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard value={allLeads.length} label="Total Warm Leads" icon={'\u{1F525}'} />
-        <StatCard value={needingAssignment} label="Needing Assignment" accentColor={needingAssignment > 0 ? '#dc2626' : undefined} icon={'\u{26A1}'} />
-        <StatCard value={repliedCount} label="Replied (Hottest)" accentColor="#dc2626" icon={'\u{1F4AC}'} />
-        <StatCard value={appointmentCount} label="Appointments" accentColor="#059669" icon={'\u{1F4C5}'} />
+        <StatCard value={allLeads.length} label="Total Warm Leads" icon="🔥" />
+        <StatCard value={needingAssignment} label="Needing Assignment" accentColor={needingAssignment > 0 ? '#dc2626' : undefined} icon="⚡" />
+        <StatCard value={repliedCount} label="Replied (Hottest)" accentColor="#dc2626" icon="💬" />
+        <StatCard value={appointmentCount} label="Appointments" accentColor="#059669" icon="📅" />
       </div>
 
       {/* Filters */}
@@ -155,7 +155,7 @@ export default function WarmLeadsPage() {
         </div>
       ) : (
         <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-          <p className="text-4xl mb-3">{'\u2705'}</p>
+          <p className="text-4xl mb-3">✅</p>
           <h3 className="text-lg font-semibold text-slate-900 mb-1">All caught up!</h3>
           <p className="text-sm text-slate-500">No warm leads matching your filters. Your campaigns are running &mdash; check back soon.</p>
         </div>
