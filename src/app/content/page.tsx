@@ -1,13 +1,29 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { getContentLibrary } from '@/lib/data';
-import { SERVICE_LINE_CONFIG, SERVICE_LINES, type ServiceLine } from '@/lib/types';
+import { usePortal } from '@/lib/context/PortalContext';
+import { SERVICE_LINE_CONFIG, SERVICE_LINES, type ServiceLine, type ContentTemplate } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EmailPreviewCard } from '@/components/ui/EmailPreviewCard';
 
 export default function ContentLibraryPage() {
-  const allTemplates = getContentLibrary();
+  const { campaigns } = usePortal();
+
+  const allTemplates: ContentTemplate[] = useMemo(() => {
+    const templates: ContentTemplate[] = [];
+    for (const campaign of campaigns) {
+      for (let i = 0; i < campaign.emailSequence.length; i++) {
+        templates.push({
+          template: campaign.emailSequence[i],
+          campaignId: campaign.id,
+          campaignName: campaign.name,
+          serviceLine: campaign.serviceLine,
+          stepNumber: i + 1,
+        });
+      }
+    }
+    return templates;
+  }, [campaigns]);
   const [activeTab, setActiveTab] = useState<ServiceLine | 'all'>('all');
   const [search, setSearch] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);

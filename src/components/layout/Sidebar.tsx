@@ -1,8 +1,10 @@
 'use client';
 
+import { useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { getWarmLeadsSummary } from '@/lib/data';
+import { usePortal } from '@/lib/context/PortalContext';
+import type { WarmLeadTier } from '@/lib/types';
 
 interface NavItem {
   href: string;
@@ -65,7 +67,38 @@ function NavIcon({ name, className }: { name: string; className?: string }) {
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const warmLeadCount = getWarmLeadsSummary();
+  const { contacts, activities } = usePortal();
+
+  // Compute warm lead count reactively from context
+  const warmLeadCount = useMemo(() => {
+    const highValueTypes: Record<string, WarmLeadTier> = {
+      'reply_received': 'replied',
+      'info_requested': 'info_requested',
+      'appointment_scheduled': 'replied',
+    };
+    const seen = new Set<string>();
+    let unassigned = 0;
+
+    for (const act of activities) {
+      if (!highValueTypes[act.type]) continue;
+      if (seen.has(act.contactId)) continue;
+      seen.add(act.contactId);
+      const contact = contacts.find(c => c.id === act.contactId);
+      if (contact && !contact.assignedRep) unassigned++;
+    }
+
+    // Also count engaged (clicked + high intent) contacts
+    for (const act of activities) {
+      if (act.type !== 'email_clicked') continue;
+      if (seen.has(act.contactId)) continue;
+      const contact = contacts.find(c => c.id === act.contactId);
+      if (!contact || contact.intentScore < 30) continue;
+      seen.add(act.contactId);
+      if (!contact.assignedRep) unassigned++;
+    }
+
+    return unassigned;
+  }, [contacts, activities]);
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-[240px] bg-[#0c1222] text-slate-300 flex flex-col z-50">

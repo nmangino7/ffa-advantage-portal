@@ -1,17 +1,27 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { getContacts, getCampaigns, getAudienceSegments, getContactEngagement } from '@/lib/data';
 import { PIPELINE_STAGES, type PipelineStage, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import Link from 'next/link';
 import { useModal } from '@/lib/context/ModalContext';
+import { usePortal } from '@/lib/context/PortalContext';
 
 export default function AudiencePage() {
   const { openEnrollModal } = useModal();
-  const allContacts = getContacts();
-  const campaigns = getCampaigns();
-  const segments = getAudienceSegments();
+  const { contacts: allContacts, campaigns } = usePortal();
+
+  const segments = useMemo(() => {
+    return PIPELINE_STAGES.map(stage => {
+      const stageContacts = allContacts.filter(c => c.stage === stage.key);
+      const avgIntent = stageContacts.length > 0
+        ? Math.round(stageContacts.reduce((s, c) => s + c.intentScore, 0) / stageContacts.length)
+        : 0;
+      const unassignedCount = stageContacts.filter(c => !c.assignedRep).length;
+      const notInCampaignCount = stageContacts.filter(c => c.campaigns.length === 0).length;
+      return { stage, count: stageContacts.length, avgIntent, unassignedCount, notInCampaignCount };
+    });
+  }, [allContacts]);
   const [search, setSearch] = useState('');
   const [stageFilter, setStageFilter] = useState<PipelineStage | 'all'>('all');
   const [campaignFilter, setCampaignFilter] = useState<string>('all');
