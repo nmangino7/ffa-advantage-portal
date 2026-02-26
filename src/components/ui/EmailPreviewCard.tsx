@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { ServiceLineBadge } from './ServiceLineBadge';
 import type { ContentTemplate } from '@/lib/types';
 
@@ -12,6 +13,7 @@ export function EmailPreviewCard({
   expanded: boolean;
   onToggle: () => void;
 }) {
+  const router = useRouter();
   return (
     <div className={`bg-white rounded-xl border transition-all ${expanded ? 'border-blue-200 shadow-md' : 'border-slate-200 hover:border-blue-200 hover:shadow-sm'}`}>
       {/* Header - always visible */}
@@ -59,7 +61,7 @@ export function EmailPreviewCard({
             </div>
           </div>
           <div className="mt-3 flex items-center gap-2">
-            <button className="px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+            <button onClick={() => router.push('/campaigns/new')} className="px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-colors">
               Use in Campaign
             </button>
             <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${

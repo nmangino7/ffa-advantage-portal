@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
+import { ClientProviders } from "@/components/layout/ClientProviders";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-geist-sans" });
 
@@ -18,10 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        <Sidebar />
-        <main className="ml-[240px] min-h-screen p-8 lg:p-10">
-          {children}
-        </main>
+        <ClientProviders>
+          <Sidebar />
+          <main className="ml-[240px] min-h-screen p-8 lg:p-10">
+            {children}
+          </main>
+        </ClientProviders>
       </body>
     </html>
   );

@@ -1,5 +1,7 @@
+'use client';
+
 import Link from 'next/link';
-import { ServiceLineBadge } from './ServiceLineBadge';
+import { useModal } from '@/lib/context/ModalContext';
 import type { WarmLead } from '@/lib/types';
 
 const TIER_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
@@ -9,6 +11,7 @@ const TIER_CONFIG: Record<string, { label: string; color: string; bg: string }> 
 };
 
 export function ActionCard({ lead }: { lead: WarmLead }) {
+  const { openAssignModal, openScheduleModal } = useModal();
   const tc = TIER_CONFIG[lead.tier];
   const campaignObj = lead.lastAction.campaignName ? lead.campaignName : null;
 
@@ -48,6 +51,16 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
             {lead.lastAction.description}
           </p>
 
+          {/* Email reply content */}
+          {lead.lastAction.emailBody && (
+            <div className="mt-2 bg-slate-50 border border-slate-100 rounded-lg p-2.5">
+              {lead.lastAction.emailSubject && (
+                <p className="text-[10px] font-semibold text-slate-600 mb-0.5">{lead.lastAction.emailSubject}</p>
+              )}
+              <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">{lead.lastAction.emailBody}</p>
+            </div>
+          )}
+
           {/* Campaign + time */}
           <div className="flex items-center gap-2 mt-1.5 flex-wrap">
             {campaignObj && (
@@ -68,11 +81,11 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
           {/* CTAs */}
           <div className="flex items-center gap-2 mt-3">
             {!lead.contact.assignedRep && (
-              <button className="px-3 py-1.5 bg-blue-600 text-white text-[11px] font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+              <button onClick={() => openAssignModal(lead.contact.id)} className="px-3 py-1.5 bg-blue-600 text-white text-[11px] font-semibold rounded-lg hover:bg-blue-700 transition-colors">
                 Assign Advisor
               </button>
             )}
-            <button className="px-3 py-1.5 bg-white text-slate-700 text-[11px] font-semibold rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">
+            <button onClick={() => openScheduleModal(lead.contact.id)} className="px-3 py-1.5 bg-white text-slate-700 text-[11px] font-semibold rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">
               Schedule Call
             </button>
             <Link href={`/audience/${lead.contact.id}`}

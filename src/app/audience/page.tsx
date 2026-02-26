@@ -5,8 +5,10 @@ import { getContacts, getCampaigns, getAudienceSegments, getContactEngagement } 
 import { PIPELINE_STAGES, type PipelineStage, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import Link from 'next/link';
+import { useModal } from '@/lib/context/ModalContext';
 
 export default function AudiencePage() {
+  const { openEnrollModal } = useModal();
   const allContacts = getContacts();
   const campaigns = getCampaigns();
   const segments = getAudienceSegments();
@@ -63,10 +65,10 @@ export default function AudiencePage() {
         title="Audience"
         subtitle={`${allContacts.length.toLocaleString()} contacts segmented by engagement stage`}
         action={
-          <Link href="/campaigns"
+          <button onClick={() => openEnrollModal()}
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm">
             Enroll in Campaign
-          </Link>
+          </button>
         }
       />
 
@@ -105,10 +107,10 @@ export default function AudiencePage() {
               <p className="text-xs text-amber-700">Enroll them in a campaign to start re-engagement.</p>
             </div>
           </div>
-          <Link href="/campaigns"
+          <button onClick={() => openEnrollModal()}
             className="px-4 py-2 bg-amber-600 text-white text-xs font-semibold rounded-lg hover:bg-amber-700 transition-colors flex-shrink-0">
             Enroll Dormant Contacts
-          </Link>
+          </button>
         </div>
       )}
 
@@ -213,10 +215,10 @@ export default function AudiencePage() {
                           View
                         </Link>
                         {contact.stage === 'dormant' && contact.campaigns.length === 0 && (
-                          <Link href="/campaigns"
+                          <button onClick={() => openEnrollModal(contact.id)}
                             className="px-2.5 py-1 text-[10px] font-semibold text-amber-600 bg-amber-50 rounded-md hover:bg-amber-100 transition-colors">
                             Enroll
-                          </Link>
+                          </button>
                         )}
                       </div>
                     </td>

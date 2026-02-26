@@ -1,20 +1,60 @@
-import { getCampaign, getContactsByCampaign, getCampaignDetailedMetrics, getWarmLeads } from '@/lib/data';
+'use client';
+
+import { useMemo } from 'react';
+import { useParams } from 'next/navigation';
+import { usePortal } from '@/lib/context/PortalContext';
+import { useModal } from '@/lib/context/ModalContext';
 import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DripTimeline } from '@/components/ui/DripTimeline';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 
-export default async function CampaignDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const campaign = getCampaign(id);
-  if (!campaign) notFound();
+export default function CampaignDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const { contacts, campaigns, activities, toggleCampaignStatus } = usePortal();
+  const { openEnrollModal } = useModal();
 
-  const contacts = getContactsByCampaign(id);
-  const detailed = getCampaignDetailedMetrics(id);
+  const campaign = campaigns.find(c => c.id === id);
+  if (!campaign) return <div className="p-10 text-center text-slate-400">Campaign not found</div>;
+
   const cfg = SERVICE_LINE_CONFIG[campaign.serviceLine];
-  const stageBreakdown = PIPELINE_STAGES.map(s => ({ ...s, count: detailed.stageBreakdown[s.key] }));
-  const warmLeads = getWarmLeads().filter(l => l.lastAction.campaignId === id);
+  const campContacts = contacts.filter(c => c.campaigns.includes(id));
+
+  const detailed = useMemo(() => {
+    const campActivities = activities.filter(a => a.campaignId === id);
+    const sent = campActivities.filter(a => a.type === 'email_sent').length;
+    const opened = campActivities.filter(a => a.type === 'email_opened').length;
+    const clicked = campActivities.filter(a => a.type === 'email_clicked').length;
+    const replied = campActivities.filter(a => a.type === 'reply_received').length;
+    const requested = campActivities.filter(a => a.type === 'info_requested').length;
+    const booked = campActivities.filter(a => a.type === 'appointment_scheduled').length;
+
+    const stageBreakdown: Record<string, number> = { dormant: 0, education: 0, intent: 0, qualified: 0, licensed_rep: 0 };
+    campContacts.forEach(c => stageBreakdown[c.stage]++);
+
+    const avgIntent = campContacts.length > 0
+      ? Math.round(campContacts.reduce((s, c) => s + c.intentScore, 0) / campContacts.length)
+      : 0;
+
+    return { sent, opened, clicked, replied, requested, booked, stageBreakdown, avgIntent };
+  }, [activities, campContacts, id]);
+
+  const stageBreakdown = PIPELINE_STAGES.map(s => ({ ...s, count: detailed.stageBreakdown[s.key] || 0 }));
+
+  // Compute warm leads from this campaign
+  const warmLeads = useMemo(() => {
+    const highValueTypes = ['reply_received', 'info_requested', 'appointment_scheduled'];
+    const campActivities = activities.filter(a => a.campaignId === id && highValueTypes.includes(a.type));
+    const seen = new Set<string>();
+    return campActivities.map(act => {
+      if (seen.has(act.contactId)) return null;
+      seen.add(act.contactId);
+      const contact = contacts.find(c => c.id === act.contactId);
+      if (!contact) return null;
+      const tierMap: Record<string, string> = { reply_received: 'Replied', info_requested: 'Requested Info', appointment_scheduled: 'Replied' };
+      return { contact, action: act, tierLabel: tierMap[act.type] || 'Engaged' };
+    }).filter(Boolean).slice(0, 3);
+  }, [activities, contacts, id]);
 
   return (
     <div className="max-w-[1100px]">
@@ -27,13 +67,14 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
         ]}
         action={
           <div className="flex gap-2">
-            <button className="px-4 py-2.5 text-sm font-semibold bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors">
+            <button onClick={() => toggleCampaignStatus(campaign.id)}
+              className="px-4 py-2.5 text-sm font-semibold bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors">
               {campaign.status === 'active' ? 'Pause Campaign' : 'Resume Campaign'}
             </button>
-            <Link href="/audience"
+            <button onClick={() => openEnrollModal()}
               className="px-4 py-2.5 text-sm font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
               Enroll More Contacts
-            </Link>
+            </button>
           </div>
         }
       />
@@ -88,19 +129,20 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
               <h2 className="text-base font-bold text-slate-900">Warm Leads from This Campaign</h2>
               <span className="text-xs font-bold px-2 py-0.5 bg-amber-200 text-amber-800 rounded-full">{warmLeads.length}</span>
             </div>
-            <Link href={`/warm-leads`} className="text-sm font-semibold text-blue-600 hover:text-blue-800">
+            <Link href="/warm-leads" className="text-sm font-semibold text-blue-600 hover:text-blue-800">
               View all warm leads &rarr;
             </Link>
           </div>
           <p className="text-sm text-amber-800 mb-3">These contacts responded to this campaign and are ready for personal follow-up.</p>
           <div className="space-y-2">
-            {warmLeads.slice(0, 3).map(lead => {
-              const tierColors = {
-                replied: { bg: 'bg-red-100', text: 'text-red-700', label: 'Replied' },
-                info_requested: { bg: 'bg-amber-100', text: 'text-amber-700', label: 'Requested Info' },
-                engaged: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'Engaged' },
+            {warmLeads.map(lead => {
+              if (!lead) return null;
+              const tierColors: Record<string, { bg: string; text: string }> = {
+                Replied: { bg: 'bg-red-100', text: 'text-red-700' },
+                'Requested Info': { bg: 'bg-amber-100', text: 'text-amber-700' },
+                Engaged: { bg: 'bg-yellow-100', text: 'text-yellow-700' },
               };
-              const tc = tierColors[lead.tier];
+              const tc = tierColors[lead.tierLabel] || tierColors.Engaged;
               return (
                 <div key={lead.contact.id} className="bg-white rounded-xl p-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -109,11 +151,11 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-slate-900">{lead.contact.firstName} {lead.contact.lastName}</p>
-                      <p className="text-xs text-slate-500">{lead.lastAction.description}</p>
+                      <p className="text-xs text-slate-500">{lead.action.description}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${tc.bg} ${tc.text}`}>{tc.label}</span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${tc.bg} ${tc.text}`}>{lead.tierLabel}</span>
                     <Link href={`/audience/${lead.contact.id}`}
                       className="text-xs font-semibold text-blue-600 hover:text-blue-800 px-2 py-1 bg-blue-50 rounded-lg">
                       View
@@ -183,7 +225,7 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
                 <span className="text-base">{stage.icon}</span>
                 <span className="text-sm text-slate-700 w-24">{stage.label}</span>
                 <div className="flex-1 h-2.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full rounded-full" style={{ width: `${contacts.length > 0 ? (stage.count / contacts.length) * 100 : 0}%`, backgroundColor: stage.color }} />
+                  <div className="h-full rounded-full" style={{ width: `${campContacts.length > 0 ? (stage.count / campContacts.length) * 100 : 0}%`, backgroundColor: stage.color }} />
                 </div>
                 <span className="text-sm font-bold text-slate-900 w-8 text-right">{stage.count}</span>
               </div>
@@ -197,7 +239,7 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
         </div>
 
         <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-          <h2 className="text-base font-bold text-slate-900 mb-4">Enrolled Contacts ({contacts.length})</h2>
+          <h2 className="text-base font-bold text-slate-900 mb-4">Enrolled Contacts ({campContacts.length})</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -210,7 +252,7 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
                 </tr>
               </thead>
               <tbody>
-                {contacts.slice(0, 20).map(contact => {
+                {campContacts.slice(0, 20).map(contact => {
                   const sm = PIPELINE_STAGES.find(s => s.key === contact.stage);
                   const daysSince = Math.floor((Date.now() - new Date(contact.lastContactDate).getTime()) / 86400000);
                   return (
@@ -241,7 +283,7 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
                 })}
               </tbody>
             </table>
-            {contacts.length > 20 && <p className="text-xs text-slate-400 text-center py-3">Showing 20 of {contacts.length}</p>}
+            {campContacts.length > 20 && <p className="text-xs text-slate-400 text-center py-3">Showing 20 of {campContacts.length}</p>}
           </div>
         </div>
       </div>

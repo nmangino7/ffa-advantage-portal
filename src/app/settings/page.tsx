@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { PageHeader } from '@/components/ui/PageHeader';
 
-const tabs = ['HubSpot Integration', 'FINRA Compliance', 'Architecture', 'Roadmap'] as const;
+const tabs = ['Email Connection', 'HubSpot Integration', 'FINRA Compliance', 'Architecture', 'Roadmap'] as const;
 type Tab = typeof tabs[number];
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<Tab>('HubSpot Integration');
+  const [activeTab, setActiveTab] = useState<Tab>('Email Connection');
 
   return (
     <div className="max-w-[1000px]">
@@ -30,10 +30,217 @@ export default function SettingsPage() {
       </div>
 
       {/* Tab Content */}
+      {activeTab === 'Email Connection' && <EmailConnectionTab />}
       {activeTab === 'HubSpot Integration' && <HubSpotTab />}
       {activeTab === 'FINRA Compliance' && <FINRATab />}
       {activeTab === 'Architecture' && <ArchitectureTab />}
       {activeTab === 'Roadmap' && <RoadmapTab />}
+    </div>
+  );
+}
+
+const EMAIL_PROVIDERS = [
+  { id: 'hubspot', name: 'HubSpot', icon: '🟠', desc: 'Full CRM + email marketing platform' },
+  { id: 'sendgrid', name: 'SendGrid', icon: '📧', desc: 'Scalable email delivery API' },
+  { id: 'mailchimp', name: 'Mailchimp', icon: '🐵', desc: 'Email marketing & automation' },
+  { id: 'smtp', name: 'Custom SMTP', icon: '⚙️', desc: 'Connect any SMTP server' },
+];
+
+const WIZARD_STEPS = ['Choose Provider', 'API Credentials', 'Verify Domain', 'Test Send', 'Connected'];
+
+function EmailConnectionTab() {
+  const [wizardStep, setWizardStep] = useState(0);
+  const [provider, setProvider] = useState('');
+  const [apiKey, setApiKey] = useState('');
+  const [domain, setDomain] = useState('ffanorth.com');
+  const [verifying, setVerifying] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  function handleVerify() {
+    setVerifying(true);
+    setTimeout(() => { setVerifying(false); setWizardStep(3); }, 1500);
+  }
+
+  function handleTestSend() {
+    setSending(true);
+    setTimeout(() => { setSending(false); setWizardStep(4); }, 2000);
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Progress */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-4">
+        <div className="flex items-center gap-1">
+          {WIZARD_STEPS.map((s, i) => (
+            <div key={s} className="flex items-center gap-1 flex-1">
+              <div className={`flex-1 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+                i === wizardStep ? 'bg-blue-600 text-white' :
+                i < wizardStep ? 'bg-emerald-100 text-emerald-700' :
+                'bg-slate-100 text-slate-400'
+              }`}>
+                <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-bold">
+                  {i < wizardStep ? '✓' : i + 1}
+                </span>
+                <span className="truncate">{s}</span>
+              </div>
+              {i < WIZARD_STEPS.length - 1 && <span className="text-slate-300 text-xs">&rarr;</span>}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Step 1: Choose Provider */}
+      {wizardStep === 0 && (
+        <div className="bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 className="text-base font-bold text-slate-900 mb-1">Choose Your Email Provider</h2>
+          <p className="text-sm text-slate-500 mb-5">Select the service you use to send emails. You can change this later.</p>
+          <div className="grid grid-cols-2 gap-3">
+            {EMAIL_PROVIDERS.map(p => (
+              <button key={p.id} onClick={() => setProvider(p.id)}
+                className={`p-4 rounded-xl border-2 text-left transition-all ${
+                  provider === p.id ? 'border-blue-500 bg-blue-50 shadow-md' : 'border-slate-200 hover:border-slate-300'
+                }`}>
+                <span className="text-2xl">{p.icon}</span>
+                <p className="text-sm font-bold text-slate-900 mt-2">{p.name}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{p.desc}</p>
+              </button>
+            ))}
+          </div>
+          <div className="flex justify-end mt-5 pt-4 border-t border-slate-100">
+            <button onClick={() => setWizardStep(1)} disabled={!provider}
+              className="px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-40">
+              Next &rarr;
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 2: API Credentials */}
+      {wizardStep === 1 && (
+        <div className="bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 className="text-base font-bold text-slate-900 mb-1">Enter API Credentials</h2>
+          <p className="text-sm text-slate-500 mb-5">
+            Enter your {EMAIL_PROVIDERS.find(p => p.id === provider)?.name} API key. This is stored securely and used to send emails on your behalf.
+          </p>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">API Key</label>
+              <input type="password" value={apiKey} onChange={e => setApiKey(e.target.value)}
+                placeholder="Enter your API key..."
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono" />
+            </div>
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
+              <p className="text-xs text-blue-800">
+                <strong>Where to find this:</strong> Go to your {EMAIL_PROVIDERS.find(p => p.id === provider)?.name} dashboard &rarr; Settings &rarr; API Keys &rarr; Create New Key with &quot;Send Email&quot; permissions.
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-between mt-5 pt-4 border-t border-slate-100">
+            <button onClick={() => setWizardStep(0)} className="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">
+              &larr; Back
+            </button>
+            <button onClick={() => setWizardStep(2)} disabled={apiKey.length < 5}
+              className="px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-40">
+              Next &rarr;
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 3: Verify Domain */}
+      {wizardStep === 2 && (
+        <div className="bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 className="text-base font-bold text-slate-900 mb-1">Verify Sending Domain</h2>
+          <p className="text-sm text-slate-500 mb-5">Verify your domain to improve email deliverability and avoid spam filters.</p>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Sending Domain</label>
+              <input type="text" value={domain} onChange={e => setDomain(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <p className="text-xs font-semibold text-slate-700 mb-2">Add these DNS records to verify your domain:</p>
+              <div className="space-y-2 font-mono text-[11px]">
+                <div className="bg-white rounded-lg p-2 border border-slate-100">
+                  <span className="text-blue-600">TXT</span> &nbsp; _dmarc.{domain} &nbsp; <span className="text-slate-500">v=DMARC1; p=none</span>
+                </div>
+                <div className="bg-white rounded-lg p-2 border border-slate-100">
+                  <span className="text-blue-600">CNAME</span> &nbsp; em1234.{domain} &nbsp; <span className="text-slate-500">u1234.wl.sendgrid.net</span>
+                </div>
+                <div className="bg-white rounded-lg p-2 border border-slate-100">
+                  <span className="text-blue-600">TXT</span> &nbsp; {domain} &nbsp; <span className="text-slate-500">v=spf1 include:sendgrid.net ~all</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between mt-5 pt-4 border-t border-slate-100">
+            <button onClick={() => setWizardStep(1)} className="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">
+              &larr; Back
+            </button>
+            <button onClick={handleVerify} disabled={verifying}
+              className="px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-70">
+              {verifying ? 'Verifying...' : 'Verify Domain'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 4: Test Send */}
+      {wizardStep === 3 && (
+        <div className="bg-white rounded-2xl border border-slate-200 p-6">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-emerald-600">✓</span>
+            <h2 className="text-base font-bold text-slate-900">Domain Verified!</h2>
+          </div>
+          <p className="text-sm text-slate-500 mb-5">Your domain is verified. Let&apos;s send a test email to make sure everything works.</p>
+          <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-4">
+            <p className="text-xs text-slate-600"><strong>From:</strong> FFA North Team &lt;outreach@{domain}&gt;</p>
+            <p className="text-xs text-slate-600"><strong>To:</strong> nick@{domain}</p>
+            <p className="text-xs text-slate-600"><strong>Subject:</strong> Test Email from The Advantage Platform</p>
+            <p className="text-xs text-slate-500 mt-2">This is a test email to verify your email connection is working correctly.</p>
+          </div>
+          <div className="flex justify-between">
+            <button onClick={() => setWizardStep(2)} className="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">
+              &larr; Back
+            </button>
+            <button onClick={handleTestSend} disabled={sending}
+              className="px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-70">
+              {sending ? 'Sending...' : 'Send Test Email'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 5: Connected */}
+      {wizardStep === 4 && (
+        <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
+          <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">✅</div>
+          <h2 className="text-xl font-bold text-slate-900 mb-2">Email Connected!</h2>
+          <p className="text-sm text-slate-500 mb-6">
+            Your {EMAIL_PROVIDERS.find(p => p.id === provider)?.name} account is connected and ready to send campaign emails.
+          </p>
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 max-w-md mx-auto mb-6">
+            <div className="space-y-2 text-sm text-left">
+              <div className="flex justify-between">
+                <span className="text-emerald-700 font-medium">Provider</span>
+                <span className="text-emerald-900 font-semibold">{EMAIL_PROVIDERS.find(p => p.id === provider)?.name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-emerald-700 font-medium">Domain</span>
+                <span className="text-emerald-900 font-semibold">{domain}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-emerald-700 font-medium">Status</span>
+                <span className="text-emerald-900 font-semibold">Active</span>
+              </div>
+            </div>
+          </div>
+          <button onClick={() => setWizardStep(0)}
+            className="px-5 py-2.5 text-sm font-semibold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+            Reconfigure
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,14 +1,15 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { getCampaigns, getCampaignDetailedMetrics } from '@/lib/data';
+import { getCampaignDetailedMetrics } from '@/lib/data';
+import { usePortal } from '@/lib/context/PortalContext';
 import { SERVICE_LINE_CONFIG, type CampaignStatus } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DripTimeline } from '@/components/ui/DripTimeline';
 import Link from 'next/link';
 
 export default function CampaignsPage() {
-  const campaigns = getCampaigns();
+  const { campaigns, toggleCampaignStatus } = usePortal();
   const [statusFilter, setStatusFilter] = useState<CampaignStatus | 'all'>('all');
 
   const filtered = useMemo(() => {
@@ -30,7 +31,7 @@ export default function CampaignsPage() {
         title="Campaigns"
         subtitle="Manage your automated drip email campaigns"
         action={
-          <Link href="/content"
+          <Link href="/campaigns/new"
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -83,7 +84,7 @@ export default function CampaignsPage() {
                     <p className="text-sm text-slate-500">{campaign.description}</p>
                   </div>
                   <div className="flex gap-2 flex-shrink-0">
-                    <button className="px-3 py-2 text-xs font-semibold text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                    <button onClick={() => toggleCampaignStatus(campaign.id)} className="px-3 py-2 text-xs font-semibold text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
                       {campaign.status === 'active' ? 'Pause' : 'Resume'}
                     </button>
                     <Link href={`/campaigns/${campaign.id}`}

@@ -1,21 +1,39 @@
-import { getContact, getCampaigns, getActivities, getContactEngagement } from '@/lib/data';
+'use client';
+
+import { useMemo } from 'react';
+import { useParams } from 'next/navigation';
+import { usePortal } from '@/lib/context/PortalContext';
+import { useModal } from '@/lib/context/ModalContext';
 import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 
-export default async function AudienceDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const contact = getContact(id);
-  if (!contact) notFound();
+export default function AudienceDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const { contacts, campaigns, activities } = usePortal();
+  const { openEnrollModal, openAssignModal, openScheduleModal } = useModal();
 
-  const allCampaigns = getCampaigns();
-  const contactCampaigns = allCampaigns.filter(c => contact.campaigns.includes(c.id));
-  const activities = getActivities(undefined, contact.id);
-  const engagement = getContactEngagement(contact.id);
+  const contact = contacts.find(c => c.id === id);
+  if (!contact) return <div className="p-10 text-center text-slate-400">Contact not found</div>;
+
+  const contactCampaigns = campaigns.filter(c => contact.campaigns.includes(c.id));
+  const contactActivities = activities.filter(a => a.contactId === id).slice(0, 50);
   const stageMeta = PIPELINE_STAGES.find(s => s.key === contact.stage);
   const daysSince = Math.floor((Date.now() - new Date(contact.lastContactDate).getTime()) / 86400000);
   const stageIndex = PIPELINE_STAGES.findIndex(s => s.key === contact.stage);
+
+  const engagement = useMemo(() => {
+    const ca = activities.filter(a => a.contactId === id);
+    return {
+      totalActions: ca.length,
+      emailsSent: ca.filter(a => a.type === 'email_sent').length,
+      emailsOpened: ca.filter(a => a.type === 'email_opened').length,
+      emailsClicked: ca.filter(a => a.type === 'email_clicked').length,
+      replies: ca.filter(a => a.type === 'reply_received').length,
+      infoRequests: ca.filter(a => a.type === 'info_requested').length,
+      appointments: ca.filter(a => a.type === 'appointment_scheduled').length,
+    };
+  }, [activities, id]);
 
   return (
     <div className="max-w-[1100px]">
@@ -28,13 +46,16 @@ export default async function AudienceDetailPage({ params }: { params: Promise<{
         ]}
         action={
           <div className="flex gap-2">
-            <button className="px-4 py-2.5 text-sm font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+            <button onClick={() => openEnrollModal(contact.id)}
+              className="px-4 py-2.5 text-sm font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
               Enroll in Campaign
             </button>
-            <button className="px-4 py-2.5 text-sm font-semibold bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors">
+            <button onClick={() => openAssignModal(contact.id)}
+              className="px-4 py-2.5 text-sm font-semibold bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors">
               Assign Advisor
             </button>
-            <button className="px-4 py-2.5 text-sm font-semibold bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors">
+            <button onClick={() => openScheduleModal(contact.id)}
+              className="px-4 py-2.5 text-sm font-semibold bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors">
               Schedule Call
             </button>
           </div>
@@ -175,7 +196,8 @@ export default async function AudienceDetailPage({ params }: { params: Promise<{
               <p className="text-2xl mb-2">💤</p>
               <p className="text-sm text-slate-500">Not enrolled in any campaigns</p>
               <p className="text-xs text-slate-400 mt-1">This contact is dormant</p>
-              <button className="mt-3 px-4 py-2 text-sm font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+              <button onClick={() => openEnrollModal(contact.id)}
+                className="mt-3 px-4 py-2 text-sm font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
                 Enroll in Campaign
               </button>
             </div>
@@ -184,10 +206,10 @@ export default async function AudienceDetailPage({ params }: { params: Promise<{
 
         {/* Activity Timeline */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-          <h2 className="text-base font-bold text-slate-900 mb-4">Activity Timeline ({activities.length})</h2>
-          {activities.length > 0 ? (
+          <h2 className="text-base font-bold text-slate-900 mb-4">Activity Timeline ({contactActivities.length})</h2>
+          {contactActivities.length > 0 ? (
             <div className="space-y-0">
-              {activities.map((act, i) => {
+              {contactActivities.map((act, i) => {
                 const typeConfig: Record<string, { icon: string; color: string; bg: string }> = {
                   email_sent: { icon: '📤', color: '#3b82f6', bg: '#eff6ff' },
                   email_opened: { icon: '👁️', color: '#06b6d4', bg: '#ecfeff' },
@@ -196,6 +218,8 @@ export default async function AudienceDetailPage({ params }: { params: Promise<{
                   info_requested: { icon: '❓', color: '#7c3aed', bg: '#f5f3ff' },
                   appointment_scheduled: { icon: '📅', color: '#dc2626', bg: '#fef2f2' },
                   campaign_enrolled: { icon: '➕', color: '#2563eb', bg: '#eff6ff' },
+                  note_added: { icon: '📝', color: '#64748b', bg: '#f1f5f9' },
+                  stage_changed: { icon: '📊', color: '#7c3aed', bg: '#f5f3ff' },
                 };
                 const tc = typeConfig[act.type] || { icon: '📌', color: '#64748b', bg: '#f1f5f9' };
                 const isHighValue = ['reply_received', 'info_requested', 'appointment_scheduled'].includes(act.type);
@@ -207,9 +231,9 @@ export default async function AudienceDetailPage({ params }: { params: Promise<{
                         style={{ backgroundColor: tc.bg }}>
                         {tc.icon}
                       </div>
-                      {i < activities.length - 1 && <div className="w-px flex-1 bg-slate-200 mt-1" />}
+                      {i < contactActivities.length - 1 && <div className="w-px flex-1 bg-slate-200 mt-1" />}
                     </div>
-                    <div className="pt-0.5">
+                    <div className="pt-0.5 flex-1 min-w-0">
                       <p className={`text-[13px] ${isHighValue ? 'text-slate-900 font-semibold' : 'text-slate-700'}`}>{act.description}</p>
                       <div className="flex items-center gap-2 mt-0.5">
                         <p className="text-[11px] text-slate-400">
@@ -219,6 +243,15 @@ export default async function AudienceDetailPage({ params }: { params: Promise<{
                           <span className="text-[9px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded-md">{act.campaignName}</span>
                         )}
                       </div>
+                      {act.emailBody && (
+                        <div className="mt-2 bg-white border border-slate-200 rounded-lg p-3">
+                          {act.emailSubject && (
+                            <p className="text-[11px] font-semibold text-slate-700 mb-1">{act.emailSubject}</p>
+                          )}
+                          <p className="text-[12px] text-slate-600 leading-relaxed">{act.emailBody}</p>
+                          <p className="text-[10px] text-slate-400 mt-2">From: {contact.firstName} {contact.lastName} &lt;{contact.email}&gt;</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

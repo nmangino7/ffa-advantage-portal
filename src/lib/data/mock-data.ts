@@ -198,6 +198,26 @@ export const campaigns: Campaign[] = campaignDefs.map((def, i) => {
   };
 });
 
+const replyBodies = [
+  `Hi, thanks for reaching out. I've been meaning to look into this — my current advisor hasn't been very responsive lately. Could we set up a quick call next week to discuss?`,
+  `Thanks for the email. I'm interested in learning more about what you can offer. I've been with my current provider for years but haven't done a review in a while.`,
+  `Hello, I received your email and this caught my attention. My wife and I have been discussing our retirement plans. Do you have any availability this month?`,
+  `This is timely — I was just talking to a friend about getting a second opinion on my portfolio. What would a consultation look like?`,
+  `Thanks for the information. I'd like to learn more about the insurance review process. What documents would I need to gather?`,
+  `I appreciate you reaching out. We've been thinking about our financial future more seriously. Could you send me some additional information about your services?`,
+  `Interesting timing on this email. I just rolled over a 401k from my previous employer and have been looking for guidance. What are my options?`,
+  `Hi there. I'm open to having a conversation about this. My annuity hasn't been performing well and I'd love to understand what other options might be available.`,
+];
+
+const infoRequestBodies = [
+  `Could you send me more details about the insurance review? I'd like to understand what's covered before committing to a meeting.`,
+  `I'm interested but want to know more first. Do you have a brochure or one-pager about your retirement planning services?`,
+  `What are the fees associated with your advisory services? I want to compare before making any changes.`,
+  `Can you provide some case studies or examples of how you've helped clients in similar situations?`,
+  `I'd like more information about the annuity review process. How long does a typical review take?`,
+  `Before I schedule a call, can you send over some information about your firm and the team I'd be working with?`,
+];
+
 const activityTypes: { type: ActivityType; desc: (c: Contact, camp?: Campaign) => string }[] = [
   { type:'email_sent', desc:(c,camp) => `Email sent to ${c.firstName} ${c.lastName}${camp ? ` — ${camp.name}` : ''}` },
   { type:'email_opened', desc:(c,camp) => `${c.firstName} ${c.lastName} opened email${camp ? ` from ${camp.name}` : ''}` },
@@ -217,12 +237,22 @@ for (const contact of contacts) {
     const actDef = pick(activityTypes);
     const campId = contact.campaigns.length > 0 ? pick(contact.campaigns) : undefined;
     const camp = campId ? campaigns.find(c => c.id === campId) : undefined;
-    activities.push({
+    const act: Activity = {
       id: `act-${++actId}`, contactId: contact.id,
       contactName: `${contact.firstName} ${contact.lastName}`,
       type: actDef.type, description: actDef.desc(contact, camp),
       timestamp: recentDate(60), campaignId: campId, campaignName: camp?.name,
-    });
+    };
+    if (actDef.type === 'reply_received') {
+      const campStep = camp?.emailSequence[Math.floor(rand() * (camp?.emailSequence.length || 1))];
+      act.emailSubject = `Re: ${campStep?.subject || 'Your Financial Review'}`;
+      act.emailBody = pick(replyBodies);
+    } else if (actDef.type === 'info_requested') {
+      const campStep = camp?.emailSequence[Math.floor(rand() * (camp?.emailSequence.length || 1))];
+      act.emailSubject = `Re: ${campStep?.subject || 'Your Financial Review'}`;
+      act.emailBody = pick(infoRequestBodies);
+    }
+    activities.push(act);
   }
 }
 activities.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());

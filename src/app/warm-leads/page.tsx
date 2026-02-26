@@ -1,23 +1,55 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { getWarmLeads, getCampaigns } from '@/lib/data';
-import type { WarmLeadTier } from '@/lib/types';
+import { usePortal } from '@/lib/context/PortalContext';
+import type { WarmLead, WarmLeadTier } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ActionCard } from '@/components/ui/ActionCard';
 import { StatCard } from '@/components/ui/StatCard';
 
 const TIER_META: Record<WarmLeadTier, { label: string; description: string; color: string; bg: string }> = {
-  replied: { label: 'Replied', description: 'These contacts responded directly — highest priority', color: '#dc2626', bg: '#fef2f2' },
+  replied: { label: 'Replied', description: 'These contacts responded directly \u2014 highest priority', color: '#dc2626', bg: '#fef2f2' },
   info_requested: { label: 'Requested Info', description: 'Asked for more information about a service', color: '#d97706', bg: '#fffbeb' },
-  engaged: { label: 'Engaged', description: 'Multiple opens or clicks — showing strong interest', color: '#ca8a04', bg: '#fefce8' },
+  engaged: { label: 'Engaged', description: 'Multiple opens or clicks \u2014 showing strong interest', color: '#ca8a04', bg: '#fefce8' },
 };
 
 export default function WarmLeadsPage() {
-  const allLeads = getWarmLeads();
-  const campaigns = getCampaigns();
+  const { contacts, campaigns, activities } = usePortal();
   const [tierFilter, setTierFilter] = useState<WarmLeadTier | 'all'>('all');
   const [campaignFilter, setCampaignFilter] = useState<string>('all');
+
+  const allLeads = useMemo(() => {
+    const highValueTypes: Record<string, WarmLeadTier> = {
+      'reply_received': 'replied',
+      'info_requested': 'info_requested',
+      'appointment_scheduled': 'replied',
+    };
+    const leadMap = new Map<string, WarmLead>();
+    for (const act of activities) {
+      const tier = highValueTypes[act.type];
+      if (!tier) continue;
+      const contact = contacts.find(c => c.id === act.contactId);
+      if (!contact) continue;
+      const existing = leadMap.get(contact.id);
+      const tierPriority: Record<WarmLeadTier, number> = { replied: 1, info_requested: 2, engaged: 3 };
+      if (!existing || tierPriority[tier] < tierPriority[existing.tier]) {
+        const daysSinceAction = Math.floor((Date.now() - new Date(act.timestamp).getTime()) / 86400000);
+        leadMap.set(contact.id, { contact, tier, lastAction: act, campaignName: act.campaignName || 'Direct', daysSinceAction });
+      }
+    }
+    for (const act of activities) {
+      if (act.type !== 'email_clicked') continue;
+      const contact = contacts.find(c => c.id === act.contactId);
+      if (!contact || contact.intentScore < 30 || leadMap.has(contact.id)) continue;
+      const daysSinceAction = Math.floor((Date.now() - new Date(act.timestamp).getTime()) / 86400000);
+      leadMap.set(contact.id, { contact, tier: 'engaged', lastAction: act, campaignName: act.campaignName || 'Direct', daysSinceAction });
+    }
+    const tierOrder: Record<WarmLeadTier, number> = { replied: 0, info_requested: 1, engaged: 2 };
+    return Array.from(leadMap.values()).sort((a, b) => {
+      const tierDiff = tierOrder[a.tier] - tierOrder[b.tier];
+      return tierDiff !== 0 ? tierDiff : a.daysSinceAction - b.daysSinceAction;
+    });
+  }, [contacts, activities]);
 
   const filtered = useMemo(() => {
     let result = allLeads;
@@ -30,7 +62,6 @@ export default function WarmLeadsPage() {
   const repliedCount = allLeads.filter(l => l.tier === 'replied').length;
   const appointmentCount = allLeads.filter(l => l.lastAction.type === 'appointment_scheduled').length;
 
-  // Group by tier
   const grouped = useMemo(() => {
     const tiers: WarmLeadTier[] = ['replied', 'info_requested', 'engaged'];
     return tiers.map(tier => ({
@@ -43,25 +74,25 @@ export default function WarmLeadsPage() {
     <div className="max-w-[1000px]">
       <PageHeader
         title="Warm Leads"
-        subtitle="Contacts who responded to your campaigns — ready for personal outreach"
+        subtitle="Contacts who responded to your campaigns \u2014 ready for personal outreach"
       />
 
       {/* Explanation Banner */}
       <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl flex-shrink-0">🤝</div>
+          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl flex-shrink-0">{'\u{1F91D}'}</div>
           <div>
             <p className="text-sm font-semibold text-blue-900 mb-1">This is where automation stops and you step in.</p>
             <p className="text-sm text-blue-700">
-              When your automated drip campaigns detect engagement — a reply, an info request, or repeated clicks — the contact appears here. Review their activity and assign an advisor for personal follow-up.
+              When your automated drip campaigns detect engagement &mdash; a reply, an info request, or repeated clicks &mdash; the contact appears here. Review their activity and assign an advisor for personal follow-up.
             </p>
             <div className="flex items-center gap-2 mt-3 text-xs text-blue-600">
               <span className="bg-blue-100 px-2 py-1 rounded-md font-medium">Automated Campaign</span>
-              <span>→</span>
+              <span>&rarr;</span>
               <span className="bg-blue-100 px-2 py-1 rounded-md font-medium">Contact Responds</span>
-              <span>→</span>
+              <span>&rarr;</span>
               <span className="bg-blue-200 px-2 py-1 rounded-md font-bold">You Are Here</span>
-              <span>→</span>
+              <span>&rarr;</span>
               <span className="bg-blue-100 px-2 py-1 rounded-md font-medium">Advisor Takes Over</span>
             </div>
           </div>
@@ -70,10 +101,10 @@ export default function WarmLeadsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard value={allLeads.length} label="Total Warm Leads" icon="🔥" />
-        <StatCard value={needingAssignment} label="Needing Assignment" accentColor={needingAssignment > 0 ? '#dc2626' : undefined} icon="⚡" />
-        <StatCard value={repliedCount} label="Replied (Hottest)" accentColor="#dc2626" icon="💬" />
-        <StatCard value={appointmentCount} label="Appointments" accentColor="#059669" icon="📅" />
+        <StatCard value={allLeads.length} label="Total Warm Leads" icon={'\u{1F525}'} />
+        <StatCard value={needingAssignment} label="Needing Assignment" accentColor={needingAssignment > 0 ? '#dc2626' : undefined} icon={'\u{26A1}'} />
+        <StatCard value={repliedCount} label="Replied (Hottest)" accentColor="#dc2626" icon={'\u{1F4AC}'} />
+        <StatCard value={appointmentCount} label="Appointments" accentColor="#059669" icon={'\u{1F4C5}'} />
       </div>
 
       {/* Filters */}
@@ -124,9 +155,9 @@ export default function WarmLeadsPage() {
         </div>
       ) : (
         <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-          <p className="text-4xl mb-3">✅</p>
+          <p className="text-4xl mb-3">{'\u2705'}</p>
           <h3 className="text-lg font-semibold text-slate-900 mb-1">All caught up!</h3>
-          <p className="text-sm text-slate-500">No warm leads matching your filters. Your campaigns are running — check back soon.</p>
+          <p className="text-sm text-slate-500">No warm leads matching your filters. Your campaigns are running &mdash; check back soon.</p>
         </div>
       )}
     </div>

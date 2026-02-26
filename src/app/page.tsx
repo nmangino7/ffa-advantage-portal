@@ -1,6 +1,10 @@
+'use client';
+
+import { useMemo } from 'react';
 import Link from 'next/link';
-import { getQuickStats, getWarmLeads, getCampaigns } from '@/lib/data';
+import { usePortal } from '@/lib/context/PortalContext';
 import { SERVICE_LINE_CONFIG } from '@/lib/types';
+import type { WarmLead, WarmLeadTier } from '@/lib/types';
 import { StatCard } from '@/components/ui/StatCard';
 import { ActionCard } from '@/components/ui/ActionCard';
 import { DripTimeline } from '@/components/ui/DripTimeline';
@@ -11,7 +15,7 @@ const HOW_IT_WORKS = [
     title: 'Segment Your Audience',
     description: 'Organize your dormant contacts by service line interest.',
     href: '/audience',
-    icon: '👥',
+    icon: '\u{1F465}',
     color: '#2563eb',
   },
   {
@@ -19,7 +23,7 @@ const HOW_IT_WORKS = [
     title: 'Pick Email Templates',
     description: 'Browse 20 ready-to-send templates across 5 service lines.',
     href: '/content',
-    icon: '📧',
+    icon: '\u{1F4E7}',
     color: '#7c3aed',
   },
   {
@@ -27,7 +31,7 @@ const HOW_IT_WORKS = [
     title: 'Launch Drip Campaigns',
     description: 'Enroll contacts in automated 4-email sequences.',
     href: '/campaigns',
-    icon: '🚀',
+    icon: '\u{1F680}',
     color: '#059669',
   },
   {
@@ -35,16 +39,55 @@ const HOW_IT_WORKS = [
     title: 'Engage Warm Leads',
     description: 'When contacts respond, advisors step in personally.',
     href: '/warm-leads',
-    icon: '🤝',
+    icon: '\u{1F91D}',
     color: '#d97706',
   },
 ];
 
 export default function HomePage() {
-  const stats = getQuickStats();
-  const warmLeads = getWarmLeads();
+  const { contacts, campaigns, activities } = usePortal();
+
+  const warmLeads = useMemo(() => {
+    const highValueTypes: Record<string, WarmLeadTier> = {
+      'reply_received': 'replied',
+      'info_requested': 'info_requested',
+      'appointment_scheduled': 'replied',
+    };
+    const leadMap = new Map<string, WarmLead>();
+    for (const act of activities) {
+      const tier = highValueTypes[act.type];
+      if (!tier) continue;
+      const contact = contacts.find(c => c.id === act.contactId);
+      if (!contact) continue;
+      const existing = leadMap.get(contact.id);
+      const tierPriority: Record<WarmLeadTier, number> = { replied: 1, info_requested: 2, engaged: 3 };
+      if (!existing || tierPriority[tier] < tierPriority[existing.tier]) {
+        const daysSinceAction = Math.floor((Date.now() - new Date(act.timestamp).getTime()) / 86400000);
+        leadMap.set(contact.id, { contact, tier, lastAction: act, campaignName: act.campaignName || 'Direct', daysSinceAction });
+      }
+    }
+    for (const act of activities) {
+      if (act.type !== 'email_clicked') continue;
+      const contact = contacts.find(c => c.id === act.contactId);
+      if (!contact || contact.intentScore < 30 || leadMap.has(contact.id)) continue;
+      const daysSinceAction = Math.floor((Date.now() - new Date(act.timestamp).getTime()) / 86400000);
+      leadMap.set(contact.id, { contact, tier: 'engaged', lastAction: act, campaignName: act.campaignName || 'Direct', daysSinceAction });
+    }
+    const tierOrder: Record<WarmLeadTier, number> = { replied: 0, info_requested: 1, engaged: 2 };
+    return Array.from(leadMap.values()).sort((a, b) => {
+      const tierDiff = tierOrder[a.tier] - tierOrder[b.tier];
+      return tierDiff !== 0 ? tierDiff : a.daysSinceAction - b.daysSinceAction;
+    });
+  }, [contacts, activities]);
+
   const unassignedLeads = warmLeads.filter(l => !l.contact.assignedRep);
-  const campaigns = getCampaigns();
+
+  const stats = useMemo(() => ({
+    totalContacts: contacts.length,
+    activeCampaigns: campaigns.filter(c => c.status === 'active').length,
+    warmLeadsNeedingAttention: unassignedLeads.length,
+    appointmentsScheduled: activities.filter(a => a.type === 'appointment_scheduled').length,
+  }), [contacts, campaigns, activities, unassignedLeads]);
 
   return (
     <div className="max-w-[1100px]">
@@ -67,7 +110,7 @@ export default function HomePage() {
       <div className="mb-8">
         <h2 className="text-lg font-bold text-slate-900 mb-4">How It Works</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {HOW_IT_WORKS.map((step, i) => (
+          {HOW_IT_WORKS.map((step) => (
             <Link key={step.number} href={step.href}
               className="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-blue-200 hover:shadow-md transition-all relative overflow-hidden">
               <div className="flex items-center gap-3 mb-3">
@@ -81,7 +124,7 @@ export default function HomePage() {
               <p className="text-xs text-slate-500 leading-relaxed">{step.description}</p>
               <div className="mt-3 text-xs font-semibold group-hover:translate-x-1 transition-transform"
                 style={{ color: step.color }}>
-                Get started →
+                Get started &rarr;
               </div>
             </Link>
           ))}
@@ -90,15 +133,15 @@ export default function HomePage() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <StatCard value={stats.totalContacts.toLocaleString()} label="Total Contacts" icon="👥" />
-        <StatCard value={stats.activeCampaigns} label="Active Campaigns" icon="📧" />
+        <StatCard value={stats.totalContacts.toLocaleString()} label="Total Contacts" icon="\u{1F465}" />
+        <StatCard value={stats.activeCampaigns} label="Active Campaigns" icon="\u{1F4E7}" />
         <StatCard
           value={stats.warmLeadsNeedingAttention}
           label="Warm Leads Waiting"
-          icon="🔥"
+          icon="\u{1F525}"
           accentColor={stats.warmLeadsNeedingAttention > 0 ? '#dc2626' : undefined}
         />
-        <StatCard value={stats.appointmentsScheduled} label="Appointments Booked" icon="📅" accentColor="#059669" />
+        <StatCard value={stats.appointmentsScheduled} label="Appointments Booked" icon="\u{1F4C5}" accentColor="#059669" />
       </div>
 
       {/* Action Required */}
@@ -115,7 +158,7 @@ export default function HomePage() {
                   </span>
                 </div>
                 <Link href="/warm-leads" className="text-sm font-semibold text-blue-600 hover:text-blue-800">
-                  View all warm leads →
+                  View all warm leads &rarr;
                 </Link>
               </div>
               <p className="text-sm text-slate-500 mb-4">These contacts responded to your campaigns and need an advisor assigned.</p>
@@ -134,7 +177,7 @@ export default function HomePage() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-slate-900">Active Campaigns</h2>
           <Link href="/campaigns" className="text-sm font-semibold text-blue-600 hover:text-blue-800">
-            View all campaigns →
+            View all campaigns &rarr;
           </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

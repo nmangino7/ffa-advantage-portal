@@ -48,6 +48,8 @@ export interface Activity {
   timestamp: string;
   campaignId?: string;
   campaignName?: string;
+  emailSubject?: string;
+  emailBody?: string;
 }
 
 export interface EmailStep {
