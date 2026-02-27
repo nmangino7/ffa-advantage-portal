@@ -2,18 +2,22 @@
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 import { contacts as initialContacts, campaigns as initialCampaigns, activities as initialActivities } from '@/lib/data/mock-data';
-import type { Contact, Campaign, Activity, PipelineStage } from '@/lib/types';
+import type { Contact, Campaign, Activity, PipelineStage, EmailStep } from '@/lib/types';
 
 interface PortalContextType {
   contacts: Contact[];
   campaigns: Campaign[];
   activities: Activity[];
+  customTemplates: EmailStep[];
   enrollContact: (contactId: string, campaignIds: string[]) => void;
   assignAdvisor: (contactId: string, advisorName: string) => void;
   scheduleCall: (contactId: string, date: string, time: string, notes: string) => void;
   addCampaign: (campaign: Campaign) => void;
   toggleCampaignStatus: (campaignId: string) => void;
   moveContactStage: (contactId: string, newStage: PipelineStage) => void;
+  addTemplate: (template: EmailStep) => void;
+  updateTemplate: (id: string, updates: Partial<EmailStep>) => void;
+  deleteTemplate: (id: string) => void;
 }
 
 const PortalContext = createContext<PortalContextType | null>(null);
@@ -32,6 +36,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   const [contacts, setContacts] = useState<Contact[]>(() => [...initialContacts]);
   const [campaigns, setCampaigns] = useState<Campaign[]>(() => [...initialCampaigns]);
   const [activities, setActivities] = useState<Activity[]>(() => [...initialActivities]);
+  const [customTemplates, setCustomTemplates] = useState<EmailStep[]>([]);
 
   const enrollContact = useCallback((contactId: string, campaignIds: string[]) => {
     setContacts(prev => prev.map(c => {
@@ -95,7 +100,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
         contactId,
         contactName: `${contact.firstName} ${contact.lastName}`,
         type: 'appointment_scheduled' as const,
-        description: `Call scheduled with ${contact.firstName} ${contact.lastName} on ${date} at ${time}${notes ? ` — ${notes}` : ''}`,
+        description: `Call scheduled with ${contact.firstName} ${contact.lastName} on ${date} at ${time}${notes ? ` \u2014 ${notes}` : ''}`,
         timestamp: new Date().toISOString(),
       }, ...prev]);
 
@@ -134,11 +139,26 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     }
   }, [contacts]);
 
+  const addTemplate = useCallback((template: EmailStep) => {
+    setCustomTemplates(prev => [...prev, template]);
+  }, []);
+
+  const updateTemplate = useCallback((id: string, updates: Partial<EmailStep>) => {
+    setCustomTemplates(prev => prev.map(t =>
+      t.id === id ? { ...t, ...updates } : t
+    ));
+  }, []);
+
+  const deleteTemplate = useCallback((id: string) => {
+    setCustomTemplates(prev => prev.filter(t => t.id !== id));
+  }, []);
+
   return (
     <PortalContext.Provider value={{
-      contacts, campaigns, activities,
+      contacts, campaigns, activities, customTemplates,
       enrollContact, assignAdvisor, scheduleCall,
       addCampaign, toggleCampaignStatus, moveContactStage,
+      addTemplate, updateTemplate, deleteTemplate,
     }}>
       {children}
     </PortalContext.Provider>

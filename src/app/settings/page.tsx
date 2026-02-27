@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Icon } from '@/components/ui/Icon';
+import { Check, Mail, Settings, Send, Server } from 'lucide-react';
 
 const tabs = ['Email Connection', 'HubSpot Integration', 'FINRA Compliance', 'Architecture', 'Roadmap'] as const;
 type Tab = typeof tabs[number];
@@ -40,10 +42,10 @@ export default function SettingsPage() {
 }
 
 const EMAIL_PROVIDERS = [
-  { id: 'hubspot', name: 'HubSpot', icon: '🟠', desc: 'Full CRM + email marketing platform' },
-  { id: 'sendgrid', name: 'SendGrid', icon: '📧', desc: 'Scalable email delivery API' },
-  { id: 'mailchimp', name: 'Mailchimp', icon: '🐵', desc: 'Email marketing & automation' },
-  { id: 'smtp', name: 'Custom SMTP', icon: '⚙️', desc: 'Connect any SMTP server' },
+  { id: 'hubspot', name: 'HubSpot', iconName: 'settings', color: '#ff7a59', desc: 'Full CRM + email marketing platform' },
+  { id: 'sendgrid', name: 'SendGrid', iconName: 'send', color: '#1A82E2', desc: 'Scalable email delivery API' },
+  { id: 'mailchimp', name: 'Mailchimp', iconName: 'mail', color: '#FFE01B', desc: 'Email marketing & automation' },
+  { id: 'smtp', name: 'Custom SMTP', iconName: 'settings', color: '#64748b', desc: 'Connect any SMTP server' },
 ];
 
 const WIZARD_STEPS = ['Choose Provider', 'API Credentials', 'Verify Domain', 'Test Send', 'Connected'];
@@ -79,7 +81,7 @@ function EmailConnectionTab() {
                 'bg-slate-100 text-slate-400'
               }`}>
                 <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-bold">
-                  {i < wizardStep ? '✓' : i + 1}
+                  {i < wizardStep ? <Check className="w-3 h-3" /> : i + 1}
                 </span>
                 <span className="truncate">{s}</span>
               </div>
@@ -100,7 +102,9 @@ function EmailConnectionTab() {
                 className={`p-4 rounded-xl border-2 text-left transition-all ${
                   provider === p.id ? 'border-blue-500 bg-blue-50 shadow-md' : 'border-slate-200 hover:border-slate-300'
                 }`}>
-                <span className="text-2xl">{p.icon}</span>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-2" style={{ backgroundColor: p.color + '15' }}>
+                  <Icon name={p.iconName} className="w-5 h-5" style={{ color: p.color }} />
+                </div>
                 <p className="text-sm font-bold text-slate-900 mt-2">{p.name}</p>
                 <p className="text-xs text-slate-500 mt-0.5">{p.desc}</p>
               </button>
@@ -189,7 +193,7 @@ function EmailConnectionTab() {
       {wizardStep === 3 && (
         <div className="bg-white rounded-2xl border border-slate-200 p-6">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-emerald-600">✓</span>
+            <Check className="w-5 h-5 text-emerald-600" />
             <h2 className="text-base font-bold text-slate-900">Domain Verified!</h2>
           </div>
           <p className="text-sm text-slate-500 mb-5">Your domain is verified. Let&apos;s send a test email to make sure everything works.</p>
@@ -214,7 +218,9 @@ function EmailConnectionTab() {
       {/* Step 5: Connected */}
       {wizardStep === 4 && (
         <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
-          <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">✅</div>
+          <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Check className="w-8 h-8 text-emerald-600" />
+          </div>
           <h2 className="text-xl font-bold text-slate-900 mb-2">Email Connected!</h2>
           <p className="text-sm text-slate-500 mb-6">
             Your {EMAIL_PROVIDERS.find(p => p.id === provider)?.name} account is connected and ready to send campaign emails.
@@ -257,10 +263,10 @@ function HubSpotTab() {
 
   const checklist = [
     { label: 'Create HubSpot Private App with required scopes', scope: 'crm.objects.contacts.read, crm.objects.deals.write, marketing-emails' },
-    { label: 'Set up Deal Pipeline with 5 custom stages', scope: 'Dormant → Education → Intent → Qualified → Licensed Rep' },
+    { label: 'Set up Deal Pipeline with 5 custom stages', scope: 'Dormant \u2192 Education \u2192 Intent \u2192 Qualified \u2192 Licensed Rep' },
     { label: 'Create custom Contact Properties', scope: 'intent_score (number), portal_stage (dropdown)' },
     { label: 'Configure 20 Marketing Email Templates', scope: '5 service lines x 4 emails each' },
-    { label: 'Set up Enrollment Workflows', scope: 'Trigger: contact property change → enroll in sequence' },
+    { label: 'Set up Enrollment Workflows', scope: 'Trigger: contact property change \u2192 enroll in sequence' },
     { label: 'Configure Webhook Subscriptions', scope: 'Contact updates, email events, deal stage changes' },
     { label: 'Import existing contact database', scope: '~500K dormant contacts with proper field mapping' },
     { label: 'Set up suppression lists', scope: 'Opt-outs, do-not-contact, bounced emails' },
@@ -314,7 +320,7 @@ function FINRATab() {
   ];
 
   const safeguards = [
-    'All email sequences are education-only — no specific product recommendations',
+    'All email sequences are education-only \u2014 no specific product recommendations',
     'No performance guarantees or misleading claims in any template',
     'Clear firm identification (FFA North) in every email',
     'One-click unsubscribe in every email (HubSpot managed)',
@@ -336,7 +342,7 @@ function FINRATab() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {safeguards.map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg bg-emerald-50 border border-emerald-100">
-              <span className="text-emerald-600 text-sm flex-shrink-0">✓</span>
+              <Check className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
               <p className="text-xs text-emerald-800">{item}</p>
             </div>
           ))}
@@ -371,29 +377,29 @@ function ArchitectureTab() {
         <h2 className="text-base font-bold text-slate-900 mb-4">Technical Architecture</h2>
         <div className="bg-slate-900 rounded-xl p-6 font-mono text-sm text-slate-300">
           <p className="text-slate-500">{'// Current MVP'}</p>
-          <p className="text-emerald-400">Next.js App (Vercel) → Mock Data Layer → UI</p>
+          <p className="text-emerald-400">Next.js App (Vercel) &rarr; Mock Data Layer &rarr; UI</p>
           <br />
           <p className="text-slate-500">{'// Production'}</p>
           <p className="text-blue-400">Next.js App (Vercel)</p>
-          <p className="text-slate-400">&nbsp;&nbsp;├── API Routes → HubSpot Private App API</p>
-          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/contacts → Contacts API</p>
-          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/campaigns → Workflows + Email Events</p>
-          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/pipeline → Deal Pipeline</p>
-          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;└── /api/activities → Engagements API</p>
-          <p className="text-slate-400">&nbsp;&nbsp;├── Webhooks ← HubSpot (real-time)</p>
-          <p className="text-slate-400">&nbsp;&nbsp;├── NextAuth.js → SSO / Auth</p>
-          <p className="text-slate-400">&nbsp;&nbsp;└── Edge Functions → Intent Score</p>
+          <p className="text-slate-400">&nbsp;&nbsp;\u251c\u2500\u2500 API Routes &rarr; HubSpot Private App API</p>
+          <p className="text-slate-400">&nbsp;&nbsp;\u2502&nbsp;&nbsp;\u251c\u2500\u2500 /api/contacts &rarr; Contacts API</p>
+          <p className="text-slate-400">&nbsp;&nbsp;\u2502&nbsp;&nbsp;\u251c\u2500\u2500 /api/campaigns &rarr; Workflows + Email Events</p>
+          <p className="text-slate-400">&nbsp;&nbsp;\u2502&nbsp;&nbsp;\u251c\u2500\u2500 /api/pipeline &rarr; Deal Pipeline</p>
+          <p className="text-slate-400">&nbsp;&nbsp;\u2502&nbsp;&nbsp;\u2514\u2500\u2500 /api/activities &rarr; Engagements API</p>
+          <p className="text-slate-400">&nbsp;&nbsp;\u251c\u2500\u2500 Webhooks \u2190 HubSpot (real-time)</p>
+          <p className="text-slate-400">&nbsp;&nbsp;\u251c\u2500\u2500 NextAuth.js &rarr; SSO / Auth</p>
+          <p className="text-slate-400">&nbsp;&nbsp;\u2514\u2500\u2500 Edge Functions &rarr; Intent Score</p>
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
         {[
-          { title: 'Data Layer', desc: 'Mock data functions are designed as a swappable abstraction. Each call becomes an API route — zero UI changes needed.', color: 'blue' },
-          { title: 'Authentication', desc: 'NextAuth.js with credentials for MVP, upgradeable to SSO for production. Role-based access per page.', color: 'emerald' },
-          { title: 'Deployment', desc: 'Vercel handles hosting, SSL, CDN, auto-scaling. Push to GitHub = auto deploy. API keys stored in env vars.', color: 'violet' },
+          { title: 'Data Layer', desc: 'Mock data functions are designed as a swappable abstraction. Each call becomes an API route \u2014 zero UI changes needed.', bgColor: '#eff6ff', borderColor: '#bfdbfe', textColor: '#1e40af' },
+          { title: 'Authentication', desc: 'NextAuth.js with credentials for MVP, upgradeable to SSO for production. Role-based access per page.', bgColor: '#ecfdf5', borderColor: '#a7f3d0', textColor: '#065f46' },
+          { title: 'Deployment', desc: 'Vercel handles hosting, SSL, CDN, auto-scaling. Push to GitHub = auto deploy. API keys stored in env vars.', bgColor: '#f5f3ff', borderColor: '#c4b5fd', textColor: '#5b21b6' },
         ].map(item => (
-          <div key={item.title} className={`bg-${item.color}-50 border border-${item.color}-100 rounded-xl p-4`}>
-            <p className="text-sm font-bold mb-1" style={{ color: `var(--${item.color}-900, #1e293b)` }}>{item.title}</p>
+          <div key={item.title} className="rounded-xl p-4" style={{ backgroundColor: item.bgColor, borderColor: item.borderColor, borderWidth: 1, borderStyle: 'solid' }}>
+            <p className="text-sm font-bold mb-1" style={{ color: item.textColor }}>{item.title}</p>
             <p className="text-xs text-slate-600">{item.desc}</p>
           </div>
         ))}

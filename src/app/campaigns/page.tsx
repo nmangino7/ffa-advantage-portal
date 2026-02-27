@@ -6,6 +6,7 @@ import { usePortal } from '@/lib/context/PortalContext';
 import { SERVICE_LINE_CONFIG, type CampaignStatus } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DripTimeline } from '@/components/ui/DripTimeline';
+import { Icon } from '@/components/ui/Icon';
 import Link from 'next/link';
 
 export default function CampaignsPage() {
@@ -68,9 +69,9 @@ export default function CampaignsPage() {
               <div className="p-6">
                 {/* Header */}
                 <div className="flex items-start gap-4 mb-5">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                    style={{ backgroundColor: cfg.bgColor }}>
-                    {cfg.icon}
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ backgroundColor: cfg.bgColor, color: cfg.color }}>
+                    <Icon name={cfg.icon} className="w-6 h-6" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">

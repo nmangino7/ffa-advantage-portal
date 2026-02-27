@@ -5,6 +5,7 @@ import { useModal } from '@/lib/context/ModalContext';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useToast } from '@/lib/context/ToastContext';
 import { SERVICE_LINE_CONFIG } from '@/lib/types';
+import { Icon } from '@/components/ui/Icon';
 
 export function EnrollmentModal() {
   const { enrollModal, closeAll } = useModal();
@@ -94,7 +95,9 @@ export function EnrollmentModal() {
                   onChange={() => !isEnrolled && handleToggle(camp.id)}
                   className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-xl">{cfg.icon}</span>
+                <span className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: cfg.bgColor, color: cfg.color }}>
+                  <Icon name={cfg.icon} className="w-4 h-4" />
+                </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-slate-900">{camp.name}</p>
                   <div className="flex items-center gap-2 mt-0.5">

@@ -8,6 +8,8 @@ import type { WarmLead, WarmLeadTier } from '@/lib/types';
 import { StatCard } from '@/components/ui/StatCard';
 import { ActionCard } from '@/components/ui/ActionCard';
 import { DripTimeline } from '@/components/ui/DripTimeline';
+import { Icon } from '@/components/ui/Icon';
+import { Users, Mail, Flame, CalendarDays, Rocket, Handshake } from 'lucide-react';
 
 const HOW_IT_WORKS = [
   {
@@ -15,7 +17,7 @@ const HOW_IT_WORKS = [
     title: 'Segment Your Audience',
     description: 'Organize your dormant contacts by service line interest.',
     href: '/audience',
-    icon: '👥',
+    iconName: 'users',
     color: '#2563eb',
   },
   {
@@ -23,7 +25,7 @@ const HOW_IT_WORKS = [
     title: 'Pick Email Templates',
     description: 'Browse 20 ready-to-send templates across 5 service lines.',
     href: '/content',
-    icon: '📧',
+    iconName: 'mail',
     color: '#7c3aed',
   },
   {
@@ -31,7 +33,7 @@ const HOW_IT_WORKS = [
     title: 'Launch Drip Campaigns',
     description: 'Enroll contacts in automated 4-email sequences.',
     href: '/campaigns',
-    icon: '🚀',
+    iconName: 'rocket',
     color: '#059669',
   },
   {
@@ -39,7 +41,7 @@ const HOW_IT_WORKS = [
     title: 'Engage Warm Leads',
     description: 'When contacts respond, advisors step in personally.',
     href: '/warm-leads',
-    icon: '🤝',
+    iconName: 'handshake',
     color: '#d97706',
   },
 ];
@@ -92,14 +94,15 @@ export default function HomePage() {
   return (
     <div className="max-w-[1100px]">
       {/* Hero */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 mb-8">
-        <div className="flex items-start gap-5">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 rounded-2xl shadow-lg p-8 mb-8 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+        <div className="relative flex items-start gap-5">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0 shadow-lg">
             FFA
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 mb-1">Welcome to The Advantage</h1>
-            <p className="text-slate-500 text-[15px] leading-relaxed">
+            <h1 className="text-2xl font-bold mb-1">Welcome to The Advantage</h1>
+            <p className="text-blue-200 text-[15px] leading-relaxed max-w-xl">
               Your automated outreach platform for re-engaging dormant contacts. Follow these 4 steps to turn old leads into new opportunities.
             </p>
           </div>
@@ -110,15 +113,17 @@ export default function HomePage() {
       <div className="mb-8">
         <h2 className="text-lg font-bold text-slate-900 mb-4">How It Works</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {HOW_IT_WORKS.map((step) => (
+          {HOW_IT_WORKS.map((step, i) => (
             <Link key={step.number} href={step.href}
-              className="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-blue-200 hover:shadow-md transition-all relative overflow-hidden">
+              className="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-blue-200 hover:shadow-lg transition-all relative overflow-hidden">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold text-white"
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold text-white shadow-sm"
                   style={{ backgroundColor: step.color }}>
                   {step.number}
                 </div>
-                <span className="text-xl">{step.icon}</span>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: step.color + '15' }}>
+                  <Icon name={step.iconName} className="w-4 h-4" style={{ color: step.color }} />
+                </div>
               </div>
               <h3 className="text-sm font-bold text-slate-900 mb-1">{step.title}</h3>
               <p className="text-xs text-slate-500 leading-relaxed">{step.description}</p>
@@ -126,6 +131,11 @@ export default function HomePage() {
                 style={{ color: step.color }}>
                 Get started &rarr;
               </div>
+              {i < HOW_IT_WORKS.length - 1 && (
+                <div className="hidden md:block absolute -right-3 top-1/2 -translate-y-1/2 text-slate-300 z-10">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                </div>
+              )}
             </Link>
           ))}
         </div>
@@ -133,15 +143,15 @@ export default function HomePage() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <StatCard value={stats.totalContacts.toLocaleString()} label="Total Contacts" icon="👥" />
-        <StatCard value={stats.activeCampaigns} label="Active Campaigns" icon="📧" />
+        <StatCard value={stats.totalContacts.toLocaleString()} label="Total Contacts" icon={<Users className="w-5 h-5" />} accentColor="#3b82f6" />
+        <StatCard value={stats.activeCampaigns} label="Active Campaigns" icon={<Mail className="w-5 h-5" />} accentColor="#7c3aed" />
         <StatCard
           value={stats.warmLeadsNeedingAttention}
           label="Warm Leads Waiting"
-          icon="🔥"
-          accentColor={stats.warmLeadsNeedingAttention > 0 ? '#dc2626' : undefined}
+          icon={<Flame className="w-5 h-5" />}
+          accentColor={stats.warmLeadsNeedingAttention > 0 ? '#dc2626' : '#94a3b8'}
         />
-        <StatCard value={stats.appointmentsScheduled} label="Appointments Booked" icon="📅" accentColor="#059669" />
+        <StatCard value={stats.appointmentsScheduled} label="Appointments Booked" icon={<CalendarDays className="w-5 h-5" />} accentColor="#059669" />
       </div>
 
       {/* Action Required */}
@@ -187,9 +197,9 @@ export default function HomePage() {
               <Link key={campaign.id} href={`/campaigns/${campaign.id}`}
                 className="bg-white rounded-2xl border border-slate-200 p-5 hover:border-blue-200 hover:shadow-md transition-all">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center"
                     style={{ backgroundColor: cfg.bgColor }}>
-                    {cfg.icon}
+                    <Icon name={cfg.icon} className="w-5 h-5" style={{ color: cfg.color }} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-sm font-bold text-slate-900 truncate">{campaign.name}</h3>

@@ -2,12 +2,16 @@
 
 import { useState, useMemo } from 'react';
 import { usePortal } from '@/lib/context/PortalContext';
+import { useModal } from '@/lib/context/ModalContext';
 import { SERVICE_LINE_CONFIG, SERVICE_LINES, type ServiceLine, type ContentTemplate } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EmailPreviewCard } from '@/components/ui/EmailPreviewCard';
+import { Icon } from '@/components/ui/Icon';
+import { Plus, Search } from 'lucide-react';
 
 export default function ContentLibraryPage() {
   const { campaigns } = usePortal();
+  const { openTemplateModal } = useModal();
 
   const allTemplates: ContentTemplate[] = useMemo(() => {
     const templates: ContentTemplate[] = [];
@@ -48,6 +52,13 @@ export default function ContentLibraryPage() {
       <PageHeader
         title="Content Library"
         subtitle={`${allTemplates.length} ready-to-send email templates across ${SERVICE_LINES.length} service lines. All content is education-only and compliance-reviewed.`}
+        action={
+          <button onClick={() => openTemplateModal('create')}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm">
+            <Plus className="w-4 h-4" />
+            Create Template
+          </button>
+        }
       />
 
       {/* Service Line Tabs */}
@@ -73,7 +84,7 @@ export default function ContentLibraryPage() {
                   : 'bg-white border border-slate-200 hover:bg-slate-50'
               }`}
               style={activeTab === sl ? { backgroundColor: cfg.color } : { color: cfg.color }}>
-              <span>{cfg.icon}</span>
+              <Icon name={cfg.icon} className="w-3.5 h-3.5" />
               {cfg.short} ({count})
             </button>
           );
@@ -81,13 +92,14 @@ export default function ContentLibraryPage() {
       </div>
 
       {/* Search */}
-      <div className="mb-6">
+      <div className="mb-6 relative">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
         <input
           type="text"
           placeholder="Search templates by subject, content, or campaign name..."
           value={search}
           onChange={e => { setSearch(e.target.value); setExpandedId(null); }}
-          className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm"
+          className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm"
         />
       </div>
 
@@ -105,7 +117,7 @@ export default function ContentLibraryPage() {
         </div>
       ) : (
         <div className="text-center py-16">
-          <p className="text-3xl mb-3">🔍</p>
+          <Search className="w-8 h-8 text-slate-300 mx-auto mb-3" />
           <h3 className="text-lg font-semibold text-slate-900 mb-1">No templates found</h3>
           <p className="text-sm text-slate-500">Try adjusting your search or filter.</p>
         </div>

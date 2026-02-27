@@ -7,6 +7,8 @@ import { useModal } from '@/lib/context/ModalContext';
 import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DripTimeline } from '@/components/ui/DripTimeline';
+import { Icon } from '@/components/ui/Icon';
+import { Flame } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CampaignDetailPage() {
@@ -84,8 +86,8 @@ export default function CampaignDetailPage() {
         <div className="h-1" style={{ backgroundColor: cfg.color }} />
         <div className="p-6">
           <div className="flex items-start gap-4 mb-5">
-            <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0" style={{ backgroundColor: cfg.bgColor }}>
-              {cfg.icon}
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: cfg.bgColor, color: cfg.color }}>
+              <Icon name={cfg.icon} className="w-7 h-7" />
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
@@ -125,7 +127,7 @@ export default function CampaignDetailPage() {
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-6">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-3">
-              <span className="text-xl">🔥</span>
+              <Flame className="w-5 h-5 text-amber-600" />
               <h2 className="text-base font-bold text-slate-900">Warm Leads from This Campaign</h2>
               <span className="text-xs font-bold px-2 py-0.5 bg-amber-200 text-amber-800 rounded-full">{warmLeads.length}</span>
             </div>
@@ -222,7 +224,7 @@ export default function CampaignDetailPage() {
           <div className="space-y-3">
             {stageBreakdown.map(stage => (
               <div key={stage.key} className="flex items-center gap-3">
-                <span className="text-base">{stage.icon}</span>
+                <Icon name={stage.icon} className="w-4 h-4" style={{ color: stage.color }} />
                 <span className="text-sm text-slate-700 w-24">{stage.label}</span>
                 <div className="flex-1 h-2.5 bg-slate-100 rounded-full overflow-hidden">
                   <div className="h-full rounded-full" style={{ width: `${campContacts.length > 0 ? (stage.count / campContacts.length) * 100 : 0}%`, backgroundColor: stage.color }} />
@@ -264,8 +266,8 @@ export default function CampaignDetailPage() {
                       </td>
                       <td className="py-2.5 px-3 text-slate-500 text-[13px]">{contact.company || '\u2014'}</td>
                       <td className="py-2.5 px-3">
-                        <span className="text-[11px] px-2 py-0.5 rounded-full text-white font-medium" style={{ backgroundColor: sm?.color }}>
-                          {sm?.icon} {sm?.label}
+                        <span className="text-[11px] px-2 py-0.5 rounded-full text-white font-medium inline-flex items-center gap-1" style={{ backgroundColor: sm?.color }}>
+                          {sm && <Icon name={sm.icon} className="w-3 h-3" />} {sm?.label}
                         </span>
                       </td>
                       <td className="py-2.5 px-3">

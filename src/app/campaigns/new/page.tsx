@@ -1,15 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Suspense, useState, useEffect, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useToast } from '@/lib/context/ToastContext';
 import { SERVICE_LINES, SERVICE_LINE_CONFIG, type ServiceLine, type EmailStep, type Campaign } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DripTimeline } from '@/components/ui/DripTimeline';
+import { Icon } from '@/components/ui/Icon';
+import { Check, Plus, ChevronDown, ChevronUp, Sparkles, Eye } from 'lucide-react';
 import { getContentLibrary } from '@/lib/data';
 
 const STEPS = ['Campaign Info', 'Email Sequence', 'Review & Launch'];
+
+const TOKENS = [
+  { label: 'First Name', token: '{{first_name}}' },
+  { label: 'Last Name', token: '{{last_name}}' },
+  { label: 'Company', token: '{{company}}' },
+  { label: 'Email', token: '{{email}}' },
+];
 
 function makeId() {
   return `camp-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -26,8 +35,17 @@ const defaultEmails: EmailStep[] = [
   { id: makeStepId(), subject: '', previewText: '', body: '', sendDay: 28, status: 'draft' },
 ];
 
-export default function NewCampaignPage() {
+export default function NewCampaignPageWrapper() {
+  return (
+    <Suspense>
+      <NewCampaignPage />
+    </Suspense>
+  );
+}
+
+function NewCampaignPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { addCampaign, campaigns } = usePortal();
   const { showToast } = useToast();
   const contentLibrary = getContentLibrary();
@@ -38,6 +56,26 @@ export default function NewCampaignPage() {
   const [description, setDescription] = useState('');
   const [cloneFrom, setCloneFrom] = useState<string>('');
   const [emails, setEmails] = useState<EmailStep[]>(defaultEmails);
+  const [expandedEmail, setExpandedEmail] = useState<number>(0);
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const bodyRefs = useRef<(HTMLTextAreaElement | null)[]>([]);
+
+  // Auto-fill from URL templateId param
+  useEffect(() => {
+    const templateId = searchParams.get('templateId');
+    if (templateId) {
+      const tmpl = contentLibrary.find(t => t.template.id === templateId);
+      if (tmpl) {
+        setServiceLine(tmpl.serviceLine);
+        setEmails(prev => prev.map((e, i) =>
+          i === 0 ? { ...e, subject: tmpl.template.subject, previewText: tmpl.template.previewText, body: tmpl.template.body } : e
+        ));
+        setStep(1);
+        showToast(`Template "${tmpl.template.subject}" loaded into Email 1`);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleClone(campaignId: string) {
     setCloneFrom(campaignId);
@@ -59,6 +97,21 @@ export default function NewCampaignPage() {
 
   function updateEmail(index: number, field: keyof EmailStep, value: string | number) {
     setEmails(prev => prev.map((e, i) => i === index ? { ...e, [field]: value } : e));
+  }
+
+  function insertToken(emailIndex: number, token: string) {
+    const textarea = bodyRefs.current[emailIndex];
+    if (!textarea) return;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const current = emails[emailIndex].body;
+    const newBody = current.slice(0, start) + token + current.slice(end);
+    updateEmail(emailIndex, 'body', newBody);
+    // Restore cursor position after token
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + token.length, start + token.length);
+    }, 0);
   }
 
   function handleLaunch(asDraft: boolean) {
@@ -107,7 +160,7 @@ export default function NewCampaignPage() {
               'bg-slate-100 text-slate-400'
             }`}>
               <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold">
-                {i < step ? '✓' : i + 1}
+                {i < step ? <Check className="w-3 h-3" /> : i + 1}
               </span>
               {s}
             </div>
@@ -137,7 +190,9 @@ export default function NewCampaignPage() {
                       serviceLine === sl ? 'shadow-md' : 'border-slate-200 hover:border-slate-300'
                     }`}
                     style={serviceLine === sl ? { borderColor: slCfg.color, backgroundColor: slCfg.bgColor } : {}}>
-                    <span className="text-lg">{slCfg.icon}</span>
+                    <span className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: slCfg.bgColor, color: slCfg.color }}>
+                      <Icon name={slCfg.icon} className="w-4 h-4" />
+                    </span>
                     <p className="text-xs font-semibold mt-1" style={serviceLine === sl ? { color: slCfg.color } : { color: '#334155' }}>{sl}</p>
                   </button>
                 );
@@ -180,59 +235,138 @@ export default function NewCampaignPage() {
             <DripTimeline steps={emails} color={cfg.color} />
           </div>
 
-          {emails.map((email, i) => (
-            <div key={email.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-              <div className="flex items-center justify-between px-5 py-3 border-b border-slate-100 bg-slate-50/50">
-                <div className="flex items-center gap-3">
-                  <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ backgroundColor: cfg.color }}>
-                    {i + 1}
-                  </span>
-                  <span className="text-sm font-bold text-slate-900">Email {i + 1}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <label className="text-xs text-slate-400">Send on Day</label>
-                  <input type="number" min={1} max={90} value={email.sendDay}
-                    onChange={e => updateEmail(i, 'sendDay', parseInt(e.target.value) || 1)}
-                    className="w-16 px-2 py-1 rounded-lg border border-slate-200 text-sm text-center focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                </div>
-              </div>
-              <div className="p-5 space-y-3">
-                {serviceLineTemplates.length > 0 && (
-                  <div>
-                    <label className="text-[10px] text-slate-400 font-medium">Load from Content Library</label>
-                    <select onChange={e => { if (e.target.value) loadTemplate(i, e.target.value); }}
-                      className="w-full mt-1 px-3 py-2 rounded-lg border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
-                      <option value="">Choose a template...</option>
-                      {serviceLineTemplates.map(t => (
-                        <option key={t.template.id} value={t.template.id}>
-                          {t.campaignName} — Step {t.stepNumber}: {t.template.subject}
-                        </option>
-                      ))}
-                    </select>
+          {emails.map((email, i) => {
+            const isExpanded = expandedEmail === i;
+            const isFilled = !!(email.subject && email.body);
+
+            return (
+              <div key={email.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${
+                isExpanded ? 'border-blue-200 shadow-md' : 'border-slate-200'
+              }`}>
+                {/* Collapsible Header */}
+                <button
+                  onClick={() => setExpandedEmail(isExpanded ? -1 : i)}
+                  className="w-full flex items-center justify-between px-5 py-3 border-b border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ backgroundColor: cfg.color }}>
+                      {i + 1}
+                    </span>
+                    <div className="text-left">
+                      <span className="text-sm font-bold text-slate-900">Email {i + 1}</span>
+                      {email.subject && !isExpanded && (
+                        <span className="text-xs text-slate-400 ml-2">&mdash; {email.subject}</span>
+                      )}
+                    </div>
+                    {isFilled && !isExpanded && (
+                      <Check className="w-4 h-4 text-emerald-500" />
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
+                      <label className="text-xs text-slate-400">Day</label>
+                      <input type="number" min={1} max={90} value={email.sendDay}
+                        onChange={e => updateEmail(i, 'sendDay', parseInt(e.target.value) || 1)}
+                        className="w-14 px-2 py-1 rounded-lg border border-slate-200 text-sm text-center focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  </div>
+                </button>
+
+                {/* Expanded Editor */}
+                {isExpanded && (
+                  <div className="p-5 space-y-3">
+                    {serviceLineTemplates.length > 0 && (
+                      <div>
+                        <label className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Import from Content Library</label>
+                        <select onChange={e => { if (e.target.value) loadTemplate(i, e.target.value); }}
+                          className="w-full mt-1 px-3 py-2 rounded-lg border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Choose a template...</option>
+                          {serviceLineTemplates.map(t => (
+                            <option key={t.template.id} value={t.template.id}>
+                              {t.campaignName} — Step {t.stepNumber}: {t.template.subject}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                    <div>
+                      <label className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Subject Line</label>
+                      <input type="text" value={email.subject} onChange={e => updateEmail(i, 'subject', e.target.value)}
+                        placeholder="Enter email subject..."
+                        className="w-full mt-1 px-3 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Preview Text</label>
+                      <input type="text" value={email.previewText} onChange={e => updateEmail(i, 'previewText', e.target.value)}
+                        placeholder="Short preview shown in inbox..."
+                        className="w-full mt-1 px-3 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Email Body</label>
+                        <div className="flex items-center gap-1">
+                          <Sparkles className="w-3 h-3 text-amber-500" />
+                          <span className="text-[9px] text-slate-400 font-medium mr-1">Insert:</span>
+                          {TOKENS.map(t => (
+                            <button key={t.token} onClick={() => insertToken(i, t.token)}
+                              className="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded font-mono hover:bg-blue-100 transition-colors">
+                              {t.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <textarea
+                        ref={el => { bodyRefs.current[i] = el; }}
+                        value={email.body}
+                        onChange={e => updateEmail(i, 'body', e.target.value)}
+                        placeholder="Write the email body... Use personalization tokens like {{first_name}} to personalize."
+                        rows={8}
+                        className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none font-mono leading-relaxed" />
+                    </div>
+
+                    {/* Inline Preview Toggle */}
+                    {email.subject && email.body && (
+                      <div>
+                        <button onClick={() => setPreviewIndex(previewIndex === i ? null : i)}
+                          className="text-[11px] text-blue-600 font-semibold inline-flex items-center gap-1 hover:text-blue-800 transition-colors">
+                          <Eye className="w-3 h-3" /> {previewIndex === i ? 'Hide Preview' : 'Show Preview'}
+                        </button>
+                        {previewIndex === i && (
+                          <div className="mt-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                            <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 space-y-0.5">
+                              <div className="flex items-center gap-2 text-[11px]">
+                                <span className="text-slate-400 font-medium w-14">From</span>
+                                <span className="text-slate-700">The FFA North Team &lt;outreach@ffanorth.com&gt;</span>
+                              </div>
+                              <div className="flex items-center gap-2 text-[11px]">
+                                <span className="text-slate-400 font-medium w-14">Subject</span>
+                                <span className="text-slate-900 font-semibold">{email.subject}</span>
+                              </div>
+                              {email.previewText && (
+                                <div className="flex items-center gap-2 text-[11px]">
+                                  <span className="text-slate-400 font-medium w-14">Preview</span>
+                                  <span className="text-slate-500 italic">{email.previewText}</span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="px-4 py-4 text-[13px] text-slate-700 leading-relaxed whitespace-pre-wrap">
+                              {email.body.replace(/\{\{first_name\}\}/g, 'John').replace(/\{\{last_name\}\}/g, 'Smith').replace(/\{\{company\}\}/g, 'Acme Corp').replace(/\{\{email\}\}/g, 'john@acme.com')}
+                            </div>
+                            <div className="px-4 py-2 border-t border-slate-100 bg-slate-50">
+                              <p className="text-[10px] text-slate-400">
+                                Florida Financial Advisors &bull; 123 Main St, Suite 100 &bull; <span className="text-blue-500 underline">Unsubscribe</span>
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
-                <div>
-                  <label className="text-[10px] text-slate-400 font-medium">Subject Line</label>
-                  <input type="text" value={email.subject} onChange={e => updateEmail(i, 'subject', e.target.value)}
-                    placeholder="Enter email subject..."
-                    className="w-full mt-1 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400 font-medium">Preview Text</label>
-                  <input type="text" value={email.previewText} onChange={e => updateEmail(i, 'previewText', e.target.value)}
-                    placeholder="Short preview..."
-                    className="w-full mt-1 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400 font-medium">Email Body</label>
-                  <textarea value={email.body} onChange={e => updateEmail(i, 'body', e.target.value)}
-                    placeholder="Write the email body..."
-                    rows={6}
-                    className="w-full mt-1 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" />
-                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           <div className="flex justify-between pt-2">
             <button onClick={() => setStep(0)}
@@ -255,8 +389,8 @@ export default function NewCampaignPage() {
             <div className="h-1" style={{ backgroundColor: cfg.color }} />
             <div className="p-6">
               <div className="flex items-start gap-4 mb-5">
-                <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0" style={{ backgroundColor: cfg.bgColor }}>
-                  {cfg.icon}
+                <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: cfg.bgColor, color: cfg.color }}>
+                  <Icon name={cfg.icon} className="w-7 h-7" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-bold text-slate-900">{name || 'Untitled Campaign'}</h3>
@@ -288,17 +422,17 @@ export default function NewCampaignPage() {
           <div className="space-y-3">
             {emails.map((email, i) => (
               email.subject ? (
-                <div key={email.id} className="bg-white rounded-xl border border-slate-200 p-4">
-                  <div className="flex items-center gap-3 mb-2">
+                <div key={email.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                  <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border-b border-slate-100">
                     <span className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white" style={{ backgroundColor: cfg.color }}>
                       {i + 1}
                     </span>
-                    <div>
+                    <div className="flex-1">
                       <p className="text-sm font-semibold text-slate-900">Day {email.sendDay}: {email.subject}</p>
                       <p className="text-xs text-slate-400">{email.previewText}</p>
                     </div>
                   </div>
-                  <div className="bg-slate-50 rounded-lg p-3 mt-2">
+                  <div className="px-4 py-3">
                     <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap line-clamp-4">{email.body}</p>
                   </div>
                 </div>

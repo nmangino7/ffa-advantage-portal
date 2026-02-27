@@ -109,11 +109,11 @@ export interface AudienceSegment {
 }
 
 export const PIPELINE_STAGES: PipelineStageMeta[] = [
-  { key: 'dormant', label: 'Dormant', description: 'Not yet re-engaged', color: '#64748b', bgColor: '#f1f5f9', icon: '💤' },
-  { key: 'education', label: 'Education', description: 'Receiving campaign emails', color: '#2563eb', bgColor: '#eff6ff', icon: '📧' },
-  { key: 'intent', label: 'Intent Signal', description: 'Opened, clicked, or replied', color: '#d97706', bgColor: '#fffbeb', icon: '🔥' },
-  { key: 'qualified', label: 'Qualified', description: 'Service associate approved', color: '#7c3aed', bgColor: '#f5f3ff', icon: '✅' },
-  { key: 'licensed_rep', label: 'Licensed Rep', description: 'Meeting booked', color: '#059669', bgColor: '#ecfdf5', icon: '🤝' },
+  { key: 'dormant', label: 'Dormant', description: 'Not yet re-engaged', color: '#64748b', bgColor: '#f1f5f9', icon: 'moon' },
+  { key: 'education', label: 'Education', description: 'Receiving campaign emails', color: '#2563eb', bgColor: '#eff6ff', icon: 'mail' },
+  { key: 'intent', label: 'Intent Signal', description: 'Opened, clicked, or replied', color: '#d97706', bgColor: '#fffbeb', icon: 'flame' },
+  { key: 'qualified', label: 'Qualified', description: 'Service associate approved', color: '#7c3aed', bgColor: '#f5f3ff', icon: 'badge-check' },
+  { key: 'licensed_rep', label: 'Licensed Rep', description: 'Meeting booked', color: '#059669', bgColor: '#ecfdf5', icon: 'handshake' },
 ];
 
 export const SERVICE_LINES: ServiceLine[] = [
@@ -125,9 +125,9 @@ export const SERVICE_LINES: ServiceLine[] = [
 ];
 
 export const SERVICE_LINE_CONFIG: Record<ServiceLine, { color: string; bgColor: string; icon: string; short: string }> = {
-  'Insurance Review': { color: '#2563eb', bgColor: '#eff6ff', icon: '🛡️', short: 'Insurance' },
-  'Under-Serviced Annuities': { color: '#7c3aed', bgColor: '#f5f3ff', icon: '📊', short: 'Annuities' },
-  'Retirement Planning': { color: '#059669', bgColor: '#ecfdf5', icon: '🏖️', short: 'Retirement' },
-  'Investment Planning': { color: '#d97706', bgColor: '#fffbeb', icon: '📈', short: 'Investment' },
-  'Second-Opinion Positioning': { color: '#dc2626', bgColor: '#fef2f2', icon: '🔍', short: 'Second Opinion' },
+  'Insurance Review': { color: '#2563eb', bgColor: '#eff6ff', icon: 'shield', short: 'Insurance' },
+  'Under-Serviced Annuities': { color: '#7c3aed', bgColor: '#f5f3ff', icon: 'bar-chart', short: 'Annuities' },
+  'Retirement Planning': { color: '#059669', bgColor: '#ecfdf5', icon: 'sunset', short: 'Retirement' },
+  'Investment Planning': { color: '#d97706', bgColor: '#fffbeb', icon: 'trending-up', short: 'Investment' },
+  'Second-Opinion Positioning': { color: '#dc2626', bgColor: '#fef2f2', icon: 'search', short: 'Second Opinion' },
 };

@@ -1,11 +1,13 @@
 'use client';
 
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useModal } from '@/lib/context/ModalContext';
 import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Icon } from '@/components/ui/Icon';
+import { BarChart3, Send, Eye, MousePointerClick, MessageSquare, HelpCircle, CalendarDays, Plus, FileText, TrendingUp, Clock } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AudienceDetailPage() {
@@ -73,8 +75,8 @@ export default function AudienceDetailPage() {
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3 mt-1 flex-wrap">
-                <span className="text-xs px-3 py-1 rounded-full text-white font-semibold" style={{ backgroundColor: stageMeta?.color }}>
-                  {stageMeta?.icon} {stageMeta?.label}
+                <span className="text-xs px-3 py-1 rounded-full text-white font-semibold inline-flex items-center gap-1" style={{ backgroundColor: stageMeta?.color }}>
+                  {stageMeta && <Icon name={stageMeta.icon} className="w-3.5 h-3.5" />} {stageMeta?.label}
                 </span>
                 {contact.intentScore > 0 && (
                   <span className={`text-sm font-extrabold ${contact.intentScore >= 70 ? 'text-emerald-600' : contact.intentScore >= 30 ? 'text-amber-600' : 'text-slate-400'}`}>
@@ -100,9 +102,9 @@ export default function AudienceDetailPage() {
                 </div>
                 <div className="flex justify-between mt-1">
                   {PIPELINE_STAGES.map((s, i) => (
-                    <span key={s.key} className={`text-[9px] ${i <= stageIndex ? 'font-semibold' : 'text-slate-300'}`}
+                    <span key={s.key} className={`text-[9px] inline-flex items-center gap-0.5 ${i <= stageIndex ? 'font-semibold' : 'text-slate-300'}`}
                       style={i <= stageIndex ? { color: s.color } : {}}>
-                      {s.icon} {s.label}
+                      <Icon name={s.icon} className="w-2.5 h-2.5" /> {s.label}
                     </span>
                   ))}
                 </div>
@@ -120,13 +122,13 @@ export default function AudienceDetailPage() {
 
       {/* Engagement Metrics */}
       <div className="grid grid-cols-3 md:grid-cols-7 gap-3 mb-6">
-        <EngagementBox label="Total Actions" value={engagement.totalActions} icon="📊" />
-        <EngagementBox label="Emails Sent" value={engagement.emailsSent} icon="📤" />
-        <EngagementBox label="Emails Opened" value={engagement.emailsOpened} icon="👁️" />
-        <EngagementBox label="Links Clicked" value={engagement.emailsClicked} icon="🖱️" />
-        <EngagementBox label="Replies" value={engagement.replies} icon="💬" highlight />
-        <EngagementBox label="Info Requests" value={engagement.infoRequests} icon="❓" highlight />
-        <EngagementBox label="Appointments" value={engagement.appointments} icon="📅" highlight />
+        <EngagementBox label="Total Actions" value={engagement.totalActions} icon={<BarChart3 className="w-4 h-4" />} />
+        <EngagementBox label="Emails Sent" value={engagement.emailsSent} icon={<Send className="w-4 h-4" />} />
+        <EngagementBox label="Emails Opened" value={engagement.emailsOpened} icon={<Eye className="w-4 h-4" />} />
+        <EngagementBox label="Links Clicked" value={engagement.emailsClicked} icon={<MousePointerClick className="w-4 h-4" />} />
+        <EngagementBox label="Replies" value={engagement.replies} icon={<MessageSquare className="w-4 h-4" />} highlight />
+        <EngagementBox label="Info Requests" value={engagement.infoRequests} icon={<HelpCircle className="w-4 h-4" />} highlight />
+        <EngagementBox label="Appointments" value={engagement.appointments} icon={<CalendarDays className="w-4 h-4" />} highlight />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -163,7 +165,9 @@ export default function AudienceDetailPage() {
                   <Link key={camp.id} href={`/campaigns/${camp.id}`}
                     className="block p-4 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="text-2xl">{campCfg.icon}</span>
+                      <span className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: campCfg.bgColor, color: campCfg.color }}>
+                        <Icon name={campCfg.icon} className="w-5 h-5" />
+                      </span>
                       <div className="flex-1 min-w-0">
                         <p className="text-[13px] font-semibold text-slate-900">{camp.name}</p>
                         <p className="text-[11px] text-slate-400">{camp.serviceLine}</p>
@@ -193,7 +197,7 @@ export default function AudienceDetailPage() {
             </div>
           ) : (
             <div className="text-center py-8">
-              <p className="text-2xl mb-2">💤</p>
+              <Clock className="w-6 h-6 text-slate-300 mx-auto mb-2" />
               <p className="text-sm text-slate-500">Not enrolled in any campaigns</p>
               <p className="text-xs text-slate-400 mt-1">This contact is dormant</p>
               <button onClick={() => openEnrollModal(contact.id)}
@@ -210,26 +214,26 @@ export default function AudienceDetailPage() {
           {contactActivities.length > 0 ? (
             <div className="space-y-0">
               {contactActivities.map((act, i) => {
-                const typeConfig: Record<string, { icon: string; color: string; bg: string }> = {
-                  email_sent: { icon: '📤', color: '#3b82f6', bg: '#eff6ff' },
-                  email_opened: { icon: '👁️', color: '#06b6d4', bg: '#ecfeff' },
-                  email_clicked: { icon: '🖱️', color: '#d97706', bg: '#fffbeb' },
-                  reply_received: { icon: '💬', color: '#059669', bg: '#ecfdf5' },
-                  info_requested: { icon: '❓', color: '#7c3aed', bg: '#f5f3ff' },
-                  appointment_scheduled: { icon: '📅', color: '#dc2626', bg: '#fef2f2' },
-                  campaign_enrolled: { icon: '➕', color: '#2563eb', bg: '#eff6ff' },
-                  note_added: { icon: '📝', color: '#64748b', bg: '#f1f5f9' },
-                  stage_changed: { icon: '📊', color: '#7c3aed', bg: '#f5f3ff' },
+                const typeConfig: Record<string, { iconName: string; color: string; bg: string }> = {
+                  email_sent: { iconName: 'send', color: '#3b82f6', bg: '#eff6ff' },
+                  email_opened: { iconName: 'eye', color: '#06b6d4', bg: '#ecfeff' },
+                  email_clicked: { iconName: 'mouse-click', color: '#d97706', bg: '#fffbeb' },
+                  reply_received: { iconName: 'message-square', color: '#059669', bg: '#ecfdf5' },
+                  info_requested: { iconName: 'help-circle', color: '#7c3aed', bg: '#f5f3ff' },
+                  appointment_scheduled: { iconName: 'calendar', color: '#dc2626', bg: '#fef2f2' },
+                  campaign_enrolled: { iconName: 'plus', color: '#2563eb', bg: '#eff6ff' },
+                  note_added: { iconName: 'file-text', color: '#64748b', bg: '#f1f5f9' },
+                  stage_changed: { iconName: 'trending-up', color: '#7c3aed', bg: '#f5f3ff' },
                 };
-                const tc = typeConfig[act.type] || { icon: '📌', color: '#64748b', bg: '#f1f5f9' };
+                const tc = typeConfig[act.type] || { iconName: 'clock', color: '#64748b', bg: '#f1f5f9' };
                 const isHighValue = ['reply_received', 'info_requested', 'appointment_scheduled'].includes(act.type);
 
                 return (
                   <div key={act.id} className={`flex gap-3 pb-4 ${isHighValue ? 'bg-amber-50/30 -mx-2 px-2 rounded-lg' : ''}`}>
                     <div className="flex flex-col items-center">
-                      <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm flex-shrink-0"
-                        style={{ backgroundColor: tc.bg }}>
-                        {tc.icon}
+                      <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: tc.bg, color: tc.color }}>
+                        <Icon name={tc.iconName} className="w-3.5 h-3.5" />
                       </div>
                       {i < contactActivities.length - 1 && <div className="w-px flex-1 bg-slate-200 mt-1" />}
                     </div>
@@ -259,7 +263,7 @@ export default function AudienceDetailPage() {
             </div>
           ) : (
             <div className="text-center py-8">
-              <p className="text-2xl mb-2">🕐</p>
+              <Clock className="w-6 h-6 text-slate-300 mx-auto mb-2" />
               <p className="text-sm text-slate-400">No activity yet</p>
             </div>
           )}
@@ -269,10 +273,10 @@ export default function AudienceDetailPage() {
   );
 }
 
-function EngagementBox({ label, value, icon, highlight }: { label: string; value: number; icon: string; highlight?: boolean }) {
+function EngagementBox({ label, value, icon, highlight }: { label: string; value: number; icon: React.ReactNode; highlight?: boolean }) {
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-3 text-center">
-      <p className="text-sm mb-1">{icon}</p>
+      <div className={`flex justify-center mb-1 ${highlight ? 'text-amber-500' : 'text-slate-400'}`}>{icon}</div>
       <p className={`text-xl font-extrabold ${highlight ? 'text-amber-600' : 'text-slate-900'}`}>{value}</p>
       <p className="text-[9px] text-slate-400 mt-0.5">{label}</p>
     </div>

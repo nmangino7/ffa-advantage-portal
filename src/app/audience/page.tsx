@@ -3,9 +3,11 @@
 import { useState, useMemo } from 'react';
 import { PIPELINE_STAGES, type PipelineStage, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Icon } from '@/components/ui/Icon';
 import Link from 'next/link';
 import { useModal } from '@/lib/context/ModalContext';
 import { usePortal } from '@/lib/context/PortalContext';
+import { User } from 'lucide-react';
 
 export default function AudiencePage() {
   const { openEnrollModal } = useModal();
@@ -94,7 +96,7 @@ export default function AudiencePage() {
             }`}
             style={stageFilter === seg.stage.key ? { borderColor: seg.stage.color, backgroundColor: seg.stage.bgColor } : {}}>
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-lg">{seg.stage.icon}</span>
+              <Icon name={seg.stage.icon} className="w-4 h-4" style={{ color: seg.stage.color }} />
               <span className="text-xs font-semibold" style={{ color: seg.stage.color }}>{seg.stage.label}</span>
             </div>
             <p className="text-2xl font-bold text-slate-900">{seg.count}</p>
@@ -109,7 +111,9 @@ export default function AudiencePage() {
       {dormantNotInCampaign > 0 && stageFilter === 'all' && (
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">💤</span>
+            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
+              <Icon name="moon" className="w-5 h-5 text-amber-600" />
+            </div>
             <div>
               <p className="text-sm font-semibold text-amber-900">
                 You have <strong>{dormantNotInCampaign} dormant contacts</strong> who haven&apos;t been reached yet.
@@ -140,7 +144,7 @@ export default function AudiencePage() {
           <select value={intentFilter} onChange={e => { setIntentFilter(e.target.value); setPage(1); }}
             className="px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="all">All Intent Levels</option>
-            <option value="hot">Hot (≥70)</option>
+            <option value="hot">Hot (&ge;70)</option>
             <option value="warm">Warm (30-69)</option>
             <option value="cold">Cold (&lt;30)</option>
           </select>
@@ -155,14 +159,14 @@ export default function AudiencePage() {
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="text-left py-3 px-4 text-[10px] text-slate-400 font-medium uppercase tracking-wider cursor-pointer hover:text-slate-700"
-                  onClick={() => toggleSort('name')}>Name {sortBy === 'name' && (sortDir === 'asc' ? '↑' : '↓')}</th>
+                  onClick={() => toggleSort('name')}>Name {sortBy === 'name' && (sortDir === 'asc' ? '\u2191' : '\u2193')}</th>
                 <th className="text-left py-3 px-4 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Company</th>
                 <th className="text-left py-3 px-4 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Stage</th>
                 <th className="text-left py-3 px-4 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Campaigns</th>
                 <th className="text-left py-3 px-4 text-[10px] text-slate-400 font-medium uppercase tracking-wider cursor-pointer hover:text-slate-700"
-                  onClick={() => toggleSort('intentScore')}>Intent {sortBy === 'intentScore' && (sortDir === 'asc' ? '↑' : '↓')}</th>
+                  onClick={() => toggleSort('intentScore')}>Intent {sortBy === 'intentScore' && (sortDir === 'asc' ? '\u2191' : '\u2193')}</th>
                 <th className="text-left py-3 px-4 text-[10px] text-slate-400 font-medium uppercase tracking-wider cursor-pointer hover:text-slate-700"
-                  onClick={() => toggleSort('lastContactDate')}>Last Contact {sortBy === 'lastContactDate' && (sortDir === 'asc' ? '↑' : '↓')}</th>
+                  onClick={() => toggleSort('lastContactDate')}>Last Contact {sortBy === 'lastContactDate' && (sortDir === 'asc' ? '\u2191' : '\u2193')}</th>
                 <th className="text-left py-3 px-4 text-[10px] text-slate-400 font-medium uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
@@ -179,10 +183,10 @@ export default function AudiencePage() {
                         {contact.firstName} {contact.lastName}
                       </Link>
                     </td>
-                    <td className="py-3 px-4 text-slate-500 text-[13px]">{contact.company || '—'}</td>
+                    <td className="py-3 px-4 text-slate-500 text-[13px]">{contact.company || '\u2014'}</td>
                     <td className="py-3 px-4">
-                      <span className="text-[10px] px-2 py-0.5 rounded-full text-white font-medium whitespace-nowrap" style={{ backgroundColor: sm?.color }}>
-                        {sm?.icon} {sm?.label}
+                      <span className="text-[10px] px-2 py-0.5 rounded-full text-white font-medium whitespace-nowrap inline-flex items-center gap-1" style={{ backgroundColor: sm?.color }}>
+                        <Icon name={sm?.icon || 'moon'} className="w-3 h-3" /> {sm?.label}
                       </span>
                     </td>
                     <td className="py-3 px-4">
@@ -191,9 +195,9 @@ export default function AudiencePage() {
                           {contactCampaigns.map(c => {
                             const cfg = SERVICE_LINE_CONFIG[c.serviceLine];
                             return (
-                              <span key={c.id} className="text-[9px] px-1.5 py-0.5 rounded-md font-semibold"
+                              <span key={c.id} className="text-[9px] px-1.5 py-0.5 rounded-md font-semibold inline-flex items-center gap-0.5"
                                 style={{ backgroundColor: cfg.bgColor, color: cfg.color }}>
-                                {cfg.short}
+                                <Icon name={cfg.icon} className="w-2.5 h-2.5" /> {cfg.short}
                               </span>
                             );
                           })}

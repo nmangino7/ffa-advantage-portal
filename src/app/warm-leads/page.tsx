@@ -6,6 +6,8 @@ import type { WarmLead, WarmLeadTier } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ActionCard } from '@/components/ui/ActionCard';
 import { StatCard } from '@/components/ui/StatCard';
+import { Icon } from '@/components/ui/Icon';
+import { Flame, Zap, MessageSquare, CalendarDays, Handshake, CheckCircle2 } from 'lucide-react';
 
 const TIER_META: Record<WarmLeadTier, { label: string; description: string; color: string; bg: string }> = {
   replied: { label: 'Replied', description: 'These contacts responded directly — highest priority', color: '#dc2626', bg: '#fef2f2' },
@@ -78,9 +80,11 @@ export default function WarmLeadsPage() {
       />
 
       {/* Explanation Banner */}
-      <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-6">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-5 mb-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl flex-shrink-0">🤝</div>
+          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+            <Handshake className="w-5 h-5 text-blue-600" />
+          </div>
           <div>
             <p className="text-sm font-semibold text-blue-900 mb-1">This is where automation stops and you step in.</p>
             <p className="text-sm text-blue-700">
@@ -101,10 +105,10 @@ export default function WarmLeadsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard value={allLeads.length} label="Total Warm Leads" icon="🔥" />
-        <StatCard value={needingAssignment} label="Needing Assignment" accentColor={needingAssignment > 0 ? '#dc2626' : undefined} icon="⚡" />
-        <StatCard value={repliedCount} label="Replied (Hottest)" accentColor="#dc2626" icon="💬" />
-        <StatCard value={appointmentCount} label="Appointments" accentColor="#059669" icon="📅" />
+        <StatCard value={allLeads.length} label="Total Warm Leads" icon={<Flame className="w-5 h-5" />} accentColor="#d97706" />
+        <StatCard value={needingAssignment} label="Needing Assignment" accentColor={needingAssignment > 0 ? '#dc2626' : '#94a3b8'} icon={<Zap className="w-5 h-5" />} />
+        <StatCard value={repliedCount} label="Replied (Hottest)" accentColor="#dc2626" icon={<MessageSquare className="w-5 h-5" />} />
+        <StatCard value={appointmentCount} label="Appointments" accentColor="#059669" icon={<CalendarDays className="w-5 h-5" />} />
       </div>
 
       {/* Filters */}
@@ -155,7 +159,9 @@ export default function WarmLeadsPage() {
         </div>
       ) : (
         <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-          <p className="text-4xl mb-3">✅</p>
+          <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center mx-auto mb-3">
+            <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+          </div>
           <h3 className="text-lg font-semibold text-slate-900 mb-1">All caught up!</h3>
           <p className="text-sm text-slate-500">No warm leads matching your filters. Your campaigns are running &mdash; check back soon.</p>
         </div>

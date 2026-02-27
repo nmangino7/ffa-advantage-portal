@@ -1,4 +1,5 @@
 import type { EmailStep } from '@/lib/types';
+import { Mail } from 'lucide-react';
 
 export function DripTimeline({
   steps,
@@ -10,16 +11,20 @@ export function DripTimeline({
   compact?: boolean;
 }) {
   return (
-    <div className={`flex items-start ${compact ? 'gap-0' : 'gap-0'} w-full`}>
+    <div className={`flex items-start w-full`}>
       {steps.map((step, i) => (
         <div key={step.id} className="flex-1 flex items-start">
           {/* Node */}
           <div className="flex flex-col items-center flex-shrink-0" style={{ minWidth: compact ? 28 : 40 }}>
             <div
-              className={`rounded-full flex items-center justify-center text-white font-bold ${compact ? 'w-7 h-7 text-[10px]' : 'w-10 h-10 text-xs'}`}
+              className={`rounded-full flex items-center justify-center text-white font-bold shadow-sm ${compact ? 'w-7 h-7' : 'w-10 h-10'}`}
               style={{ backgroundColor: color }}
             >
-              {i + 1}
+              {compact ? (
+                <span className="text-[10px]">{i + 1}</span>
+              ) : (
+                <Mail className="w-4 h-4" />
+              )}
             </div>
             <span className={`mt-1 font-medium ${compact ? 'text-[9px]' : 'text-[11px]'} text-slate-400`}>
               Day {step.sendDay}
@@ -33,7 +38,7 @@ export function DripTimeline({
           {/* Connector line */}
           {i < steps.length - 1 && (
             <div className="flex-1 flex items-center pt-3.5" style={{ minWidth: 12 }}>
-              <div className={`w-full border-t-2 border-dashed`} style={{ borderColor: color + '40' }} />
+              <div className="w-full h-0.5 rounded-full" style={{ backgroundColor: color + '60' }} />
             </div>
           )}
         </div>

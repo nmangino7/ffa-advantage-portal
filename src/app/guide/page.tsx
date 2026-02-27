@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Icon } from '@/components/ui/Icon';
 
 const steps = [
   {
@@ -8,7 +9,7 @@ const steps = [
     description: 'Start by reviewing your contacts. The Audience page shows them organized by where they are in the outreach lifecycle. Focus on the Dormant segment — these are contacts who haven\'t heard from you in a while and are prime candidates for re-engagement.',
     href: '/audience',
     cta: 'Go to Audience',
-    icon: '👥',
+    iconName: 'users',
     color: '#2563eb',
   },
   {
@@ -17,7 +18,7 @@ const steps = [
     description: 'The Content Library has 20 pre-written email templates across 5 service lines (Insurance, Annuities, Retirement, Investment, and Second Opinion). Each template is education-only and compliance-safe. Preview them and choose which ones fit your contacts.',
     href: '/content',
     cta: 'Browse Templates',
-    icon: '📧',
+    iconName: 'mail',
     color: '#7c3aed',
   },
   {
@@ -26,7 +27,7 @@ const steps = [
     description: 'Each campaign is a 4-email automated sequence sent over 14 days. Enroll your dormant contacts and the system handles the rest — sending emails on schedule, tracking opens, clicks, and replies. No manual work required.',
     href: '/campaigns',
     cta: 'View Campaigns',
-    icon: '🚀',
+    iconName: 'rocket',
     color: '#059669',
   },
   {
@@ -35,9 +36,17 @@ const steps = [
     description: 'When a contact opens, clicks, or replies to your emails, they become a "warm lead" and appear on the Warm Leads page. This is where automation stops and the advisor steps in. Assign a rep, schedule a call, or send a personal follow-up.',
     href: '/warm-leads',
     cta: 'Check Warm Leads',
-    icon: '🤝',
+    iconName: 'handshake',
     color: '#d97706',
   },
+];
+
+const flowStages = [
+  { label: 'Dormant Contacts', sub: '~500K leads sitting idle', color: '#64748b', iconName: 'moon' },
+  { label: 'Drip Campaign', sub: '4-email automated sequence', color: '#2563eb', iconName: 'mail' },
+  { label: 'Contact Responds', sub: 'Opens, clicks, or replies', color: '#d97706', iconName: 'flame' },
+  { label: 'Advisor Handoff', sub: 'Personal follow-up begins', color: '#7c3aed', iconName: 'handshake' },
+  { label: 'Meeting Booked', sub: 'Revenue opportunity created', color: '#059669', iconName: 'calendar' },
 ];
 
 const faqs = [
@@ -63,7 +72,7 @@ const faqs = [
   },
   {
     q: 'Can I create my own email templates?',
-    a: 'In the current MVP, templates are pre-built. When connected to HubSpot, you\'ll be able to create custom templates in HubSpot\'s email editor and they\'ll appear in the Content Library automatically.',
+    a: 'Yes! Use the Content Library\'s "Create Template" button to build custom templates. You can add personalization tokens like {{first_name}} and {{company}} that auto-fill for each contact. When connected to HubSpot, templates will sync automatically.',
   },
   {
     q: 'What are the 5 service lines?',
@@ -83,18 +92,12 @@ export default function GuidePage() {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">
         <h2 className="text-lg font-bold text-slate-900 mb-4">The Big Picture</h2>
         <div className="flex items-center gap-0 overflow-x-auto pb-2">
-          {[
-            { label: 'Dormant Contacts', sub: '~500K leads sitting idle', color: '#64748b', icon: '💤' },
-            { label: 'Drip Campaign', sub: '4-email automated sequence', color: '#2563eb', icon: '📧' },
-            { label: 'Contact Responds', sub: 'Opens, clicks, or replies', color: '#d97706', icon: '🔥' },
-            { label: 'Advisor Handoff', sub: 'Personal follow-up begins', color: '#7c3aed', icon: '🤝' },
-            { label: 'Meeting Booked', sub: 'Revenue opportunity created', color: '#059669', icon: '📅' },
-          ].map((stage, i) => (
+          {flowStages.map((stage, i) => (
             <div key={i} className="flex items-center">
               <div className="flex flex-col items-center text-center min-w-[130px]">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-2"
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-2"
                   style={{ backgroundColor: stage.color + '15' }}>
-                  {stage.icon}
+                  <Icon name={stage.iconName} className="w-6 h-6" style={{ color: stage.color }} />
                 </div>
                 <p className="text-xs font-bold text-slate-900">{stage.label}</p>
                 <p className="text-[10px] text-slate-500 mt-0.5">{stage.sub}</p>
@@ -129,7 +132,9 @@ export default function GuidePage() {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xl">{step.icon}</span>
+                    <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ backgroundColor: step.color + '15' }}>
+                      <Icon name={step.iconName} className="w-4 h-4" style={{ color: step.color }} />
+                    </div>
                     <h3 className="text-base font-bold text-slate-900">{step.title}</h3>
                   </div>
                   <p className="text-sm text-slate-600 leading-relaxed mb-4">{step.description}</p>

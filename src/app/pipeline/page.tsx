@@ -5,7 +5,9 @@ import { usePortal } from '@/lib/context/PortalContext';
 import { useModal } from '@/lib/context/ModalContext';
 import { PIPELINE_STAGES, type PipelineStage, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Icon } from '@/components/ui/Icon';
 import Link from 'next/link';
+import { Inbox, User } from 'lucide-react';
 
 export default function PipelinePage() {
   const { contacts: allContacts, campaigns, moveContactStage } = usePortal();
@@ -17,11 +19,6 @@ export default function PipelinePage() {
     if (campaignFilter !== 'all') result = result.filter(c => c.campaigns.includes(campaignFilter));
     return result;
   }, [allContacts, campaignFilter]);
-
-  function getLastActivity(contactId: string) {
-    // We don't need to import activities for this simple display
-    return null;
-  }
 
   return (
     <div>
@@ -48,7 +45,7 @@ export default function PipelinePage() {
               <div key={stage.key} className="flex items-center gap-1 flex-1">
                 <div className="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold"
                   style={{ backgroundColor: stage.bgColor, color: stage.color }}>
-                  <span className="text-base">{stage.icon}</span>
+                  <Icon name={stage.icon} className="w-4 h-4" />
                   <div className="text-left min-w-0">
                     <p className="text-[11px] font-bold truncate">{stage.label}</p>
                     <p className="text-lg font-extrabold leading-tight">{count}</p>
@@ -91,7 +88,7 @@ export default function PipelinePage() {
                 <div className="p-4 border-b border-slate-100" style={{ borderTopWidth: '3px', borderTopColor: stage.color }}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-lg">{stage.icon}</span>
+                      <Icon name={stage.icon} className="w-5 h-5" style={{ color: stage.color }} />
                       <span className="text-sm font-bold text-slate-900">{stage.label}</span>
                     </div>
                     <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ backgroundColor: stage.bgColor, color: stage.color }}>
@@ -138,9 +135,9 @@ export default function PipelinePage() {
                               {contactCampaigns.map(c => {
                                 const ccfg = SERVICE_LINE_CONFIG[c.serviceLine];
                                 return (
-                                  <span key={c.id} className="text-[9px] px-1.5 py-0.5 rounded-md font-semibold"
+                                  <span key={c.id} className="text-[9px] px-1.5 py-0.5 rounded-md font-semibold inline-flex items-center gap-0.5"
                                     style={{ backgroundColor: ccfg.bgColor, color: ccfg.color }}>
-                                    {ccfg.icon} {ccfg.short}
+                                    <Icon name={ccfg.icon} className="w-2.5 h-2.5" /> {ccfg.short}
                                   </span>
                                 );
                               })}
@@ -154,7 +151,9 @@ export default function PipelinePage() {
                           </div>
 
                           {contact.assignedRep && (
-                            <p className="text-[9px] text-blue-500 font-medium mt-1">👤 {contact.assignedRep}</p>
+                            <p className="text-[9px] text-blue-500 font-medium mt-1 flex items-center gap-1">
+                              <User className="w-2.5 h-2.5" /> {contact.assignedRep}
+                            </p>
                           )}
                         </Link>
 
@@ -172,7 +171,7 @@ export default function PipelinePage() {
                   )}
                   {stageContacts.length === 0 && (
                     <div className="text-center py-10">
-                      <p className="text-2xl mb-2">🏜️</p>
+                      <Inbox className="w-8 h-8 text-slate-300 mx-auto mb-2" />
                       <p className="text-[11px] text-slate-400">No contacts in this stage</p>
                     </div>
                   )}

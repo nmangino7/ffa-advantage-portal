@@ -1,4 +1,5 @@
 import { SERVICE_LINE_CONFIG, type ServiceLine } from '@/lib/types';
+import { Icon } from './Icon';
 
 export function ServiceLineBadge({
   serviceLine,
@@ -11,13 +12,14 @@ export function ServiceLineBadge({
   const sizeClasses = size === 'md'
     ? 'text-xs px-2.5 py-1 gap-1.5'
     : 'text-[10px] px-2 py-0.5 gap-1';
+  const iconSize = size === 'md' ? 'w-3.5 h-3.5' : 'w-3 h-3';
 
   return (
     <span
       className={`inline-flex items-center rounded-full font-semibold ${sizeClasses}`}
       style={{ backgroundColor: cfg.bgColor, color: cfg.color }}
     >
-      <span>{cfg.icon}</span>
+      <Icon name={cfg.icon} className={iconSize} />
       <span>{cfg.short}</span>
     </span>
   );
