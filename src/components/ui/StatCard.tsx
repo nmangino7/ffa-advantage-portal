@@ -7,7 +7,7 @@ export function StatCard({
   icon,
   accentColor,
 }: {
-  value: string | number;
+  value: ReactNode;
   label: string;
   sub?: string;
   icon?: ReactNode;

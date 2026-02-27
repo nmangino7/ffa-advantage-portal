@@ -127,8 +127,8 @@ export default function PipelinePage() {
                             )}
                           </div>
 
-                          {contact.company && <p className="text-[11px] text-slate-600 font-medium truncate">{contact.company}</p>}
-                          <p className="text-[10px] text-slate-400 truncate">{contact.email}</p>
+                          {contact.company && <p className="text-[11px] text-slate-600 font-medium truncate" title={contact.company}>{contact.company}</p>}
+                          <p className="text-[10px] text-slate-400 truncate" title={contact.email}>{contact.email}</p>
 
                           {contactCampaigns.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2">

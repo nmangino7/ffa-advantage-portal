@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-geist-sans" });
 export const metadata: Metadata = {
   title: "FFA Advantage — Marketing Outreach Platform",
   description: "Enterprise Contact & Lead Regeneration Platform for FFA North",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -21,7 +24,9 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased`}>
         <ClientProviders>
           <Sidebar />
-          <main className="ml-[240px] min-h-screen p-8 lg:p-10">
+          {/* Mobile top bar spacer */}
+          <div className="md:hidden h-14" />
+          <main className="ml-0 md:ml-[240px] min-h-screen p-4 md:p-8 lg:p-10">
             {children}
           </main>
         </ClientProviders>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePortal } from '@/lib/context/PortalContext';
 import { SERVICE_LINE_CONFIG } from '@/lib/types';
@@ -9,7 +9,29 @@ import { StatCard } from '@/components/ui/StatCard';
 import { ActionCard } from '@/components/ui/ActionCard';
 import { DripTimeline } from '@/components/ui/DripTimeline';
 import { Icon } from '@/components/ui/Icon';
-import { Users, Mail, Flame, CalendarDays, Rocket, Handshake } from 'lucide-react';
+import { SkeletonCard } from '@/components/ui/SkeletonCard';
+import { Users, Mail, Flame, CalendarDays, CheckCircle } from 'lucide-react';
+
+/* ── Animated number counter ── */
+function AnimatedNumber({ value, duration = 1200 }: { value: number; duration?: number }) {
+  const [display, setDisplay] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    let start = 0;
+    const end = value;
+    if (end === 0) { setDisplay(0); return; }
+    const stepTime = Math.max(Math.floor(duration / end), 12);
+    const timer = setInterval(() => {
+      start += Math.ceil(end / (duration / stepTime));
+      if (start >= end) { start = end; clearInterval(timer); }
+      setDisplay(start);
+    }, stepTime);
+    return () => clearInterval(timer);
+  }, [value, duration]);
+
+  return <span ref={ref}>{display.toLocaleString()}</span>;
+}
 
 const HOW_IT_WORKS = [
   {
@@ -48,6 +70,12 @@ const HOW_IT_WORKS = [
 
 export default function HomePage() {
   const { contacts, campaigns, activities } = usePortal();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, []);
 
   const warmLeads = useMemo(() => {
     const highValueTypes: Record<string, WarmLeadTier> = {
@@ -91,13 +119,38 @@ export default function HomePage() {
     appointmentsScheduled: activities.filter(a => a.type === 'appointment_scheduled').length,
   }), [contacts, campaigns, activities, unassignedLeads]);
 
+  if (loading) {
+    return (
+      <div className="max-w-[1100px] animate-fade-in">
+        {/* Hero skeleton */}
+        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 rounded-2xl shadow-lg p-8 mb-8 h-32 animate-shimmer" />
+        {/* How it works skeletons */}
+        <div className="mb-8">
+          <div className="h-5 w-32 rounded animate-shimmer mb-4" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map(i => <SkeletonCard key={i} variant="card" />)}
+          </div>
+        </div>
+        {/* Stats skeletons */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[1, 2, 3, 4].map(i => <SkeletonCard key={i} variant="stat" />)}
+        </div>
+        {/* Action rows */}
+        <div className="space-y-3">
+          {[1, 2, 3].map(i => <SkeletonCard key={i} variant="row" />)}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-[1100px]">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 rounded-2xl shadow-lg p-8 mb-8 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 rounded-2xl shadow-lg p-8 mb-8 text-white relative overflow-hidden animate-fade-in animate-gradient">
         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/10 rounded-full translate-y-1/2 -translate-x-1/2" />
         <div className="relative flex items-start gap-5">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0 shadow-lg">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0 shadow-lg shadow-blue-500/25">
             FFA
           </div>
           <div>
@@ -115,7 +168,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {HOW_IT_WORKS.map((step, i) => (
             <Link key={step.number} href={step.href}
-              className="group bg-white rounded-2xl border border-slate-200 p-5 hover:border-blue-200 hover:shadow-lg transition-all relative overflow-hidden">
+              className={`group bg-white rounded-2xl border border-slate-200 p-5 hover:border-blue-200 hover:shadow-lg transition-all relative overflow-hidden animate-slide-up stagger-${i + 1}`}>
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold text-white shadow-sm"
                   style={{ backgroundColor: step.color }}>
@@ -142,21 +195,21 @@ export default function HomePage() {
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <StatCard value={stats.totalContacts.toLocaleString()} label="Total Contacts" icon={<Users className="w-5 h-5" />} accentColor="#3b82f6" />
-        <StatCard value={stats.activeCampaigns} label="Active Campaigns" icon={<Mail className="w-5 h-5" />} accentColor="#7c3aed" />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 animate-slide-up stagger-5">
+        <StatCard value={<AnimatedNumber value={stats.totalContacts} />} label="Total Contacts" icon={<Users className="w-5 h-5" />} accentColor="#3b82f6" />
+        <StatCard value={<AnimatedNumber value={stats.activeCampaigns} />} label="Active Campaigns" icon={<Mail className="w-5 h-5" />} accentColor="#7c3aed" />
         <StatCard
-          value={stats.warmLeadsNeedingAttention}
+          value={<AnimatedNumber value={stats.warmLeadsNeedingAttention} />}
           label="Warm Leads Waiting"
           icon={<Flame className="w-5 h-5" />}
           accentColor={stats.warmLeadsNeedingAttention > 0 ? '#dc2626' : '#94a3b8'}
         />
-        <StatCard value={stats.appointmentsScheduled} label="Appointments Booked" icon={<CalendarDays className="w-5 h-5" />} accentColor="#059669" />
+        <StatCard value={<AnimatedNumber value={stats.appointmentsScheduled} />} label="Appointments Booked" icon={<CalendarDays className="w-5 h-5" />} accentColor="#059669" />
       </div>
 
-      {/* Action Required */}
-      {unassignedLeads.length > 0 && (
-        <div className="mb-8">
+      {/* Action Required or All Caught Up */}
+      <div className="mb-8 animate-fade-in">
+        {unassignedLeads.length > 0 ? (
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="border-t-4 border-amber-500" />
             <div className="p-6">
@@ -179,11 +232,21 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 text-center">
+            <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <CheckCircle className="w-7 h-7 text-emerald-600" />
+            </div>
+            <h2 className="text-lg font-bold text-slate-900 mb-1">All Caught Up!</h2>
+            <p className="text-sm text-slate-500 max-w-md mx-auto">
+              No warm leads need attention right now. New leads will appear here when contacts engage with your campaigns.
+            </p>
+          </div>
+        )}
+      </div>
 
       {/* Active Campaigns */}
-      <div className="mb-8">
+      <div className="mb-8 animate-slide-up">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-slate-900">Active Campaigns</h2>
           <Link href="/campaigns" className="text-sm font-semibold text-blue-600 hover:text-blue-800">
@@ -222,7 +285,7 @@ export default function HomePage() {
       </div>
 
       {/* Getting Started CTA */}
-      <div className="bg-blue-50 rounded-2xl border border-blue-100 p-6 text-center">
+      <div className="bg-blue-50 rounded-2xl border border-blue-100 p-6 text-center animate-fade-in">
         <p className="text-sm font-semibold text-blue-900 mb-1">New to the platform?</p>
         <p className="text-sm text-blue-700 mb-3">Check out the step-by-step guide to learn how everything works.</p>
         <Link href="/guide" className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useModal } from '@/lib/context/ModalContext';
 import type { WarmLead } from '@/lib/types';
-import { UserPlus, Phone, Eye, MessageSquare, Info, MousePointerClick } from 'lucide-react';
+import { UserPlus, Phone, Eye, MessageSquare, Info, MousePointerClick, CheckCircle, RefreshCw } from 'lucide-react';
 
 const TIER_CONFIG: Record<string, { label: string; color: string; bg: string; iconName: string }> = {
   replied: { label: 'Replied', color: '#dc2626', bg: '#fef2f2', iconName: 'message-square' },
@@ -83,16 +83,20 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
             <span className="text-[10px] text-slate-400">
               {lead.daysSinceAction === 0 ? 'Today' : lead.daysSinceAction === 1 ? 'Yesterday' : `${lead.daysSinceAction} days ago`}
             </span>
-            {lead.contact.assignedRep && (
-              <span className="text-[10px] text-blue-600 font-medium inline-flex items-center gap-0.5">
-                <UserPlus className="w-3 h-3" /> {lead.contact.assignedRep}
-              </span>
-            )}
           </div>
 
           {/* CTAs */}
           <div className="flex items-center gap-2 mt-3">
-            {!lead.contact.assignedRep && (
+            {lead.contact.assignedRep ? (
+              <>
+                <span className="px-3 py-1.5 bg-emerald-50 text-emerald-700 text-[11px] font-semibold rounded-lg border border-emerald-200 inline-flex items-center gap-1.5">
+                  <CheckCircle className="w-3 h-3" /> Assigned to {lead.contact.assignedRep}
+                </span>
+                <button onClick={() => openAssignModal(lead.contact.id)} className="px-3 py-1.5 text-slate-500 text-[11px] font-semibold hover:text-blue-600 transition-colors inline-flex items-center gap-1">
+                  <RefreshCw className="w-3 h-3" /> Reassign
+                </button>
+              </>
+            ) : (
               <button onClick={() => openAssignModal(lead.contact.id)} className="px-3 py-1.5 bg-blue-600 text-white text-[11px] font-semibold rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-1.5">
                 <UserPlus className="w-3 h-3" /> Assign Advisor
               </button>

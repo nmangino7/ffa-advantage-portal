@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Icon } from '@/components/ui/Icon';
 import { Check, Mail, Settings, Send, Server } from 'lucide-react';
@@ -8,8 +8,24 @@ import { Check, Mail, Settings, Send, Server } from 'lucide-react';
 const tabs = ['Email Connection', 'HubSpot Integration', 'FINRA Compliance', 'Architecture', 'Roadmap'] as const;
 type Tab = typeof tabs[number];
 
+function usePersistedState<T>(key: string, defaultValue: T): [T, (v: T | ((prev: T) => T)) => void] {
+  const [state, setState] = useState<T>(() => {
+    if (typeof window === 'undefined') return defaultValue;
+    try {
+      const saved = localStorage.getItem(key);
+      return saved !== null ? JSON.parse(saved) : defaultValue;
+    } catch { return defaultValue; }
+  });
+
+  useEffect(() => {
+    try { localStorage.setItem(key, JSON.stringify(state)); } catch {}
+  }, [key, state]);
+
+  return [state, setState];
+}
+
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<Tab>('Email Connection');
+  const [activeTab, setActiveTab] = usePersistedState<Tab>('ffa-settings-tab', 'Email Connection');
 
   return (
     <div className="max-w-[1000px]">
@@ -51,8 +67,8 @@ const EMAIL_PROVIDERS = [
 const WIZARD_STEPS = ['Choose Provider', 'API Credentials', 'Verify Domain', 'Test Send', 'Connected'];
 
 function EmailConnectionTab() {
-  const [wizardStep, setWizardStep] = useState(0);
-  const [provider, setProvider] = useState('');
+  const [wizardStep, setWizardStep] = usePersistedState('ffa-wizard-step', 0);
+  const [provider, setProvider] = usePersistedState('ffa-wizard-provider', '');
   const [apiKey, setApiKey] = useState('');
   const [domain, setDomain] = useState('ffanorth.com');
   const [verifying, setVerifying] = useState(false);

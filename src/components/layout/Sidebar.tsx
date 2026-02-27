@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { usePortal } from '@/lib/context/PortalContext';
 import { Icon } from '@/components/ui/Icon';
+import { Menu, X } from 'lucide-react';
 import type { WarmLeadTier } from '@/lib/types';
 
 interface NavItem {
@@ -53,6 +54,12 @@ const navSections: NavSection[] = [
 export default function Sidebar() {
   const pathname = usePathname();
   const { contacts, activities } = usePortal();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Close mobile menu on navigation
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   const warmLeadCount = useMemo(() => {
     const highValueTypes: Record<string, WarmLeadTier> = {
@@ -83,12 +90,12 @@ export default function Sidebar() {
     return unassigned;
   }, [contacts, activities]);
 
-  return (
-    <aside className="fixed left-0 top-0 h-screen w-[240px] bg-[#0c1222] text-slate-300 flex flex-col z-50">
+  const sidebarContent = (
+    <>
       {/* Logo */}
       <div className="px-5 pt-5 pb-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-black text-sm">
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-black text-sm shadow-lg shadow-blue-500/20">
             FFA
           </div>
           <div>
@@ -97,6 +104,9 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
+
+      {/* Separator */}
+      <div className="mx-4 border-t border-slate-800/60 mb-2" />
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-3 pb-4">
@@ -115,14 +125,14 @@ export default function Sidebar() {
 
                 return (
                   <Link key={item.href} href={item.href}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all group ${
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-150 group ${
                       isActive
                         ? 'bg-blue-600/15 text-blue-400 border-l-[3px] border-blue-400 ml-0 pl-[9px]'
-                        : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'}`}>
-                    <Icon name={item.icon} className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-500 group-hover:text-slate-300'}`} />
+                        : 'text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 hover:translate-x-0.5'}`}>
+                    <Icon name={item.icon} className={`w-[18px] h-[18px] flex-shrink-0 transition-colors ${isActive ? 'text-blue-400' : 'text-slate-500 group-hover:text-slate-300'}`} />
                     <span className="flex-1">{item.label}</span>
                     {item.badge && warmLeadCount > 0 && (
-                      <span className="min-w-[20px] h-5 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5">
+                      <span className="min-w-[20px] h-5 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5 animate-pulse-badge">
                         {warmLeadCount}
                       </span>
                     )}
@@ -137,13 +147,63 @@ export default function Sidebar() {
       {/* User */}
       <div className="border-t border-slate-800 px-4 py-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-[11px] font-bold text-white">NM</div>
+          <div className="relative">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-[11px] font-bold text-white">NM</div>
+            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#0c1222]" />
+          </div>
           <div>
             <p className="text-[13px] font-medium text-white leading-tight">Nick Mangino</p>
             <p className="text-[10px] text-slate-500">FFA North</p>
           </div>
         </div>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile top bar */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-[#0c1222] z-50 flex items-center px-4 gap-3">
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        <div className="w-7 h-7 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-black text-[10px]">
+          FFA
+        </div>
+        <span className="text-sm font-bold text-white">The Advantage</span>
+      </div>
+
+      {/* Mobile backdrop */}
+      {mobileOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/50 z-[60] animate-fade-in"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      {/* Mobile sidebar */}
+      <aside
+        className={`md:hidden fixed left-0 top-0 h-screen w-[280px] bg-[#0c1222] text-slate-300 flex flex-col z-[70] transition-transform duration-300 ${
+          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {/* Close button */}
+        <button
+          onClick={() => setMobileOpen(false)}
+          className="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <X className="w-4 h-4" />
+        </button>
+        {sidebarContent}
+      </aside>
+
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex fixed left-0 top-0 h-screen w-[240px] bg-[#0c1222] text-slate-300 flex-col z-50">
+        {sidebarContent}
+      </aside>
+    </>
   );
 }
