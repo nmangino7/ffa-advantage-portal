@@ -1,24 +1,19 @@
 'use client';
 
-import { Suspense, useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useToast } from '@/lib/context/ToastContext';
 import { SERVICE_LINES, SERVICE_LINE_CONFIG, type ServiceLine, type EmailStep, type Campaign } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DripTimeline } from '@/components/ui/DripTimeline';
+import { RichTextEditor } from '@/components/ui/RichTextEditor';
+import { EmailPreview } from '@/components/ui/EmailPreview';
 import { Icon } from '@/components/ui/Icon';
-import { Check, Plus, ChevronDown, ChevronUp, Sparkles, Eye } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp, Eye } from 'lucide-react';
 import { getContentLibrary } from '@/lib/data';
 
 const STEPS = ['Campaign Info', 'Email Sequence', 'Review & Launch'];
-
-const TOKENS = [
-  { label: 'First Name', token: '{{first_name}}' },
-  { label: 'Last Name', token: '{{last_name}}' },
-  { label: 'Company', token: '{{company}}' },
-  { label: 'Email', token: '{{email}}' },
-];
 
 function makeId() {
   return `camp-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -29,10 +24,10 @@ function makeStepId() {
 }
 
 const defaultEmails: EmailStep[] = [
-  { id: makeStepId(), subject: '', previewText: '', body: '', sendDay: 1, status: 'draft' },
-  { id: makeStepId(), subject: '', previewText: '', body: '', sendDay: 7, status: 'draft' },
-  { id: makeStepId(), subject: '', previewText: '', body: '', sendDay: 14, status: 'draft' },
-  { id: makeStepId(), subject: '', previewText: '', body: '', sendDay: 28, status: 'draft' },
+  { id: makeStepId(), subject: '', previewText: '', body: '', bodyFormat: 'html', sendDay: 1, status: 'draft' },
+  { id: makeStepId(), subject: '', previewText: '', body: '', bodyFormat: 'html', sendDay: 7, status: 'draft' },
+  { id: makeStepId(), subject: '', previewText: '', body: '', bodyFormat: 'html', sendDay: 14, status: 'draft' },
+  { id: makeStepId(), subject: '', previewText: '', body: '', bodyFormat: 'html', sendDay: 28, status: 'draft' },
 ];
 
 export default function NewCampaignPageWrapper() {
@@ -58,7 +53,6 @@ function NewCampaignPage() {
   const [emails, setEmails] = useState<EmailStep[]>(defaultEmails);
   const [expandedEmail, setExpandedEmail] = useState<number>(0);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
-  const bodyRefs = useRef<(HTMLTextAreaElement | null)[]>([]);
 
   // Auto-fill from URL templateId param
   useEffect(() => {
@@ -68,7 +62,7 @@ function NewCampaignPage() {
       if (tmpl) {
         setServiceLine(tmpl.serviceLine);
         setEmails(prev => prev.map((e, i) =>
-          i === 0 ? { ...e, subject: tmpl.template.subject, previewText: tmpl.template.previewText, body: tmpl.template.body } : e
+          i === 0 ? { ...e, subject: tmpl.template.subject, previewText: tmpl.template.previewText, body: tmpl.template.body, bodyFormat: tmpl.template.bodyFormat || 'text' } : e
         ));
         setStep(1);
         showToast(`Template "${tmpl.template.subject}" loaded into Email 1`);
@@ -91,27 +85,12 @@ function NewCampaignPage() {
     const tmpl = contentLibrary.find(t => t.template.id === templateId);
     if (!tmpl) return;
     setEmails(prev => prev.map((e, i) =>
-      i === emailIndex ? { ...e, subject: tmpl.template.subject, previewText: tmpl.template.previewText, body: tmpl.template.body } : e
+      i === emailIndex ? { ...e, subject: tmpl.template.subject, previewText: tmpl.template.previewText, body: tmpl.template.body, bodyFormat: tmpl.template.bodyFormat || 'text' } : e
     ));
   }
 
   function updateEmail(index: number, field: keyof EmailStep, value: string | number) {
     setEmails(prev => prev.map((e, i) => i === index ? { ...e, [field]: value } : e));
-  }
-
-  function insertToken(emailIndex: number, token: string) {
-    const textarea = bodyRefs.current[emailIndex];
-    if (!textarea) return;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const current = emails[emailIndex].body;
-    const newBody = current.slice(0, start) + token + current.slice(end);
-    updateEmail(emailIndex, 'body', newBody);
-    // Restore cursor position after token
-    setTimeout(() => {
-      textarea.focus();
-      textarea.setSelectionRange(start + token.length, start + token.length);
-    }, 0);
   }
 
   function handleLaunch(asDraft: boolean) {
@@ -217,7 +196,14 @@ function NewCampaignPage() {
             </select>
           </div>
 
-          <div className="flex justify-end pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+            {!canProceedStep1 && name.length === 0 && (
+              <p className="text-xs text-amber-600">Enter a campaign name to continue</p>
+            )}
+            {!canProceedStep1 && name.length > 0 && (
+              <p className="text-xs text-amber-600">Campaign name cannot be only whitespace</p>
+            )}
+            {canProceedStep1 && <div />}
             <button onClick={() => setStep(1)} disabled={!canProceedStep1}
               className="px-6 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
               Next: Email Sequence &rarr;
@@ -303,29 +289,16 @@ function NewCampaignPage() {
                         className="w-full mt-1 px-3 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
                     <div>
-                      <div className="flex items-center justify-between mb-1">
-                        <label className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Email Body</label>
-                        <div className="flex items-center gap-1">
-                          <Sparkles className="w-3 h-3 text-amber-500" />
-                          <span className="text-[9px] text-slate-400 font-medium mr-1">Insert:</span>
-                          {TOKENS.map(t => (
-                            <button key={t.token} onClick={() => insertToken(i, t.token)}
-                              className="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded font-mono hover:bg-blue-100 transition-colors">
-                              {t.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      <textarea
-                        ref={el => { bodyRefs.current[i] = el; }}
-                        value={email.body}
-                        onChange={e => updateEmail(i, 'body', e.target.value)}
-                        placeholder="Write the email body... Use personalization tokens like {{first_name}} to personalize."
-                        rows={8}
-                        className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none font-mono leading-relaxed" />
+                      <label className="text-[10px] text-slate-400 font-medium uppercase tracking-wider mb-1 block">Email Body</label>
+                      <RichTextEditor
+                        initialContent={email.body}
+                        onChange={(html) => updateEmail(i, 'body', html)}
+                        placeholder="Start writing your email..."
+                        minHeight="200px"
+                      />
                     </div>
 
-                    {/* Inline Preview Toggle */}
+                    {/* Preview Toggle */}
                     {email.subject && email.body && (
                       <div>
                         <button onClick={() => setPreviewIndex(previewIndex === i ? null : i)}
@@ -333,31 +306,13 @@ function NewCampaignPage() {
                           <Eye className="w-3 h-3" /> {previewIndex === i ? 'Hide Preview' : 'Show Preview'}
                         </button>
                         {previewIndex === i && (
-                          <div className="mt-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                            <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 space-y-0.5">
-                              <div className="flex items-center gap-2 text-[11px]">
-                                <span className="text-slate-400 font-medium w-14">From</span>
-                                <span className="text-slate-700">The FFA North Team &lt;outreach@ffanorth.com&gt;</span>
-                              </div>
-                              <div className="flex items-center gap-2 text-[11px]">
-                                <span className="text-slate-400 font-medium w-14">Subject</span>
-                                <span className="text-slate-900 font-semibold">{email.subject}</span>
-                              </div>
-                              {email.previewText && (
-                                <div className="flex items-center gap-2 text-[11px]">
-                                  <span className="text-slate-400 font-medium w-14">Preview</span>
-                                  <span className="text-slate-500 italic">{email.previewText}</span>
-                                </div>
-                              )}
-                            </div>
-                            <div className="px-4 py-4 text-[13px] text-slate-700 leading-relaxed whitespace-pre-wrap">
-                              {email.body.replace(/\{\{first_name\}\}/g, 'John').replace(/\{\{last_name\}\}/g, 'Smith').replace(/\{\{company\}\}/g, 'Acme Corp').replace(/\{\{email\}\}/g, 'john@acme.com')}
-                            </div>
-                            <div className="px-4 py-2 border-t border-slate-100 bg-slate-50">
-                              <p className="text-[10px] text-slate-400">
-                                Florida Financial Advisors &bull; 123 Main St, Suite 100 &bull; <span className="text-blue-500 underline">Unsubscribe</span>
-                              </p>
-                            </div>
+                          <div className="mt-2 rounded-xl border border-slate-200 overflow-hidden" style={{ height: '400px' }}>
+                            <EmailPreview
+                              subject={email.subject}
+                              previewText={email.previewText}
+                              body={email.body}
+                              bodyFormat={email.bodyFormat || 'text'}
+                            />
                           </div>
                         )}
                       </div>
@@ -368,15 +323,20 @@ function NewCampaignPage() {
             );
           })}
 
-          <div className="flex justify-between pt-2">
+          <div className="flex items-center justify-between pt-2">
             <button onClick={() => setStep(0)}
               className="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
               &larr; Back
             </button>
-            <button onClick={() => setStep(2)} disabled={!canProceedStep2}
-              className="px-6 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
-              Next: Review &rarr;
-            </button>
+            <div className="flex items-center gap-3">
+              {!canProceedStep2 && (
+                <p className="text-xs text-amber-600">Complete at least 1 email (subject + body)</p>
+              )}
+              <button onClick={() => setStep(2)} disabled={!canProceedStep2}
+                className="px-6 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                Next: Review &rarr;
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -433,7 +393,10 @@ function NewCampaignPage() {
                     </div>
                   </div>
                   <div className="px-4 py-3">
-                    <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap line-clamp-4">{email.body}</p>
+                    <div
+                      className="text-xs text-slate-600 leading-relaxed line-clamp-4 [&_p]:mb-2"
+                      dangerouslySetInnerHTML={{ __html: email.bodyFormat === 'html' ? email.body : email.body.replace(/\n/g, '<br/>') }}
+                    />
                   </div>
                 </div>
               ) : null

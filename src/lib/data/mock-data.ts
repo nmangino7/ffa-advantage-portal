@@ -9,6 +9,9 @@ import {
   EmailStep,
 } from '../types';
 
+// If this version changes, localStorage will be re-seeded with fresh mock data
+export const STORAGE_VERSION = 1;
+
 // Deterministic seed helpers
 function seededRandom(seed: number): () => number {
   let s = seed;

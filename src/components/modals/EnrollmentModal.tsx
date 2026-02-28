@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useModal } from '@/lib/context/ModalContext';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useToast } from '@/lib/context/ToastContext';
@@ -12,6 +12,17 @@ export function EnrollmentModal() {
   const { contacts, campaigns, enrollContact } = usePortal();
   const { showToast } = useToast();
   const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  const handleEscape = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') closeAll();
+  }, [closeAll]);
+
+  useEffect(() => {
+    if (enrollModal) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [enrollModal, handleEscape]);
 
   if (!enrollModal) return null;
 

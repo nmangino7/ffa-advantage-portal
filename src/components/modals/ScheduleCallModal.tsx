@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useModal } from '@/lib/context/ModalContext';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useToast } from '@/lib/context/ToastContext';
@@ -18,6 +18,17 @@ export function ScheduleCallModal() {
   const [date, setDate] = useState(getTomorrow());
   const [time, setTime] = useState('10:00');
   const [notes, setNotes] = useState('');
+
+  const handleEscape = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') closeAll();
+  }, [closeAll]);
+
+  useEffect(() => {
+    if (scheduleModal) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [scheduleModal, handleEscape]);
 
   if (!scheduleModal) return null;
 

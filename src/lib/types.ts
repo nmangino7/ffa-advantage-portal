@@ -52,13 +52,31 @@ export interface Activity {
   emailBody?: string;
 }
 
+export interface FileAttachment {
+  fileId: string;
+  fileName: string;
+  fileSize: number;
+}
+
+export interface ContentFile {
+  id: string;
+  name: string;
+  mimeType: string;
+  size: number;
+  uploadedAt: string;
+  serviceLine?: ServiceLine;
+  tags: string[];
+}
+
 export interface EmailStep {
   id: string;
   subject: string;
   previewText: string;
   body: string;
+  bodyFormat?: 'html' | 'text';
   sendDay: number;
   status: 'draft' | 'active';
+  attachments?: FileAttachment[];
 }
 
 export interface Campaign {

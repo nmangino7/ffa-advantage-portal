@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { getCampaignDetailedMetrics } from '@/lib/data';
 import { usePortal } from '@/lib/context/PortalContext';
+import { useToast } from '@/lib/context/ToastContext';
 import { SERVICE_LINE_CONFIG, type CampaignStatus } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DripTimeline } from '@/components/ui/DripTimeline';
@@ -10,7 +11,8 @@ import { Icon } from '@/components/ui/Icon';
 import Link from 'next/link';
 
 export default function CampaignsPage() {
-  const { campaigns, toggleCampaignStatus } = usePortal();
+  const { campaigns, toggleCampaignStatus, duplicateCampaign } = usePortal();
+  const { showToast } = useToast();
   const [statusFilter, setStatusFilter] = useState<CampaignStatus | 'all'>('all');
 
   const filtered = useMemo(() => {
@@ -88,9 +90,17 @@ export default function CampaignsPage() {
                     <button onClick={() => toggleCampaignStatus(campaign.id)} className="px-3 py-2 text-xs font-semibold text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
                       {campaign.status === 'active' ? 'Pause' : 'Resume'}
                     </button>
+                    <button onClick={() => { duplicateCampaign(campaign.id); showToast(`"${campaign.name}" duplicated as draft`); }}
+                      className="px-3 py-2 text-xs font-semibold text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                      Duplicate
+                    </button>
+                    <Link href={`/campaigns/${campaign.id}/edit`}
+                      className="px-3 py-2 text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-200 rounded-lg hover:bg-amber-100 transition-colors">
+                      Edit
+                    </Link>
                     <Link href={`/campaigns/${campaign.id}`}
                       className="px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
-                      View Details
+                      View
                     </Link>
                   </div>
                 </div>

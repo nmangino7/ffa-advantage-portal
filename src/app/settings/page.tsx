@@ -1,31 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { usePersistedState } from '@/lib/hooks/usePersistedState';
+import { usePortal } from '@/lib/context/PortalContext';
+import { useToast } from '@/lib/context/ToastContext';
 import { Icon } from '@/components/ui/Icon';
-import { Check, Mail, Settings, Send, Server } from 'lucide-react';
+import { Check, Mail, Settings, Server, RotateCcw, Download, AlertTriangle, Info, Zap } from 'lucide-react';
 
-const tabs = ['Email Connection', 'HubSpot Integration', 'FINRA Compliance', 'Architecture', 'Roadmap'] as const;
+const tabs = ['Email & Data', 'HubSpot Integration', 'FINRA Compliance', 'Architecture', 'Roadmap'] as const;
 type Tab = typeof tabs[number];
 
-function usePersistedState<T>(key: string, defaultValue: T): [T, (v: T | ((prev: T) => T)) => void] {
-  const [state, setState] = useState<T>(() => {
-    if (typeof window === 'undefined') return defaultValue;
-    try {
-      const saved = localStorage.getItem(key);
-      return saved !== null ? JSON.parse(saved) : defaultValue;
-    } catch { return defaultValue; }
-  });
-
-  useEffect(() => {
-    try { localStorage.setItem(key, JSON.stringify(state)); } catch {}
-  }, [key, state]);
-
-  return [state, setState];
-}
-
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = usePersistedState<Tab>('ffa-settings-tab', 'Email Connection');
+  const [activeTab, setActiveTab] = usePersistedState<Tab>('ffa-settings-tab', 'Email & Data');
 
   return (
     <div className="max-w-[1000px]">
@@ -35,11 +22,11 @@ export default function SettingsPage() {
       />
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 bg-slate-100 p-1 rounded-xl">
+      <div className="flex gap-1 mb-6 bg-slate-100 p-1 rounded-xl overflow-x-auto">
         {tabs.map(tab => (
           <button key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+            className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
               activeTab === tab ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
             }`}>
             {tab}
@@ -48,7 +35,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'Email Connection' && <EmailConnectionTab />}
+      {activeTab === 'Email & Data' && <EmailDataTab />}
       {activeTab === 'HubSpot Integration' && <HubSpotTab />}
       {activeTab === 'FINRA Compliance' && <FINRATab />}
       {activeTab === 'Architecture' && <ArchitectureTab />}
@@ -57,212 +44,149 @@ export default function SettingsPage() {
   );
 }
 
-const EMAIL_PROVIDERS = [
-  { id: 'hubspot', name: 'HubSpot', iconName: 'settings', color: '#ff7a59', desc: 'Full CRM + email marketing platform' },
-  { id: 'sendgrid', name: 'SendGrid', iconName: 'send', color: '#1A82E2', desc: 'Scalable email delivery API' },
-  { id: 'mailchimp', name: 'Mailchimp', iconName: 'mail', color: '#FFE01B', desc: 'Email marketing & automation' },
-  { id: 'smtp', name: 'Custom SMTP', iconName: 'settings', color: '#64748b', desc: 'Connect any SMTP server' },
-];
+function EmailDataTab() {
+  const { contacts, campaigns, activities, customTemplates, resetToDefaults } = usePortal();
+  const { showToast } = useToast();
+  const [confirmReset, setConfirmReset] = useState(false);
 
-const WIZARD_STEPS = ['Choose Provider', 'API Credentials', 'Verify Domain', 'Test Send', 'Connected'];
+  const handleExport = useCallback(() => {
+    const data = {
+      exportDate: new Date().toISOString(),
+      contacts: contacts.length,
+      campaigns,
+      activities: activities.slice(0, 100), // last 100 activities
+      customTemplates,
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ffa-advantage-export-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Data exported successfully');
+  }, [contacts, campaigns, activities, customTemplates, showToast]);
 
-function EmailConnectionTab() {
-  const [wizardStep, setWizardStep] = usePersistedState('ffa-wizard-step', 0);
-  const [provider, setProvider] = usePersistedState('ffa-wizard-provider', '');
-  const [apiKey, setApiKey] = useState('');
-  const [domain, setDomain] = useState('ffanorth.com');
-  const [verifying, setVerifying] = useState(false);
-  const [sending, setSending] = useState(false);
-
-  function handleVerify() {
-    setVerifying(true);
-    setTimeout(() => { setVerifying(false); setWizardStep(3); }, 1500);
-  }
-
-  function handleTestSend() {
-    setSending(true);
-    setTimeout(() => { setSending(false); setWizardStep(4); }, 2000);
-  }
+  const handleReset = useCallback(() => {
+    resetToDefaults();
+    setConfirmReset(false);
+    showToast('All data reset to demo defaults');
+  }, [resetToDefaults, showToast]);
 
   return (
     <div className="space-y-6">
-      {/* Progress */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-4">
-        <div className="flex items-center gap-1">
-          {WIZARD_STEPS.map((s, i) => (
-            <div key={s} className="flex items-center gap-1 flex-1">
-              <div className={`flex-1 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-                i === wizardStep ? 'bg-blue-600 text-white' :
-                i < wizardStep ? 'bg-emerald-100 text-emerald-700' :
-                'bg-slate-100 text-slate-400'
-              }`}>
-                <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-bold">
-                  {i < wizardStep ? <Check className="w-3 h-3" /> : i + 1}
-                </span>
-                <span className="truncate">{s}</span>
-              </div>
-              {i < WIZARD_STEPS.length - 1 && <span className="text-slate-300 text-xs">&rarr;</span>}
+      {/* Simulation Mode Banner */}
+      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+            <Zap className="w-5 h-5 text-amber-600" />
+          </div>
+          <div>
+            <h3 className="text-base font-bold text-amber-900 mb-1">Simulation Mode</h3>
+            <p className="text-sm text-amber-800 leading-relaxed">
+              This portal is running in demo mode. Emails are <strong>not</strong> being sent — all campaign data, engagement metrics, and activity are simulated locally.
+              When HubSpot is integrated, real emails will be sent through your connected provider.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* What's Real vs Coming Soon */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6">
+        <h2 className="text-base font-bold text-slate-900 mb-4">What Works Today</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {[
+            { label: 'Create & edit campaigns with rich text emails', live: true },
+            { label: 'Upload PDFs, images, and documents', live: true },
+            { label: 'Enroll contacts in drip sequences', live: true },
+            { label: 'Assign advisors to warm leads', live: true },
+            { label: 'Track pipeline stages for contacts', live: true },
+            { label: 'All data persists across browser sessions', live: true },
+            { label: 'Send real emails via HubSpot / SendGrid', live: false },
+            { label: 'Real-time open/click tracking', live: false },
+            { label: 'Actual appointment scheduling', live: false },
+            { label: 'Role-based access & SSO', live: false },
+          ].map((item, i) => (
+            <div key={i} className={`flex items-center gap-2 p-3 rounded-lg border ${
+              item.live ? 'bg-emerald-50 border-emerald-100' : 'bg-slate-50 border-slate-100'
+            }`}>
+              {item.live ? (
+                <Check className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              ) : (
+                <span className="text-[9px] px-1.5 py-0.5 bg-slate-200 text-slate-500 rounded font-bold flex-shrink-0">SOON</span>
+              )}
+              <p className={`text-xs ${item.live ? 'text-emerald-800' : 'text-slate-500'}`}>{item.label}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Step 1: Choose Provider */}
-      {wizardStep === 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <h2 className="text-base font-bold text-slate-900 mb-1">Choose Your Email Provider</h2>
-          <p className="text-sm text-slate-500 mb-5">Select the service you use to send emails. You can change this later.</p>
-          <div className="grid grid-cols-2 gap-3">
-            {EMAIL_PROVIDERS.map(p => (
-              <button key={p.id} onClick={() => setProvider(p.id)}
-                className={`p-4 rounded-xl border-2 text-left transition-all ${
-                  provider === p.id ? 'border-blue-500 bg-blue-50 shadow-md' : 'border-slate-200 hover:border-slate-300'
-                }`}>
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-2" style={{ backgroundColor: p.color + '15' }}>
-                  <Icon name={p.iconName} className="w-5 h-5" style={{ color: p.color }} />
-                </div>
-                <p className="text-sm font-bold text-slate-900 mt-2">{p.name}</p>
-                <p className="text-xs text-slate-500 mt-0.5">{p.desc}</p>
-              </button>
-            ))}
-          </div>
-          <div className="flex justify-end mt-5 pt-4 border-t border-slate-100">
-            <button onClick={() => setWizardStep(1)} disabled={!provider}
-              className="px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-40">
-              Next &rarr;
-            </button>
-          </div>
+      {/* Data Summary */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6">
+        <h2 className="text-base font-bold text-slate-900 mb-4">Your Data</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          {[
+            { label: 'Contacts', value: contacts.length, color: '#3b82f6' },
+            { label: 'Campaigns', value: campaigns.length, color: '#7c3aed' },
+            { label: 'Activities', value: activities.length, color: '#059669' },
+            { label: 'Templates', value: customTemplates.length, color: '#d97706' },
+          ].map(s => (
+            <div key={s.label} className="bg-slate-50 rounded-xl p-4 text-center">
+              <p className="text-2xl font-extrabold" style={{ color: s.color }}>{s.value}</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">{s.label}</p>
+            </div>
+          ))}
         </div>
-      )}
 
-      {/* Step 2: API Credentials */}
-      {wizardStep === 1 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <h2 className="text-base font-bold text-slate-900 mb-1">Enter API Credentials</h2>
-          <p className="text-sm text-slate-500 mb-5">
-            Enter your {EMAIL_PROVIDERS.find(p => p.id === provider)?.name} API key. This is stored securely and used to send emails on your behalf.
-          </p>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">API Key</label>
-              <input type="password" value={apiKey} onChange={e => setApiKey(e.target.value)}
-                placeholder="Enter your API key..."
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono" />
-            </div>
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
-              <p className="text-xs text-blue-800">
-                <strong>Where to find this:</strong> Go to your {EMAIL_PROVIDERS.find(p => p.id === provider)?.name} dashboard &rarr; Settings &rarr; API Keys &rarr; Create New Key with &quot;Send Email&quot; permissions.
-              </p>
-            </div>
-          </div>
-          <div className="flex justify-between mt-5 pt-4 border-t border-slate-100">
-            <button onClick={() => setWizardStep(0)} className="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">
-              &larr; Back
-            </button>
-            <button onClick={() => setWizardStep(2)} disabled={apiKey.length < 5}
-              className="px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-40">
-              Next &rarr;
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step 3: Verify Domain */}
-      {wizardStep === 2 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <h2 className="text-base font-bold text-slate-900 mb-1">Verify Sending Domain</h2>
-          <p className="text-sm text-slate-500 mb-5">Verify your domain to improve email deliverability and avoid spam filters.</p>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Sending Domain</label>
-              <input type="text" value={domain} onChange={e => setDomain(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
-              <p className="text-xs font-semibold text-slate-700 mb-2">Add these DNS records to verify your domain:</p>
-              <div className="space-y-2 font-mono text-[11px]">
-                <div className="bg-white rounded-lg p-2 border border-slate-100">
-                  <span className="text-blue-600">TXT</span> &nbsp; _dmarc.{domain} &nbsp; <span className="text-slate-500">v=DMARC1; p=none</span>
-                </div>
-                <div className="bg-white rounded-lg p-2 border border-slate-100">
-                  <span className="text-blue-600">CNAME</span> &nbsp; em1234.{domain} &nbsp; <span className="text-slate-500">u1234.wl.sendgrid.net</span>
-                </div>
-                <div className="bg-white rounded-lg p-2 border border-slate-100">
-                  <span className="text-blue-600">TXT</span> &nbsp; {domain} &nbsp; <span className="text-slate-500">v=spf1 include:sendgrid.net ~all</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-between mt-5 pt-4 border-t border-slate-100">
-            <button onClick={() => setWizardStep(1)} className="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">
-              &larr; Back
-            </button>
-            <button onClick={handleVerify} disabled={verifying}
-              className="px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-70">
-              {verifying ? 'Verifying...' : 'Verify Domain'}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step 4: Test Send */}
-      {wizardStep === 3 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <div className="flex items-center gap-2 mb-1">
-            <Check className="w-5 h-5 text-emerald-600" />
-            <h2 className="text-base font-bold text-slate-900">Domain Verified!</h2>
-          </div>
-          <p className="text-sm text-slate-500 mb-5">Your domain is verified. Let&apos;s send a test email to make sure everything works.</p>
-          <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-4">
-            <p className="text-xs text-slate-600"><strong>From:</strong> FFA North Team &lt;outreach@{domain}&gt;</p>
-            <p className="text-xs text-slate-600"><strong>To:</strong> nick@{domain}</p>
-            <p className="text-xs text-slate-600"><strong>Subject:</strong> Test Email from The Advantage Platform</p>
-            <p className="text-xs text-slate-500 mt-2">This is a test email to verify your email connection is working correctly.</p>
-          </div>
-          <div className="flex justify-between">
-            <button onClick={() => setWizardStep(2)} className="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">
-              &larr; Back
-            </button>
-            <button onClick={handleTestSend} disabled={sending}
-              className="px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-70">
-              {sending ? 'Sending...' : 'Send Test Email'}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step 5: Connected */}
-      {wizardStep === 4 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
-          <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Check className="w-8 h-8 text-emerald-600" />
-          </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-2">Email Connected!</h2>
-          <p className="text-sm text-slate-500 mb-6">
-            Your {EMAIL_PROVIDERS.find(p => p.id === provider)?.name} account is connected and ready to send campaign emails.
-          </p>
-          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 max-w-md mx-auto mb-6">
-            <div className="space-y-2 text-sm text-left">
-              <div className="flex justify-between">
-                <span className="text-emerald-700 font-medium">Provider</span>
-                <span className="text-emerald-900 font-semibold">{EMAIL_PROVIDERS.find(p => p.id === provider)?.name}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-emerald-700 font-medium">Domain</span>
-                <span className="text-emerald-900 font-semibold">{domain}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-emerald-700 font-medium">Status</span>
-                <span className="text-emerald-900 font-semibold">Active</span>
-              </div>
-            </div>
-          </div>
-          <button onClick={() => setWizardStep(0)}
-            className="px-5 py-2.5 text-sm font-semibold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-            Reconfigure
+        <div className="flex flex-wrap gap-3">
+          {/* Export */}
+          <button onClick={handleExport}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
+            <Download className="w-4 h-4" />
+            Export Data (JSON)
           </button>
+
+          {/* Reset */}
+          {!confirmReset ? (
+            <button onClick={() => setConfirmReset(true)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-red-600 text-sm font-semibold rounded-xl border border-red-200 hover:bg-red-50 transition-colors">
+              <RotateCcw className="w-4 h-4" />
+              Reset Demo Data
+            </button>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-red-600 font-medium">Are you sure? This clears all your data.</span>
+              <button onClick={handleReset}
+                className="px-3 py-2 bg-red-600 text-white text-xs font-semibold rounded-lg hover:bg-red-700 transition-colors">
+                Yes, Reset
+              </button>
+              <button onClick={() => setConfirmReset(false)}
+                className="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-700">
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
+
+      {/* Email Provider Info */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6">
+        <h2 className="text-base font-bold text-slate-900 mb-1">Email Provider</h2>
+        <p className="text-sm text-slate-500 mb-4">Real email sending requires a HubSpot integration. See the HubSpot Integration tab for setup details.</p>
+
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-start gap-3">
+          <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-semibold text-blue-900 mb-1">Coming with HubSpot Integration</p>
+            <ul className="text-xs text-blue-800 space-y-1 list-disc pl-4">
+              <li>Automated email sending through HubSpot Workflows</li>
+              <li>Real-time open, click, and reply tracking</li>
+              <li>Domain verification and deliverability monitoring</li>
+              <li>Suppression list and CAN-SPAM compliance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -392,25 +316,25 @@ function ArchitectureTab() {
       <div className="bg-white rounded-2xl border border-slate-200 p-6">
         <h2 className="text-base font-bold text-slate-900 mb-4">Technical Architecture</h2>
         <div className="bg-slate-900 rounded-xl p-6 font-mono text-sm text-slate-300">
-          <p className="text-slate-500">{'// Current MVP'}</p>
-          <p className="text-emerald-400">Next.js App (Vercel) &rarr; Mock Data Layer &rarr; UI</p>
+          <p className="text-slate-500">{'// Current MVP (with local persistence)'}</p>
+          <p className="text-emerald-400">Next.js App (Vercel) &rarr; localStorage + IndexedDB &rarr; UI</p>
           <br />
           <p className="text-slate-500">{'// Production'}</p>
           <p className="text-blue-400">Next.js App (Vercel)</p>
-          <p className="text-slate-400">&nbsp;&nbsp;\u251c\u2500\u2500 API Routes &rarr; HubSpot Private App API</p>
-          <p className="text-slate-400">&nbsp;&nbsp;\u2502&nbsp;&nbsp;\u251c\u2500\u2500 /api/contacts &rarr; Contacts API</p>
-          <p className="text-slate-400">&nbsp;&nbsp;\u2502&nbsp;&nbsp;\u251c\u2500\u2500 /api/campaigns &rarr; Workflows + Email Events</p>
-          <p className="text-slate-400">&nbsp;&nbsp;\u2502&nbsp;&nbsp;\u251c\u2500\u2500 /api/pipeline &rarr; Deal Pipeline</p>
-          <p className="text-slate-400">&nbsp;&nbsp;\u2502&nbsp;&nbsp;\u2514\u2500\u2500 /api/activities &rarr; Engagements API</p>
-          <p className="text-slate-400">&nbsp;&nbsp;\u251c\u2500\u2500 Webhooks \u2190 HubSpot (real-time)</p>
-          <p className="text-slate-400">&nbsp;&nbsp;\u251c\u2500\u2500 NextAuth.js &rarr; SSO / Auth</p>
-          <p className="text-slate-400">&nbsp;&nbsp;\u2514\u2500\u2500 Edge Functions &rarr; Intent Score</p>
+          <p className="text-slate-400">&nbsp;&nbsp;├── API Routes &rarr; HubSpot Private App API</p>
+          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/contacts &rarr; Contacts API</p>
+          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/campaigns &rarr; Workflows + Email Events</p>
+          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/pipeline &rarr; Deal Pipeline</p>
+          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;└── /api/activities &rarr; Engagements API</p>
+          <p className="text-slate-400">&nbsp;&nbsp;├── Webhooks ← HubSpot (real-time)</p>
+          <p className="text-slate-400">&nbsp;&nbsp;├── NextAuth.js &rarr; SSO / Auth</p>
+          <p className="text-slate-400">&nbsp;&nbsp;└── Edge Functions &rarr; Intent Score</p>
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
         {[
-          { title: 'Data Layer', desc: 'Mock data functions are designed as a swappable abstraction. Each call becomes an API route \u2014 zero UI changes needed.', bgColor: '#eff6ff', borderColor: '#bfdbfe', textColor: '#1e40af' },
+          { title: 'Data Layer', desc: 'localStorage + IndexedDB for MVP. Each data call is swappable — when HubSpot connects, zero UI changes needed.', bgColor: '#eff6ff', borderColor: '#bfdbfe', textColor: '#1e40af' },
           { title: 'Authentication', desc: 'NextAuth.js with credentials for MVP, upgradeable to SSO for production. Role-based access per page.', bgColor: '#ecfdf5', borderColor: '#a7f3d0', textColor: '#065f46' },
           { title: 'Deployment', desc: 'Vercel handles hosting, SSL, CDN, auto-scaling. Push to GitHub = auto deploy. API keys stored in env vars.', bgColor: '#f5f3ff', borderColor: '#c4b5fd', textColor: '#5b21b6' },
         ].map(item => (

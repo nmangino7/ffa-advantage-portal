@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useModal } from '@/lib/context/ModalContext';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useToast } from '@/lib/context/ToastContext';
@@ -15,6 +15,17 @@ export function AssignAdvisorModal() {
   const { contacts, assignAdvisor } = usePortal();
   const { showToast } = useToast();
   const [selectedAdvisor, setSelectedAdvisor] = useState<string | null>(null);
+
+  const handleEscape = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') closeAll();
+  }, [closeAll]);
+
+  useEffect(() => {
+    if (assignModal) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [assignModal, handleEscape]);
 
   if (!assignModal) return null;
 

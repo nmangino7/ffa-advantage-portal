@@ -8,13 +8,13 @@ import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DripTimeline } from '@/components/ui/DripTimeline';
 import { Icon } from '@/components/ui/Icon';
-import { Flame } from 'lucide-react';
+import { Flame, Pencil } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CampaignDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { contacts, campaigns, activities, toggleCampaignStatus } = usePortal();
-  const { openEnrollModal } = useModal();
+  const { openEnrollModal, openConfirmDialog } = useModal();
 
   const campaign = campaigns.find(c => c.id === id);
   if (!campaign) return <div className="p-10 text-center text-slate-400">Campaign not found</div>;
@@ -69,7 +69,24 @@ export default function CampaignDetailPage() {
         ]}
         action={
           <div className="flex gap-2">
-            <button onClick={() => toggleCampaignStatus(campaign.id)}
+            <Link href={`/campaigns/${id}/edit`}
+              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors">
+              <Pencil className="w-4 h-4" />
+              Edit
+            </Link>
+            <button onClick={() => {
+              if (campaign.status === 'active') {
+                openConfirmDialog({
+                  title: 'Pause Campaign?',
+                  message: `This will pause "${campaign.name}". No new emails will be sent until you resume it.`,
+                  confirmLabel: 'Pause',
+                  destructive: false,
+                  onConfirm: () => toggleCampaignStatus(campaign.id),
+                });
+              } else {
+                toggleCampaignStatus(campaign.id);
+              }
+            }}
               className="px-4 py-2.5 text-sm font-semibold bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors">
               {campaign.status === 'active' ? 'Pause Campaign' : 'Resume Campaign'}
             </button>
@@ -206,9 +223,17 @@ export default function CampaignDetailPage() {
                       <span className="font-medium">Subject:</span> {step.subject}<br />
                       <span className="font-medium">Preview:</span> {step.previewText}
                     </div>
-                    <div className="text-[13px] text-slate-700 leading-relaxed whitespace-pre-wrap">
-                      {step.body}
-                    </div>
+                    {step.bodyFormat === 'html' ? (
+                      <div className="text-[13px] text-slate-700 leading-relaxed prose prose-sm max-w-none
+                        [&_a]:text-blue-600 [&_a]:underline [&_h2]:text-base [&_h2]:font-bold [&_h2]:mt-3 [&_h2]:mb-1
+                        [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:mb-2"
+                        dangerouslySetInnerHTML={{ __html: step.body }}
+                      />
+                    ) : (
+                      <div className="text-[13px] text-slate-700 leading-relaxed whitespace-pre-wrap">
+                        {step.body}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

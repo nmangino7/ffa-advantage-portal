@@ -2,11 +2,21 @@
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 
+interface ConfirmConfig {
+  title: string;
+  message: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  destructive?: boolean;
+  onConfirm: () => void;
+}
+
 interface ModalState {
   enrollModal: { contactId?: string; contactIds?: string[] } | null;
   assignModal: { contactId: string } | null;
   scheduleModal: { contactId: string } | null;
   templateModal: { mode: 'create' | 'edit'; templateId?: string; campaignId?: string } | null;
+  confirmDialog: ConfirmConfig | null;
 }
 
 interface ModalContextType extends ModalState {
@@ -14,6 +24,8 @@ interface ModalContextType extends ModalState {
   openAssignModal: (contactId: string) => void;
   openScheduleModal: (contactId: string) => void;
   openTemplateModal: (mode: 'create' | 'edit', templateId?: string, campaignId?: string) => void;
+  openConfirmDialog: (config: ConfirmConfig) => void;
+  closeConfirmDialog: () => void;
   closeAll: () => void;
 }
 
@@ -30,6 +42,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const [assignModal, setAssignModal] = useState<ModalState['assignModal']>(null);
   const [scheduleModal, setScheduleModal] = useState<ModalState['scheduleModal']>(null);
   const [templateModal, setTemplateModal] = useState<ModalState['templateModal']>(null);
+  const [confirmDialog, setConfirmDialog] = useState<ModalState['confirmDialog']>(null);
 
   const openEnrollModal = useCallback((contactId?: string, contactIds?: string[]) => {
     setEnrollModal({ contactId, contactIds });
@@ -47,17 +60,27 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     setTemplateModal({ mode, templateId, campaignId });
   }, []);
 
+  const openConfirmDialog = useCallback((config: ConfirmConfig) => {
+    setConfirmDialog(config);
+  }, []);
+
+  const closeConfirmDialog = useCallback(() => {
+    setConfirmDialog(null);
+  }, []);
+
   const closeAll = useCallback(() => {
     setEnrollModal(null);
     setAssignModal(null);
     setScheduleModal(null);
     setTemplateModal(null);
+    setConfirmDialog(null);
   }, []);
 
   return (
     <ModalContext.Provider value={{
-      enrollModal, assignModal, scheduleModal, templateModal,
-      openEnrollModal, openAssignModal, openScheduleModal, openTemplateModal, closeAll,
+      enrollModal, assignModal, scheduleModal, templateModal, confirmDialog,
+      openEnrollModal, openAssignModal, openScheduleModal, openTemplateModal,
+      openConfirmDialog, closeConfirmDialog, closeAll,
     }}>
       {children}
     </ModalContext.Provider>
