@@ -99,7 +99,7 @@ export default function CampaignDetailPage() {
               {campaign.status === 'active' ? 'Pause Campaign' : 'Resume Campaign'}
             </button>
             <button onClick={() => openEnrollModal()}
-              className="px-4 py-2.5 text-sm font-semibold bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors">
+              className="px-4 py-2.5 text-sm font-semibold bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
               Enroll More Contacts
             </button>
           </div>
@@ -323,7 +323,7 @@ export default function CampaignDetailPage() {
                   const sm = PIPELINE_STAGES.find(s => s.key === contact.stage);
                   const daysSince = Math.floor((Date.now() - new Date(contact.lastContactDate).getTime()) / 86400000);
                   return (
-                    <tr key={contact.id} className="hover:bg-neutral-50 transition-colors">
+                    <tr key={contact.id} className="hover:bg-neutral-50 transition-colors even:bg-neutral-50/50">
                       <td className="py-2.5 px-3">
                         <Link href={`/audience/${contact.id}`} className="font-semibold text-indigo-600 hover:text-indigo-800 text-[13px]">
                           {contact.firstName} {contact.lastName}

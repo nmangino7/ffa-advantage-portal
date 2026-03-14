@@ -119,7 +119,7 @@ export default function PipelinePage() {
                     const daysSince = Math.floor((Date.now() - new Date(contact.lastContactDate).getTime()) / 86400000);
 
                     return (
-                      <div key={contact.id} className="bg-white rounded-xl border border-neutral-100 p-3 hover:border-indigo-200 transition-all">
+                      <div key={contact.id} className="bg-white rounded-xl border border-neutral-100 p-3 hover:border-indigo-200 hover:shadow-sm transition-all duration-200">
                         <Link href={`/audience/${contact.id}`}>
                           <div className="flex items-center justify-between mb-1.5">
                             <p className="text-[13px] font-semibold text-neutral-900 truncate">{contact.firstName} {contact.lastName}</p>

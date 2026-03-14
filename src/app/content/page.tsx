@@ -162,7 +162,7 @@ export default function ContentLibraryPage() {
           </button>
           <button
             onClick={() => openTemplateModal('create')}
-            className="bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 px-4 py-2 text-sm font-semibold transition-colors inline-flex items-center gap-2"
+            className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg hover:from-indigo-700 hover:to-violet-700 px-4 py-2 text-sm font-semibold transition-all inline-flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Create Template

@@ -189,7 +189,7 @@ export default function GuidePage() {
         <h3 className="text-lg font-semibold text-neutral-900 mb-2">Ready to get started?</h3>
         <p className="text-sm text-neutral-600 mb-4">Begin by reviewing your audience segments, then explore the email templates.</p>
         <div className="flex gap-3 justify-center">
-          <Link href="/audience" className="px-5 py-2.5 bg-neutral-900 text-white text-sm font-semibold rounded-lg hover:bg-neutral-800 transition-colors">
+          <Link href="/audience" className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
             View Your Audience
           </Link>
           <Link href="/content" className="px-5 py-2.5 bg-white text-neutral-700 text-sm font-semibold rounded-lg border border-neutral-200 hover:bg-neutral-50 transition-colors">

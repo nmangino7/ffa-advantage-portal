@@ -80,7 +80,7 @@ export function EmailPreviewCard({
           <div className="mt-3 flex items-center gap-2">
             <button
               onClick={() => router.push(`/campaigns/new?templateId=${template.template.id}`)}
-              className="px-3 py-1.5 bg-neutral-900 text-white text-xs font-medium rounded-lg hover:bg-neutral-800 transition-colors inline-flex items-center gap-1.5"
+              className="px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-medium rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all inline-flex items-center gap-1.5"
             >
               <ArrowRight className="w-3 h-3" /> Use in Campaign
             </button>
