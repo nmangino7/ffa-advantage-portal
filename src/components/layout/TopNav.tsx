@@ -18,6 +18,7 @@ const mainNav: NavItem[] = [
   { href: '/audience', label: 'Audience' },
   { href: '/pipeline', label: 'Pipeline' },
   { href: '/content', label: 'Content' },
+  { href: '/ai-studio', label: 'AI Studio' },
   { href: '/warm-leads', label: 'Warm Leads' },
 ];
 
