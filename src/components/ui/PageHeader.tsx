@@ -1,9 +1,5 @@
+import React from 'react';
 import Link from 'next/link';
-
-interface Breadcrumb {
-  label: string;
-  href?: string;
-}
 
 export function PageHeader({
   title,
@@ -13,31 +9,31 @@ export function PageHeader({
 }: {
   title: string;
   subtitle?: string;
-  breadcrumbs?: Breadcrumb[];
+  breadcrumbs?: { label: string; href?: string }[];
   action?: React.ReactNode;
 }) {
   return (
     <div className="mb-8">
       {breadcrumbs && breadcrumbs.length > 0 && (
-        <div className="flex items-center gap-1.5 text-sm text-slate-400 mb-3">
-          {breadcrumbs.map((bc, i) => (
-            <span key={i} className="flex items-center gap-1.5">
-              {i > 0 && <span className="text-slate-300">/</span>}
-              {bc.href ? (
-                <Link href={bc.href} className="hover:text-blue-600 transition-colors">{bc.label}</Link>
+        <nav className="flex items-center gap-1.5 text-xs text-neutral-400 mb-2">
+          {breadcrumbs.map((crumb, i) => (
+            <React.Fragment key={i}>
+              {i > 0 && <span>/</span>}
+              {crumb.href ? (
+                <Link href={crumb.href} className="hover:text-neutral-600 transition-colors">{crumb.label}</Link>
               ) : (
-                <span className="text-slate-600 font-medium">{bc.label}</span>
+                <span className="text-neutral-500">{crumb.label}</span>
               )}
-            </span>
+            </React.Fragment>
           ))}
-        </div>
+        </nav>
       )}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">{title}</h1>
-          {subtitle && <p className="text-slate-500 mt-1 text-[15px]">{subtitle}</p>}
+          <h1 className="text-2xl font-semibold text-neutral-900 tracking-tight">{title}</h1>
+          {subtitle && <p className="text-sm text-neutral-500 mt-1">{subtitle}</p>}
         </div>
-        {action && <div className="flex-shrink-0">{action}</div>}
+        {action && <div className="shrink-0">{action}</div>}
       </div>
     </div>
   );

@@ -46,18 +46,16 @@ export function AssignAdvisorModal() {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={handleClose}>
-      <div className="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden" onClick={e => e.stopPropagation()}>
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-100">
-          <h2 className="text-lg font-bold text-slate-900">Assign Advisor</h2>
-          <p className="text-sm text-slate-500 mt-0.5">
+    <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center p-4 animate-fade-in" onClick={handleClose}>
+      <div className="bg-white rounded-xl border border-neutral-200 shadow-xl max-w-md w-full overflow-hidden animate-slide-up" onClick={e => e.stopPropagation()}>
+        <div className="px-6 py-4 border-b border-neutral-100">
+          <h2 className="text-base font-semibold text-neutral-900">Assign Advisor</h2>
+          <p className="text-sm text-neutral-500 mt-0.5">
             {contact.firstName} {contact.lastName} {contact.company ? `\u2022 ${contact.company}` : ''}
           </p>
         </div>
 
-        {/* Advisor List */}
-        <div className="px-6 py-4 space-y-2">
+        <div className="px-6 py-4 space-y-1.5">
           {ADVISORS.map(advisor => {
             const initials = advisor.split(' ').map(n => n[0]).join('');
             const isSelected = selectedAdvisor === advisor;
@@ -66,12 +64,12 @@ export function AssignAdvisorModal() {
             return (
               <label
                 key={advisor}
-                className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
+                className={`flex items-center gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
                   isCurrent
                     ? 'bg-emerald-50 border-emerald-200'
                     : isSelected
-                    ? 'bg-blue-50 border-blue-300'
-                    : 'border-slate-200 hover:border-blue-200 hover:bg-blue-50/30'
+                    ? 'bg-indigo-50 border-indigo-300'
+                    : 'border-neutral-200 hover:border-neutral-300'
                 }`}
               >
                 <input
@@ -79,14 +77,14 @@ export function AssignAdvisorModal() {
                   name="advisor"
                   checked={isSelected || isCurrent}
                   onChange={() => setSelectedAdvisor(advisor)}
-                  className="w-4 h-4 border-slate-300 text-blue-600 focus:ring-blue-500"
+                  className="w-4 h-4 border-neutral-300 text-indigo-600 focus:ring-indigo-500"
                 />
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-[11px] font-bold text-white">
+                <div className="w-7 h-7 rounded-full bg-neutral-900 flex items-center justify-center text-[10px] font-bold text-white">
                   {initials}
                 </div>
-                <span className="text-sm font-medium text-slate-900">{advisor}</span>
+                <span className="text-sm font-medium text-neutral-900 flex-1">{advisor}</span>
                 {isCurrent && (
-                  <span className="text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full font-bold ml-auto">
+                  <span className="text-[10px] px-1.5 py-0.5 bg-emerald-100 text-emerald-700 rounded font-medium">
                     Current
                   </span>
                 )}
@@ -95,14 +93,12 @@ export function AssignAdvisorModal() {
           })}
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-slate-100 flex justify-end gap-3">
-          <button onClick={handleClose}
-            className="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
+        <div className="px-6 py-4 border-t border-neutral-100 flex justify-end gap-2">
+          <button onClick={handleClose} className="px-3 py-1.5 text-sm font-medium text-neutral-600 hover:bg-neutral-50 rounded-lg transition-colors">
             Cancel
           </button>
           <button onClick={handleAssign} disabled={!selectedAdvisor}
-            className="px-5 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+            className="px-4 py-1.5 text-sm font-medium text-white bg-neutral-900 rounded-lg hover:bg-neutral-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
             Assign {selectedAdvisor || 'Advisor'}
           </button>
         </div>

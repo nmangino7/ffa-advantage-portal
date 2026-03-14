@@ -13,29 +13,17 @@ export function StatCard({
   icon?: ReactNode;
   accentColor?: string;
 }) {
-  const color = accentColor || '#3b82f6';
-
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition-all group relative overflow-hidden">
-      {/* Left accent stripe */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl" style={{ backgroundColor: color }} />
-
+    <div className="bg-white border border-neutral-200 rounded-xl p-5 transition-colors hover:border-neutral-300">
       <div className="flex items-start justify-between">
-        <div>
-          <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider">{label}</p>
-          <p className="text-2xl font-bold mt-1" style={{ color }}>
+        <div className="space-y-1">
+          <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide">{label}</p>
+          <p className="text-2xl font-semibold text-neutral-900 tracking-tight tabular-nums" style={accentColor ? { color: accentColor } : undefined}>
             {value}
           </p>
-          {sub && <p className="text-[11px] text-slate-400 mt-0.5">{sub}</p>}
+          {sub && <p className="text-xs text-neutral-400">{sub}</p>}
         </div>
-        {icon && (
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110"
-            style={{ backgroundColor: color + '12' }}
-          >
-            <span style={{ color }}>{icon}</span>
-          </div>
-        )}
+        {icon && <div className="text-neutral-300">{icon}</div>}
       </div>
     </div>
   );

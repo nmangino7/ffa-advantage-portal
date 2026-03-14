@@ -11,34 +11,32 @@ export function DripTimeline({
   compact?: boolean;
 }) {
   return (
-    <div className={`flex items-start w-full`}>
+    <div className="flex items-start w-full">
       {steps.map((step, i) => (
         <div key={step.id} className="flex-1 flex items-start">
-          {/* Node */}
-          <div className="flex flex-col items-center flex-shrink-0" style={{ minWidth: compact ? 28 : 40 }}>
+          <div className="flex flex-col items-center shrink-0" style={{ minWidth: compact ? 28 : 40 }}>
             <div
-              className={`rounded-full flex items-center justify-center text-white font-bold shadow-sm ${compact ? 'w-7 h-7' : 'w-10 h-10'}`}
+              className={`rounded-full flex items-center justify-center text-white font-medium ${compact ? 'w-6 h-6' : 'w-9 h-9'}`}
               style={{ backgroundColor: color }}
             >
               {compact ? (
-                <span className="text-[10px]">{i + 1}</span>
+                <span className="text-[9px]">{i + 1}</span>
               ) : (
-                <Mail className="w-4 h-4" />
+                <Mail className="w-3.5 h-3.5" />
               )}
             </div>
-            <span className={`mt-1 font-medium ${compact ? 'text-[9px]' : 'text-[11px]'} text-slate-400`}>
+            <span className={`mt-1 font-medium text-neutral-400 ${compact ? 'text-[9px]' : 'text-[11px]'}`}>
               Day {step.sendDay}
             </span>
-            {!compact && (
-              <p className="text-[11px] text-slate-600 font-medium mt-0.5 text-center leading-tight max-w-[120px] line-clamp-2">
+            {!compact && step.subject && (
+              <p className="text-[10px] text-neutral-500 mt-0.5 text-center leading-tight max-w-[120px] line-clamp-2">
                 {step.subject}
               </p>
             )}
           </div>
-          {/* Connector line */}
           {i < steps.length - 1 && (
-            <div className="flex-1 flex items-center pt-3.5" style={{ minWidth: 12 }}>
-              <div className="w-full h-0.5 rounded-full" style={{ backgroundColor: color + '60' }} />
+            <div className="flex-1 flex items-center pt-3" style={{ minWidth: 12 }}>
+              <div className="w-full h-px bg-neutral-200" />
             </div>
           )}
         </div>

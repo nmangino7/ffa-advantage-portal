@@ -9,18 +9,17 @@ export function ServiceLineBadge({
   size?: 'sm' | 'md';
 }) {
   const cfg = SERVICE_LINE_CONFIG[serviceLine];
-  const sizeClasses = size === 'md'
-    ? 'text-xs px-2.5 py-1 gap-1.5'
-    : 'text-[10px] px-2 py-0.5 gap-1';
-  const iconSize = size === 'md' ? 'w-3.5 h-3.5' : 'w-3 h-3';
+  if (!cfg) return null;
+
+  const sizeClasses = size === 'md' ? 'text-xs px-2.5 py-1 gap-1.5' : 'text-[11px] px-2 py-0.5 gap-1';
 
   return (
     <span
-      className={`inline-flex items-center rounded-full font-semibold ${sizeClasses}`}
+      className={`inline-flex items-center font-medium rounded-full ${sizeClasses}`}
       style={{ backgroundColor: cfg.bgColor, color: cfg.color }}
     >
-      <Icon name={cfg.icon} className={iconSize} />
-      <span>{cfg.short}</span>
+      <Icon name={cfg.icon} className={size === 'md' ? 'w-3.5 h-3.5' : 'w-3 h-3'} />
+      {cfg.short}
     </span>
   );
 }

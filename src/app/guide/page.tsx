@@ -1,6 +1,9 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { Icon } from '@/components/ui/Icon';
+import { ChevronDown } from 'lucide-react';
 
 const steps = [
   {
@@ -81,48 +84,53 @@ const faqs = [
 ];
 
 export default function GuidePage() {
-  return (
-    <div className="max-w-[900px]">
-      <PageHeader
-        title="How It Works"
-        subtitle="A complete walkthrough of The Advantage platform"
-      />
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-      {/* Big Picture Flow */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">
-        <h2 className="text-lg font-bold text-slate-900 mb-4">The Big Picture</h2>
-        <div className="flex items-center gap-0 overflow-x-auto pb-2">
-          {flowStages.map((stage, i) => (
-            <div key={i} className="flex items-center">
-              <div className="flex flex-col items-center text-center min-w-[130px]">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-2"
-                  style={{ backgroundColor: stage.color + '15' }}>
-                  <Icon name={stage.iconName} className="w-6 h-6" style={{ color: stage.color }} />
-                </div>
-                <p className="text-xs font-bold text-slate-900">{stage.label}</p>
-                <p className="text-[10px] text-slate-500 mt-0.5">{stage.sub}</p>
-              </div>
-              {i < 4 && (
-                <div className="flex-shrink-0 mx-1">
-                  <svg className="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+  return (
+    <div className="max-w-3xl mx-auto px-6 py-8">
+      {/* Header */}
+      <div className="mb-10">
+        <h1 className="text-2xl font-semibold text-neutral-900">How It Works</h1>
+        <p className="text-sm text-neutral-500 mt-1">A complete walkthrough of The Advantage platform</p>
       </div>
 
+      {/* Big Picture Flow */}
+      <section className="mb-10">
+        <h2 className="text-lg font-semibold text-neutral-900 mb-4">The Big Picture</h2>
+        <div className="bg-white rounded-xl border border-neutral-200 p-6">
+          <div className="flex items-center gap-0 overflow-x-auto pb-2">
+            {flowStages.map((stage, i) => (
+              <div key={i} className="flex items-center">
+                <div className="flex flex-col items-center text-center min-w-[130px]">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-2"
+                    style={{ backgroundColor: stage.color + '15' }}>
+                    <Icon name={stage.iconName} className="w-6 h-6" style={{ color: stage.color }} />
+                  </div>
+                  <p className="text-xs font-semibold text-neutral-900">{stage.label}</p>
+                  <p className="text-[10px] text-neutral-500 mt-0.5">{stage.sub}</p>
+                </div>
+                {i < 4 && (
+                  <div className="flex-shrink-0 mx-1">
+                    <svg className="w-6 h-6 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Step-by-Step Guide */}
-      <div className="mb-10">
-        <h2 className="text-lg font-bold text-slate-900 mb-5">Step-by-Step Guide</h2>
+      <section className="mb-10">
+        <h2 className="text-lg font-semibold text-neutral-900 mb-5">Step-by-Step Guide</h2>
         <div className="space-y-4">
           {steps.map((step, i) => (
-            <div key={step.number} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div key={step.number} className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
               <div className="flex items-start gap-5 p-6">
                 <div className="flex flex-col items-center flex-shrink-0">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold text-white"
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center text-lg font-semibold text-white"
                     style={{ backgroundColor: step.color }}>
                     {step.number}
                   </div>
@@ -135,9 +143,9 @@ export default function GuidePage() {
                     <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ backgroundColor: step.color + '15' }}>
                       <Icon name={step.iconName} className="w-4 h-4" style={{ color: step.color }} />
                     </div>
-                    <h3 className="text-base font-bold text-slate-900">{step.title}</h3>
+                    <h3 className="text-base font-semibold text-neutral-900">{step.title}</h3>
                   </div>
-                  <p className="text-sm text-slate-600 leading-relaxed mb-4">{step.description}</p>
+                  <p className="text-sm text-neutral-600 leading-relaxed mb-4">{step.description}</p>
                   <Link href={step.href}
                     className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg text-white transition-colors hover:opacity-90"
                     style={{ backgroundColor: step.color }}>
@@ -151,30 +159,40 @@ export default function GuidePage() {
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
-      {/* FAQ */}
-      <div className="mb-8">
-        <h2 className="text-lg font-bold text-slate-900 mb-5">Frequently Asked Questions</h2>
-        <div className="space-y-3">
+      {/* FAQ Accordion */}
+      <section className="mb-10">
+        <h2 className="text-lg font-semibold text-neutral-900 mb-5">Frequently Asked Questions</h2>
+        <div className="bg-white rounded-xl border border-neutral-200 divide-y divide-neutral-100">
           {faqs.map((faq, i) => (
-            <div key={i} className="bg-white rounded-xl border border-slate-200 p-5">
-              <h3 className="text-sm font-bold text-slate-900 mb-2">{faq.q}</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">{faq.a}</p>
+            <div key={i}>
+              <button
+                onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-neutral-50 transition-colors"
+              >
+                <span className="text-sm font-semibold text-neutral-900 pr-4">{faq.q}</span>
+                <ChevronDown className={`w-4 h-4 text-neutral-400 flex-shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
+              </button>
+              {openFaq === i && (
+                <div className="px-5 pb-4">
+                  <p className="text-sm text-neutral-600 leading-relaxed">{faq.a}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
       {/* Bottom CTA */}
-      <div className="bg-blue-50 rounded-2xl border border-blue-100 p-6 text-center">
-        <h3 className="text-lg font-bold text-slate-900 mb-2">Ready to get started?</h3>
-        <p className="text-sm text-slate-600 mb-4">Begin by reviewing your audience segments, then explore the email templates.</p>
+      <div className="bg-neutral-50 rounded-xl border border-neutral-200 p-6 text-center">
+        <h3 className="text-lg font-semibold text-neutral-900 mb-2">Ready to get started?</h3>
+        <p className="text-sm text-neutral-600 mb-4">Begin by reviewing your audience segments, then explore the email templates.</p>
         <div className="flex gap-3 justify-center">
-          <Link href="/audience" className="px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
+          <Link href="/audience" className="px-5 py-2.5 bg-neutral-900 text-white text-sm font-semibold rounded-lg hover:bg-neutral-800 transition-colors">
             View Your Audience
           </Link>
-          <Link href="/content" className="px-5 py-2.5 bg-white text-slate-700 text-sm font-semibold rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors">
+          <Link href="/content" className="px-5 py-2.5 bg-white text-neutral-700 text-sm font-semibold rounded-lg border border-neutral-200 hover:bg-neutral-50 transition-colors">
             Browse Templates
           </Link>
         </div>
