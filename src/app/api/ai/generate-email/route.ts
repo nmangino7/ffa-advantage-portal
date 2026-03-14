@@ -27,7 +27,7 @@ ${sequencePosition ? `- Position in drip sequence: Email ${sequencePosition} of 
 Generate the email content now.`;
 
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-6-20250514',
+      model: 'claude-sonnet-4-5-20241022',
       max_tokens: 1500,
       system: EMAIL_GENERATION_PROMPT,
       messages: [{ role: 'user', content: userPrompt }],
