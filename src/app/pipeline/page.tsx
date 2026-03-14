@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useModal } from '@/lib/context/ModalContext';
 import { PIPELINE_STAGES, type PipelineStage, SERVICE_LINE_CONFIG } from '@/lib/types';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { Icon } from '@/components/ui/Icon';
 import Link from 'next/link';
 import { Inbox, User } from 'lucide-react';
@@ -21,21 +20,27 @@ export default function PipelinePage() {
   }, [allContacts, campaignFilter]);
 
   return (
-    <div>
-      <PageHeader
-        title="Pipeline Board"
-        subtitle={`Track leads through the outreach lifecycle \u2022 ${filteredContacts.length.toLocaleString()} contacts`}
-        action={
-          <select value={campaignFilter} onChange={e => setCampaignFilter(e.target.value)}
-            className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="all">All Campaigns</option>
-            {campaigns.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-          </select>
-        }
-      />
+    <div className="max-w-7xl mx-auto px-6 py-8">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-semibold text-neutral-900">Pipeline Board</h1>
+          <p className="text-sm text-neutral-500 mt-1">
+            Track leads through the outreach lifecycle &bull; {filteredContacts.length.toLocaleString()} contacts
+          </p>
+        </div>
+        <select
+          value={campaignFilter}
+          onChange={e => setCampaignFilter(e.target.value)}
+          className="px-4 py-2 rounded-lg border border-neutral-200 bg-white text-sm text-neutral-700 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600"
+        >
+          <option value="all">All Campaigns</option>
+          {campaigns.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+        </select>
+      </div>
 
       {/* Funnel Summary */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6">
+      <div className="bg-white rounded-xl border border-neutral-200 p-4 mb-6">
         <div className="flex items-center gap-1">
           {PIPELINE_STAGES.map((stage, i) => {
             const count = filteredContacts.filter(c => c.stage === stage.key).length;
@@ -47,14 +52,14 @@ export default function PipelinePage() {
                   style={{ backgroundColor: stage.bgColor, color: stage.color }}>
                   <Icon name={stage.icon} className="w-4 h-4" />
                   <div className="text-left min-w-0">
-                    <p className="text-[11px] font-bold truncate">{stage.label}</p>
-                    <p className="text-lg font-extrabold leading-tight">{count}</p>
+                    <p className="text-[11px] font-semibold truncate">{stage.label}</p>
+                    <p className="text-lg font-semibold leading-tight">{count}</p>
                   </div>
                 </div>
                 {i < PIPELINE_STAGES.length - 1 && (
                   <div className="flex flex-col items-center px-1">
-                    <span className="text-slate-300 text-sm">&rarr;</span>
-                    {i > 0 && <span className="text-[9px] font-bold text-slate-400">{convRate}%</span>}
+                    <span className="text-neutral-300 text-sm">&rarr;</span>
+                    {i > 0 && <span className="text-[9px] font-semibold text-neutral-400">{convRate}%</span>}
                   </div>
                 )}
               </div>
@@ -66,10 +71,10 @@ export default function PipelinePage() {
       {/* Quick Actions */}
       <div className="flex gap-3 mb-6">
         <button onClick={() => openEnrollModal()}
-          className="text-sm font-semibold text-blue-600 bg-blue-50 border border-blue-200 px-4 py-2 rounded-xl hover:bg-blue-100 transition-colors">
+          className="text-sm font-semibold text-indigo-600 bg-indigo-50 border border-indigo-200 px-4 py-2 rounded-lg hover:bg-indigo-100 transition-colors">
           Enroll Dormant Contacts
         </button>
-        <Link href="/warm-leads" className="text-sm font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-4 py-2 rounded-xl hover:bg-amber-100 transition-colors">
+        <Link href="/warm-leads" className="text-sm font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-4 py-2 rounded-lg hover:bg-amber-100 transition-colors">
           View Warm Leads
         </Link>
       </div>
@@ -83,20 +88,20 @@ export default function PipelinePage() {
 
           return (
             <div key={stage.key} className="flex-shrink-0 w-[260px]">
-              <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+              <div className="rounded-xl border border-neutral-200 bg-white overflow-hidden">
                 {/* Column header */}
-                <div className="p-4 border-b border-slate-100" style={{ borderTopWidth: '3px', borderTopColor: stage.color }}>
+                <div className="p-4 border-b border-neutral-100" style={{ borderTopWidth: '3px', borderTopColor: stage.color }}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
                       <Icon name={stage.icon} className="w-5 h-5" style={{ color: stage.color }} />
-                      <span className="text-sm font-bold text-slate-900">{stage.label}</span>
+                      <span className="text-sm font-semibold text-neutral-900">{stage.label}</span>
                     </div>
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ backgroundColor: stage.bgColor, color: stage.color }}>
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: stage.bgColor, color: stage.color }}>
                       {stageContacts.length}
                     </span>
                   </div>
                   {stage.key === 'dormant' && (
-                    <button onClick={() => openEnrollModal()} className="text-[10px] font-semibold text-blue-600 hover:text-blue-800">
+                    <button onClick={() => openEnrollModal()} className="text-[10px] font-semibold text-indigo-600 hover:text-indigo-800">
                       Enroll in campaign &rarr;
                     </button>
                   )}
@@ -108,27 +113,27 @@ export default function PipelinePage() {
                 </div>
 
                 {/* Contact cards */}
-                <div className="p-2 space-y-2 max-h-[calc(100vh-340px)] overflow-y-auto bg-slate-50/50">
+                <div className="p-2 space-y-2 max-h-[calc(100vh-340px)] overflow-y-auto bg-neutral-50/50">
                   {stageContacts.slice(0, 15).map(contact => {
                     const contactCampaigns = campaigns.filter(c => contact.campaigns.includes(c.id));
                     const daysSince = Math.floor((Date.now() - new Date(contact.lastContactDate).getTime()) / 86400000);
 
                     return (
-                      <div key={contact.id} className="bg-white rounded-xl border border-slate-100 p-3 hover:shadow-md hover:border-blue-200 transition-all">
+                      <div key={contact.id} className="bg-white rounded-xl border border-neutral-100 p-3 hover:border-indigo-200 transition-all">
                         <Link href={`/audience/${contact.id}`}>
                           <div className="flex items-center justify-between mb-1.5">
-                            <p className="text-[13px] font-semibold text-slate-900 truncate">{contact.firstName} {contact.lastName}</p>
+                            <p className="text-[13px] font-semibold text-neutral-900 truncate">{contact.firstName} {contact.lastName}</p>
                             {contact.intentScore > 0 && (
-                              <span className={`text-[11px] font-bold px-1.5 py-0.5 rounded-md ${
+                              <span className={`text-[11px] font-semibold px-1.5 py-0.5 rounded-md ${
                                 contact.intentScore >= 70 ? 'bg-emerald-100 text-emerald-700' :
                                 contact.intentScore >= 30 ? 'bg-amber-100 text-amber-700' :
-                                'bg-slate-100 text-slate-500'
+                                'bg-neutral-100 text-neutral-500'
                               }`}>{contact.intentScore}</span>
                             )}
                           </div>
 
-                          {contact.company && <p className="text-[11px] text-slate-600 font-medium truncate" title={contact.company}>{contact.company}</p>}
-                          <p className="text-[10px] text-slate-400 truncate" title={contact.email}>{contact.email}</p>
+                          {contact.company && <p className="text-[11px] text-neutral-600 font-medium truncate" title={contact.company}>{contact.company}</p>}
+                          <p className="text-[10px] text-neutral-400 truncate" title={contact.email}>{contact.email}</p>
 
                           {contactCampaigns.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2">
@@ -144,14 +149,14 @@ export default function PipelinePage() {
                             </div>
                           )}
 
-                          <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-50">
-                            <span className={`text-[10px] ${daysSince > 180 ? 'text-red-500 font-semibold' : daysSince > 90 ? 'text-amber-500' : 'text-slate-400'}`}>
+                          <div className="flex items-center justify-between mt-2 pt-2 border-t border-neutral-50">
+                            <span className={`text-[10px] ${daysSince > 180 ? 'text-red-500 font-semibold' : daysSince > 90 ? 'text-amber-500' : 'text-neutral-400'}`}>
                               {daysSince > 365 ? `${Math.floor(daysSince / 365)}y ago` : `${daysSince}d ago`}
                             </span>
                           </div>
 
                           {contact.assignedRep && (
-                            <p className="text-[9px] text-blue-500 font-medium mt-1 flex items-center gap-1">
+                            <p className="text-[9px] text-indigo-500 font-medium mt-1 flex items-center gap-1">
                               <User className="w-2.5 h-2.5" /> {contact.assignedRep}
                             </p>
                           )}
@@ -159,7 +164,7 @@ export default function PipelinePage() {
 
                         {stageIndex < PIPELINE_STAGES.length - 1 && (
                           <button onClick={(e) => { e.preventDefault(); moveContactStage(contact.id, PIPELINE_STAGES[stageIndex + 1].key); }}
-                            className="mt-2 w-full text-[11px] py-1.5 rounded-lg bg-slate-50 hover:bg-blue-50 text-slate-500 hover:text-blue-600 font-medium transition-colors border border-slate-100">
+                            className="mt-2 w-full text-[11px] py-1.5 rounded-lg bg-neutral-50 hover:bg-indigo-50 text-neutral-500 hover:text-indigo-600 font-medium transition-colors border border-neutral-100">
                             Advance to {PIPELINE_STAGES[stageIndex + 1].label} &rarr;
                           </button>
                         )}
@@ -167,12 +172,12 @@ export default function PipelinePage() {
                     );
                   })}
                   {stageContacts.length > 15 && (
-                    <p className="text-[11px] text-slate-400 text-center py-2">+{stageContacts.length - 15} more contacts</p>
+                    <p className="text-[11px] text-neutral-400 text-center py-2">+{stageContacts.length - 15} more contacts</p>
                   )}
                   {stageContacts.length === 0 && (
                     <div className="text-center py-10">
-                      <Inbox className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-                      <p className="text-[11px] text-slate-400">No contacts in this stage</p>
+                      <Inbox className="w-8 h-8 text-neutral-300 mx-auto mb-2" />
+                      <p className="text-[11px] text-neutral-400">No contacts in this stage</p>
                     </div>
                   )}
                 </div>

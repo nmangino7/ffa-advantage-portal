@@ -5,46 +5,49 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { usePersistedState } from '@/lib/hooks/usePersistedState';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useToast } from '@/lib/context/ToastContext';
-import { Icon } from '@/components/ui/Icon';
-import { Check, Mail, Settings, Server, RotateCcw, Download, AlertTriangle, Info, Zap } from 'lucide-react';
+import { Check, RotateCcw, Download, Info, Zap } from 'lucide-react';
 
-const tabs = ['Email & Data', 'HubSpot Integration', 'FINRA Compliance', 'Architecture', 'Roadmap'] as const;
-type Tab = typeof tabs[number];
+const sections = ['General', 'HubSpot', 'Compliance', 'Architecture', 'Roadmap'] as const;
+type Section = typeof sections[number];
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = usePersistedState<Tab>('ffa-settings-tab', 'Email & Data');
+  const [activeSection, setActiveSection] = usePersistedState<Section>('ffa-settings-tab', 'General');
 
   return (
-    <div className="max-w-[1000px]">
-      <PageHeader
-        title="Settings"
-        subtitle="Platform configuration, integration guides, and compliance documentation"
-      />
+    <div className="max-w-7xl mx-auto px-6 py-8">
+      <PageHeader title="Settings" subtitle="Platform configuration, integrations, and documentation" />
 
-      {/* Tabs */}
-      <div className="flex gap-1 mb-6 bg-slate-100 p-1 rounded-xl overflow-x-auto">
-        {tabs.map(tab => (
-          <button key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
-              activeTab === tab ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-            }`}>
-            {tab}
-          </button>
-        ))}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Left Sub-Nav */}
+        <nav className="lg:col-span-1">
+          <div className="bg-white rounded-xl border border-neutral-200 p-2 space-y-0.5 lg:sticky lg:top-20">
+            {sections.map(s => (
+              <button key={s} onClick={() => setActiveSection(s)}
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeSection === s
+                    ? 'bg-neutral-900 text-white'
+                    : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50'
+                }`}>
+                {s}
+              </button>
+            ))}
+          </div>
+        </nav>
+
+        {/* Content */}
+        <div className="lg:col-span-3">
+          {activeSection === 'General' && <GeneralSection />}
+          {activeSection === 'HubSpot' && <HubSpotSection />}
+          {activeSection === 'Compliance' && <ComplianceSection />}
+          {activeSection === 'Architecture' && <ArchitectureSection />}
+          {activeSection === 'Roadmap' && <RoadmapSection />}
+        </div>
       </div>
-
-      {/* Tab Content */}
-      {activeTab === 'Email & Data' && <EmailDataTab />}
-      {activeTab === 'HubSpot Integration' && <HubSpotTab />}
-      {activeTab === 'FINRA Compliance' && <FINRATab />}
-      {activeTab === 'Architecture' && <ArchitectureTab />}
-      {activeTab === 'Roadmap' && <RoadmapTab />}
     </div>
   );
 }
 
-function EmailDataTab() {
+function GeneralSection() {
   const { contacts, campaigns, activities, customTemplates, resetToDefaults } = usePortal();
   const { showToast } = useToast();
   const [confirmReset, setConfirmReset] = useState(false);
@@ -54,7 +57,7 @@ function EmailDataTab() {
       exportDate: new Date().toISOString(),
       contacts: contacts.length,
       campaigns,
-      activities: activities.slice(0, 100), // last 100 activities
+      activities: activities.slice(0, 100),
       customTemplates,
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -75,15 +78,13 @@ function EmailDataTab() {
 
   return (
     <div className="space-y-6">
-      {/* Simulation Mode Banner */}
-      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+      {/* Simulation Mode */}
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Zap className="w-5 h-5 text-amber-600" />
-          </div>
+          <Zap className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div>
-            <h3 className="text-base font-bold text-amber-900 mb-1">Simulation Mode</h3>
-            <p className="text-sm text-amber-800 leading-relaxed">
+            <h3 className="text-sm font-semibold text-amber-900 mb-1">Simulation Mode</h3>
+            <p className="text-xs text-amber-800 leading-relaxed">
               This portal is running in demo mode. Emails are <strong>not</strong> being sent — all campaign data, engagement metrics, and activity are simulated locally.
               When HubSpot is integrated, real emails will be sent through your connected provider.
             </p>
@@ -91,10 +92,10 @@ function EmailDataTab() {
         </div>
       </div>
 
-      {/* What's Real vs Coming Soon */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6">
-        <h2 className="text-base font-bold text-slate-900 mb-4">What Works Today</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {/* What Works Today */}
+      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+        <h2 className="text-sm font-semibold text-neutral-900 mb-4">What Works Today</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {[
             { label: 'Create & edit campaigns with rich text emails', live: true },
             { label: 'Upload PDFs, images, and documents', live: true },
@@ -107,49 +108,47 @@ function EmailDataTab() {
             { label: 'Actual appointment scheduling', live: false },
             { label: 'Role-based access & SSO', live: false },
           ].map((item, i) => (
-            <div key={i} className={`flex items-center gap-2 p-3 rounded-lg border ${
-              item.live ? 'bg-emerald-50 border-emerald-100' : 'bg-slate-50 border-slate-100'
+            <div key={i} className={`flex items-center gap-2 p-2.5 rounded-lg border ${
+              item.live ? 'bg-emerald-50 border-emerald-100' : 'bg-neutral-50 border-neutral-100'
             }`}>
               {item.live ? (
-                <Check className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
               ) : (
-                <span className="text-[9px] px-1.5 py-0.5 bg-slate-200 text-slate-500 rounded font-bold flex-shrink-0">SOON</span>
+                <span className="text-[9px] px-1.5 py-0.5 bg-neutral-200 text-neutral-500 rounded font-semibold flex-shrink-0">SOON</span>
               )}
-              <p className={`text-xs ${item.live ? 'text-emerald-800' : 'text-slate-500'}`}>{item.label}</p>
+              <p className={`text-xs ${item.live ? 'text-emerald-800' : 'text-neutral-500'}`}>{item.label}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Data Summary */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6">
-        <h2 className="text-base font-bold text-slate-900 mb-4">Your Data</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+        <h2 className="text-sm font-semibold text-neutral-900 mb-4">Your Data</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           {[
-            { label: 'Contacts', value: contacts.length, color: '#3b82f6' },
-            { label: 'Campaigns', value: campaigns.length, color: '#7c3aed' },
-            { label: 'Activities', value: activities.length, color: '#059669' },
-            { label: 'Templates', value: customTemplates.length, color: '#d97706' },
+            { label: 'Contacts', value: contacts.length },
+            { label: 'Campaigns', value: campaigns.length },
+            { label: 'Activities', value: activities.length },
+            { label: 'Templates', value: customTemplates.length },
           ].map(s => (
-            <div key={s.label} className="bg-slate-50 rounded-xl p-4 text-center">
-              <p className="text-2xl font-extrabold" style={{ color: s.color }}>{s.value}</p>
-              <p className="text-[11px] text-slate-500 mt-0.5">{s.label}</p>
+            <div key={s.label} className="bg-neutral-50 rounded-xl p-4 text-center">
+              <p className="text-2xl font-semibold text-neutral-900">{s.value}</p>
+              <p className="text-[11px] text-neutral-500 mt-0.5">{s.label}</p>
             </div>
           ))}
         </div>
 
         <div className="flex flex-wrap gap-3">
-          {/* Export */}
           <button onClick={handleExport}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-neutral-900 text-white text-sm font-semibold rounded-lg hover:bg-neutral-800 transition-colors">
             <Download className="w-4 h-4" />
             Export Data (JSON)
           </button>
 
-          {/* Reset */}
           {!confirmReset ? (
             <button onClick={() => setConfirmReset(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-red-600 text-sm font-semibold rounded-xl border border-red-200 hover:bg-red-50 transition-colors">
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-red-600 text-sm font-semibold rounded-lg border border-red-200 hover:bg-red-50 transition-colors">
               <RotateCcw className="w-4 h-4" />
               Reset Demo Data
             </button>
@@ -161,7 +160,7 @@ function EmailDataTab() {
                 Yes, Reset
               </button>
               <button onClick={() => setConfirmReset(false)}
-                className="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-700">
+                className="px-3 py-2 text-xs font-semibold text-neutral-500 hover:text-neutral-700">
                 Cancel
               </button>
             </div>
@@ -169,16 +168,16 @@ function EmailDataTab() {
         </div>
       </div>
 
-      {/* Email Provider Info */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6">
-        <h2 className="text-base font-bold text-slate-900 mb-1">Email Provider</h2>
-        <p className="text-sm text-slate-500 mb-4">Real email sending requires a HubSpot integration. See the HubSpot Integration tab for setup details.</p>
+      {/* Email Provider */}
+      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+        <h2 className="text-sm font-semibold text-neutral-900 mb-1">Email Provider</h2>
+        <p className="text-xs text-neutral-500 mb-4">Real email sending requires a HubSpot integration. See the HubSpot section for setup details.</p>
 
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-start gap-3">
-          <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex items-start gap-3">
+          <Info className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-semibold text-blue-900 mb-1">Coming with HubSpot Integration</p>
-            <ul className="text-xs text-blue-800 space-y-1 list-disc pl-4">
+            <p className="text-xs font-semibold text-indigo-900 mb-1">Coming with HubSpot Integration</p>
+            <ul className="text-xs text-indigo-800 space-y-1 list-disc pl-4">
               <li>Automated email sending through HubSpot Workflows</li>
               <li>Real-time open, click, and reply tracking</li>
               <li>Domain verification and deliverability monitoring</li>
@@ -191,7 +190,7 @@ function EmailDataTab() {
   );
 }
 
-function HubSpotTab() {
+function HubSpotSection() {
   const steps = [
     { title: 'HubSpot API Authentication', detail: 'Set up a HubSpot Private App with scoped permissions for contacts, deals, and marketing emails.', effort: '1 day' },
     { title: 'Contact Sync (~500K)', detail: 'Replace mock data with HubSpot Contacts API calls. Map properties like name, email, company, and phone.', effort: '3-4 days' },
@@ -214,33 +213,33 @@ function HubSpotTab() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-2xl border border-slate-200 p-6">
-        <h2 className="text-base font-bold text-slate-900 mb-4">Integration Steps</h2>
+      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+        <h2 className="text-sm font-semibold text-neutral-900 mb-4">Integration Steps</h2>
         <div className="space-y-3">
           {steps.map((step, i) => (
-            <div key={i} className="flex gap-3 p-4 rounded-xl bg-slate-50 border border-slate-100">
-              <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0">{i + 1}</div>
+            <div key={i} className="flex gap-3 p-4 rounded-xl bg-neutral-50 border border-neutral-100">
+              <div className="w-7 h-7 rounded-full bg-neutral-900 flex items-center justify-center text-[11px] font-semibold text-white flex-shrink-0">{i + 1}</div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
-                  <p className="text-sm font-semibold text-slate-900">{step.title}</p>
-                  <span className="text-[10px] text-slate-400 bg-white px-2 py-0.5 rounded-md border border-slate-100">{step.effort}</span>
+                  <p className="text-sm font-semibold text-neutral-900">{step.title}</p>
+                  <span className="text-[10px] text-neutral-400 bg-white px-2 py-0.5 rounded-md border border-neutral-100">{step.effort}</span>
                 </div>
-                <p className="text-xs text-slate-600">{step.detail}</p>
+                <p className="text-xs text-neutral-600">{step.detail}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-6">
-        <h2 className="text-base font-bold text-slate-900 mb-4">HubSpot Setup Checklist</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+        <h2 className="text-sm font-semibold text-neutral-900 mb-4">HubSpot Setup Checklist</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {checklist.map((item, i) => (
-            <div key={i} className="flex gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
-              <div className="w-5 h-5 rounded border-2 border-slate-300 flex-shrink-0 mt-0.5" />
+            <div key={i} className="flex gap-3 p-3 rounded-xl bg-neutral-50 border border-neutral-100">
+              <div className="w-4 h-4 rounded border-2 border-neutral-300 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-medium text-slate-900">{item.label}</p>
-                <p className="text-[10px] text-slate-400 mt-0.5">{item.scope}</p>
+                <p className="text-xs font-medium text-neutral-900">{item.label}</p>
+                <p className="text-[10px] text-neutral-400 mt-0.5">{item.scope}</p>
               </div>
             </div>
           ))}
@@ -250,7 +249,7 @@ function HubSpotTab() {
   );
 }
 
-function FINRATab() {
+function ComplianceSection() {
   const rules = [
     { rule: 'Rule 2210', title: 'Communications with the Public', summary: 'All firm communications must be fair, balanced, and not misleading. Requires clear firm identification and balanced risk/benefit presentation.', impact: 'Every email template must be reviewed for compliance before going live.' },
     { rule: 'Rule 2111', title: 'Suitability', summary: 'Firms must have a reasonable basis for recommending products. Our education-only approach avoids suitability triggers.', impact: 'The Qualified stage is where suitability is assessed before advisor handoff.' },
@@ -272,34 +271,34 @@ function FINRATab() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-        <p className="text-sm font-semibold text-amber-900 mb-1">Compliance is built into every layer of this platform.</p>
-        <p className="text-sm text-amber-800">The education-only approach, supervisory review workflow, and automatic audit trail ensure FINRA compliance at every step. All marketing materials should still go through your firm&apos;s designated principal for review.</p>
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
+        <p className="text-xs font-semibold text-amber-900 mb-1">Compliance is built into every layer of this platform.</p>
+        <p className="text-xs text-amber-800">The education-only approach, supervisory review workflow, and automatic audit trail ensure FINRA compliance at every step. All marketing materials should still go through your firm&apos;s designated principal for review.</p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-6">
-        <h2 className="text-base font-bold text-slate-900 mb-4">Built-in Safeguards</h2>
+      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+        <h2 className="text-sm font-semibold text-neutral-900 mb-4">Built-in Safeguards</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {safeguards.map((item, i) => (
-            <div key={i} className="flex items-start gap-2 p-3 rounded-lg bg-emerald-50 border border-emerald-100">
-              <Check className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <div key={i} className="flex items-start gap-2 p-2.5 rounded-lg bg-emerald-50 border border-emerald-100">
+              <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
               <p className="text-xs text-emerald-800">{item}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-6">
-        <h2 className="text-base font-bold text-slate-900 mb-4">Key FINRA Rules</h2>
+      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+        <h2 className="text-sm font-semibold text-neutral-900 mb-4">Key FINRA Rules</h2>
         <div className="space-y-3">
           {rules.map((r, i) => (
-            <div key={i} className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+            <div key={i} className="p-4 rounded-xl bg-neutral-50 border border-neutral-100">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">{r.rule}</span>
-                <span className="text-sm font-bold text-slate-900">{r.title}</span>
+                <span className="text-[10px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">{r.rule}</span>
+                <span className="text-sm font-semibold text-neutral-900">{r.title}</span>
               </div>
-              <p className="text-xs text-slate-600 mb-2">{r.summary}</p>
-              <p className="text-[11px] text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg">
+              <p className="text-xs text-neutral-600 mb-2">{r.summary}</p>
+              <p className="text-[11px] text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-lg">
                 <strong>Portal Impact:</strong> {r.impact}
               </p>
             </div>
@@ -310,37 +309,37 @@ function FINRATab() {
   );
 }
 
-function ArchitectureTab() {
+function ArchitectureSection() {
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-2xl border border-slate-200 p-6">
-        <h2 className="text-base font-bold text-slate-900 mb-4">Technical Architecture</h2>
-        <div className="bg-slate-900 rounded-xl p-6 font-mono text-sm text-slate-300">
-          <p className="text-slate-500">{'// Current MVP (with local persistence)'}</p>
+      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+        <h2 className="text-sm font-semibold text-neutral-900 mb-4">Technical Architecture</h2>
+        <div className="bg-neutral-900 rounded-xl p-6 font-mono text-sm text-neutral-300">
+          <p className="text-neutral-500">{'// Current MVP (with local persistence)'}</p>
           <p className="text-emerald-400">Next.js App (Vercel) &rarr; localStorage + IndexedDB &rarr; UI</p>
           <br />
-          <p className="text-slate-500">{'// Production'}</p>
-          <p className="text-blue-400">Next.js App (Vercel)</p>
-          <p className="text-slate-400">&nbsp;&nbsp;├── API Routes &rarr; HubSpot Private App API</p>
-          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/contacts &rarr; Contacts API</p>
-          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/campaigns &rarr; Workflows + Email Events</p>
-          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/pipeline &rarr; Deal Pipeline</p>
-          <p className="text-slate-400">&nbsp;&nbsp;│&nbsp;&nbsp;└── /api/activities &rarr; Engagements API</p>
-          <p className="text-slate-400">&nbsp;&nbsp;├── Webhooks ← HubSpot (real-time)</p>
-          <p className="text-slate-400">&nbsp;&nbsp;├── NextAuth.js &rarr; SSO / Auth</p>
-          <p className="text-slate-400">&nbsp;&nbsp;└── Edge Functions &rarr; Intent Score</p>
+          <p className="text-neutral-500">{'// Production'}</p>
+          <p className="text-indigo-400">Next.js App (Vercel)</p>
+          <p className="text-neutral-400">&nbsp;&nbsp;├── API Routes &rarr; HubSpot Private App API</p>
+          <p className="text-neutral-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/contacts &rarr; Contacts API</p>
+          <p className="text-neutral-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/campaigns &rarr; Workflows + Email Events</p>
+          <p className="text-neutral-400">&nbsp;&nbsp;│&nbsp;&nbsp;├── /api/pipeline &rarr; Deal Pipeline</p>
+          <p className="text-neutral-400">&nbsp;&nbsp;│&nbsp;&nbsp;└── /api/activities &rarr; Engagements API</p>
+          <p className="text-neutral-400">&nbsp;&nbsp;├── Webhooks ← HubSpot (real-time)</p>
+          <p className="text-neutral-400">&nbsp;&nbsp;├── NextAuth.js &rarr; SSO / Auth</p>
+          <p className="text-neutral-400">&nbsp;&nbsp;└── Edge Functions &rarr; Intent Score</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
-          { title: 'Data Layer', desc: 'localStorage + IndexedDB for MVP. Each data call is swappable — when HubSpot connects, zero UI changes needed.', bgColor: '#eff6ff', borderColor: '#bfdbfe', textColor: '#1e40af' },
-          { title: 'Authentication', desc: 'NextAuth.js with credentials for MVP, upgradeable to SSO for production. Role-based access per page.', bgColor: '#ecfdf5', borderColor: '#a7f3d0', textColor: '#065f46' },
-          { title: 'Deployment', desc: 'Vercel handles hosting, SSL, CDN, auto-scaling. Push to GitHub = auto deploy. API keys stored in env vars.', bgColor: '#f5f3ff', borderColor: '#c4b5fd', textColor: '#5b21b6' },
+          { title: 'Data Layer', desc: 'localStorage + IndexedDB for MVP. Each data call is swappable — when HubSpot connects, zero UI changes needed.' },
+          { title: 'Authentication', desc: 'NextAuth.js with credentials for MVP, upgradeable to SSO for production. Role-based access per page.' },
+          { title: 'Deployment', desc: 'Vercel handles hosting, SSL, CDN, auto-scaling. Push to GitHub = auto deploy. API keys stored in env vars.' },
         ].map(item => (
-          <div key={item.title} className="rounded-xl p-4" style={{ backgroundColor: item.bgColor, borderColor: item.borderColor, borderWidth: 1, borderStyle: 'solid' }}>
-            <p className="text-sm font-bold mb-1" style={{ color: item.textColor }}>{item.title}</p>
-            <p className="text-xs text-slate-600">{item.desc}</p>
+          <div key={item.title} className="bg-white rounded-xl border border-neutral-200 p-4">
+            <p className="text-sm font-semibold text-neutral-900 mb-1">{item.title}</p>
+            <p className="text-xs text-neutral-500">{item.desc}</p>
           </div>
         ))}
       </div>
@@ -348,34 +347,34 @@ function ArchitectureTab() {
   );
 }
 
-function RoadmapTab() {
+function RoadmapSection() {
   const phases = [
     { phase: '1', title: 'HubSpot Integration', status: 'Next Up', color: '#d97706', timeline: '2-3 weeks', items: ['API auth setup', 'Contact sync (500K)', 'Campaign mapping', 'Pipeline stage sync', 'Activity sync', 'Webhooks'] },
-    { phase: '2', title: 'Governance Model', status: 'Phase 2', color: '#7c3aed', timeline: '1-2 weeks', items: ['Role-based access control', 'Lead routing rules', 'Audit trail & reporting'] },
-    { phase: '3', title: 'Scale & Optimize', status: 'Future', color: '#64748b', timeline: 'Ongoing', items: ['ML intent scoring', 'A/B testing framework', 'Multi-channel expansion', 'ROI attribution dashboard'] },
+    { phase: '2', title: 'Governance Model', status: 'Phase 2', color: '#6366f1', timeline: '1-2 weeks', items: ['Role-based access control', 'Lead routing rules', 'Audit trail & reporting'] },
+    { phase: '3', title: 'Scale & Optimize', status: 'Future', color: '#a3a3a3', timeline: 'Ongoing', items: ['ML intent scoring', 'A/B testing framework', 'Multi-channel expansion', 'ROI attribution dashboard'] },
   ];
 
   return (
     <div className="space-y-4">
       {phases.map(p => (
-        <div key={p.phase} className="bg-white rounded-2xl border border-slate-200 p-6">
+        <div key={p.phase} className="bg-white rounded-xl border border-neutral-200 p-6">
           <div className="flex items-center gap-3 mb-4">
-            <span className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white" style={{ backgroundColor: p.color }}>
+            <span className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-semibold text-white" style={{ backgroundColor: p.color }}>
               {p.phase}
             </span>
             <div className="flex-1">
-              <h3 className="text-base font-bold text-slate-900">{p.title}</h3>
-              <p className="text-xs text-slate-400">{p.timeline}</p>
+              <h3 className="text-sm font-semibold text-neutral-900">{p.title}</h3>
+              <p className="text-xs text-neutral-400">{p.timeline}</p>
             </div>
-            <span className="text-[10px] px-2.5 py-1 rounded-full font-bold" style={{ backgroundColor: p.color + '15', color: p.color }}>
+            <span className="text-[10px] px-2.5 py-1 rounded-full font-semibold" style={{ backgroundColor: p.color + '15', color: p.color }}>
               {p.status}
             </span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {p.items.map((item, i) => (
-              <div key={i} className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                <div className="w-4 h-4 rounded border-2 border-slate-300 flex-shrink-0" />
-                <p className="text-xs text-slate-700">{item}</p>
+              <div key={i} className="flex items-center gap-2 p-2.5 rounded-lg bg-neutral-50 border border-neutral-100">
+                <div className="w-4 h-4 rounded border-2 border-neutral-300 flex-shrink-0" />
+                <p className="text-xs text-neutral-700">{item}</p>
               </div>
             ))}
           </div>

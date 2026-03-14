@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/layout/Sidebar";
+import TopNav from "@/components/layout/TopNav";
 import { ClientProviders } from "@/components/layout/ClientProviders";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-geist-sans" });
 
 export const metadata: Metadata = {
   title: "FFA Advantage — Marketing Outreach Platform",
@@ -21,12 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+      <body className="antialiased font-sans">
         <ClientProviders>
-          <Sidebar />
-          {/* Mobile top bar spacer */}
-          <div className="md:hidden h-14" />
-          <main className="ml-0 md:ml-[240px] min-h-screen p-4 md:p-8 lg:p-10">
+          <TopNav />
+          <div className="h-14" />
+          <main className="min-h-[calc(100vh-56px)]">
             {children}
           </main>
         </ClientProviders>
