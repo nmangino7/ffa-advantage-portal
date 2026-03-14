@@ -10,7 +10,8 @@ import { EmailPreviewCard } from '@/components/ui/EmailPreviewCard';
 import { FileUploadZone } from '@/components/ui/FileUploadZone';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { Icon } from '@/components/ui/Icon';
-import { Plus, Search, Mail, FolderOpen, LayoutGrid } from 'lucide-react';
+import { Plus, Search, Mail, FolderOpen, LayoutGrid, Sparkles } from 'lucide-react';
+import Link from 'next/link';
 
 type ViewTab = 'all' | 'files' | 'templates';
 
@@ -146,6 +147,13 @@ export default function ContentLibraryPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <Link
+            href="/ai-studio"
+            className="border border-indigo-200 text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 px-4 py-2 text-sm font-semibold transition-colors inline-flex items-center gap-2"
+          >
+            <Sparkles className="w-4 h-4" />
+            AI Studio
+          </Link>
           <button
             onClick={() => document.getElementById('file-upload-trigger')?.click()}
             className="border border-neutral-200 text-neutral-600 rounded-lg hover:bg-neutral-50 px-4 py-2 text-sm font-semibold transition-colors"

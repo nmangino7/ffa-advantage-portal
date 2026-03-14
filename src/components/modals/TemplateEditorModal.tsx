@@ -8,7 +8,8 @@ import { SERVICE_LINES, SERVICE_LINE_CONFIG, type ServiceLine } from '@/lib/type
 import { Icon } from '@/components/ui/Icon';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { EmailPreview } from '@/components/ui/EmailPreview';
-import { X, FileText } from 'lucide-react';
+import { X, FileText, Sparkles, ShieldCheck, Loader2 } from 'lucide-react';
+import type { AIEmailResponse, ComplianceReviewResponse } from '@/lib/ai-types';
 
 export function TemplateEditorModal() {
   const { templateModal, closeAll } = useModal();
@@ -20,6 +21,11 @@ export function TemplateEditorModal() {
   const [body, setBody] = useState('');
   const [serviceLine, setServiceLine] = useState<ServiceLine>('Insurance Review');
   const [sendDay, setSendDay] = useState(1);
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiTopic, setAiTopic] = useState('');
+  const [showAiForm, setShowAiForm] = useState(false);
+  const [complianceChecking, setComplianceChecking] = useState(false);
+  const [complianceResult, setComplianceResult] = useState<ComplianceReviewResponse | null>(null);
 
   useEffect(() => {
     if (templateModal?.mode === 'edit' && templateModal.templateId) {
@@ -48,6 +54,56 @@ export function TemplateEditorModal() {
       return () => document.removeEventListener('keydown', handleEscape);
     }
   }, [templateModal, handleEscape]);
+
+  async function handleAiGenerate() {
+    if (!aiTopic.trim()) return;
+    setAiGenerating(true);
+    try {
+      const res = await fetch('/api/ai/generate-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          serviceLine,
+          tone: 'professional',
+          topic: aiTopic,
+          audience: 'dormant financial contacts',
+          sequencePosition: sendDay <= 3 ? 1 : sendDay <= 7 ? 2 : sendDay <= 14 ? 3 : 4,
+        }),
+      });
+      if (!res.ok) throw new Error('Failed to generate');
+      const data: AIEmailResponse = await res.json();
+      setSubject(data.subject);
+      setPreviewText(data.previewText);
+      setBody(data.body);
+      setShowAiForm(false);
+      setAiTopic('');
+      showToast('AI generated email content');
+    } catch {
+      showToast('Failed to generate — check your API key');
+    } finally {
+      setAiGenerating(false);
+    }
+  }
+
+  async function handleComplianceCheck() {
+    if (!body.trim()) return;
+    setComplianceChecking(true);
+    setComplianceResult(null);
+    try {
+      const res = await fetch('/api/ai/compliance-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: `Subject: ${subject}\n\n${body}`, contentType: 'email', serviceLine }),
+      });
+      if (!res.ok) throw new Error('Failed to review');
+      const data: ComplianceReviewResponse = await res.json();
+      setComplianceResult(data);
+    } catch {
+      showToast('Failed to run compliance check');
+    } finally {
+      setComplianceChecking(false);
+    }
+  }
 
   if (!templateModal) return null;
 
@@ -119,6 +175,38 @@ export function TemplateEditorModal() {
         <div className="flex-1 overflow-hidden">
           <div className="grid grid-cols-2 divide-x divide-neutral-100 h-full">
             <div className="overflow-y-auto p-6 space-y-4">
+              {/* AI Generate button */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowAiForm(!showAiForm)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-lg hover:bg-indigo-100 transition-colors"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Generate with AI
+                </button>
+              </div>
+
+              {showAiForm && (
+                <div className="p-3 bg-indigo-50/50 border border-indigo-100 rounded-lg space-y-2">
+                  <input
+                    type="text"
+                    value={aiTopic}
+                    onChange={e => setAiTopic(e.target.value)}
+                    placeholder="Topic: e.g., coverage gap analysis, retirement readiness..."
+                    className="w-full px-3 py-2 rounded-lg border border-indigo-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    onKeyDown={e => e.key === 'Enter' && handleAiGenerate()}
+                  />
+                  <button
+                    onClick={handleAiGenerate}
+                    disabled={aiGenerating || !aiTopic.trim()}
+                    className="px-3 py-1.5 text-xs font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-40 inline-flex items-center gap-1.5"
+                  >
+                    {aiGenerating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                    {aiGenerating ? 'Generating...' : 'Generate'}
+                  </button>
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-neutral-500 mb-1.5">Service Line</label>
@@ -167,11 +255,49 @@ export function TemplateEditorModal() {
           </div>
         </div>
 
+        {/* Compliance Result */}
+        {complianceResult && (
+          <div className="px-6 py-3 border-t border-neutral-100 bg-neutral-50">
+            <div className="flex items-center gap-3 mb-2">
+              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                complianceResult.status === 'pass' ? 'bg-green-100 text-green-700' :
+                complianceResult.status === 'warning' ? 'bg-amber-100 text-amber-700' :
+                'bg-red-100 text-red-700'
+              }`}>
+                Score: {complianceResult.overallScore}/100
+              </span>
+              <span className="text-xs text-neutral-500">{complianceResult.summary}</span>
+            </div>
+            {complianceResult.issues.length > 0 && (
+              <div className="space-y-1 max-h-24 overflow-y-auto">
+                {complianceResult.issues.map((issue, i) => (
+                  <div key={i} className="text-xs flex items-start gap-1.5">
+                    <span className={`shrink-0 mt-0.5 w-1.5 h-1.5 rounded-full ${
+                      issue.severity === 'critical' ? 'bg-red-500' : issue.severity === 'warning' ? 'bg-amber-500' : 'bg-blue-500'
+                    }`} />
+                    <span className="text-neutral-600"><strong>{issue.rule}:</strong> {issue.description}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Footer */}
         <div className="px-6 py-4 border-t border-neutral-100 flex items-center justify-between">
-          <p className="text-xs text-neutral-400">
-            {subject.length > 0 ? `Subject: ${subject.length} chars` : ''}
-          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleComplianceCheck}
+              disabled={complianceChecking || !body.trim()}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors disabled:opacity-40"
+            >
+              {complianceChecking ? <Loader2 className="w-3 h-3 animate-spin" /> : <ShieldCheck className="w-3 h-3" />}
+              {complianceChecking ? 'Checking...' : 'Check Compliance'}
+            </button>
+            <p className="text-xs text-neutral-400">
+              {subject.length > 0 ? `Subject: ${subject.length} chars` : ''}
+            </p>
+          </div>
           <div className="flex gap-2">
             <button onClick={handleClose} className="px-3 py-1.5 text-sm font-medium text-neutral-600 hover:bg-neutral-50 rounded-lg transition-colors">
               Cancel
