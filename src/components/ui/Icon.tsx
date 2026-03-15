@@ -7,6 +7,7 @@ import {
   Pencil, Trash2, Eye, Phone, Inbox, Check, X,
   FileText, Clock, MousePointerClick, Info,
   AlertTriangle, ArrowRight, Copy, Sparkles,
+  Target, TrendingDown, Lightbulb, LayoutDashboard,
   type LucideProps,
 } from 'lucide-react';
 import { type FC } from 'react';
@@ -52,6 +53,10 @@ const ICONS: Record<string, FC<LucideProps>> = {
   'arrow-right': ArrowRight,
   copy: Copy,
   sparkles: Sparkles,
+  target: Target,
+  'trending-down': TrendingDown,
+  lightbulb: Lightbulb,
+  dashboard: LayoutDashboard,
 };
 
 export function Icon({

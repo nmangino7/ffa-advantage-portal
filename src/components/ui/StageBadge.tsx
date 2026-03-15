@@ -15,7 +15,7 @@ export function StageBadge({
 
   return (
     <span
-      className={`inline-flex items-center font-medium rounded-full ${sizeClasses}`}
+      className={`inline-flex items-center font-semibold rounded-full shadow-sm ${sizeClasses}`}
       style={{ backgroundColor: meta.bgColor, color: meta.color }}
     >
       <Icon name={meta.icon} className={size === 'md' ? 'w-3.5 h-3.5' : 'w-3 h-3'} />

@@ -126,7 +126,7 @@ export default function AudienceDetailPage() {
             {/* Action Buttons */}
             <div className="border-t border-neutral-100 pt-4 mt-4 space-y-2">
               <button onClick={() => openEnrollModal(contact.id)}
-                className="w-full px-4 py-2.5 text-sm font-semibold bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors">
+                className="w-full px-4 py-2.5 text-sm font-semibold bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
                 Enroll in Campaign
               </button>
               <button onClick={() => openAssignModal(contact.id)}
@@ -273,7 +273,7 @@ export default function AudienceDetailPage() {
                   <p className="text-sm text-neutral-500">Not enrolled in any campaigns</p>
                   <p className="text-xs text-neutral-400 mt-1">This contact is dormant</p>
                   <button onClick={() => openEnrollModal(contact.id)}
-                    className="mt-3 px-4 py-2 text-sm font-semibold bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors">
+                    className="mt-3 px-4 py-2 text-sm font-semibold bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
                     Enroll in Campaign
                   </button>
                 </div>

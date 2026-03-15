@@ -9,6 +9,7 @@ import { StatCard } from '@/components/ui/StatCard';
 import { ActionCard } from '@/components/ui/ActionCard';
 import { Icon } from '@/components/ui/Icon';
 import { SkeletonCard } from '@/components/ui/SkeletonCard';
+import { RecommendationsPanel } from '@/components/ui/RecommendationsPanel';
 import {
   Mail, Flame, CalendarDays, CheckCircle, Clock, FileText, UserPlus, Play,
 } from 'lucide-react';
@@ -112,9 +113,9 @@ export default function HomePage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 animate-fade-up">
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <StatCard value={stats.totalContacts.toLocaleString()} label="Total Contacts" />
         <StatCard value={stats.activeCampaigns} label="Active Campaigns" />
         <StatCard
@@ -123,6 +124,11 @@ export default function HomePage() {
           accentColor={stats.warmLeadsNeedingAttention > 0 ? '#ef4444' : undefined}
         />
         <StatCard value={stats.appointmentsScheduled} label="Meetings Booked" />
+      </div>
+
+      {/* AI Recommendations */}
+      <div className="mb-8">
+        <RecommendationsPanel />
       </div>
 
       {/* Two-column: Needs Attention + Recent Activity */}
@@ -194,7 +200,7 @@ export default function HomePage() {
               const cfg = SERVICE_LINE_CONFIG[campaign.serviceLine];
               return (
                 <Link key={campaign.id} href={`/campaigns/${campaign.id}`}
-                  className="bg-white border border-neutral-200 rounded-xl p-4 hover:border-neutral-300 transition-all min-w-[260px] shrink-0">
+                  className="bg-white border border-neutral-200 rounded-xl p-4 hover:border-neutral-300 hover:shadow-md transition-all duration-200 min-w-[260px] shrink-0">
                   <div className="flex items-center gap-2.5 mb-2">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: cfg.bgColor }}>
                       <Icon name={cfg.icon} className="w-4 h-4" style={{ color: cfg.color }} />
@@ -217,7 +223,7 @@ export default function HomePage() {
           <div className="bg-white border border-neutral-200 rounded-xl p-8 text-center">
             <Mail className="w-5 h-5 text-neutral-300 mx-auto mb-2" />
             <p className="text-sm text-neutral-500 mb-3">No active campaigns yet.</p>
-            <Link href="/campaigns/new" className="inline-flex items-center px-4 py-2 bg-neutral-900 text-white text-sm font-medium rounded-lg hover:bg-neutral-800 transition-colors">
+            <Link href="/campaigns/new" className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-medium rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
               Create Campaign
             </Link>
           </div>

@@ -23,7 +23,7 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
   const TierIcon = TIER_ICON[lead.tier] || MessageSquare;
 
   return (
-    <div className="bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 transition-all p-4">
+    <div className="bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 hover:shadow-md transition-all duration-200 p-4">
       <div className="flex items-start gap-3">
         {/* Avatar */}
         <div
@@ -96,7 +96,7 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
             ) : (
               <button
                 onClick={() => openAssignModal(lead.contact.id)}
-                className="px-2.5 py-1 bg-neutral-900 text-white text-[11px] font-medium rounded-md hover:bg-neutral-800 transition-colors inline-flex items-center gap-1"
+                className="px-2.5 py-1 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-[11px] font-medium rounded-md hover:from-indigo-700 hover:to-violet-700 transition-all inline-flex items-center gap-1"
               >
                 <UserPlus className="w-3 h-3" /> Assign Advisor
               </button>

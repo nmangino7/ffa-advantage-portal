@@ -5,21 +5,24 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { usePortal } from '@/lib/context/PortalContext';
 import { Menu, X, Settings } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { WarmLeadTier } from '@/lib/types';
 
 interface NavItem {
   href: string;
   label: string;
+  icon?: string;
 }
 
 const mainNav: NavItem[] = [
-  { href: '/', label: 'Dashboard' },
-  { href: '/campaigns', label: 'Campaigns' },
-  { href: '/audience', label: 'Audience' },
-  { href: '/pipeline', label: 'Pipeline' },
-  { href: '/content', label: 'Content' },
-  { href: '/ai-studio', label: 'AI Studio' },
-  { href: '/warm-leads', label: 'Warm Leads' },
+  { href: '/', label: 'Dashboard', icon: 'home' },
+  { href: '/campaigns', label: 'Campaigns', icon: 'megaphone' },
+  { href: '/audience', label: 'Audience', icon: 'users' },
+  { href: '/pipeline', label: 'Pipeline', icon: 'arrow-right' },
+  { href: '/analytics', label: 'Analytics', icon: 'bar-chart' },
+  { href: '/content', label: 'Content', icon: 'file-text' },
+  { href: '/ai-studio', label: 'AI Studio', icon: 'sparkles' },
+  { href: '/warm-leads', label: 'Warm Leads', icon: 'flame' },
 ];
 
 const settingsNav: NavItem[] = [
@@ -96,20 +99,18 @@ export default function TopNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`relative px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+              className={`relative px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 inline-flex items-center gap-1.5 ${
                 isActive(item.href)
-                  ? 'text-neutral-900'
+                  ? 'text-indigo-700 bg-indigo-50'
                   : 'text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50'
               }`}
             >
+              {item.icon && <Icon name={item.icon} className="w-3.5 h-3.5" />}
               {item.label}
               {item.href === '/warm-leads' && warmLeadCount > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full px-1">
                   {warmLeadCount}
                 </span>
-              )}
-              {isActive(item.href) && (
-                <span className="absolute bottom-[-9px] left-3 right-3 h-[2px] bg-indigo-500 rounded-full" />
               )}
             </Link>
           ))}
@@ -129,7 +130,7 @@ export default function TopNav() {
               <Settings className="w-4 h-4" />
             </button>
             {settingsOpen && (
-              <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-neutral-200 rounded-lg shadow-lg py-1 animate-fade-in">
+              <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-neutral-200 rounded-xl shadow-xl py-1 animate-fade-in">
                 {settingsNav.map((item) => (
                   <Link
                     key={item.href}

@@ -14,7 +14,10 @@ export function StatCard({
   accentColor?: string;
 }) {
   return (
-    <div className="bg-white border border-neutral-200 rounded-xl p-5 transition-colors hover:border-neutral-300">
+    <div
+      className="bg-white border border-neutral-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200"
+      style={accentColor ? { borderLeftWidth: '4px', borderLeftColor: accentColor } : undefined}
+    >
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide">{label}</p>

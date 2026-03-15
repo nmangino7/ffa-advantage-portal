@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 Generate the newsletter content now.`;
 
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-6-20250514',
+      model: 'claude-sonnet-4-5-20241022',
       max_tokens: 3000,
       system: NEWSLETTER_GENERATION_PROMPT,
       messages: [{ role: 'user', content: userPrompt }],
