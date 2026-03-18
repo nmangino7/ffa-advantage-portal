@@ -13,6 +13,14 @@ import {
 import type { CampaignPerformanceData } from '@/lib/analytics';
 
 export function CampaignPerformanceChart({ data }: { data: CampaignPerformanceData[] }) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[320px] text-sm text-neutral-400">
+        No campaign data to display yet.
+      </div>
+    );
+  }
+
   return (
     <ResponsiveContainer width="100%" height={320}>
       <BarChart data={data} margin={{ top: 4, right: 8, left: -12, bottom: 0 }}>

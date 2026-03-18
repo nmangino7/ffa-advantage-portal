@@ -1,9 +1,9 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, useEffect, useRef, type ReactNode } from 'react';
-import { contacts as seedContacts, campaigns as seedCampaigns, activities as seedActivities, STORAGE_VERSION } from '@/lib/data/mock-data';
+import { contacts as seedContacts, campaigns as seedCampaigns, activities as seedActivities, ADVISORS as seedAdvisors, STORAGE_VERSION } from '@/lib/data/mock-data';
 import { loadState, debouncedSave, clearAllData } from '@/lib/storage';
-import type { Contact, Campaign, Activity, PipelineStage, EmailStep } from '@/lib/types';
+import type { Advisor, Contact, Campaign, Activity, PipelineStage, EmailStep } from '@/lib/types';
 
 // ─── Storage keys ────────────────────────────────────────────
 const KEYS = {
@@ -20,14 +20,17 @@ interface PortalContextType {
   campaigns: Campaign[];
   activities: Activity[];
   customTemplates: EmailStep[];
+  advisors: Advisor[];
   isHydrated: boolean;
   enrollContact: (contactId: string, campaignIds: string[]) => void;
   assignAdvisor: (contactId: string, advisorName: string) => void;
+  getAdvisorByName: (name: string) => Advisor | undefined;
   scheduleCall: (contactId: string, date: string, time: string, notes: string) => void;
   addCampaign: (campaign: Campaign) => void;
   updateCampaign: (id: string, updates: Partial<Campaign>) => void;
   duplicateCampaign: (id: string) => Campaign | null;
   toggleCampaignStatus: (campaignId: string) => void;
+  importContacts: (newContacts: Contact[]) => void;
   moveContactStage: (contactId: string, newStage: PipelineStage) => void;
   addTemplate: (template: EmailStep) => void;
   updateTemplate: (id: string, updates: Partial<EmailStep>) => void;
@@ -105,29 +108,50 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // ─── Auto-save on state changes ────────────────────────────
-  const isFirstRender = useRef(true);
+  // Track whether each key has been through its initial render after hydration
+  // to avoid re-saving data that was just loaded from localStorage.
+  const savedSnapshot = useRef<{
+    contacts: Contact[];
+    campaigns: Campaign[];
+    activities: Activity[];
+    customTemplates: EmailStep[];
+  } | null>(null);
+
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
+    if (!isHydrated) return;
+    // On the first render after hydration, capture the snapshot and skip saving
+    if (!savedSnapshot.current) {
+      savedSnapshot.current = { contacts, campaigns, activities, customTemplates };
       return;
     }
-    if (!isHydrated) return;
-    debouncedSave(KEYS.contacts, contacts);
+    if (contacts !== savedSnapshot.current.contacts) {
+      debouncedSave(KEYS.contacts, contacts);
+      savedSnapshot.current = { ...savedSnapshot.current, contacts };
+    }
   }, [contacts, isHydrated]);
 
   useEffect(() => {
-    if (!isHydrated) return;
-    debouncedSave(KEYS.campaigns, campaigns);
+    if (!isHydrated || !savedSnapshot.current) return;
+    if (campaigns !== savedSnapshot.current.campaigns) {
+      debouncedSave(KEYS.campaigns, campaigns);
+      savedSnapshot.current = { ...savedSnapshot.current, campaigns };
+    }
   }, [campaigns, isHydrated]);
 
   useEffect(() => {
-    if (!isHydrated) return;
-    debouncedSave(KEYS.activities, activities);
+    if (!isHydrated || !savedSnapshot.current) return;
+    if (activities !== savedSnapshot.current.activities) {
+      debouncedSave(KEYS.activities, activities);
+      savedSnapshot.current = { ...savedSnapshot.current, activities };
+    }
   }, [activities, isHydrated]);
 
   useEffect(() => {
-    if (!isHydrated) return;
-    debouncedSave(KEYS.customTemplates, customTemplates);
+    if (!isHydrated || !savedSnapshot.current) return;
+    if (customTemplates !== savedSnapshot.current.customTemplates) {
+      debouncedSave(KEYS.customTemplates, customTemplates);
+      savedSnapshot.current = { ...savedSnapshot.current, customTemplates };
+    }
   }, [customTemplates, isHydrated]);
 
   // ─── Actions ───────────────────────────────────────────────
@@ -174,10 +198,16 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const getAdvisorByName = useCallback((name: string): Advisor | undefined => {
+    return seedAdvisors.find(a => `${a.firstName} ${a.lastName}` === name);
+  }, []);
+
   const assignAdvisor = useCallback((contactId: string, advisorName: string) => {
+    const advisor = seedAdvisors.find(a => `${a.firstName} ${a.lastName}` === advisorName);
+    const advisorEmail = advisor?.email || null;
     setContacts(prev => {
       const updated = prev.map(c =>
-        c.id === contactId ? { ...c, assignedRep: advisorName } : c
+        c.id === contactId ? { ...c, assignedRep: advisorName, assignedRepEmail: advisorEmail } : c
       );
       const contact = updated.find(c => c.id === contactId);
       if (contact) {
@@ -255,6 +285,27 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
+  const importContacts = useCallback((newContacts: Contact[]) => {
+    setContacts(prev => {
+      const existingEmails = new Set(prev.map(c => c.email.toLowerCase()));
+      const unique = newContacts.filter(c => !existingEmails.has(c.email.toLowerCase()));
+      if (unique.length === 0) return prev;
+
+      // Create activity records for each imported contact
+      const importActivities: Activity[] = unique.map(c => ({
+        id: makeId(),
+        contactId: c.id,
+        contactName: `${c.firstName} ${c.lastName}`,
+        type: 'note_added' as const,
+        description: 'Contact imported from CSV/Excel',
+        timestamp: new Date().toISOString(),
+      }));
+      setActivities(actPrev => [...importActivities, ...actPrev]);
+
+      return [...prev, ...unique];
+    });
+  }, []);
+
   const moveContactStage = useCallback((contactId: string, newStage: PipelineStage) => {
     setContacts(prev => {
       const updated = prev.map(c =>
@@ -304,10 +355,10 @@ export function PortalProvider({ children }: { children: ReactNode }) {
 
   return (
     <PortalContext.Provider value={{
-      contacts, campaigns, activities, customTemplates, isHydrated,
-      enrollContact, assignAdvisor, scheduleCall,
+      contacts, campaigns, activities, customTemplates, advisors: seedAdvisors, isHydrated,
+      enrollContact, assignAdvisor, getAdvisorByName, scheduleCall,
       addCampaign, updateCampaign, duplicateCampaign, toggleCampaignStatus,
-      moveContactStage, addTemplate, updateTemplate, deleteTemplate,
+      importContacts, moveContactStage, addTemplate, updateTemplate, deleteTemplate,
       resetToDefaults,
     }}>
       {children}

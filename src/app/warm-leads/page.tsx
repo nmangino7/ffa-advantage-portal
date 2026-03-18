@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { usePortal } from '@/lib/context/PortalContext';
 import type { WarmLead, WarmLeadTier } from '@/lib/types';
 import { ActionCard } from '@/components/ui/ActionCard';
+import { SkeletonCard } from '@/components/ui/SkeletonCard';
 import { Flame, Zap, CalendarDays, CheckCircle2 } from 'lucide-react';
 
 const TIER_META: Record<WarmLeadTier, { label: string; description: string; color: string; bg: string }> = {
@@ -13,7 +14,15 @@ const TIER_META: Record<WarmLeadTier, { label: string; description: string; colo
 };
 
 export default function WarmLeadsPage() {
-  const { contacts, campaigns, activities } = usePortal();
+  const { contacts, campaigns, activities, isHydrated } = usePortal();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isHydrated) {
+      const timer = setTimeout(() => setLoading(false), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isHydrated]);
   const [tierFilter, setTierFilter] = useState<WarmLeadTier | 'all'>('all');
   const [campaignFilter, setCampaignFilter] = useState<string>('all');
 
@@ -60,8 +69,21 @@ export default function WarmLeadsPage() {
   const needingAssignment = allLeads.filter(l => !l.contact.assignedRep).length;
   const appointmentCount = allLeads.filter(l => l.lastAction.type === 'appointment_scheduled').length;
 
+  if (loading || !isHydrated) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          {[1, 2, 3].map(i => <SkeletonCard key={i} variant="stat" />)}
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map(i => <SkeletonCard key={i} variant="row" />)}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 animate-fade-up">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-neutral-900">Warm Leads</h1>
@@ -70,9 +92,24 @@ export default function WarmLeadsPage() {
         </p>
       </div>
 
+      {/* Alert Banner for unassigned high-priority leads */}
+      {needingAssignment > 0 && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-center gap-4">
+          <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
+            <Zap className="w-5 h-5 text-red-600" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-red-900">
+              {needingAssignment} warm lead{needingAssignment !== 1 ? 's' : ''} need{needingAssignment === 1 ? 's' : ''} assignment
+            </p>
+            <p className="text-xs text-red-700">Assign a rep to follow up with these high-priority contacts before they go cold.</p>
+          </div>
+        </div>
+      )}
+
       {/* Stat Numbers */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-white rounded-xl border border-neutral-200 p-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderTopWidth: '3px', borderTopColor: '#d97706' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
               <Flame className="w-5 h-5 text-amber-600" />
@@ -83,7 +120,7 @@ export default function WarmLeadsPage() {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-neutral-200 p-5">
+        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderTopWidth: '3px', borderTopColor: '#dc2626' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
               <Zap className="w-5 h-5 text-red-500" />
@@ -94,7 +131,7 @@ export default function WarmLeadsPage() {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-neutral-200 p-5">
+        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderTopWidth: '3px', borderTopColor: '#059669' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
               <CalendarDays className="w-5 h-5 text-emerald-600" />
@@ -114,12 +151,19 @@ export default function WarmLeadsPage() {
             <button
               key={tier}
               onClick={() => setTierFilter(tier)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all inline-flex items-center gap-1.5 ${
                 tierFilter === tier
-                  ? 'bg-neutral-900 text-white'
-                  : 'border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                  ? 'text-white shadow-md'
+                  : 'border border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:shadow-sm'
               }`}
+              style={tierFilter === tier
+                ? { backgroundColor: tier === 'all' ? '#171717' : TIER_META[tier].color }
+                : {}
+              }
             >
+              {tier === 'replied' && <Flame className="w-3 h-3" />}
+              {tier === 'info_requested' && <CalendarDays className="w-3 h-3" />}
+              {tier === 'engaged' && <Zap className="w-3 h-3" />}
               {tier === 'all'
                 ? `All (${allLeads.length})`
                 : `${TIER_META[tier].label} (${allLeads.filter(l => l.tier === tier).length})`

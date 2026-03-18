@@ -11,6 +11,8 @@ import { AssignAdvisorModal } from '@/components/modals/AssignAdvisorModal';
 import { ScheduleCallModal } from '@/components/modals/ScheduleCallModal';
 import { TemplateEditorModal } from '@/components/modals/TemplateEditorModal';
 import { GlobalConfirmDialog } from '@/components/modals/GlobalConfirmDialog';
+import { SendTestEmailModal } from '@/components/modals/SendTestEmailModal';
+import { ImportContactsModal } from '@/components/modals/ImportContactsModal';
 
 export function ClientProviders({ children }: { children: ReactNode }) {
   return (
@@ -24,6 +26,8 @@ export function ClientProviders({ children }: { children: ReactNode }) {
             <ScheduleCallModal />
             <TemplateEditorModal />
             <GlobalConfirmDialog />
+            <SendTestEmailModal />
+            <ImportContactsModal />
             <ToastContainer />
           </ToastProvider>
         </ModalProvider>

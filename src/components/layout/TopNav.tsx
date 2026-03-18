@@ -87,7 +87,7 @@ export default function TopNav() {
       <header className="hidden md:flex fixed top-0 left-0 right-0 h-14 bg-white border-b border-neutral-200 z-50 items-center px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 mr-10 shrink-0">
-          <div className="w-7 h-7 rounded-lg bg-neutral-900 flex items-center justify-center text-white font-black text-[9px] tracking-tight">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-center text-white font-black text-[9px] tracking-tight shadow-md hover:shadow-indigo-400/50 transition-shadow duration-300">
             FFA
           </div>
           <span className="text-sm font-semibold text-neutral-900 tracking-tight">Advantage</span>
@@ -162,7 +162,7 @@ export default function TopNav() {
           <Menu className="w-5 h-5" />
         </button>
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-neutral-900 flex items-center justify-center text-white font-black text-[8px]">
+          <div className="w-6 h-6 rounded-md bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-center text-white font-black text-[8px] shadow-md hover:shadow-indigo-400/50 transition-shadow duration-300">
             FFA
           </div>
           <span className="text-sm font-semibold text-neutral-900">Advantage</span>

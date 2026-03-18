@@ -1,18 +1,28 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { getCampaignDetailedMetrics } from '@/lib/data';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useToast } from '@/lib/context/ToastContext';
 import { SERVICE_LINE_CONFIG, type CampaignStatus } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { SkeletonCard } from '@/components/ui/SkeletonCard';
 import { Icon } from '@/components/ui/Icon';
+import { Mail } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CampaignsPage() {
-  const { campaigns, toggleCampaignStatus, duplicateCampaign } = usePortal();
+  const { campaigns, toggleCampaignStatus, duplicateCampaign, isHydrated } = usePortal();
   const { showToast } = useToast();
   const [statusFilter, setStatusFilter] = useState<CampaignStatus | 'all'>('all');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isHydrated) {
+      const timer = setTimeout(() => setLoading(false), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isHydrated]);
 
   const filtered = useMemo(() => {
     if (statusFilter === 'all') return campaigns;
@@ -34,8 +44,49 @@ export default function CampaignsPage() {
     completed: 'bg-neutral-300',
   };
 
+  if (loading || !isHydrated) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="mb-6">
+          <SkeletonCard variant="stat" />
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3, 4].map(i => <SkeletonCard key={i} variant="row" />)}
+        </div>
+      </div>
+    );
+  }
+
+  if (campaigns.length === 0) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <PageHeader
+          title="Campaigns"
+          subtitle="Manage your automated drip email campaigns"
+          action={
+            <Link href="/campaigns/new"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              New Campaign
+            </Link>
+          }
+        />
+        <div className="bg-white border border-neutral-200 rounded-xl py-16 text-center">
+          <Mail className="w-10 h-10 text-neutral-300 mx-auto mb-3" />
+          <h3 className="text-base font-semibold text-neutral-900 mb-1">No campaigns yet</h3>
+          <p className="text-sm text-neutral-500 mb-4">Create your first campaign to start reaching your audience.</p>
+          <Link href="/campaigns/new" className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-medium rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
+            Create Campaign
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 animate-fade-up">
       <PageHeader
         title="Campaigns"
         subtitle="Manage your automated drip email campaigns"
@@ -67,8 +118,9 @@ export default function CampaignsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-neutral-200">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+        <div className="overflow-x-auto">
+        <table className="w-full text-sm min-w-[700px]">
           <thead>
             <tr className="border-b border-neutral-100">
               <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Campaign</th>
@@ -88,7 +140,7 @@ export default function CampaignsPage() {
               const clickPct = metrics.sent > 0 ? Math.round(metrics.clicked / metrics.sent * 100) : 0;
 
               return (
-                <tr key={campaign.id} className="group hover:bg-neutral-50 transition-colors">
+                <tr key={campaign.id} className="group hover:bg-neutral-50/80 transition-all duration-200" style={{ boxShadow: `inset 3px 0 0 ${cfg.color}` }}>
                   {/* Name + Status */}
                   <td className="py-3.5 px-4">
                     <div className="flex items-center gap-3">
@@ -104,7 +156,7 @@ export default function CampaignsPage() {
 
                   {/* Service Line Badge */}
                   <td className="py-3.5 px-4">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
+                    <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold px-3 py-1.5 rounded-full"
                       style={{ backgroundColor: cfg.bgColor, color: cfg.color }}>
                       <Icon name={cfg.icon} className="w-3.5 h-3.5" />
                       {campaign.serviceLine}
@@ -189,6 +241,7 @@ export default function CampaignsPage() {
             <p className="text-sm text-neutral-500">No campaigns found for this filter.</p>
           </div>
         )}
+        </div>
       </div>
     </div>
   );

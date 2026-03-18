@@ -5,16 +5,17 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { usePersistedState } from '@/lib/hooks/usePersistedState';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useToast } from '@/lib/context/ToastContext';
-import { Check, RotateCcw, Download, Info, Zap } from 'lucide-react';
+import { Check, RotateCcw, Download, Info, Zap, Mail, Loader2, CheckCircle2 } from 'lucide-react';
+import { getEmailConfig, saveEmailConfig, type EmailConfig } from '@/lib/email-service';
 
-const sections = ['General', 'HubSpot', 'Compliance', 'Architecture', 'Roadmap'] as const;
+const sections = ['General', 'Email Integration', 'HubSpot', 'Compliance', 'Architecture', 'Roadmap'] as const;
 type Section = typeof sections[number];
 
 export default function SettingsPage() {
   const [activeSection, setActiveSection] = usePersistedState<Section>('ffa-settings-tab', 'General');
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 animate-fade-up">
       <PageHeader title="Settings" subtitle="Platform configuration, integrations, and documentation" />
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -37,6 +38,7 @@ export default function SettingsPage() {
         {/* Content */}
         <div className="lg:col-span-3">
           {activeSection === 'General' && <GeneralSection />}
+          {activeSection === 'Email Integration' && <EmailIntegrationSection />}
           {activeSection === 'HubSpot' && <HubSpotSection />}
           {activeSection === 'Compliance' && <ComplianceSection />}
           {activeSection === 'Architecture' && <ArchitectureSection />}
@@ -185,6 +187,252 @@ function GeneralSection() {
             </ul>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function EmailIntegrationSection() {
+  const { showToast } = useToast();
+  const [config, setConfig] = useState<EmailConfig>(() => getEmailConfig());
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+
+  function updateConfig(partial: Partial<EmailConfig>) {
+    setConfig(prev => ({ ...prev, ...partial }));
+    setTestResult(null);
+  }
+
+  function handleSave() {
+    saveEmailConfig(config);
+    showToast('Email integration settings saved');
+  }
+
+  async function handleTestConnection() {
+    setTesting(true);
+    setTestResult(null);
+    try {
+      const res = await fetch('/api/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          emailRequest: {
+            to: config.fromEmail,
+            toName: 'Connection Test',
+            subject: '[CONNECTION TEST] FFA Advantage Portal',
+            body: '<p>This is a connection test email from the FFA Advantage Portal.</p>',
+            bodyFormat: 'html',
+          },
+          emailConfig: config,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setTestResult({ success: true, message: `Connection successful via ${data.provider}. Message ID: ${data.messageId}` });
+        showToast('Connection test successful');
+      } else {
+        setTestResult({ success: false, message: data.error || 'Connection failed' });
+        showToast('Connection test failed', 'error');
+      }
+    } catch {
+      setTestResult({ success: false, message: 'Network error - could not reach the API' });
+      showToast('Connection test failed', 'error');
+    } finally {
+      setTesting(false);
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Provider Selection */}
+      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Mail className="w-5 h-5 text-indigo-600" />
+          <h2 className="text-sm font-semibold text-neutral-900">Email Provider</h2>
+        </div>
+        <p className="text-xs text-neutral-500 mb-4">Select how emails are sent from the portal. Simulation mode logs sends without delivering real emails.</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+          {([
+            { key: 'simulation' as const, label: 'Simulation', desc: 'Log sends without delivering', color: 'bg-neutral-50 border-neutral-200' },
+            { key: 'hubspot' as const, label: 'HubSpot', desc: 'Transactional email API', color: 'bg-orange-50 border-orange-200' },
+            { key: 'outlook' as const, label: 'Outlook', desc: 'Microsoft Graph sendMail', color: 'bg-blue-50 border-blue-200' },
+          ]).map(p => (
+            <button
+              key={p.key}
+              onClick={() => updateConfig({ provider: p.key })}
+              className={`p-4 rounded-xl border-2 text-left transition-all ${
+                config.provider === p.key
+                  ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-200'
+                  : `${p.color} hover:border-neutral-300`
+              }`}
+            >
+              <p className="text-sm font-semibold text-neutral-900">{p.label}</p>
+              <p className="text-[11px] text-neutral-500 mt-0.5">{p.desc}</p>
+            </button>
+          ))}
+        </div>
+
+        {/* HubSpot fields */}
+        {config.provider === 'hubspot' && (
+          <div className="p-4 rounded-xl bg-orange-50 border border-orange-200 space-y-3 mb-4">
+            <h3 className="text-xs font-semibold text-orange-900">HubSpot Configuration</h3>
+            <div>
+              <label className="block text-xs font-medium text-neutral-500 mb-1">API Key / Private App Token</label>
+              <input
+                type="password"
+                value={config.hubspotApiKey || ''}
+                onChange={e => updateConfig({ hubspotApiKey: e.target.value })}
+                placeholder="pat-na1-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                className="w-full px-3 py-2 rounded-lg border border-orange-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Outlook fields */}
+        {config.provider === 'outlook' && (
+          <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 space-y-3 mb-4">
+            <h3 className="text-xs font-semibold text-blue-900">Microsoft Outlook Configuration</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-neutral-500 mb-1">Client ID (Application ID)</label>
+                <input
+                  type="text"
+                  value={config.outlookClientId || ''}
+                  onChange={e => updateConfig({ outlookClientId: e.target.value })}
+                  placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                  className="w-full px-3 py-2 rounded-lg border border-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-neutral-500 mb-1">Tenant ID</label>
+                <input
+                  type="text"
+                  value={config.outlookTenantId || ''}
+                  onChange={e => updateConfig({ outlookTenantId: e.target.value })}
+                  placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                  className="w-full px-3 py-2 rounded-lg border border-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                />
+              </div>
+            </div>
+            <p className="text-[10px] text-blue-700">Note: The Client Secret should be set as an environment variable (OUTLOOK_CLIENT_SECRET) on the server.</p>
+          </div>
+        )}
+      </div>
+
+      {/* Sender Information */}
+      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+        <h2 className="text-sm font-semibold text-neutral-900 mb-4">Sender Information</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-medium text-neutral-500 mb-1.5">From Name</label>
+            <input
+              type="text"
+              value={config.fromName}
+              onChange={e => updateConfig({ fromName: e.target.value })}
+              placeholder="FFA North Team"
+              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-neutral-500 mb-1.5">From Email</label>
+            <input
+              type="email"
+              value={config.fromEmail}
+              onChange={e => updateConfig({ fromEmail: e.target.value })}
+              placeholder="outreach@ffanorth.com"
+              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-neutral-500 mb-1.5">Reply-To Email</label>
+            <input
+              type="email"
+              value={config.replyToEmail}
+              onChange={e => updateConfig({ replyToEmail: e.target.value })}
+              placeholder="outreach@ffanorth.com"
+              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* CAN-SPAM Footer */}
+      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+        <h2 className="text-sm font-semibold text-neutral-900 mb-1">CAN-SPAM Footer</h2>
+        <p className="text-xs text-neutral-500 mb-4">This information is automatically appended to every outgoing email for compliance.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-medium text-neutral-500 mb-1.5">Company Name</label>
+            <input
+              type="text"
+              value={config.companyName}
+              onChange={e => updateConfig({ companyName: e.target.value })}
+              placeholder="Florida Financial Advisors"
+              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-neutral-500 mb-1.5">Unsubscribe URL</label>
+            <input
+              type="url"
+              value={config.unsubscribeUrl}
+              onChange={e => updateConfig({ unsubscribeUrl: e.target.value })}
+              placeholder="https://ffanorth.com/unsubscribe"
+              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-xs font-medium text-neutral-500 mb-1.5">Company Address</label>
+            <input
+              type="text"
+              value={config.companyAddress}
+              onChange={e => updateConfig({ companyAddress: e.target.value })}
+              placeholder="1234 Main Street, Suite 100, Tampa, FL 33602"
+              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Test Connection Result */}
+      {testResult && (
+        <div className={`p-4 rounded-xl border ${
+          testResult.success
+            ? 'bg-emerald-50 border-emerald-200'
+            : 'bg-red-50 border-red-200'
+        }`}>
+          <div className="flex items-center gap-2">
+            {testResult.success ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            ) : (
+              <Info className="w-4 h-4 text-red-600" />
+            )}
+            <span className={`text-xs font-semibold ${testResult.success ? 'text-emerald-700' : 'text-red-700'}`}>
+              {testResult.message}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Action Buttons */}
+      <div className="flex flex-wrap gap-3">
+        <button
+          onClick={handleSave}
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all"
+        >
+          <Check className="w-4 h-4" />
+          Save Settings
+        </button>
+        <button
+          onClick={handleTestConnection}
+          disabled={testing}
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-neutral-700 text-sm font-semibold rounded-lg border border-neutral-200 hover:bg-neutral-50 transition-colors disabled:opacity-40"
+        >
+          {testing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
+          {testing ? 'Testing...' : 'Test Connection'}
+        </button>
       </div>
     </div>
   );

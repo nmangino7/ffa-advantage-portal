@@ -70,11 +70,11 @@ export default function AIStudioPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 animate-fade-up">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-1">
-          <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center animate-sparkle">
             <Sparkles className="w-5 h-5 text-indigo-600" />
           </div>
           <div>
@@ -87,20 +87,20 @@ export default function AIStudioPage() {
       </div>
 
       {/* Tab bar */}
-      <div className="flex border-b border-neutral-200 mb-8">
+      <div className="flex gap-2 mb-8">
         {TABS.map((tab) => {
-          const Icon = tab.icon;
+          const TabIcon = tab.icon;
           return (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors -mb-px ${
+              className={`flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
                 activeTab === tab.key
-                  ? 'border-indigo-500 text-neutral-900'
-                  : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
+                  ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md'
+                  : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:shadow-sm'
               }`}
             >
-              <Icon className="w-4 h-4" />
+              <TabIcon className="w-4 h-4" />
               {tab.label}
             </button>
           );

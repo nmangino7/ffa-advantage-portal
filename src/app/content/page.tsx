@@ -9,6 +9,7 @@ import { SERVICE_LINE_CONFIG, SERVICE_LINES, type ServiceLine, type ContentTempl
 import { EmailPreviewCard } from '@/components/ui/EmailPreviewCard';
 import { FileUploadZone } from '@/components/ui/FileUploadZone';
 import { ContentCard } from '@/components/ui/ContentCard';
+import { SkeletonCard } from '@/components/ui/SkeletonCard';
 import { Icon } from '@/components/ui/Icon';
 import { Plus, Search, Mail, FolderOpen, LayoutGrid, Sparkles } from 'lucide-react';
 import Link from 'next/link';
@@ -16,7 +17,7 @@ import Link from 'next/link';
 type ViewTab = 'all' | 'files' | 'templates';
 
 export default function ContentLibraryPage() {
-  const { campaigns, customTemplates } = usePortal();
+  const { campaigns, customTemplates, isHydrated } = usePortal();
   const { files, uploadFile, removeFile, getFileUrl, getFileThumbnail } = useContent();
   const { openTemplateModal } = useModal();
   const { showToast } = useToast();
@@ -136,8 +137,21 @@ export default function ContentLibraryPage() {
   const showFiles = viewTab === 'all' || viewTab === 'files';
   const showTemplates = viewTab === 'all' || viewTab === 'templates';
 
+  if (!isHydrated) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="mb-6">
+          <SkeletonCard variant="stat" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map(i => <SkeletonCard key={i} variant="card" />)}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 animate-fade-up">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -247,7 +261,10 @@ export default function ContentLibraryPage() {
       {showFiles && (
         <div className="mb-8">
           {viewTab === 'all' && (
-            <h2 className="text-sm font-semibold text-neutral-900 mb-4 uppercase tracking-wider">Files</h2>
+            <h2 className="text-sm font-semibold text-neutral-900 mb-4 uppercase tracking-wider section-divider">
+              <span className="w-2 h-2 rounded-full bg-indigo-500 shrink-0" />
+              Files
+            </h2>
           )}
 
           <FileUploadZone onUpload={handleUpload} />
@@ -287,7 +304,10 @@ export default function ContentLibraryPage() {
       {showTemplates && (
         <div>
           {viewTab === 'all' && (
-            <h2 className="text-sm font-semibold text-neutral-900 mb-4 uppercase tracking-wider">Email Templates</h2>
+            <h2 className="text-sm font-semibold text-neutral-900 mb-4 uppercase tracking-wider section-divider">
+              <span className="w-2 h-2 rounded-full bg-violet-500 shrink-0" />
+              Email Templates
+            </h2>
           )}
 
           {filteredTemplates.length > 0 ? (

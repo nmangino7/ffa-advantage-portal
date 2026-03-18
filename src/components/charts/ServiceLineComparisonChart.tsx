@@ -13,6 +13,14 @@ import {
 import type { ServiceLineComparisonData } from '@/lib/analytics';
 
 export function ServiceLineComparisonChart({ data }: { data: ServiceLineComparisonData[] }) {
+  if (!data || data.length === 0 || data.every(d => d.enrolled === 0 && d.opened === 0 && d.clicked === 0 && d.replied === 0)) {
+    return (
+      <div className="flex items-center justify-center h-[320px] text-sm text-neutral-400">
+        No service line data to display yet.
+      </div>
+    );
+  }
+
   return (
     <ResponsiveContainer width="100%" height={320}>
       <BarChart data={data} margin={{ top: 4, right: 8, left: -12, bottom: 0 }}>

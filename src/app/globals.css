@@ -77,9 +77,9 @@ body {
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, #f5f5f5 25%, #e5e5e5 50%, #f5f5f5 75%);
+  background: linear-gradient(90deg, #f5f5f5 0%, #f5f5f5 25%, #ebebeb 50%, #f5f5f5 75%, #f5f5f5 100%);
   background-size: 800px 100%;
-  animation: shimmer 1.5s infinite linear;
+  animation: shimmer 2s infinite ease-in-out;
 }
 
 @keyframes fadeUp {
@@ -109,3 +109,28 @@ body {
 .stagger-6 { animation-delay: 0.18s; }
 .stagger-7 { animation-delay: 0.21s; }
 .stagger-8 { animation-delay: 0.24s; }
+
+/* Sparkle animation for AI Studio */
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  25% { opacity: 0.8; transform: scale(1.1) rotate(5deg); }
+  50% { opacity: 1; transform: scale(1.15) rotate(-3deg); }
+  75% { opacity: 0.9; transform: scale(1.05) rotate(2deg); }
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+/* Section header divider */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, #e5e5e5, transparent);
+}

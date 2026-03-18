@@ -1,17 +1,26 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useModal } from '@/lib/context/ModalContext';
 import { PIPELINE_STAGES, type PipelineStage, SERVICE_LINE_CONFIG } from '@/lib/types';
+import { SkeletonCard } from '@/components/ui/SkeletonCard';
 import { Icon } from '@/components/ui/Icon';
 import Link from 'next/link';
 import { Inbox, User } from 'lucide-react';
 
 export default function PipelinePage() {
-  const { contacts: allContacts, campaigns, moveContactStage } = usePortal();
+  const { contacts: allContacts, campaigns, moveContactStage, isHydrated } = usePortal();
   const { openEnrollModal } = useModal();
   const [campaignFilter, setCampaignFilter] = useState<string>('all');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isHydrated) {
+      const timer = setTimeout(() => setLoading(false), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isHydrated]);
 
   const filteredContacts = useMemo(() => {
     let result = allContacts;
@@ -19,8 +28,25 @@ export default function PipelinePage() {
     return result;
   }, [allContacts, campaignFilter]);
 
+  if (loading || !isHydrated) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[1, 2, 3, 4].map(i => <SkeletonCard key={i} variant="stat" />)}
+        </div>
+        <div className="flex gap-4">
+          {[1, 2, 3, 4, 5].map(i => (
+            <div key={i} className="flex-shrink-0 w-[260px]">
+              <SkeletonCard variant="card" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 animate-fade-up">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -90,7 +116,7 @@ export default function PipelinePage() {
             <div key={stage.key} className="flex-shrink-0 w-[260px]">
               <div className="rounded-xl border border-neutral-200 bg-white overflow-hidden">
                 {/* Column header */}
-                <div className="p-4 border-b border-neutral-100" style={{ borderTopWidth: '3px', borderTopColor: stage.color }}>
+                <div className="p-4 border-b border-neutral-100" style={{ borderTopWidth: '3px', borderTopColor: stage.color, background: `linear-gradient(to bottom, ${stage.bgColor}, white)` }}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
                       <Icon name={stage.icon} className="w-5 h-5" style={{ color: stage.color }} />
@@ -114,12 +140,13 @@ export default function PipelinePage() {
 
                 {/* Contact cards */}
                 <div className="p-2 space-y-2 max-h-[calc(100vh-340px)] overflow-y-auto bg-neutral-50/50">
-                  {stageContacts.slice(0, 15).map(contact => {
+                  {stageContacts.slice(0, 15).map((contact, cardIndex) => {
                     const contactCampaigns = campaigns.filter(c => contact.campaigns.includes(c.id));
                     const daysSince = Math.floor((Date.now() - new Date(contact.lastContactDate).getTime()) / 86400000);
 
+                    const staggerClass = `stagger-${Math.min(cardIndex + 1, 8)}`;
                     return (
-                      <div key={contact.id} className="bg-white rounded-xl border border-neutral-100 p-3 hover:border-indigo-200 hover:shadow-sm transition-all duration-200">
+                      <div key={contact.id} className={`bg-white rounded-xl border border-neutral-100 p-3 hover:border-indigo-200 hover:shadow-md transition-all duration-200 animate-fade-up ${staggerClass}`}>
                         <Link href={`/audience/${contact.id}`}>
                           <div className="flex items-center justify-between mb-1.5">
                             <p className="text-[13px] font-semibold text-neutral-900 truncate">{contact.firstName} {contact.lastName}</p>

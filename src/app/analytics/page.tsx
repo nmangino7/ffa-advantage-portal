@@ -142,6 +142,13 @@ export default function AnalyticsPage() {
               </tr>
             </thead>
             <tbody>
+              {topCampaigns.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-sm text-neutral-400">
+                    No campaign data to display yet.
+                  </td>
+                </tr>
+              )}
               {topCampaigns.map((campaign, idx) => {
                 const cfg = SERVICE_LINE_CONFIG[campaign.serviceLine];
                 return (

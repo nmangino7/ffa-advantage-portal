@@ -13,6 +13,14 @@ import {
 import type { PipelineFunnelData } from '@/lib/analytics';
 
 export function PipelineFunnelChart({ data }: { data: PipelineFunnelData[] }) {
+  if (!data || data.length === 0 || data.every(d => d.count === 0)) {
+    return (
+      <div className="flex items-center justify-center h-[320px] text-sm text-neutral-400">
+        No pipeline data to display yet.
+      </div>
+    );
+  }
+
   return (
     <ResponsiveContainer width="100%" height={320}>
       <BarChart
