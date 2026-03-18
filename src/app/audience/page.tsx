@@ -1,16 +1,26 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { PIPELINE_STAGES, type PipelineStage, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { SkeletonCard } from '@/components/ui/SkeletonCard';
 import { Icon } from '@/components/ui/Icon';
 import Link from 'next/link';
 import { useModal } from '@/lib/context/ModalContext';
 import { usePortal } from '@/lib/context/PortalContext';
+import { Users } from 'lucide-react';
 
 export default function AudiencePage() {
-  const { openEnrollModal } = useModal();
-  const { contacts: allContacts, campaigns } = usePortal();
+  const { openEnrollModal, openImportModal } = useModal();
+  const { contacts: allContacts, campaigns, isHydrated } = usePortal();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isHydrated) {
+      const timer = setTimeout(() => setLoading(false), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isHydrated]);
 
   const segments = useMemo(() => {
     return PIPELINE_STAGES.map(stage => {
@@ -71,16 +81,52 @@ export default function AudiencePage() {
     setPage(1);
   }
 
+  if (loading || !isHydrated) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[1, 2, 3, 4].map(i => <SkeletonCard key={i} variant="stat" />)}
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map(i => <SkeletonCard key={i} variant="row" />)}
+        </div>
+      </div>
+    );
+  }
+
+  if (allContacts.length === 0) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <PageHeader
+          title="Audience"
+          subtitle="0 contacts"
+        />
+        <div className="bg-white border border-neutral-200 rounded-xl py-16 text-center">
+          <Users className="w-10 h-10 text-neutral-300 mx-auto mb-3" />
+          <h3 className="text-base font-semibold text-neutral-900 mb-1">No contacts yet</h3>
+          <p className="text-sm text-neutral-500">Import contacts to start building your audience segments.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 animate-fade-up">
       <PageHeader
         title="Audience"
         subtitle={`${allContacts.length.toLocaleString()} contacts segmented by engagement stage`}
         action={
-          <button onClick={() => openEnrollModal()}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
-            Enroll in Campaign
-          </button>
+          <div className="flex items-center gap-2">
+            <button onClick={() => openImportModal()}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
+              <Icon name="upload" className="w-4 h-4" />
+              Import Contacts
+            </button>
+            <button onClick={() => openEnrollModal()}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
+              Enroll in Campaign
+            </button>
+          </div>
         }
       />
 
@@ -93,9 +139,10 @@ export default function AudiencePage() {
               onClick={() => { setStageFilter(stageFilter === seg.stage.key ? 'all' : seg.stage.key); setPage(1); }}
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
                 isActive
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-              }`}>
+                  ? 'text-white shadow-md'
+                  : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:shadow-sm'
+              }`}
+              style={isActive ? { backgroundColor: seg.stage.color } : { borderLeftWidth: '3px', borderLeftColor: seg.stage.color }}>
               <Icon name={seg.stage.icon} className="w-4 h-4" />
               <span>{seg.stage.label}</span>
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${
@@ -176,7 +223,7 @@ export default function AudiencePage() {
                 const daysSince = Math.floor((Date.now() - new Date(contact.lastContactDate).getTime()) / 86400000);
 
                 return (
-                  <tr key={contact.id} className="hover:bg-neutral-50 transition-colors">
+                  <tr key={contact.id} className="hover:bg-neutral-50 transition-all duration-200 hover:shadow-sm">
                     <td className="py-3 px-4">
                       <Link href={`/audience/${contact.id}`} className="font-semibold text-indigo-600 hover:text-indigo-800 text-[13px]">
                         {contact.firstName} {contact.lastName}
@@ -221,6 +268,13 @@ export default function AudiencePage() {
                   </tr>
                 );
               })}
+              {paged.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="py-16 text-center text-sm text-neutral-500">
+                    No contacts match your current filters.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

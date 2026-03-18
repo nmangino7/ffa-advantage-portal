@@ -87,7 +87,7 @@ export default function GuidePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="max-w-3xl mx-auto px-6 py-8 animate-fade-up">
       {/* Header */}
       <div className="mb-10">
         <h1 className="text-2xl font-semibold text-neutral-900">How It Works</h1>
@@ -130,8 +130,8 @@ export default function GuidePage() {
             <div key={step.number} className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
               <div className="flex items-start gap-5 p-6">
                 <div className="flex flex-col items-center flex-shrink-0">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center text-lg font-semibold text-white"
-                    style={{ backgroundColor: step.color }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white shadow-lg"
+                    style={{ background: `linear-gradient(135deg, ${step.color}, ${step.color}cc)` }}>
                     {step.number}
                   </div>
                   {i < steps.length - 1 && (

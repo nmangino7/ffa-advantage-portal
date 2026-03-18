@@ -37,7 +37,7 @@ export function ContentCard({ file, onDelete, onPreview, onDownload, thumbnailUr
   const isPdf = file.mimeType === 'application/pdf';
 
   return (
-    <div className="bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 transition-all overflow-hidden group">
+    <div className="bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 hover:shadow-md transition-all duration-200 overflow-hidden group">
       {/* Thumbnail */}
       <div className="h-32 bg-neutral-50 flex items-center justify-center relative overflow-hidden">
         {isImage && thumbnailUrl ? (
@@ -71,7 +71,21 @@ export function ContentCard({ file, onDelete, onPreview, onDownload, thumbnailUr
           <span className="text-[10px] text-neutral-400">{formatDate(file.uploadedAt)}</span>
         </div>
         {file.serviceLine && (
-          <span className="inline-block text-[9px] px-1.5 py-0.5 mt-2 bg-indigo-50 text-indigo-600 rounded font-medium">
+          <span className="inline-block text-[9px] px-1.5 py-0.5 mt-2 rounded font-medium"
+            style={{
+              backgroundColor: file.serviceLine === 'Retirement Planning' ? '#eef2ff'
+                : file.serviceLine === 'Insurance Review' ? '#ecfdf5'
+                : file.serviceLine === 'Under-Serviced Annuities' ? '#fefce8'
+                : file.serviceLine === 'Investment Planning' ? '#faf5ff'
+                : file.serviceLine === 'Second-Opinion Positioning' ? '#fff7ed'
+                : '#eef2ff',
+              color: file.serviceLine === 'Retirement Planning' ? '#4f46e5'
+                : file.serviceLine === 'Insurance Review' ? '#059669'
+                : file.serviceLine === 'Under-Serviced Annuities' ? '#ca8a04'
+                : file.serviceLine === 'Investment Planning' ? '#7c3aed'
+                : file.serviceLine === 'Second-Opinion Positioning' ? '#c2410c'
+                : '#4f46e5',
+            }}>
             {file.serviceLine}
           </span>
         )}

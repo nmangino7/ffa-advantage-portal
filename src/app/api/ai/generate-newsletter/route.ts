@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAnthropicClient } from '@/lib/ai-client';
+import { getAnthropicClient, parseAIJsonResponse } from '@/lib/ai-client';
 import { NEWSLETTER_GENERATION_PROMPT } from '@/lib/ai-prompts';
 import type { AINewsletterRequest, AINewsletterResponse } from '@/lib/ai-types';
 
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 Generate the newsletter content now.`;
 
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-5-20241022',
+      model: 'claude-sonnet-4-6',
       max_tokens: 3000,
       system: NEWSLETTER_GENERATION_PROMPT,
       messages: [{ role: 'user', content: userPrompt }],
@@ -37,7 +37,7 @@ Generate the newsletter content now.`;
       return NextResponse.json({ error: 'No response from AI' }, { status: 500 });
     }
 
-    const parsed: AINewsletterResponse = JSON.parse(textContent.text);
+    const parsed: AINewsletterResponse = parseAIJsonResponse<AINewsletterResponse>(textContent.text);
 
     return NextResponse.json(parsed);
   } catch (error) {

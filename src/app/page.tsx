@@ -115,7 +115,7 @@ export default function HomePage() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-8 animate-fade-up">
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 stagger-1 animate-fade-up">
         <StatCard value={stats.totalContacts.toLocaleString()} label="Total Contacts" />
         <StatCard value={stats.activeCampaigns} label="Active Campaigns" />
         <StatCard
@@ -127,16 +127,19 @@ export default function HomePage() {
       </div>
 
       {/* AI Recommendations */}
-      <div className="mb-8">
+      <div className="mb-8 stagger-2 animate-fade-up">
         <RecommendationsPanel />
       </div>
 
       {/* Two-column: Needs Attention + Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 stagger-3 animate-fade-up">
         {/* Needs Attention — 2/3 */}
         <div className="lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-neutral-900">Needs Attention</h2>
+            <h2 className="text-lg font-semibold text-neutral-900 section-divider">
+              <span className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
+              Needs Attention
+            </h2>
             {unassignedLeads.length > 0 && (
               <Link href="/warm-leads" className="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
                 View all &rarr;
@@ -160,8 +163,13 @@ export default function HomePage() {
 
         {/* Recent Activity — 1/3 */}
         <div>
-          <h2 className="text-lg font-semibold text-neutral-900 mb-4">Recent Activity</h2>
+          <h2 className="text-lg font-semibold text-neutral-900 mb-4 section-divider">
+            <span className="w-2 h-2 rounded-full bg-indigo-500 shrink-0" />
+            Recent Activity
+          </h2>
           <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
+            {/* Gradient header strip */}
+            <div className="h-1 bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-500" />
             {recentActivities.length > 0 ? (
               <div className="divide-y divide-neutral-100">
                 {recentActivities.map(act => (
@@ -187,9 +195,12 @@ export default function HomePage() {
       </div>
 
       {/* Active Campaigns strip */}
-      <div>
+      <div className="stagger-4 animate-fade-up">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-neutral-900">Active Campaigns</h2>
+          <h2 className="text-lg font-semibold text-neutral-900 section-divider">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+            Active Campaigns
+          </h2>
           <Link href="/campaigns" className="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
             All campaigns &rarr;
           </Link>
@@ -200,7 +211,8 @@ export default function HomePage() {
               const cfg = SERVICE_LINE_CONFIG[campaign.serviceLine];
               return (
                 <Link key={campaign.id} href={`/campaigns/${campaign.id}`}
-                  className="bg-white border border-neutral-200 rounded-xl p-4 hover:border-neutral-300 hover:shadow-md transition-all duration-200 min-w-[260px] shrink-0">
+                  className="bg-white border border-neutral-200 rounded-xl p-4 hover:border-neutral-300 hover:shadow-md transition-all duration-200 min-w-[260px] shrink-0 overflow-hidden"
+                  style={{ borderTopWidth: '3px', borderTopColor: cfg.color }}>
                   <div className="flex items-center gap-2.5 mb-2">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: cfg.bgColor }}>
                       <Icon name={cfg.icon} className="w-4 h-4" style={{ color: cfg.color }} />

@@ -16,7 +16,9 @@ interface ModalState {
   assignModal: { contactId: string } | null;
   scheduleModal: { contactId: string } | null;
   templateModal: { mode: 'create' | 'edit'; templateId?: string; campaignId?: string } | null;
+  sendTestModal: { campaignId: string } | null;
   confirmDialog: ConfirmConfig | null;
+  importModal: boolean;
 }
 
 interface ModalContextType extends ModalState {
@@ -24,6 +26,9 @@ interface ModalContextType extends ModalState {
   openAssignModal: (contactId: string) => void;
   openScheduleModal: (contactId: string) => void;
   openTemplateModal: (mode: 'create' | 'edit', templateId?: string, campaignId?: string) => void;
+  openSendTestModal: (campaignId: string) => void;
+  openImportModal: () => void;
+  closeImportModal: () => void;
   openConfirmDialog: (config: ConfirmConfig) => void;
   closeConfirmDialog: () => void;
   closeAll: () => void;
@@ -42,7 +47,9 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const [assignModal, setAssignModal] = useState<ModalState['assignModal']>(null);
   const [scheduleModal, setScheduleModal] = useState<ModalState['scheduleModal']>(null);
   const [templateModal, setTemplateModal] = useState<ModalState['templateModal']>(null);
+  const [sendTestModal, setSendTestModal] = useState<ModalState['sendTestModal']>(null);
   const [confirmDialog, setConfirmDialog] = useState<ModalState['confirmDialog']>(null);
+  const [importModal, setImportModal] = useState(false);
 
   const openEnrollModal = useCallback((contactId?: string, contactIds?: string[]) => {
     setEnrollModal({ contactId, contactIds });
@@ -60,6 +67,18 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     setTemplateModal({ mode, templateId, campaignId });
   }, []);
 
+  const openSendTestModal = useCallback((campaignId: string) => {
+    setSendTestModal({ campaignId });
+  }, []);
+
+  const openImportModal = useCallback(() => {
+    setImportModal(true);
+  }, []);
+
+  const closeImportModal = useCallback(() => {
+    setImportModal(false);
+  }, []);
+
   const openConfirmDialog = useCallback((config: ConfirmConfig) => {
     setConfirmDialog(config);
   }, []);
@@ -73,13 +92,16 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     setAssignModal(null);
     setScheduleModal(null);
     setTemplateModal(null);
+    setSendTestModal(null);
     setConfirmDialog(null);
+    setImportModal(false);
   }, []);
 
   return (
     <ModalContext.Provider value={{
-      enrollModal, assignModal, scheduleModal, templateModal, confirmDialog,
-      openEnrollModal, openAssignModal, openScheduleModal, openTemplateModal,
+      enrollModal, assignModal, scheduleModal, templateModal, sendTestModal, confirmDialog, importModal,
+      openEnrollModal, openAssignModal, openScheduleModal, openTemplateModal, openSendTestModal,
+      openImportModal, closeImportModal,
       openConfirmDialog, closeConfirmDialog, closeAll,
     }}>
       {children}

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAnthropicClient } from '@/lib/ai-client';
+import { getAnthropicClient, parseAIJsonResponse } from '@/lib/ai-client';
 import { COMPLIANCE_REVIEW_PROMPT } from '@/lib/ai-prompts';
 import type { ComplianceReviewRequest, ComplianceReviewResponse } from '@/lib/ai-types';
 
@@ -28,7 +28,7 @@ ${content}
 Perform the compliance review now.`;
 
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-5-20241022',
+      model: 'claude-sonnet-4-6',
       max_tokens: 2000,
       system: COMPLIANCE_REVIEW_PROMPT,
       messages: [{ role: 'user', content: userPrompt }],
@@ -39,7 +39,7 @@ Perform the compliance review now.`;
       return NextResponse.json({ error: 'No response from AI' }, { status: 500 });
     }
 
-    const parsed: ComplianceReviewResponse = JSON.parse(textContent.text);
+    const parsed: ComplianceReviewResponse = parseAIJsonResponse<ComplianceReviewResponse>(textContent.text);
 
     return NextResponse.json(parsed);
   } catch (error) {

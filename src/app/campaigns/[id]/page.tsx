@@ -8,13 +8,13 @@ import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DripTimeline } from '@/components/ui/DripTimeline';
 import { Icon } from '@/components/ui/Icon';
-import { Flame, Pencil } from 'lucide-react';
+import { Flame, Pencil, Send } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CampaignDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { contacts, campaigns, activities, toggleCampaignStatus } = usePortal();
-  const { openEnrollModal, openConfirmDialog } = useModal();
+  const { openEnrollModal, openConfirmDialog, openSendTestModal } = useModal();
   const [activeTab, setActiveTab] = useState<'overview' | 'sequence' | 'contacts'>('overview');
 
   const campaign = campaigns.find(c => c.id === id);
@@ -97,6 +97,11 @@ export default function CampaignDetailPage() {
             }}
               className="px-4 py-2.5 text-sm font-semibold border border-neutral-200 rounded-lg hover:bg-neutral-50 text-neutral-600 transition-colors">
               {campaign.status === 'active' ? 'Pause Campaign' : 'Resume Campaign'}
+            </button>
+            <button onClick={() => openSendTestModal(id)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border border-neutral-200 rounded-lg hover:bg-neutral-50 text-neutral-600 transition-colors">
+              <Send className="w-4 h-4" />
+              Send Test Email
             </button>
             <button onClick={() => openEnrollModal()}
               className="px-4 py-2.5 text-sm font-semibold bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
@@ -256,8 +261,8 @@ export default function CampaignDetailPage() {
             const stepOpened = Math.round(stepSent * (campaign.openRate / 100) * (1 - i * 0.08));
             const stepClicked = Math.round(stepSent * (campaign.clickRate / 100) * (1 + i * 0.1));
             return (
-              <div key={step.id} className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
-                <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-neutral-50/50">
+              <div key={step.id} className="bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-md hover:border-neutral-300 transition-all duration-200">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-gradient-to-r from-neutral-50/80 to-white">
                   <div className="flex items-center gap-3">
                     <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold text-white" style={{ backgroundColor: cfg.color }}>
                       {i + 1}
@@ -359,11 +364,18 @@ export default function CampaignDetailPage() {
 }
 
 function MetricBox({ label, value, sub, highlight }: { label: string; value: number; sub?: string; highlight?: boolean }) {
+  const isGood = highlight && value > 0;
+  const isRate = sub?.endsWith('%');
+  const rateValue = isRate ? parseInt(sub || '0') : 0;
+  const rateColor = isRate ? (rateValue >= 20 ? 'text-emerald-600' : rateValue >= 10 ? 'text-amber-600' : 'text-neutral-900') : '';
+
   return (
-    <div className="bg-neutral-50 rounded-xl p-3 text-center">
-      <p className={`text-xl font-semibold ${highlight ? 'text-amber-600' : 'text-neutral-900'}`}>{value}</p>
-      {sub && <span className="text-[10px] text-neutral-400">{sub}</span>}
-      <p className="text-[10px] text-neutral-400 mt-0.5">{label}</p>
+    <div className={`rounded-xl p-3 text-center transition-all duration-200 hover:shadow-sm ${
+      isGood ? 'bg-amber-50 border border-amber-100' : 'bg-neutral-50 border border-transparent'
+    }`}>
+      <p className={`text-xl font-semibold ${isGood ? 'text-amber-600' : rateColor || 'text-neutral-900'}`}>{value}</p>
+      {sub && <span className={`text-[10px] ${isGood ? 'text-amber-400' : 'text-neutral-400'}`}>{sub}</span>}
+      <p className={`text-[10px] mt-0.5 ${isGood ? 'text-amber-500' : 'text-neutral-400'}`}>{label}</p>
     </div>
   );
 }

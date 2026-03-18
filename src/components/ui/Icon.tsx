@@ -8,6 +8,7 @@ import {
   FileText, Clock, MousePointerClick, Info,
   AlertTriangle, ArrowRight, Copy, Sparkles,
   Target, TrendingDown, Lightbulb, LayoutDashboard,
+  Upload, FileSpreadsheet, CircleAlert, CheckCircle2,
   type LucideProps,
 } from 'lucide-react';
 import { type FC } from 'react';
@@ -57,6 +58,10 @@ const ICONS: Record<string, FC<LucideProps>> = {
   'trending-down': TrendingDown,
   lightbulb: Lightbulb,
   dashboard: LayoutDashboard,
+  upload: Upload,
+  'file-spreadsheet': FileSpreadsheet,
+  'circle-alert': CircleAlert,
+  'check-circle': CheckCircle2,
 };
 
 export function Icon({

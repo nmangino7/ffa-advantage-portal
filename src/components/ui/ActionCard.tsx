@@ -61,7 +61,13 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
 
           {/* Reply snippet */}
           {lead.lastAction.emailBody && (
-            <div className="mt-2 bg-neutral-50 border-l-2 border-neutral-300 rounded-r-md px-3 py-2">
+            <div
+              className="mt-2 rounded-r-md px-3 py-2 border-l-2"
+              style={{
+                borderLeftColor: tc.color,
+                background: `linear-gradient(to right, ${tc.bg}, transparent)`,
+              }}
+            >
               {lead.lastAction.emailSubject && (
                 <p className="text-[10px] font-medium text-neutral-600 mb-0.5">{lead.lastAction.emailSubject}</p>
               )}

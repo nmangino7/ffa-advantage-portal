@@ -16,8 +16,11 @@ export function DripTimeline({
         <div key={step.id} className="flex-1 flex items-start">
           <div className="flex flex-col items-center shrink-0" style={{ minWidth: compact ? 28 : 40 }}>
             <div
-              className={`rounded-full flex items-center justify-center text-white font-medium ${compact ? 'w-6 h-6' : 'w-9 h-9'}`}
-              style={{ backgroundColor: color }}
+              className={`rounded-full flex items-center justify-center text-white font-medium transition-all duration-300 hover:scale-110 hover:shadow-lg ${compact ? 'w-6 h-6' : 'w-9 h-9'}`}
+              style={{
+                backgroundColor: color,
+                boxShadow: `0 2px 8px ${color}40`,
+              }}
             >
               {compact ? (
                 <span className="text-[9px]">{i + 1}</span>
@@ -36,7 +39,12 @@ export function DripTimeline({
           </div>
           {i < steps.length - 1 && (
             <div className="flex-1 flex items-center pt-3" style={{ minWidth: 12 }}>
-              <div className="w-full h-px bg-neutral-200" />
+              <div
+                className="w-full h-0.5 rounded-full"
+                style={{
+                  background: `linear-gradient(to right, ${color}60, ${color}20)`,
+                }}
+              />
             </div>
           )}
         </div>

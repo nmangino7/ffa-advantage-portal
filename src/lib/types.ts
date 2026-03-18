@@ -23,6 +23,18 @@ export type CampaignStatus = 'active' | 'paused' | 'draft' | 'completed';
 
 export type WarmLeadTier = 'replied' | 'info_requested' | 'engaged';
 
+export interface Advisor {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  title: string;
+  status: 'active' | 'inactive';
+  complianceApproved: boolean;
+  assignedCount: number;
+}
+
 export interface Contact {
   id: string;
   firstName: string;
@@ -35,6 +47,7 @@ export interface Contact {
   intentScore: number;
   campaigns: string[];
   assignedRep: string | null;
+  assignedRepEmail: string | null;
   notes: string;
   createdAt: string;
 }

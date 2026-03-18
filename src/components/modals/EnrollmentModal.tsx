@@ -81,6 +81,12 @@ export function EnrollmentModal() {
         </div>
 
         <div className="px-6 py-4 overflow-y-auto max-h-[50vh] space-y-1.5">
+          {activeCampaigns.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-sm text-neutral-500 mb-1">No active or draft campaigns available.</p>
+              <p className="text-xs text-neutral-400">Create a campaign first, then enroll contacts.</p>
+            </div>
+          )}
           {activeCampaigns.map(camp => {
             const cfg = SERVICE_LINE_CONFIG[camp.serviceLine];
             const isEnrolled = alreadyEnrolled.has(camp.id);

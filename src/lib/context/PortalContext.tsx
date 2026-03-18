@@ -1,9 +1,9 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, useEffect, useRef, type ReactNode } from 'react';
-import { contacts as seedContacts, campaigns as seedCampaigns, activities as seedActivities, STORAGE_VERSION } from '@/lib/data/mock-data';
+import { contacts as seedContacts, campaigns as seedCampaigns, activities as seedActivities, ADVISORS as seedAdvisors, STORAGE_VERSION } from '@/lib/data/mock-data';
 import { loadState, debouncedSave, clearAllData } from '@/lib/storage';
-import type { Contact, Campaign, Activity, PipelineStage, EmailStep } from '@/lib/types';
+import type { Advisor, Contact, Campaign, Activity, PipelineStage, EmailStep } from '@/lib/types';
 
 // ─── Storage keys ────────────────────────────────────────────
 const KEYS = {
@@ -20,14 +20,17 @@ interface PortalContextType {
   campaigns: Campaign[];
   activities: Activity[];
   customTemplates: EmailStep[];
+  advisors: Advisor[];
   isHydrated: boolean;
   enrollContact: (contactId: string, campaignIds: string[]) => void;
   assignAdvisor: (contactId: string, advisorName: string) => void;
+  getAdvisorByName: (name: string) => Advisor | undefined;
   scheduleCall: (contactId: string, date: string, time: string, notes: string) => void;
   addCampaign: (campaign: Campaign) => void;
   updateCampaign: (id: string, updates: Partial<Campaign>) => void;
   duplicateCampaign: (id: string) => Campaign | null;
   toggleCampaignStatus: (campaignId: string) => void;
+  importContacts: (newContacts: Contact[]) => void;
   moveContactStage: (contactId: string, newStage: PipelineStage) => void;
   addTemplate: (template: EmailStep) => void;
   updateTemplate: (id: string, updates: Partial<EmailStep>) => void;
@@ -86,6 +89,9 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     if (didHydrate.current) return;
     didHydrate.current = true;
 
+    // Intentional: hydrating client state from localStorage on mount.
+    // This is a standard pattern for client-side state hydration.
+    /* eslint-disable react-hooks/set-state-in-effect */
     const state = hydrateState();
     setContacts(state.contacts);
     setCampaigns(state.campaigns);
@@ -102,31 +108,36 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     }
 
     setIsHydrated(true);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   // ─── Auto-save on state changes ────────────────────────────
-  const isFirstRender = useRef(true);
+  // Use a render counter to skip saving during the first render after hydration,
+  // since the data was just loaded from localStorage and doesn't need re-saving.
+  const renderCount = useRef(0);
+
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
+    if (!isHydrated) return;
+    // Skip the first render after hydration (render 0) — data was just loaded
+    if (renderCount.current === 0) {
+      renderCount.current = 1;
       return;
     }
-    if (!isHydrated) return;
     debouncedSave(KEYS.contacts, contacts);
   }, [contacts, isHydrated]);
 
   useEffect(() => {
-    if (!isHydrated) return;
+    if (!isHydrated || renderCount.current === 0) return;
     debouncedSave(KEYS.campaigns, campaigns);
   }, [campaigns, isHydrated]);
 
   useEffect(() => {
-    if (!isHydrated) return;
+    if (!isHydrated || renderCount.current === 0) return;
     debouncedSave(KEYS.activities, activities);
   }, [activities, isHydrated]);
 
   useEffect(() => {
-    if (!isHydrated) return;
+    if (!isHydrated || renderCount.current === 0) return;
     debouncedSave(KEYS.customTemplates, customTemplates);
   }, [customTemplates, isHydrated]);
 
@@ -174,10 +185,16 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const getAdvisorByName = useCallback((name: string): Advisor | undefined => {
+    return seedAdvisors.find(a => `${a.firstName} ${a.lastName}` === name);
+  }, []);
+
   const assignAdvisor = useCallback((contactId: string, advisorName: string) => {
+    const advisor = seedAdvisors.find(a => `${a.firstName} ${a.lastName}` === advisorName);
+    const advisorEmail = advisor?.email || null;
     setContacts(prev => {
       const updated = prev.map(c =>
-        c.id === contactId ? { ...c, assignedRep: advisorName } : c
+        c.id === contactId ? { ...c, assignedRep: advisorName, assignedRepEmail: advisorEmail } : c
       );
       const contact = updated.find(c => c.id === contactId);
       if (contact) {
@@ -255,6 +272,27 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
+  const importContacts = useCallback((newContacts: Contact[]) => {
+    setContacts(prev => {
+      const existingEmails = new Set(prev.map(c => c.email.toLowerCase()));
+      const unique = newContacts.filter(c => !existingEmails.has(c.email.toLowerCase()));
+      if (unique.length === 0) return prev;
+
+      // Create activity records for each imported contact
+      const importActivities: Activity[] = unique.map(c => ({
+        id: makeId(),
+        contactId: c.id,
+        contactName: `${c.firstName} ${c.lastName}`,
+        type: 'note_added' as const,
+        description: 'Contact imported from CSV/Excel',
+        timestamp: new Date().toISOString(),
+      }));
+      setActivities(actPrev => [...importActivities, ...actPrev]);
+
+      return [...prev, ...unique];
+    });
+  }, []);
+
   const moveContactStage = useCallback((contactId: string, newStage: PipelineStage) => {
     setContacts(prev => {
       const updated = prev.map(c =>
@@ -304,10 +342,10 @@ export function PortalProvider({ children }: { children: ReactNode }) {
 
   return (
     <PortalContext.Provider value={{
-      contacts, campaigns, activities, customTemplates, isHydrated,
-      enrollContact, assignAdvisor, scheduleCall,
+      contacts, campaigns, activities, customTemplates, advisors: seedAdvisors, isHydrated,
+      enrollContact, assignAdvisor, getAdvisorByName, scheduleCall,
       addCampaign, updateCampaign, duplicateCampaign, toggleCampaignStatus,
-      moveContactStage, addTemplate, updateTemplate, deleteTemplate,
+      importContacts, moveContactStage, addTemplate, updateTemplate, deleteTemplate,
       resetToDefaults,
     }}>
       {children}

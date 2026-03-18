@@ -7,14 +7,14 @@ import { useModal } from '@/lib/context/ModalContext';
 import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Icon } from '@/components/ui/Icon';
-import { BarChart3, Send, Eye, MousePointerClick, MessageSquare, HelpCircle, CalendarDays, Plus, FileText, TrendingUp, Clock } from 'lucide-react';
+import { BarChart3, Send, Eye, MousePointerClick, MessageSquare, HelpCircle, CalendarDays, Plus, FileText, TrendingUp, Clock, CheckCircle2, Mail } from 'lucide-react';
 import Link from 'next/link';
 
 type TabKey = 'activity' | 'campaigns' | 'engagement';
 
 export default function AudienceDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { contacts, campaigns, activities } = usePortal();
+  const { contacts, campaigns, activities, getAdvisorByName } = usePortal();
   const { openEnrollModal, openAssignModal, openScheduleModal } = useModal();
   const [activeTab, setActiveTab] = useState<TabKey>('activity');
 
@@ -60,11 +60,17 @@ export default function AudienceDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Contact Card */}
         <div className="lg:col-span-1 space-y-4">
-          <div className="bg-white rounded-xl border border-neutral-200 p-6">
+          <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+            {/* Stage accent bar */}
+            <div className="h-1.5" style={{ background: `linear-gradient(to right, ${stageMeta?.color || '#94a3b8'}, ${stageMeta?.color || '#94a3b8'}40)` }} />
+            <div className="p-6">
             {/* Avatar & Name */}
             <div className="flex flex-col items-center text-center mb-6">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-semibold text-white mb-3"
-                style={{ backgroundColor: stageMeta?.color || '#94a3b8' }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-semibold text-white mb-3 shadow-lg"
+                style={{
+                  backgroundColor: stageMeta?.color || '#94a3b8',
+                  boxShadow: `0 4px 14px ${stageMeta?.color || '#94a3b8'}30`,
+                }}>
                 {contact.firstName[0]}{contact.lastName[0]}
               </div>
               <h2 className="text-lg font-semibold text-neutral-900">{contact.firstName} {contact.lastName}</h2>
@@ -86,7 +92,28 @@ export default function AudienceDetailPage() {
                   {contact.intentScore}/100
                 </span>
               </InfoField>
-              {contact.assignedRep && <InfoField label="Assigned Rep" value={contact.assignedRep} />}
+              {contact.assignedRep && (() => {
+                const advisor = getAdvisorByName(contact.assignedRep);
+                return (
+                  <InfoField label="Assigned Rep">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-neutral-900">{contact.assignedRep}</span>
+                        {advisor?.complianceApproved && (
+                          <span className="inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 bg-emerald-50 text-emerald-600 rounded-full font-medium">
+                            <CheckCircle2 className="w-2.5 h-2.5" /> Compliant
+                          </span>
+                        )}
+                      </div>
+                      {contact.assignedRepEmail && (
+                        <p className="text-[11px] text-neutral-400 flex items-center gap-1">
+                          <Mail className="w-3 h-3" /> {contact.assignedRepEmail}
+                        </p>
+                      )}
+                    </div>
+                  </InfoField>
+                );
+              })()}
               <InfoField label="Days Since Contact">
                 <span className={`text-sm ${daysSince > 180 ? 'text-red-500 font-semibold' : daysSince > 90 ? 'text-amber-500 font-semibold' : 'text-neutral-900'}`}>
                   {daysSince > 365 ? `${Math.floor(daysSince / 365)}y ${daysSince % 365}d` : `${daysSince} days`}
@@ -139,6 +166,7 @@ export default function AudienceDetailPage() {
               </button>
             </div>
           </div>
+          </div>
         </div>
 
         {/* Right Column - Tabbed Content */}
@@ -184,13 +212,15 @@ export default function AudienceDetailPage() {
                     const isHighValue = ['reply_received', 'info_requested', 'appointment_scheduled'].includes(act.type);
 
                     return (
-                      <div key={act.id} className={`flex gap-3 pb-4 ${isHighValue ? 'bg-amber-50/30 -mx-2 px-2 rounded-lg' : ''}`}>
+                      <div key={act.id} className={`flex gap-3 pb-4 transition-colors duration-200 ${isHighValue ? 'bg-amber-50/40 -mx-2 px-2 rounded-lg border-l-2 border-amber-300' : ''}`}>
                         <div className="flex flex-col items-center">
-                          <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ring-2 ring-white shadow-sm"
                             style={{ backgroundColor: tc.bg, color: tc.color }}>
                             <Icon name={tc.iconName} className="w-3.5 h-3.5" />
                           </div>
-                          {i < contactActivities.length - 1 && <div className="w-px flex-1 bg-neutral-200 mt-1" />}
+                          {i < contactActivities.length - 1 && (
+                            <div className="w-px flex-1 mt-1" style={{ background: `linear-gradient(to bottom, ${tc.color}30, #e5e7eb)` }} />
+                          )}
                         </div>
                         <div className="pt-0.5 flex-1 min-w-0">
                           <p className={`text-[13px] ${isHighValue ? 'text-neutral-900 font-semibold' : 'text-neutral-700'}`}>{act.description}</p>

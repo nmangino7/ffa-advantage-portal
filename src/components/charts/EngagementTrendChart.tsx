@@ -13,6 +13,14 @@ import {
 import type { EngagementTrendData } from '@/lib/analytics';
 
 export function EngagementTrendChart({ data }: { data: EngagementTrendData[] }) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[320px] text-sm text-neutral-400">
+        No engagement data to display yet.
+      </div>
+    );
+  }
+
   return (
     <ResponsiveContainer width="100%" height={320}>
       <AreaChart data={data} margin={{ top: 4, right: 8, left: -12, bottom: 0 }}>
