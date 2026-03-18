@@ -11,7 +11,7 @@ import {
 } from '../types';
 
 // If this version changes, localStorage will be re-seeded with fresh mock data
-export const STORAGE_VERSION = 3;
+export const STORAGE_VERSION = 4;
 
 // Deterministic seed helpers
 function seededRandom(seed: number): () => number {
@@ -193,7 +193,7 @@ export const contacts: Contact[] = Array.from({ length: 200 }, (_, i) => {
     : stage === 'qualified' ? 70 + Math.floor(rand() * 20)
     : 85 + Math.floor(rand() * 15);
   const campaignIds: string[] = stage === 'dormant'
-    ? [] : pickN(['camp-1','camp-2','camp-3','camp-4','camp-5'], 1, 3);
+    ? [] : pickN(['camp-1','camp-2','camp-3','camp-4','camp-5','camp-6','camp-7'], 1, 3);
   const assignedRep = ['qualified','licensed_rep'].includes(stage) ? pick(reps.filter(Boolean) as string[]) : null;
   const company = pick(companies);
   const domain = company && companyDomains[company]
@@ -1100,12 +1100,350 @@ const secondOpinionEmails: EmailStep[] = [
 <p>With warm regards,<br/>The FFA North Team</p>` },
 ];
 
+const crossSellingEmails: EmailStep[] = [
+  { id:'e-6-1', subject:"Beyond insurance: your complete financial picture", previewText:"Insurance is just one piece of the puzzle.", sendDay:0, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Thank you for exploring your insurance options with us. It tells us something important about you — you take protecting your family and your assets seriously.</p>
+
+<p>But here is something we have learned after working with hundreds of clients: insurance does not exist in a vacuum. It is one piece of a much larger financial picture that includes:</p>
+
+<ul>
+  <li><strong>Retirement planning</strong> — ensuring your income lasts as long as you do</li>
+  <li><strong>Investment management</strong> — growing your wealth in alignment with your goals and risk tolerance</li>
+  <li><strong>Tax strategy</strong> — keeping more of what you earn through proactive planning</li>
+  <li><strong>Estate planning</strong> — making sure your assets go where you intend</li>
+</ul>
+
+<p>When these areas are managed independently — often by different professionals who do not communicate with each other — gaps and redundancies can develop without anyone noticing.</p>
+
+<p>Over the next few weeks, we will share some insights on how these pieces fit together. No pressure, no sales pitch — just education that we hope you will find valuable.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-6-2', subject:"How insurance, investments, and retirement planning work together", previewText:"Three pillars. One strategy.", sendDay:7, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Most people manage their insurance, investments, and retirement planning as separate concerns. But in practice, these areas are deeply interconnected:</p>
+
+<h2>How They Connect</h2>
+
+<ul>
+  <li><strong>Insurance affects your investment risk tolerance.</strong> If you have strong disability and life insurance coverage, you may be able to take on more investment risk — because your downside is protected. Without that coverage, a more conservative approach may be warranted.</li>
+  <li><strong>Investment performance affects your retirement timeline.</strong> Your portfolio growth rate directly influences when you can afford to retire and how much income you can generate.</li>
+  <li><strong>Retirement planning affects your insurance needs.</strong> As you approach retirement, your insurance requirements change. You may need less life insurance but more long-term care coverage.</li>
+</ul>
+
+<p>When these three areas are coordinated, each one reinforces the others. When they are not, you may be paying for protection you do not need — or missing coverage that could be critical.</p>
+
+<p>If you would like to see how your insurance, investments, and retirement plan work together (or where they might not), we would be happy to walk through it with you. Reply to this email to get started.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-6-3', subject:"The 3 pillars of financial security", previewText:"Protection. Growth. Income. Are all three covered?", sendDay:14, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>After years of working with individuals and families across a range of financial situations, we have found that lasting financial security rests on three pillars:</p>
+
+<h2>Pillar 1: Protection</h2>
+<p>This is your safety net — life insurance, disability coverage, liability protection, and an emergency fund. Without it, a single unexpected event can derail years of financial progress.</p>
+
+<h2>Pillar 2: Growth</h2>
+<p>This is your investment strategy — the engine that builds wealth over time. It includes your 401(k), IRAs, brokerage accounts, and any other investment vehicles. The goal is disciplined, diversified growth aligned with your timeline and risk tolerance.</p>
+
+<h2>Pillar 3: Income</h2>
+<p>This is your retirement income plan — how you will convert your accumulated assets into reliable income that lasts. It includes Social Security optimization, pension decisions, withdrawal sequencing, and tax-efficient distribution strategies.</p>
+
+<p>Most people have addressed at least one pillar. Few have all three working in concert. The gaps between them are where financial risk hides.</p>
+
+<p>Would you like to see how your three pillars stack up? Reply to this email and we will schedule a brief, no-obligation assessment.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-6-4', subject:"Are your financial strategies working in harmony?", previewText:"Misalignment can cost more than you think.", sendDay:21, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Here is a scenario we see more often than you might expect:</p>
+
+<p>A client has a well-funded 401(k), adequate life insurance, and a financial advisor managing their portfolio. On paper, everything looks fine. But a closer look reveals:</p>
+
+<ul>
+  <li>Their investment allocation is too aggressive for their timeline, but no one has revisited it since they were 15 years from retirement — now they are 5 years away.</li>
+  <li>Their life insurance is a whole life policy purchased 20 years ago that may no longer align with their current needs or estate plan.</li>
+  <li>They have no Roth conversion strategy, which means they are potentially missing an opportunity to reduce their future tax burden.</li>
+  <li>Their beneficiary designations across accounts contradict what their estate plan says.</li>
+</ul>
+
+<p>None of these issues are catastrophic on their own. But together, they represent a financial plan that is working against itself in subtle but meaningful ways.</p>
+
+<p>A comprehensive review looks at all of your financial strategies as a system — not as isolated pieces. If you are curious about whether your strategies are aligned, we would be glad to help you find out.</p>
+
+<p>Reply to this email to schedule a conversation.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-6-5', subject:"What a comprehensive financial review reveals", previewText:"See your finances from a new angle.", sendDay:28, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>You may be wondering what, specifically, a comprehensive financial review looks like. Here is what we cover:</p>
+
+<h2>Our Comprehensive Review Process</h2>
+
+<ul>
+  <li><strong>Insurance audit.</strong> We review all current policies — life, disability, liability, long-term care — to identify gaps, overlaps, or opportunities for better coverage at lower cost.</li>
+  <li><strong>Investment analysis.</strong> We evaluate your portfolio for performance, fees, diversification, tax efficiency, and alignment with your stated goals and risk tolerance.</li>
+  <li><strong>Retirement projection.</strong> We model your retirement income from all sources — Social Security, pensions, investments, annuities — and stress-test it against different scenarios.</li>
+  <li><strong>Tax strategy review.</strong> We look for opportunities to reduce your tax burden today and in retirement through Roth conversions, tax-loss harvesting, and charitable strategies.</li>
+  <li><strong>Estate planning check.</strong> We verify that beneficiary designations, account titling, and estate documents are consistent and current.</li>
+</ul>
+
+<p>The review typically takes about 45 minutes and results in a written summary of findings. There is no cost and no obligation to act on anything we find.</p>
+
+<p>If you would like to see your complete financial picture in one place, reply to this email and we will get you scheduled.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-6-6', subject:"Real story: How integrating services helped the Johnsons", previewText:"What one family gained from a comprehensive approach.", sendDay:35, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>We recently worked with a couple — we will call them the Johnsons — who came to us for an insurance review. What we discovered went well beyond insurance.</p>
+
+<h2>The Situation</h2>
+<p>The Johnsons had adequate life insurance, a 401(k) and IRA with a separate advisor, and no formal retirement income plan. Each piece had been set up independently over the years.</p>
+
+<h2>What We Found</h2>
+<ul>
+  <li><strong>Redundant coverage.</strong> They were paying for both an employer-provided and a private disability policy with overlapping benefits — an unnecessary expense.</li>
+  <li><strong>High investment fees.</strong> Their IRA was invested in actively managed funds charging over 1.4% in combined expenses. Comparable index-based alternatives were available at a fraction of the cost.</li>
+  <li><strong>Missing tax strategy.</strong> They were in a lower tax bracket than they would likely be in retirement, making the next several years an ideal window for partial Roth conversions.</li>
+  <li><strong>Uncoordinated beneficiaries.</strong> Their life insurance and retirement accounts named different beneficiaries than their estate plan specified.</li>
+</ul>
+
+<h2>The Outcome</h2>
+<p>By addressing these issues together, the Johnsons were able to reduce unnecessary expenses, improve their tax positioning, and bring their entire financial plan into alignment.</p>
+
+<p>Every family's situation is unique. But the value of looking at the full picture is consistent. If you would like a similar review, simply reply to this email.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-6-7', subject:"Your financial health scorecard", previewText:"Rate yourself across 6 key areas.", sendDay:42, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Here is a quick self-assessment you can complete in a few minutes. For each area, give yourself a score from 1 (not addressed) to 5 (fully optimized):</p>
+
+<h2>Financial Health Scorecard</h2>
+
+<ul>
+  <li><strong>Emergency Fund:</strong> Do you have 3-6 months of living expenses in an accessible account? ___/5</li>
+  <li><strong>Insurance Coverage:</strong> Are your life, disability, and liability policies current and adequate for your situation? ___/5</li>
+  <li><strong>Investment Strategy:</strong> Is your portfolio diversified, tax-efficient, and aligned with your goals and timeline? ___/5</li>
+  <li><strong>Retirement Readiness:</strong> Do you know your target retirement income and have a plan to get there? ___/5</li>
+  <li><strong>Tax Planning:</strong> Are you using available strategies — Roth conversions, tax-loss harvesting, charitable giving — to minimize your tax burden? ___/5</li>
+  <li><strong>Estate Planning:</strong> Are your beneficiaries, wills, trusts, and powers of attorney current and coordinated? ___/5</li>
+</ul>
+
+<p><strong>Your total: ___/30</strong></p>
+
+<p>If you scored below 20, there are likely meaningful opportunities to strengthen your financial position. Even scores above 20 often reveal one or two areas that could use attention.</p>
+
+<p>We would be happy to walk through your scorecard with you and identify where small improvements could make the biggest difference. Reply to this email to schedule a conversation.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-6-8', subject:"Let's build your comprehensive financial plan", previewText:"All your financial strategies, working together.", sendDay:56, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Over the past several weeks, we have explored how insurance, investments, retirement planning, tax strategy, and estate planning work together as a system — and how gaps between them can quietly erode your financial security.</p>
+
+<p>Now we would like to offer you a simple next step: <strong>a complimentary comprehensive financial planning session with one of our senior advisors.</strong></p>
+
+<h2>What to Expect</h2>
+
+<ul>
+  <li>A 45-minute conversation covering all major areas of your financial life</li>
+  <li>An objective assessment of how your current strategies work together — and where they might not</li>
+  <li>Identification of specific opportunities to reduce costs, improve coverage, and strengthen your long-term plan</li>
+  <li>A written summary of findings that is yours to keep</li>
+</ul>
+
+<h2>What We Promise</h2>
+
+<ul>
+  <li>No cost — this is a complimentary service</li>
+  <li>No obligation — you are not committing to anything by having the conversation</li>
+  <li>No pressure — our job is to educate, not to sell</li>
+</ul>
+
+<p>If you have ever wondered whether all the pieces of your financial life are truly working together, this is an easy way to find out.</p>
+
+<p>Reply to this email or call us at (561) 555-0100 to schedule your session. We look forward to hearing from you.</p>
+
+<p>With warm regards,<br/>The FFA North Team</p>` },
+];
+
+const reEngagementEmails: EmailStep[] = [
+  { id:'e-7-1', subject:"We noticed you have been quiet — here is what is new", previewText:"A lot has changed. We wanted you to know.", sendDay:0, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>It has been a while since we last connected, and we wanted to reach out — not to sell you anything, but to share a few updates that might be relevant to your financial planning.</p>
+
+<h2>What Is New at FFA North</h2>
+
+<ul>
+  <li><strong>Expanded retirement planning services.</strong> We have added comprehensive Social Security optimization modeling and retirement income stress-testing to our complimentary review process.</li>
+  <li><strong>New educational resources.</strong> We have published several new guides on tax-efficient withdrawal strategies, Medicare planning, and estate coordination — all available at no cost.</li>
+  <li><strong>Same commitment to education first.</strong> Our philosophy has not changed: we believe informed clients make the best decisions, and we will never pressure you into anything.</li>
+</ul>
+
+<p>If any of this sounds relevant to where you are today, we would love to reconnect. If the timing is not right, that is perfectly fine — we will be here when it is.</p>
+
+<p>Simply reply to this email if you would like to hear more.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-7-2', subject:"3 financial trends you should know about in 2026", previewText:"What is shaping the financial landscape right now.", sendDay:7, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Whether or not you are actively working on your financial plan right now, these three trends are worth keeping on your radar:</p>
+
+<h2>1. Interest Rates and What They Mean for Your Portfolio</h2>
+<p>The interest rate environment continues to evolve. If you have not reviewed your bond allocation, cash holdings, or fixed-income strategy recently, this is a good time to make sure your positioning still makes sense.</p>
+
+<h2>2. Tax Law Changes on the Horizon</h2>
+<p>Several provisions from recent tax legislation are set to sunset in the coming years, which could meaningfully impact your tax bracket, estate tax exemption, and retirement account strategies. Planning ahead — rather than reacting — can make a significant difference.</p>
+
+<h2>3. Rising Healthcare Costs in Retirement</h2>
+<p>Healthcare inflation continues to outpace general inflation. For those approaching retirement, building a realistic healthcare cost projection into your plan is more important than ever. Medicare does not cover everything, and the gaps can be substantial.</p>
+
+<p>If you would like to discuss how any of these trends might affect your personal situation, we are here to help. Reply to this email to start a conversation.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-7-3', subject:"A quick financial health check you can do in 5 minutes", previewText:"Five questions. Five minutes. Real clarity.", sendDay:14, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Sometimes the hardest part of financial planning is knowing where to start. Here is a simple five-minute exercise that can help you identify your biggest priority:</p>
+
+<h2>Your 5-Minute Financial Health Check</h2>
+
+<p>Answer each question with Yes, No, or Not Sure:</p>
+
+<ul>
+  <li><strong>1.</strong> Do you have enough saved to cover 3-6 months of living expenses without touching your investments? <em>(Emergency fund)</em></li>
+  <li><strong>2.</strong> Have you reviewed your insurance coverage — life, disability, liability — in the past two years? <em>(Protection)</em></li>
+  <li><strong>3.</strong> Do you know, within a reasonable range, how much income you will need in retirement? <em>(Retirement planning)</em></li>
+  <li><strong>4.</strong> Have you reviewed your investment fees and performance in the past year? <em>(Investment management)</em></li>
+  <li><strong>5.</strong> Are your beneficiary designations, will, and powers of attorney up to date? <em>(Estate planning)</em></li>
+</ul>
+
+<p>If you answered "No" or "Not Sure" to any of these, you are not alone — and each one represents a straightforward area where a brief conversation could provide real clarity.</p>
+
+<p>We are happy to discuss any of these with you, at no cost and with no obligation. Reply to this email and let us know which question resonated most.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-7-4', subject:"New resources available: retirement planning toolkit", previewText:"Free guides, calculators, and checklists.", sendDay:21, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>We have put together a collection of retirement planning resources that we think you will find useful — whether you are just starting to think about retirement or are already well into your planning.</p>
+
+<h2>Our Retirement Planning Toolkit Includes:</h2>
+
+<ul>
+  <li><strong>The Retirement Income Gap Calculator.</strong> A simple worksheet to estimate your projected retirement income from all sources (Social Security, pensions, investments) and compare it to your anticipated expenses.</li>
+  <li><strong>Social Security Claiming Strategy Guide.</strong> A plain-English overview of when and how to claim — including spousal and survivor strategies that many people overlook.</li>
+  <li><strong>Healthcare Cost Estimator.</strong> A framework for projecting your healthcare expenses in retirement, including Medicare premiums, supplemental coverage, and out-of-pocket costs.</li>
+  <li><strong>Pre-Retirement Checklist.</strong> A comprehensive list of financial, legal, and administrative steps to complete in the 5 years leading up to retirement.</li>
+</ul>
+
+<p>All of these resources are available at no cost. We created them because we believe better-informed people make better financial decisions.</p>
+
+<p>Reply to this email with "send toolkit" and we will get these resources to you right away.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-7-5', subject:"What has changed in financial planning this year", previewText:"Key updates that could affect your plan.", sendDay:28, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Financial planning is not static — regulations, markets, and best practices evolve. Here are some of the most significant changes from the past year that may be relevant to your planning:</p>
+
+<h2>Key Updates Worth Knowing</h2>
+
+<ul>
+  <li><strong>Retirement account contribution limits.</strong> Annual contribution limits for 401(k)s, IRAs, and other retirement accounts have been adjusted. If you have not updated your contribution amounts, you may be leaving tax-advantaged savings on the table.</li>
+  <li><strong>Required Minimum Distribution (RMD) changes.</strong> Recent legislation has adjusted the age at which RMDs begin and the rules around inherited IRAs. These changes can significantly impact your tax planning and withdrawal strategy.</li>
+  <li><strong>Estate and gift tax exemptions.</strong> Current elevated exemption amounts are scheduled to change. If you have a sizable estate, this is worth discussing with your advisor sooner rather than later.</li>
+  <li><strong>Medicare premium adjustments.</strong> Medicare Part B and Part D premiums have changed, and high-income surcharges (IRMAA) may apply if your modified adjusted gross income exceeds certain thresholds.</li>
+</ul>
+
+<p>Each of these changes can create both challenges and opportunities — depending on your specific situation. If you would like to understand how they affect you, we are happy to walk through it together.</p>
+
+<p>Reply to this email to schedule a brief, no-cost conversation.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-7-6', subject:"Our clients' most common question — answered", previewText:"It is the one thing everyone wants to know.", sendDay:35, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>After thousands of client conversations, one question comes up more than any other:</p>
+
+<p><em>"Am I going to be okay?"</em></p>
+
+<p>It is asked in different ways — "Do I have enough?" "Can I afford to retire?" "Will my money last?" — but the underlying concern is the same. People want to know that they are on solid ground.</p>
+
+<h2>Here Is What We Have Learned</h2>
+
+<ul>
+  <li><strong>The question itself is healthy.</strong> Worrying about your financial future is not a sign of failure — it is a sign that you care. The people who should be concerned are the ones who never ask.</li>
+  <li><strong>The answer is almost always actionable.</strong> Whether you are ahead of schedule or behind, there are concrete steps you can take to improve your position. The key is knowing where you stand.</li>
+  <li><strong>Clarity reduces anxiety.</strong> The clients who feel most at peace are not always the wealthiest — they are the ones who have a clear plan, understand their numbers, and know what to expect.</li>
+</ul>
+
+<p>If you have been carrying this question around, we would be glad to help you find your answer. A 30-minute conversation is often all it takes to go from uncertainty to clarity.</p>
+
+<p>Reply to this email and we will set up a time that works for you.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-7-7', subject:"Is now the right time for a financial review?", previewText:"The short answer might surprise you.", sendDay:42, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>People often ask us when the "right" time is for a financial review. The honest answer: there is no perfect time — but there are several situations that make it especially valuable:</p>
+
+<h2>Consider a Review If:</h2>
+
+<ul>
+  <li><strong>Your life has changed.</strong> Marriage, divorce, a new child, a job change, an inheritance, or the loss of a loved one — any of these can shift your financial priorities.</li>
+  <li><strong>It has been more than two years.</strong> Even without a major life event, tax laws, markets, and your own goals evolve. A plan that was right two years ago may need updating.</li>
+  <li><strong>You feel uncertain.</strong> If you have a nagging sense that something is off — or you simply do not know where you stand — that feeling is worth exploring.</li>
+  <li><strong>You are approaching a milestone.</strong> Within 10 years of retirement, reaching a certain net worth, or becoming eligible for Medicare are all natural checkpoints.</li>
+</ul>
+
+<p>The truth is, a financial review is never wasted. At worst, it confirms you are on the right track. At best, it uncovers opportunities you did not know existed.</p>
+
+<p>If any of these situations resonate with you, we would be happy to schedule a complimentary review. Reply to this email to get started.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-7-8', subject:"We are here when you are ready", previewText:"No rush. No pressure. Just an open door.", sendDay:56, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>This is the last email in our series, and we want to leave you with something simple: an open invitation.</p>
+
+<h2>Whenever You Are Ready, We Are Here</h2>
+
+<p>We understand that timing matters. Maybe right now is not the right moment to focus on your financial plan — and that is perfectly okay. Life has a way of demanding our attention in different places at different times.</p>
+
+<p>But when the time is right — whether that is next week, next month, or next year — here is what we offer:</p>
+
+<ul>
+  <li>A complimentary, no-obligation financial review</li>
+  <li>An experienced advisor who will listen to your concerns and answer your questions</li>
+  <li>A clear, written assessment of where you stand and what you might consider</li>
+  <li>Zero pressure to make any changes or commitments</li>
+</ul>
+
+<p>We will not keep sending emails, but we wanted you to know the door is always open. Save this email, bookmark our number, or simply reply when the time feels right.</p>
+
+<p>We genuinely wish you the best, {{first_name}}, and we hope to hear from you someday.</p>
+
+<p>With warm regards,<br/>The FFA North Team<br/>(561) 555-0100</p>` },
+];
+
 const campaignDefs: { name: string; serviceLine: ServiceLine; description: string; status: CampaignStatus; emails: EmailStep[] }[] = [
   { name:'Insurance Portfolio Review', serviceLine:'Insurance Review', description:'A 12-email educational series targeting business owners and professionals aged 35-60 who likely haven\'t reviewed their insurance coverage in 3+ years. Addresses common pain points including outdated liability limits, insufficient life insurance for growing families, and the lack of umbrella policies. The 70-day progressive sequence moves contacts from awareness through education to action, covering coverage gaps, business insurance, umbrella policies, case studies, and second-opinion positioning. The goal is to book a complimentary 15-minute coverage review by positioning FFA as a no-pressure, education-first resource.', status:'active', emails:insuranceEmails },
   { name:'Annuity Optimization Insights', serviceLine:'Under-Serviced Annuities', description:'Targets existing annuity holders — typically ages 50-70 — who may be unaware of hidden fees, surrender period expirations, or better-performing alternatives. The 12-email, 70-day sequence progressively educates contacts about M&E charges, rider fees, withdrawal optimization strategies, fixed vs. variable annuity differences, interest rate impacts, and 1035 exchange considerations. Ideal persona: someone who purchased an annuity years ago through another advisor and hasn\'t had a review since. Includes real-world case studies and actionable checklists. Outcome: book a free 20-minute annuity health check.', status:'active', emails:annuityEmails },
   { name:'Retirement Readiness Check', serviceLine:'Retirement Planning', description:'A comprehensive 12-email educational series designed for pre-retirees (ages 50-65) who feel uncertain about their retirement readiness. The campaign progressively covers the five critical retirement questions, Social Security claiming and spousal coordination strategies, healthcare cost planning including Medicare and supplements, tax-efficient withdrawal sequencing and Roth conversions, inflation protection, estate planning essentials, and a real-world client case study. Pain points addressed: "Am I saving enough?", "When should I claim Social Security?", "What will healthcare cost me?", and "How do I make my money last?" Outcome: schedule a complimentary 30-minute Retirement Readiness Assessment.', status:'active', emails:retirementEmails },
   { name:'Investment Planning Essentials', serviceLine:'Investment Planning', description:'A comprehensive 12-email educational series for investors of all ages who want clarity on portfolio performance, fees, diversification, and tax efficiency. Targets professionals and business owners who suspect they may be overpaying in fees or holding a poorly diversified portfolio. The campaign progressively covers fee transparency and compounding impact, diversification beyond stocks and bonds, behavioral finance and staying disciplined during volatility, risk tolerance vs. risk capacity, tax-loss harvesting and year-round tax strategies, life milestone-triggered portfolio reviews, and a real-world case study demonstrating the value of a disciplined approach. Outcome: book a complimentary 30-minute Portfolio Analysis with full fee transparency, benchmark comparison, and actionable recommendations.', status:'active', emails:investmentEmails },
   { name:'Get a Second Opinion', serviceLine:'Second-Opinion Positioning', description:'A comprehensive 12-email trust-building campaign for affluent individuals and families who already have a financial advisor but may not be getting the best advice. Targets high-net-worth contacts ($500K+ in investable assets) who value thoroughness and objectivity. Uses the medical second opinion analogy to normalize the idea of an independent financial review. The sequence progressively covers what a second opinion looks like, common findings from past reviews, the fiduciary vs. suitability distinction, fee transparency and compounding impact, a 5-point advisor evaluation framework, essential questions to ask before making changes, an anonymized client case study, and a zero-pressure closing CTA. Outcome: book a free, confidential Second Opinion Review covering investments, insurance, tax strategy, and estate planning.', status:'active', emails:secondOpinionEmails },
+  { name:'Cross-Selling Re-Engagement', serviceLine:'Insurance Review', description:'An 8-email educational series targeting contacts who initially engaged with one service line (typically insurance) but could benefit from a comprehensive financial approach. The campaign bridges the gap between siloed services — insurance, investments, and retirement planning — and educates contacts on how these areas work together for stronger financial outcomes. Covers the three pillars of financial security, strategy harmonization, comprehensive review benefits, an anonymized case study, and a financial health scorecard. Ideal for contacts aged 40-65 who have addressed one financial need but may have blind spots in other areas. Outcome: schedule a comprehensive financial planning session.', status:'active', emails:crossSellingEmails },
+  { name:'Re-Engagement Nurture', serviceLine:'Retirement Planning', description:'An 8-email re-engagement campaign designed for dormant contacts who showed initial interest but have not responded to previous outreach. Uses a softer, value-first approach to re-establish the relationship without pressure. Covers current financial trends, a quick self-assessment tool, new resources and toolkits, industry changes, frequently asked questions, and timing considerations for financial reviews. The tone is patient, informative, and low-pressure — acknowledging that the contact may not have been ready before while keeping the door open. Outcome: re-engage dormant contacts and move them back into the education pipeline.', status:'active', emails:reEngagementEmails },
 ];
 
 export const campaigns: Campaign[] = campaignDefs.map((def, i) => {
@@ -1170,6 +1508,12 @@ const emailSentSubjects = [
   "Thinking about a second opinion on your finances?",
   "The hidden cost dragging down your returns",
   "Your free Retirement Readiness Review",
+  "Beyond insurance: your complete financial picture",
+  "The 3 pillars of financial security",
+  "We noticed you have been quiet — here is what is new",
+  "3 financial trends you should know about in 2026",
+  "What fiduciary duty means for your money",
+  "5 red flags that your financial plan needs a review",
 ];
 
 const clickedLinks = [
@@ -1179,9 +1523,11 @@ const clickedLinks = [
   "'Book a Consultation'",
   "'View Portfolio Analysis Sample'",
   "'Calculate Your Retirement Number'",
+  "'Take Financial Health Assessment'",
+  "'Download Retirement Toolkit'",
 ];
 
-const dayLabels = ['Day 1 intro', 'Day 3 follow-up', 'Day 7 education', 'Day 14 final'];
+const dayLabels = ['Day 1 intro', 'Day 3 follow-up', 'Day 7 education', 'Day 14 mid-series', 'Day 21 deepdive', 'Day 28 checklist', 'Day 35 case study', 'Day 42 action'];
 
 const activityTypes: { type: ActivityType; desc: (c: Contact, camp?: Campaign) => string }[] = [
   { type:'email_sent', desc:(c,camp) => {
@@ -1203,6 +1549,9 @@ const activityTypes: { type: ActivityType; desc: (c: Contact, camp?: Campaign) =
       'Wants to discuss retirement timeline',
       'Requesting fee comparison details',
       'Interested but wants more info first',
+      'Wants to understand comprehensive planning',
+      'Asking about fiduciary vs suitability',
+      'Re-engaging after quiet period',
     ];
     return `Reply from ${c.firstName} ${c.lastName}: ${pick(snippets)}`;
   }},
@@ -1213,6 +1562,9 @@ const activityTypes: { type: ActivityType; desc: (c: Contact, camp?: Campaign) =
       'the insurance gap checklist',
       'the portfolio review sample report',
       'the fee transparency one-pager',
+      'the financial health scorecard',
+      'the retirement planning toolkit',
+      'the comprehensive review overview',
     ];
     return `Info request: ${c.firstName} ${c.lastName} downloaded ${pick(resources)}`;
   }},
@@ -1223,6 +1575,8 @@ const activityTypes: { type: ActivityType; desc: (c: Contact, camp?: Campaign) =
       'Insurance coverage review',
       'Retirement planning consultation',
       'Second opinion meeting',
+      'Comprehensive financial review',
+      'Re-engagement follow-up call',
     ];
     return `Appointment booked: ${pick(types)} with ${c.firstName} ${c.lastName}`;
   }},
