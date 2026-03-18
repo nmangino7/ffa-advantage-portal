@@ -89,8 +89,9 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     if (didHydrate.current) return;
     didHydrate.current = true;
 
-    // Intentional: hydrating client state from localStorage on mount
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // Intentional: hydrating client state from localStorage on mount.
+    // This is a standard pattern for client-side state hydration.
+    /* eslint-disable react-hooks/set-state-in-effect */
     const state = hydrateState();
     setContacts(state.contacts);
     setCampaigns(state.campaigns);
@@ -107,6 +108,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     }
 
     setIsHydrated(true);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   // ─── Auto-save on state changes ────────────────────────────
