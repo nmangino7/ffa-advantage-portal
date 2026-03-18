@@ -89,6 +89,8 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     if (didHydrate.current) return;
     didHydrate.current = true;
 
+    // Intentional: hydrating client state from localStorage on mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     const state = hydrateState();
     setContacts(state.contacts);
     setCampaigns(state.campaigns);
@@ -108,50 +110,33 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // ─── Auto-save on state changes ────────────────────────────
-  // Track whether each key has been through its initial render after hydration
-  // to avoid re-saving data that was just loaded from localStorage.
-  const savedSnapshot = useRef<{
-    contacts: Contact[];
-    campaigns: Campaign[];
-    activities: Activity[];
-    customTemplates: EmailStep[];
-  } | null>(null);
+  // Use a render counter to skip saving during the first render after hydration,
+  // since the data was just loaded from localStorage and doesn't need re-saving.
+  const renderCount = useRef(0);
 
   useEffect(() => {
     if (!isHydrated) return;
-    // On the first render after hydration, capture the snapshot and skip saving
-    if (!savedSnapshot.current) {
-      savedSnapshot.current = { contacts, campaigns, activities, customTemplates };
+    // Skip the first render after hydration (render 0) — data was just loaded
+    if (renderCount.current === 0) {
+      renderCount.current = 1;
       return;
     }
-    if (contacts !== savedSnapshot.current.contacts) {
-      debouncedSave(KEYS.contacts, contacts);
-      savedSnapshot.current = { ...savedSnapshot.current, contacts };
-    }
+    debouncedSave(KEYS.contacts, contacts);
   }, [contacts, isHydrated]);
 
   useEffect(() => {
-    if (!isHydrated || !savedSnapshot.current) return;
-    if (campaigns !== savedSnapshot.current.campaigns) {
-      debouncedSave(KEYS.campaigns, campaigns);
-      savedSnapshot.current = { ...savedSnapshot.current, campaigns };
-    }
+    if (!isHydrated || renderCount.current === 0) return;
+    debouncedSave(KEYS.campaigns, campaigns);
   }, [campaigns, isHydrated]);
 
   useEffect(() => {
-    if (!isHydrated || !savedSnapshot.current) return;
-    if (activities !== savedSnapshot.current.activities) {
-      debouncedSave(KEYS.activities, activities);
-      savedSnapshot.current = { ...savedSnapshot.current, activities };
-    }
+    if (!isHydrated || renderCount.current === 0) return;
+    debouncedSave(KEYS.activities, activities);
   }, [activities, isHydrated]);
 
   useEffect(() => {
-    if (!isHydrated || !savedSnapshot.current) return;
-    if (customTemplates !== savedSnapshot.current.customTemplates) {
-      debouncedSave(KEYS.customTemplates, customTemplates);
-      savedSnapshot.current = { ...savedSnapshot.current, customTemplates };
-    }
+    if (!isHydrated || renderCount.current === 0) return;
+    debouncedSave(KEYS.customTemplates, customTemplates);
   }, [customTemplates, isHydrated]);
 
   // ─── Actions ───────────────────────────────────────────────
