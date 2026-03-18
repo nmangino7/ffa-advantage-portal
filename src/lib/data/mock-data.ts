@@ -11,7 +11,7 @@ import {
 } from '../types';
 
 // If this version changes, localStorage will be re-seeded with fresh mock data
-export const STORAGE_VERSION = 2;
+export const STORAGE_VERSION = 3;
 
 // Deterministic seed helpers
 function seededRandom(seed: number): () => number {
@@ -456,6 +456,191 @@ const investmentEmails: EmailStep[] = [
     body:`Hi {{first_name}},\n\nCommon diversification mistakes:\n• Owning 5 large-cap growth funds and calling it "diversified"\n• Underexposed to international markets\n• Not enough fixed income near retirement\n• Concentrated positions in a single stock\n\nTrue diversification means assets that don't all move together.\n\nWe'd be happy to run a diversification analysis — free. Reply if interested.\n\nWarm regards,\nThe FFA North Team` },
   { id:'e-4-4', subject:"Your complimentary portfolio review awaits", previewText:"See how your investments really stack up.", sendDay:14, status:'active',
     body:`Hi {{first_name}},\n\nOur Portfolio Review includes:\n✓ Performance vs. benchmarks\n✓ Total fee transparency\n✓ Diversification assessment\n✓ Risk alignment check\n✓ Tax efficiency opportunities\n\nFree, 30 minutes, no obligation.\n\nReply "I'm ready" and we'll find a time.\n\nBest,\nThe FFA North Team` },
+  { id:'step-inv-5', subject:"Market volatility and your portfolio: staying the course", previewText:"Why your reaction to a downturn matters more than the downturn itself.", sendDay:21, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>When markets drop sharply, every instinct tells us to do something — sell, move to cash, wait it out on the sidelines. It feels like the safe choice. But decades of market data tell a different story.</p>
+
+<h2>The Real Risk: Missing the Recovery</h2>
+
+<p>Some of the market's strongest days historically have occurred shortly after its worst days. Investors who moved to cash during downturns and waited for things to "settle down" have often missed the recovery that followed.</p>
+
+<p>Research from J.P. Morgan has shown that missing just the 10 best days in the market over a 20-year period could cut your total returns by more than half. And the challenge is that no one can consistently predict which days those will be.</p>
+
+<h2>What You Can Do Instead</h2>
+
+<ul>
+  <li><strong>Review your allocation.</strong> Make sure your portfolio reflects your actual time horizon, not your emotional state during a downturn.</li>
+  <li><strong>Rebalance thoughtfully.</strong> Market drops can create opportunities to buy assets at lower prices through disciplined rebalancing.</li>
+  <li><strong>Focus on what you can control.</strong> Your savings rate, your tax strategy, and your diversification are all within your control — market returns are not.</li>
+  <li><strong>Talk to your advisor.</strong> A calm conversation during turbulent markets is one of the most valuable things an advisor can provide.</li>
+</ul>
+
+<p>Volatility is the price of admission for long-term growth. Having a plan — and sticking to it — has historically been one of the most effective investment strategies available.</p>
+
+<p><strong>Schedule a complimentary consultation</strong> if you would like to discuss how your portfolio is positioned. Reply to this email to get started.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'step-inv-6', subject:"Diversification beyond stocks and bonds", previewText:"There is a wider world of investment options.", sendDay:28, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>When most people hear "diversification," they think of owning a mix of stocks and bonds. That is an important foundation — but it is only part of the picture.</p>
+
+<h2>Expanding Your Investment Toolkit</h2>
+
+<p>A well-diversified portfolio may include exposure to asset classes that do not move in lockstep with the traditional stock and bond markets:</p>
+
+<ul>
+  <li><strong>Real estate investment trusts (REITs).</strong> These provide exposure to commercial and residential real estate without the complexity of owning property directly. They have historically offered attractive income and diversification benefits.</li>
+  <li><strong>International and emerging market equities.</strong> While domestic stocks have performed well in recent years, international markets represent roughly half of global market capitalization. Meaningful overseas exposure can reduce concentration risk.</li>
+  <li><strong>Treasury Inflation-Protected Securities (TIPS).</strong> These government bonds adjust their principal value with inflation, providing a hedge that traditional bonds do not offer.</li>
+  <li><strong>Commodities and natural resources.</strong> These can provide a buffer during inflationary periods when both stocks and bonds may struggle.</li>
+</ul>
+
+<h2>The Key Principle</h2>
+
+<p>True diversification means owning assets that respond differently to the same economic conditions. The goal is not to find the single best-performing asset — it is to build a portfolio that is resilient across a range of scenarios.</p>
+
+<p>Wondering how your portfolio's diversification measures up? <strong>Download our complimentary guide, "Building a Resilient Portfolio,"</strong> by replying to this email.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'step-inv-7', subject:"Understanding investment fees and their long-term impact", previewText:"Small percentages, big consequences over time.", sendDay:35, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>In our earlier email, we shared how fees can cost investors hundreds of thousands of dollars over a lifetime. Today, we want to go deeper — because understanding <em>what</em> you are paying is the first step to making informed decisions.</p>
+
+<h2>The Layers of Investment Fees</h2>
+
+<p>Most investors pay fees at multiple levels, and many are not clearly disclosed:</p>
+
+<ul>
+  <li><strong>Expense ratios.</strong> Every mutual fund and ETF charges an annual fee, expressed as a percentage of your assets. These can range from 0.03% for a simple index fund to over 1.5% for actively managed funds.</li>
+  <li><strong>Advisory fees.</strong> If you work with a financial advisor, you typically pay an additional fee — often 0.5% to 1.5% of assets under management annually.</li>
+  <li><strong>Transaction costs.</strong> Trading commissions, bid-ask spreads, and market impact costs all reduce your returns, though they are rarely itemized on statements.</li>
+  <li><strong>Account fees.</strong> Custodial fees, account maintenance charges, and transfer fees can also add up over time.</li>
+</ul>
+
+<h2>Fees Are Not Inherently Bad</h2>
+
+<p>The question is not whether you are paying fees — it is whether you are getting value for what you pay. Good financial advice, proper tax management, and behavioral coaching during volatile markets can be worth far more than their cost. The key is transparency.</p>
+
+<p>We believe you deserve to know exactly what you are paying and what you are receiving in return. <strong>Schedule a complimentary fee transparency review</strong> — reply to this email and we will analyze your current costs.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'step-inv-8', subject:"Risk tolerance vs. risk capacity: know the difference", previewText:"How you feel about risk is only half the equation.", sendDay:42, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Most investment questionnaires ask how you <em>feel</em> about risk. But your feelings are only one side of the coin. Equally important is your <strong>capacity</strong> to take risk.</p>
+
+<h2>Risk Tolerance vs. Risk Capacity</h2>
+
+<p><strong>Risk tolerance</strong> is emotional — it is how much volatility you can stomach without losing sleep or making impulsive decisions. It is personal and psychological.</p>
+
+<p><strong>Risk capacity</strong> is financial — it is how much risk you can objectively afford to take given your income, savings, time horizon, and obligations. It is mathematical.</p>
+
+<h2>Why Both Matter</h2>
+
+<p>Consider two scenarios:</p>
+<ul>
+  <li>A 35-year-old with a long time horizon and steady income has high risk <em>capacity</em> but may have low risk <em>tolerance</em> after experiencing a market downturn. An overly conservative portfolio could cost them significant growth over decades.</li>
+  <li>A 60-year-old nearing retirement may feel comfortable taking aggressive risks (high tolerance) but may not have the time horizon to recover from a major loss (low capacity). Taking too much risk could jeopardize their retirement.</li>
+</ul>
+
+<p>The best investment strategy aligns both dimensions. A portfolio that matches your capacity but ignores your tolerance will lead to poor decisions during downturns. A portfolio that matches your tolerance but ignores your capacity may leave you short of your goals.</p>
+
+<p>We help our clients find the right balance. <strong>Schedule a complimentary consultation</strong> to discuss your personal risk profile — reply to this email to get started.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'step-inv-9', subject:"Tax-loss harvesting and other year-round tax strategies", previewText:"Tax planning is not just a December activity.", sendDay:49, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Many investors think about taxes only at year-end. But some of the most effective tax strategies work best when they are implemented throughout the year.</p>
+
+<h2>Strategies Worth Knowing</h2>
+
+<ul>
+  <li><strong>Tax-loss harvesting.</strong> When an investment declines in value, selling it can generate a tax loss that offsets gains elsewhere in your portfolio. The proceeds can be reinvested in a similar (but not identical) holding to maintain your market exposure. This is most effective when done opportunistically throughout the year — not just in December.</li>
+  <li><strong>Asset location.</strong> Placing tax-inefficient investments (like taxable bonds or REITs) in tax-advantaged accounts and tax-efficient investments (like index funds) in taxable accounts can improve your after-tax returns without changing your overall allocation.</li>
+  <li><strong>Gain deferral and recognition.</strong> Timing the realization of capital gains to manage your tax bracket — for example, recognizing gains in a year when your income is lower — can reduce your total tax bill.</li>
+  <li><strong>Qualified Charitable Distributions.</strong> If you are over 70-1/2 and charitably inclined, donating directly from your IRA can satisfy your Required Minimum Distribution without increasing your taxable income.</li>
+</ul>
+
+<p>These strategies require ongoing attention and coordination between your investment management and tax planning. That is exactly the kind of comprehensive approach we provide.</p>
+
+<p><strong>Download our complimentary guide, "Year-Round Tax Strategies for Investors,"</strong> by replying to this email.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'step-inv-10', subject:"How life milestones should trigger portfolio reviews", previewText:"Major life changes call for investment checkups.", sendDay:56, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Your investments should evolve as your life evolves. Yet many people set their portfolio once and rarely revisit it — even as their circumstances change dramatically.</p>
+
+<h2>Life Events That Warrant a Portfolio Review</h2>
+
+<ul>
+  <li><strong>Career changes.</strong> A new job, promotion, or transition to self-employment can change your income, benefits, and retirement account options. Your investment strategy should reflect your new reality.</li>
+  <li><strong>Marriage or divorce.</strong> Combining finances — or separating them — affects your tax situation, estate plan, and overall investment approach.</li>
+  <li><strong>Having or adopting children.</strong> Education funding, increased insurance needs, and a longer financial planning horizon all impact how your portfolio should be structured.</li>
+  <li><strong>Receiving an inheritance or windfall.</strong> A sudden increase in assets requires thoughtful integration into your existing plan to avoid concentration risk and tax surprises.</li>
+  <li><strong>Approaching retirement.</strong> The transition from accumulation to distribution is one of the most significant shifts in your financial life. Your portfolio should begin reflecting this change years before your retirement date.</li>
+  <li><strong>Loss of a spouse or family member.</strong> Beyond the emotional impact, this often requires a complete reassessment of income needs, beneficiary designations, and financial goals.</li>
+</ul>
+
+<p>If you have experienced a significant life change recently — or expect one in the near future — it may be time to revisit your investment approach.</p>
+
+<p><strong>Schedule a complimentary consultation</strong> to discuss how your portfolio aligns with where you are today. Reply to this email or call us at (561) 555-0100.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'step-inv-11', subject:"Real results: How a disciplined approach outperforms", previewText:"Patience and process over prediction and impulse.", sendDay:63, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>We would like to share a story that illustrates why we believe in disciplined, evidence-based investing (details changed to protect privacy).</p>
+
+<h2>The Situation</h2>
+
+<p>A business owner — we will call him David — came to us after years of managing his own portfolio. He was a smart, successful professional, but his investment approach was reactive: buying what was hot, selling after downturns, and frequently shifting strategies based on headlines.</p>
+
+<p>When we reviewed his accounts, we found that despite a strong market over the prior decade, his actual returns had significantly lagged a simple balanced portfolio. The culprit was not bad investments — it was bad timing.</p>
+
+<h2>The Approach</h2>
+
+<p>Together, we built a diversified portfolio aligned with his goals, time horizon, and risk profile. We established a systematic rebalancing schedule and a clear investment policy that removed emotion from the equation. Most importantly, we agreed on a plan to follow during market turbulence — before it happened.</p>
+
+<h2>The Outcome</h2>
+
+<p>Over the following years, David's portfolio experienced the same market ups and downs as everyone else. But because he had a plan and a partner to help him stick to it, he avoided the costly mistakes that had held him back before.</p>
+
+<p>Past results do not guarantee future performance, and every investor's situation is unique. But the principle holds: <strong>a disciplined process, consistently followed, has historically been one of the most reliable paths to long-term investment success.</strong></p>
+
+<p>Ready to bring more discipline to your investment approach? <strong>Reply to this email to schedule a complimentary consultation.</strong></p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'step-inv-12', subject:"Your complimentary portfolio analysis awaits", previewText:"A clear, unbiased look at where you stand.", sendDay:70, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Over the past several weeks, we have shared insights on market volatility, diversification, fees, risk management, tax strategies, and the importance of aligning your investments with your life. We hope you have found these emails valuable.</p>
+
+<p>Now we would like to offer you something more personal.</p>
+
+<h2>Your Complimentary Portfolio Analysis</h2>
+
+<p>This is a thorough, one-on-one review conducted by one of our experienced advisors. Here is what we will cover:</p>
+
+<ul>
+  <li><strong>Performance evaluation</strong> — how your portfolio has performed relative to appropriate benchmarks, adjusted for risk</li>
+  <li><strong>Fee transparency report</strong> — a complete accounting of what you are paying across all layers of fees</li>
+  <li><strong>Diversification analysis</strong> — identifying concentration risks, overlapping holdings, and gaps in your allocation</li>
+  <li><strong>Risk alignment assessment</strong> — ensuring your portfolio matches both your risk tolerance and your risk capacity</li>
+  <li><strong>Tax efficiency opportunities</strong> — strategies that may reduce your tax burden without changing your investment goals</li>
+</ul>
+
+<p>The analysis takes about 30 minutes, is completely complimentary, and comes with no obligation whatsoever. You will leave with a clear understanding of where you stand and specific, actionable ideas for improvement.</p>
+
+<p><strong>Ready to get started? Reply to this email or call us directly at (561) 555-0100 to schedule your portfolio analysis.</strong></p>
+
+<p>We look forward to working with you.</p>
+
+<p>All the best,<br/>The FFA North Team</p>` },
 ];
 
 const secondOpinionEmails: EmailStep[] = [
@@ -472,8 +657,8 @@ const secondOpinionEmails: EmailStep[] = [
 const campaignDefs: { name: string; serviceLine: ServiceLine; description: string; status: CampaignStatus; emails: EmailStep[] }[] = [
   { name:'Insurance Portfolio Review', serviceLine:'Insurance Review', description:'A 4-email educational series targeting business owners and professionals aged 35-60 who likely haven\'t reviewed their insurance coverage in 3+ years. Addresses common pain points including outdated liability limits, insufficient life insurance for growing families, and the lack of umbrella policies. The goal is to move contacts from awareness to booking a complimentary 15-minute coverage review by positioning FFA as a no-pressure, education-first resource.', status:'active', emails:insuranceEmails },
   { name:'Annuity Optimization Insights', serviceLine:'Under-Serviced Annuities', description:'Targets existing annuity holders — typically ages 50-70 — who may be unaware of hidden fees, surrender period expirations, or better-performing alternatives. The 4-email sequence progressively educates contacts about M&E charges, rider fees, and withdrawal optimization strategies. Ideal persona: someone who purchased an annuity years ago through another advisor and hasn\'t had a review since. Outcome: book a free 20-minute annuity health check.', status:'active', emails:annuityEmails },
-  { name:'Retirement Readiness Check', serviceLine:'Retirement Planning', description:'Designed for pre-retirees (ages 50-65) who feel uncertain about their retirement readiness. The 4-email campaign covers the five critical retirement questions, Social Security claiming strategy (potentially worth $100K+ in lifetime benefits), healthcare cost planning ($315K average for couples), and tax-efficient withdrawal strategies. Pain points addressed: "Am I saving enough?", "When should I claim Social Security?", and "What will healthcare cost me?" Outcome: schedule a complimentary 30-minute Retirement Readiness Review.', status:'active', emails:retirementEmails },
-  { name:'Investment Planning Essentials', serviceLine:'Investment Planning', description:'A 4-email educational series for investors of all ages who want clarity on portfolio performance, fees, and diversification. Targets professionals and business owners who suspect they may be overpaying in fees or holding a poorly diversified portfolio but lack the tools or expertise to evaluate on their own. Highlights the compounding impact of fees ($620K difference over 25 years on a $500K portfolio) and common diversification mistakes. Outcome: book a complimentary 30-minute Portfolio Review with full fee transparency and benchmark comparison.', status:'active', emails:investmentEmails },
+  { name:'Retirement Readiness Check', serviceLine:'Retirement Planning', description:'A comprehensive 12-email educational series designed for pre-retirees (ages 50-65) who feel uncertain about their retirement readiness. The campaign progressively covers the five critical retirement questions, Social Security claiming and spousal coordination strategies, healthcare cost planning including Medicare and supplements, tax-efficient withdrawal sequencing and Roth conversions, inflation protection, estate planning essentials, and a real-world client case study. Pain points addressed: "Am I saving enough?", "When should I claim Social Security?", "What will healthcare cost me?", and "How do I make my money last?" Outcome: schedule a complimentary 30-minute Retirement Readiness Assessment.', status:'active', emails:retirementEmails },
+  { name:'Investment Planning Essentials', serviceLine:'Investment Planning', description:'A comprehensive 12-email educational series for investors of all ages who want clarity on portfolio performance, fees, diversification, and tax efficiency. Targets professionals and business owners who suspect they may be overpaying in fees or holding a poorly diversified portfolio. The campaign progressively covers fee transparency and compounding impact, diversification beyond stocks and bonds, behavioral finance and staying disciplined during volatility, risk tolerance vs. risk capacity, tax-loss harvesting and year-round tax strategies, life milestone-triggered portfolio reviews, and a real-world case study demonstrating the value of a disciplined approach. Outcome: book a complimentary 30-minute Portfolio Analysis with full fee transparency, benchmark comparison, and actionable recommendations.', status:'active', emails:investmentEmails },
   { name:'Get a Second Opinion', serviceLine:'Second-Opinion Positioning', description:'A trust-building campaign for affluent individuals and families who already have a financial advisor but may not be getting the best advice. Targets high-net-worth contacts ($500K+ in investable assets) who value thoroughness and objectivity. Uses the medical second opinion analogy to normalize the idea of an independent financial review. The 4-email sequence walks contacts through exactly what the process looks like, the top 5 findings from past reviews, and a zero-pressure commitment. Outcome: book a free, confidential Second Opinion Review covering investments, insurance, tax strategy, and estate planning.', status:'draft', emails:secondOpinionEmails },
 ];
 
