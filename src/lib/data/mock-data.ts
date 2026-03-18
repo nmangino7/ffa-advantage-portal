@@ -259,6 +259,192 @@ const retirementEmails: EmailStep[] = [
     body:`Hi {{first_name}},\n\nThe expense that catches most retirees off guard is healthcare.\n\nThe average 65-year-old couple will spend roughly $315,000 on healthcare in retirement.\n\n• Medicare doesn't cover everything\n• Supplemental coverage costs vary wildly\n• Long-term care is the wildcard\n\nWith planning, you can prepare. Want to see how healthcare costs fit into your picture? Reply and we'll talk.\n\nWarm regards,\nThe FFA North Team` },
   { id:'e-3-4', subject:"Your free Retirement Readiness Review", previewText:"Let's build your retirement picture together.", sendDay:14, status:'active',
     body:`Hi {{first_name}},\n\nOur Retirement Readiness Review covers:\n✓ Where you stand vs. your goals\n✓ Social Security optimization\n✓ Income planning strategies\n✓ Healthcare cost projections\n✓ Tax-efficient withdrawal strategies\n\nIt's complimentary — about 30 minutes — and you'll walk away with clarity.\n\nReply "Let's do it" and we'll get you on the calendar.\n\nHere's to your future,\nThe FFA North Team` },
+  { id:'step-ret-5', subject:"The retirement income gap: are you prepared?", previewText:"What happens when your paycheck stops?", sendDay:21, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Here is a question that keeps many pre-retirees up at night: <strong>Will my savings actually replace my paycheck?</strong></p>
+
+<p>The reality is that most Americans face a significant gap between the retirement income they will need and the income their current savings are projected to provide. According to research from the Employee Benefit Research Institute, nearly half of households are at risk of not having enough to cover essential expenses in retirement.</p>
+
+<h2>Understanding Your Income Gap</h2>
+
+<p>Your retirement income gap is the difference between:</p>
+<ul>
+  <li>The monthly income you will need to maintain your lifestyle</li>
+  <li>The combined income from Social Security, pensions, and projected portfolio withdrawals</li>
+</ul>
+
+<p>Most financial professionals suggest planning for 75-85% of your pre-retirement income, though the right number depends on your unique circumstances — your health, where you plan to live, and how you envision spending your time.</p>
+
+<p>The good news? Once you quantify the gap, you can build a strategy to close it. Small adjustments today — increasing contributions, optimizing asset allocation, or adjusting your timeline — can make a meaningful difference.</p>
+
+<p>We help people calculate and close their income gap every day. <strong>Schedule a complimentary consultation</strong> and we will walk through your numbers together.</p>
+
+<p>Simply reply to this email to get started.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'step-ret-6', subject:"Social Security strategies most people miss", previewText:"Timing and coordination can add tens of thousands.", sendDay:28, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Social Security may be the single most important retirement decision you make — yet most people spend more time planning a vacation than planning their claiming strategy.</p>
+
+<h2>Three Strategies Worth Knowing</h2>
+
+<ul>
+  <li><strong>Delayed claiming for higher guaranteed income.</strong> For every year you delay past your Full Retirement Age (up to 70), your benefit grows by approximately 8%. That is a guaranteed increase that is difficult to replicate with any investment.</li>
+  <li><strong>Spousal coordination.</strong> If you are married, the order and timing of when each spouse claims can significantly affect your combined lifetime benefits. One spouse claiming early while the other delays is a strategy that works well for many couples.</li>
+  <li><strong>Tax-aware claiming.</strong> Social Security benefits can be taxable depending on your other income sources. Coordinating your claiming strategy with Roth conversions and other income can help reduce your overall tax burden in retirement.</li>
+</ul>
+
+<p>The difference between a good strategy and a suboptimal one can amount to tens of thousands of dollars over your lifetime. And once you start receiving benefits, your options become much more limited.</p>
+
+<p>We offer a complimentary Social Security optimization analysis as part of our retirement planning process. <strong>Reply to this email</strong> and we will run the numbers for your specific situation.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'step-ret-7', subject:"Healthcare costs in retirement: planning ahead", previewText:"Medicare is just the starting point.", sendDay:35, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>When most people think about retirement expenses, they think about housing, travel, and daily living costs. But the expense that often has the biggest impact on a retirement plan is <strong>healthcare</strong>.</p>
+
+<h2>What Medicare Covers — and What It Does Not</h2>
+
+<p>Medicare is an important foundation, but it was never designed to cover everything:</p>
+<ul>
+  <li><strong>Part A</strong> covers hospital stays but comes with deductibles and copays</li>
+  <li><strong>Part B</strong> covers doctor visits and outpatient care — with a monthly premium that increases based on income</li>
+  <li><strong>Part D</strong> helps with prescription drugs but has its own costs and coverage gaps</li>
+  <li><strong>Long-term care</strong> — such as assisted living or in-home care — is generally <em>not</em> covered by Medicare at all</li>
+</ul>
+
+<h2>Bridging the Gaps</h2>
+
+<p>Many retirees choose a Medicare Supplement (Medigap) or Medicare Advantage plan to reduce out-of-pocket exposure. The right choice depends on your health history, preferred doctors, prescription needs, and risk tolerance.</p>
+
+<p>If you are retiring before 65, you also need a strategy for the gap years before Medicare eligibility — a period when coverage can be especially expensive.</p>
+
+<p>Healthcare planning is a critical piece of any retirement strategy. <strong>Download our complimentary guide, "Healthcare in Retirement: What You Need to Know,"</strong> by replying to this email.</p>
+
+<p>To your health and your future,<br/>The FFA North Team</p>` },
+  { id:'step-ret-8', subject:"Tax-efficient withdrawal strategies", previewText:"The order you draw from accounts matters more than you think.", sendDay:42, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Most people focus on how much they have saved for retirement. Far fewer think about <strong>how they will withdraw it</strong> — and that can be just as important.</p>
+
+<h2>Why Withdrawal Order Matters</h2>
+
+<p>In retirement, you likely have money in accounts with different tax treatments:</p>
+<ul>
+  <li><strong>Tax-deferred accounts</strong> (Traditional IRA, 401(k)) — withdrawals are taxed as ordinary income</li>
+  <li><strong>Tax-free accounts</strong> (Roth IRA, Roth 401(k)) — qualified withdrawals owe no tax</li>
+  <li><strong>Taxable accounts</strong> (brokerage) — taxed at capital gains rates, which are often lower</li>
+</ul>
+
+<p>The conventional wisdom of "draw from taxable first, then tax-deferred, then Roth last" is a reasonable starting point, but it is not always optimal. A more nuanced approach considers your tax bracket each year and may include:</p>
+
+<ul>
+  <li><strong>Roth conversions</strong> in lower-income years to reduce future Required Minimum Distributions</li>
+  <li><strong>Strategic Roth withdrawals</strong> to manage your Medicare premium surcharges (IRMAA)</li>
+  <li><strong>Tax bracket management</strong> — filling up lower brackets with taxable income to keep more money growing tax-free</li>
+</ul>
+
+<p>A well-designed withdrawal strategy can potentially extend the life of your portfolio and reduce the total taxes you pay over your retirement. <strong>Schedule a complimentary consultation</strong> and we can discuss which approach may make sense for your situation.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'step-ret-9', subject:"How inflation affects your retirement timeline", previewText:"Your purchasing power is quietly eroding.", sendDay:49, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Inflation has been front-page news in recent years, and for good reason. But even in more typical years, inflation quietly reshapes every retirement plan.</p>
+
+<h2>The Purchasing Power Problem</h2>
+
+<p>Consider this: at just 3% annual inflation, something that costs $1,000 today will cost roughly $1,800 in twenty years. If your retirement could last 25 or 30 years, the impact compounds significantly.</p>
+
+<p>This means your retirement plan needs to account not just for today's expenses, but for expenses that may double over your lifetime.</p>
+
+<h2>Strategies to Help Protect Your Purchasing Power</h2>
+
+<ul>
+  <li><strong>Maintain some growth-oriented investments</strong> even in retirement — a portfolio that is too conservative may not keep pace with rising costs</li>
+  <li><strong>Consider Social Security timing</strong> — delayed benefits grow at 8% per year, which can serve as a built-in inflation hedge</li>
+  <li><strong>Review your plan annually</strong> — inflation assumptions from five years ago may no longer be accurate</li>
+  <li><strong>Build in margin</strong> — a plan that works only if everything goes perfectly is not truly a plan</li>
+</ul>
+
+<p>Inflation does not have to derail your retirement. With thoughtful planning, you can build a strategy designed to maintain your lifestyle regardless of economic conditions.</p>
+
+<p><strong>Schedule a complimentary consultation</strong> to discuss how inflation is factored into your current plan. Reply to get started.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'step-ret-10', subject:"Estate planning essentials for retirement", previewText:"Protect what you have built for the people you love.", sendDay:56, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Estate planning is one of those topics people know is important but often put off. The truth is, retirement is the ideal time to get your estate plan in order — or to review one you created years ago.</p>
+
+<h2>Five Things to Review Now</h2>
+
+<ul>
+  <li><strong>Beneficiary designations.</strong> These override your will. If you have had a life change — marriage, divorce, birth, or loss — your designations may be out of date. We see this more often than you might expect.</li>
+  <li><strong>Power of attorney.</strong> Both financial and healthcare powers of attorney ensure that someone you trust can act on your behalf if you are unable to.</li>
+  <li><strong>Trust considerations.</strong> Depending on the size of your estate and your goals, a trust can help avoid probate, reduce estate taxes, and protect assets for your heirs.</li>
+  <li><strong>Required Minimum Distributions and your estate.</strong> If you have significant IRA balances, the SECURE Act changed the rules for inherited IRAs. Your beneficiaries may face a 10-year distribution window that could create a substantial tax burden.</li>
+  <li><strong>Charitable giving strategies.</strong> Qualified Charitable Distributions and donor-advised funds can help you support causes you care about while potentially reducing your tax liability.</li>
+</ul>
+
+<p>Estate planning works best as part of a comprehensive retirement strategy — not in isolation. <strong>Download our complimentary guide, "Estate Planning Essentials,"</strong> by replying to this email.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'step-ret-11', subject:"Real story: How the Martinez family secured their retirement", previewText:"A real-world example of comprehensive planning in action.", sendDay:63, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>We would like to share a story about a couple we will call the Martinez family (names and details changed for privacy).</p>
+
+<h2>Where They Started</h2>
+
+<p>Carlos and Maria came to us five years before their planned retirement. They had done a lot of things right — saved consistently, avoided major debt, and paid off their home. But they had some concerns:</p>
+<ul>
+  <li>Their savings were concentrated in Carlos's 401(k) with limited diversification</li>
+  <li>They had no strategy for when to claim Social Security</li>
+  <li>Maria had a small pension, but they were unsure how it fit into their overall plan</li>
+  <li>They had not reviewed their estate documents since their children were young</li>
+</ul>
+
+<h2>What We Did Together</h2>
+
+<p>Over the course of several meetings, we helped the Martinez family build a comprehensive plan. We modeled different Social Security claiming scenarios and identified a strategy that was projected to provide significantly more lifetime income. We diversified their investment holdings and created a tax-efficient withdrawal sequence. We also connected them with an estate attorney to update their documents.</p>
+
+<h2>Where They Are Today</h2>
+
+<p>Carlos retired on schedule and Maria followed a year later. They feel confident about their income, their healthcare coverage, and the legacy they will leave their family.</p>
+
+<p>Every family's situation is unique, but the process works the same way: understand where you are, define where you want to go, and build a plan to get there. <strong>Schedule a complimentary consultation</strong> and let us start building your plan.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'step-ret-12', subject:"Your personalized retirement readiness assessment", previewText:"Let us build a clear picture of your retirement future.", sendDay:70, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Over the past several weeks, we have shared insights on some of the most important aspects of retirement planning — from Social Security and healthcare costs to tax-efficient withdrawals and estate planning.</p>
+
+<p>Now we would like to offer you something more personal.</p>
+
+<h2>Your Complimentary Retirement Readiness Assessment</h2>
+
+<p>This is not a generic calculator or a one-size-fits-all report. It is a personalized review conducted by one of our experienced advisors, tailored to your specific situation. Here is what we will cover:</p>
+
+<ul>
+  <li><strong>Income gap analysis</strong> — how your projected retirement income compares to your anticipated needs</li>
+  <li><strong>Social Security optimization</strong> — the claiming strategy that may work best for you and your spouse</li>
+  <li><strong>Healthcare cost projection</strong> — a realistic estimate of your medical expenses in retirement</li>
+  <li><strong>Tax efficiency review</strong> — opportunities to reduce your lifetime tax burden through smart withdrawal sequencing</li>
+  <li><strong>Estate and beneficiary checkup</strong> — making sure your wishes are properly documented</li>
+</ul>
+
+<p>The assessment takes about 30 minutes, is completely complimentary, and comes with zero obligation. You will walk away with a clear picture of where you stand and actionable next steps.</p>
+
+<p><strong>Ready to get started? Reply to this email or call us directly at (561) 555-0100 to schedule your assessment.</strong></p>
+
+<p>We look forward to helping you plan the retirement you deserve.</p>
+
+<p>All the best,<br/>The FFA North Team</p>` },
 ];
 
 const investmentEmails: EmailStep[] = [
