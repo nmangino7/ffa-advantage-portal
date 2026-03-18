@@ -237,6 +237,132 @@ const insuranceEmails: EmailStep[] = [
     body:`Hi {{first_name}},\n\nWe talk to people about insurance every day, and the same questions come up again and again:\n\nQ: "Do I really need life insurance if my kids are grown?"\nA: It depends. Life insurance can also be a tool for estate planning, charitable giving, or leaving a legacy.\n\nQ: "Is my employer's coverage enough?"\nA: Usually not. Employer plans often cover only 1-2x your salary — far less than most families need.\n\nQ: "How often should I review my coverage?"\nA: At least every 2-3 years, or after any major life event.\n\nQ: "Can I save money without losing coverage?"\nA: Often, yes. We frequently find ways to restructure policies that maintain or improve coverage while reducing costs.\n\nHave a question we didn't cover? Just hit reply — we're here to help.\n\nBest,\nThe FFA North Team` },
   { id:'e-1-4', subject:"Last chance: Free insurance coverage review", previewText:"Let's make sure you're fully protected.", sendDay:14, status:'active',
     body:`Hi {{first_name}},\n\nThis is the last email in our series, and we wanted to reach out one more time.\n\nIf you've been meaning to review your insurance but haven't gotten around to it — we understand. Life's busy.\n\nHere's what a review with us looks like:\n✓ 15-minute phone or video call\n✓ We review your current policies together\n✓ You get a clear picture of where you stand\n✓ Zero obligation — it's completely free\n\nIf you'd like to take us up on this, simply reply with "Let's do it" and we'll get you scheduled.\n\nIf not, no hard feelings. We'll be here whenever you're ready.\n\nAll the best,\nThe FFA North Team` },
+  { id:'e-1-5', subject:"The hidden cost of outdated coverage", previewText:"Life changes create coverage gaps you can\u2019t afford to ignore.", sendDay:21, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Here\u2019s something we see far too often: a client comes in with a policy they purchased ten years ago \u2014 before the second child, before the new home, before the business took off. On paper, they\u2019re \u201ccovered.\u201d In reality, they have significant gaps.</p>
+<h2>Life Events That Quietly Change Your Insurance Needs</h2>
+<ul>
+<li><strong>Marriage or divorce</strong> \u2014 beneficiaries, ownership structures, and liability exposure all shift</li>
+<li><strong>Buying or refinancing a home</strong> \u2014 replacement cost values change, and so should your coverage</li>
+<li><strong>Starting or growing a business</strong> \u2014 personal policies rarely cover business-related liabilities</li>
+<li><strong>Children reaching adulthood</strong> \u2014 your life insurance needs may look very different now</li>
+<li><strong>Aging parents</strong> \u2014 if you\u2019ve become a caregiver, your own coverage needs may have expanded</li>
+</ul>
+<p>The cost of outdated coverage isn\u2019t the premium you pay each month \u2014 it\u2019s the claim that gets denied because your policy no longer reflects your life.</p>
+<p>We offer a complimentary coverage gap review that takes about 15 minutes. No sales pitch \u2014 just a clear-eyed look at where you stand today.</p>
+<p><strong>Reply to this email or call us at (561) 555-0100 to schedule yours.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
+  { id:'e-1-6', subject:"5 questions every business owner should ask about their insurance", previewText:"Your business is your livelihood \u2014 make sure it\u2019s protected.", sendDay:28, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>If you own or operate a business, your insurance needs go well beyond a standard homeowners or auto policy. Yet many business owners rely on coverage that was set up years ago and never revisited.</p>
+<h2>Ask Yourself These 5 Questions</h2>
+<ul>
+<li><strong>1. Is my liability coverage keeping pace with revenue?</strong> A policy sized for a $500K operation may leave dangerous gaps at $2M.</li>
+<li><strong>2. Do I have key-person insurance?</strong> If you or a critical employee were suddenly unable to work, could the business survive financially?</li>
+<li><strong>3. Are my personal and business assets truly separated?</strong> Without proper coverage, a business lawsuit could put your personal assets at risk.</li>
+<li><strong>4. When did I last review my workers\u2019 compensation?</strong> Rates and requirements change \u2014 and audits can result in unexpected bills.</li>
+<li><strong>5. Do I have a business continuity plan?</strong> Insurance is one piece. Do you know what happens to your business if you can\u2019t run it for 90 days?</li>
+</ul>
+<p>If any of these gave you pause, you\u2019re not alone. Most business owners we work with discover at least one significant gap during their first review.</p>
+<p><strong>Schedule a complimentary business coverage review \u2014 reply to this email or call (561) 555-0100.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
+  { id:'e-1-7', subject:"How a Tampa family saved $12K by modernizing their coverage", previewText:"A real-world example of what a policy review can uncover.", sendDay:35, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>We recently worked with a family in the Tampa area \u2014 let\u2019s call them the Martins \u2014 who hadn\u2019t reviewed their insurance in over seven years. They assumed everything was fine. Here\u2019s what we found:</p>
+<h2>What the Review Uncovered</h2>
+<ul>
+<li><strong>Duplicate disability coverage</strong> \u2014 Mr. Martin had both an employer plan and a private policy covering the same benefit. Eliminating the overlap saved $3,200 per year.</li>
+<li><strong>Outdated life insurance</strong> \u2014 Their term policy was sized for when they had a mortgage and two young children. With the house paid off and both kids in college, they right-sized the coverage and redirected $4,100 annually toward retirement savings.</li>
+<li><strong>Missing umbrella policy</strong> \u2014 With a rental property and a teenage driver, their liability exposure was significant. We added a $1M umbrella policy for just $380 per year.</li>
+<li><strong>Auto insurance savings</strong> \u2014 A simple multi-policy bundling adjustment saved another $4,300 annually.</li>
+</ul>
+<p><strong>Net result:</strong> Better coverage in every category, plus approximately $12,000 in annual savings redirected to their financial plan.</p>
+<p>Every family\u2019s situation is different, and past results don\u2019t guarantee future outcomes. But the Martins\u2019 story illustrates why periodic reviews matter.</p>
+<p><strong>Want to see what a review might reveal for you? Reply to this email to get started.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432. Names and details changed to protect client privacy.</p>` },
+  { id:'e-1-8', subject:"Understanding umbrella policies: affordable protection most people overlook", previewText:"One of the best-kept secrets in personal insurance.", sendDay:42, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>If there\u2019s one type of insurance that consistently surprises people \u2014 both in how affordable it is and how much protection it provides \u2014 it\u2019s the personal umbrella policy.</p>
+<h2>What Is an Umbrella Policy?</h2>
+<p>An umbrella policy provides an extra layer of liability protection beyond what your homeowners, auto, and other policies cover. It kicks in when you exhaust the liability limits on your underlying policies.</p>
+<h2>Why It Matters More Than You Think</h2>
+<ul>
+<li><strong>Lawsuits are unpredictable.</strong> A serious auto accident, an injury on your property, or even a social media post can result in a judgment that exceeds your standard policy limits.</li>
+<li><strong>Your net worth is the target.</strong> The more assets you have, the more you have to lose. Courts can go after savings, investments, and even future earnings.</li>
+<li><strong>It\u2019s surprisingly affordable.</strong> A $1 million umbrella policy typically costs between $200 and $500 per year \u2014 far less than most people expect.</li>
+</ul>
+<h2>Who Should Consider One?</h2>
+<p>If you own a home, have investment accounts, employ household help, own rental property, have a swimming pool, or have a teenage driver \u2014 an umbrella policy deserves serious consideration.</p>
+<p>This is general education, not a recommendation for your specific situation. But if you\u2019d like to explore whether an umbrella policy makes sense for you, we\u2019re happy to help.</p>
+<p><strong>Schedule a complimentary review \u2014 just reply to this email.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
+  { id:'e-1-9', subject:"Your annual insurance checkup is due", previewText:"Just like your car and your health \u2014 your coverage needs regular attention.", sendDay:49, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>You wouldn\u2019t skip your annual physical. You wouldn\u2019t drive 30,000 miles without an oil change. So why do so many people go years \u2014 sometimes decades \u2014 without reviewing their insurance?</p>
+<h2>What\u2019s Changed in the Last 12 Months?</h2>
+<p>Think about the past year alone. Have you:</p>
+<ul>
+<li>Received a raise or changed jobs?</li>
+<li>Renovated your home or purchased property?</li>
+<li>Had a child, gotten married, or experienced a family change?</li>
+<li>Started a side business or taken on new professional responsibilities?</li>
+<li>Turned 50, 55, 60, or 65? (Age milestones often trigger coverage changes)</li>
+</ul>
+<p>Even if none of these apply, the insurance market itself has changed. New products, new pricing, and new features may be available that didn\u2019t exist when you last reviewed your policies.</p>
+<h2>A 15-Minute Checkup Can Save You Hours of Worry</h2>
+<p>Our annual insurance checkup is designed to be quick, thorough, and completely free. We\u2019ll review your current policies, flag any gaps, and let you know if there are opportunities to improve your coverage or reduce your costs.</p>
+<p><strong>Reply \u201ccheckup\u201d to this email and we\u2019ll get you on the calendar this week.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
+  { id:'e-1-10', subject:"What your current agent might not be telling you", previewText:"A second set of eyes never hurts.", sendDay:56, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Let us be clear upfront: we\u2019re not here to criticize your current insurance agent. Many agents do excellent work. But here\u2019s a reality worth acknowledging \u2014 every professional has blind spots, and the insurance industry has structural incentives that don\u2019t always align with your interests.</p>
+<h2>Things Worth Asking About</h2>
+<ul>
+<li><strong>Captive vs. independent.</strong> If your agent represents a single carrier, they can only offer you that company\u2019s products \u2014 even if a better option exists elsewhere.</li>
+<li><strong>Commission structures.</strong> Some products pay agents significantly higher commissions than others. That doesn\u2019t mean the recommendation is wrong, but it\u2019s worth understanding.</li>
+<li><strong>Proactive reviews.</strong> When\u2019s the last time your agent reached out to review your coverage \u2014 without you asking? Regular check-ins are a hallmark of good service.</li>
+<li><strong>Holistic perspective.</strong> Insurance doesn\u2019t exist in a vacuum. It\u2019s part of your broader financial picture, including estate planning, tax strategy, and retirement goals.</li>
+</ul>
+<p>A second opinion isn\u2019t about finding fault \u2014 it\u2019s about gaining confidence. Either you\u2019ll confirm you\u2019re in great shape, or you\u2019ll discover opportunities you didn\u2019t know existed. Either way, you win.</p>
+<p><strong>Request your complimentary second-opinion review \u2014 reply to this email or call (561) 555-0100.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
+  { id:'e-1-11', subject:"Free insurance gap analysis \u2014 limited availability this month", previewText:"We\u2019re opening up a handful of complimentary review slots.", sendDay:63, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>We\u2019re setting aside time this month to conduct a limited number of complimentary Insurance Gap Analyses for individuals and families in our community. I wanted to make sure you had the opportunity before our calendar fills up.</p>
+<h2>What\u2019s Included in the Gap Analysis</h2>
+<ul>
+<li><strong>Full policy inventory</strong> \u2014 we\u2019ll catalog every policy you currently hold and identify what\u2019s covered and what isn\u2019t</li>
+<li><strong>Life event alignment</strong> \u2014 we\u2019ll check whether your coverage reflects your current life situation, not the one you had five years ago</li>
+<li><strong>Cost comparison</strong> \u2014 we\u2019ll look at whether you\u2019re paying a fair price for the coverage you have</li>
+<li><strong>Risk assessment</strong> \u2014 we\u2019ll identify your biggest uninsured or underinsured risks</li>
+<li><strong>Written summary</strong> \u2014 you\u2019ll receive a clear, one-page report with findings and suggestions, yours to keep regardless of what you decide</li>
+</ul>
+<p>The analysis takes about 20 minutes and can be done over the phone or on a video call \u2014 whichever you prefer.</p>
+<p>There\u2019s truly no obligation. We offer these because they\u2019re the best way to demonstrate the value of working with an advisor who looks at your full financial picture.</p>
+<p><strong>Reply to this email to reserve your spot, or call us at (561) 555-0100.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
+  { id:'e-1-12', subject:"Final thoughts on protecting what matters most", previewText:"Our last email \u2014 and an open invitation.", sendDay:70, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>This is the final email in our insurance education series, and I want to end with something simple.</p>
+<p>Insurance isn\u2019t exciting. Nobody wakes up eager to review their policies. But the purpose of insurance is deeply personal \u2014 it\u2019s about protecting the people, the home, the business, and the future you\u2019ve worked so hard to build.</p>
+<h2>What We\u2019ve Covered Together</h2>
+<ul>
+<li>Why coverage gaps form silently over time</li>
+<li>The questions every homeowner and business owner should be asking</li>
+<li>How periodic reviews can improve coverage while reducing costs</li>
+<li>The role of umbrella policies in a comprehensive protection plan</li>
+<li>Why a second opinion on your coverage is always a smart move</li>
+</ul>
+<p>Whether you\u2019re ready for a conversation today or a year from now, our door is open. We don\u2019t believe in high-pressure tactics \u2014 we believe in being here when you need us.</p>
+<p><strong>If you\u2019d like to schedule a complimentary review at any time, you can:</strong></p>
+<ul>
+<li>Reply to this email</li>
+<li>Call us at (561) 555-0100</li>
+<li>Visit our website to book online</li>
+</ul>
+<p>Thank you for your time, {{first_name}}. It\u2019s been a pleasure sharing these insights with you.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432. You are receiving this email because you opted in to educational content from Florida Financial Advisors. To unsubscribe, reply \u201cunsubscribe\u201d or click the link below.</p>` },
 ];
 
 const annuityEmails: EmailStep[] = [
@@ -248,6 +374,149 @@ const annuityEmails: EmailStep[] = [
     body:`Hi {{first_name}},\n\n1. "Am I past my surrender period?"\nIf yes, you have more flexibility than you think.\n\n2. "Am I maximizing my withdrawal strategy?"\nMany owners leave money on the table by not optimizing distributions.\n\n3. "Has my risk tolerance changed?"\nThe allocation inside your annuity should reflect who you are today.\n\nReply "review" if you'd like us to take a look. Free, confidential, about 20 minutes.\n\nTalk soon,\nThe FFA North Team` },
   { id:'e-2-4', subject:"One last thing about your annuity", previewText:"We're here when you're ready.", sendDay:14, status:'active',
     body:`Hi {{first_name}},\n\nOur Annuity Review is:\n✓ Free and confidential\n✓ Takes about 20 minutes\n✓ Covers fees, performance, and alternatives\n✓ No pressure to make any changes\n\nJust reply "I'm in" and we'll schedule a time.\n\nWarm regards,\nThe FFA North Team` },
+  { id:'e-2-5', subject:"Hidden fees in annuities: what you need to know", previewText:"Understanding the true cost of your annuity contract.", sendDay:21, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>When you purchased your annuity, you likely focused on the guarantees, the growth potential, or the income promise. That makes sense \u2014 those are the features that matter most. But there\u2019s another side of the equation that deserves equal attention: the fees.</p>
+<h2>The Four Layers of Annuity Costs</h2>
+<ul>
+<li><strong>Mortality and Expense (M&E) charges</strong> \u2014 This is the insurance company\u2019s charge for providing the guarantees in your contract. It typically ranges from 0.50% to 1.50% annually, deducted from your account value. Older contracts often carry higher M&E charges than what\u2019s available today.</li>
+<li><strong>Administrative fees</strong> \u2014 Annual maintenance charges that can be a flat fee ($25\u2013$50) or a percentage of your account. Small, but they add up over decades.</li>
+<li><strong>Rider fees</strong> \u2014 If you added optional benefits like a guaranteed lifetime withdrawal benefit or enhanced death benefit, each rider carries its own annual charge \u2014 often 0.50% to 1.25% each.</li>
+<li><strong>Underlying fund expenses</strong> \u2014 For variable annuities, the mutual fund sub-accounts have their own expense ratios, just like funds in a 401(k).</li>
+</ul>
+<p>Added together, total annual costs on some older variable annuities can exceed 3.5% per year. That\u2019s a significant drag on growth over time.</p>
+<p>We\u2019re not saying your annuity is a bad deal \u2014 but understanding what you\u2019re paying is the first step toward knowing if you\u2019re getting fair value.</p>
+<p><strong>Want us to help you decode your annuity\u2019s fee structure? Reply to this email for a complimentary fee review.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
+  { id:'e-2-6', subject:"Fixed vs. variable annuities explained", previewText:"Understanding the two main types \u2014 and which might suit you better.", sendDay:28, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Not all annuities are created equal. If you own one \u2014 or are considering one \u2014 it\u2019s important to understand the fundamental differences between the two most common types.</p>
+<h2>Fixed Annuities</h2>
+<ul>
+<li>Your principal is protected from market losses</li>
+<li>You earn a guaranteed interest rate for a set period</li>
+<li>Predictable, stable growth \u2014 but typically lower long-term returns</li>
+<li>Generally lower fees than variable annuities</li>
+<li>Best suited for conservative investors prioritizing safety over growth</li>
+</ul>
+<h2>Variable Annuities</h2>
+<ul>
+<li>Your money is invested in sub-accounts (similar to mutual funds)</li>
+<li>Returns depend on market performance \u2014 higher upside, but also downside risk</li>
+<li>Often include optional riders for income or death benefit guarantees (at additional cost)</li>
+<li>Higher fee structures due to investment management and insurance charges</li>
+<li>Better suited for investors with longer time horizons who can tolerate volatility</li>
+</ul>
+<h2>There Are Also Fixed Indexed Annuities</h2>
+<p>These are a hybrid \u2014 your principal is protected, but your returns are linked to a market index (like the S&P 500), subject to caps and participation rates. They\u2019ve become increasingly popular, but the crediting methods can be complex.</p>
+<p>The right type depends entirely on your goals, timeline, and risk tolerance. There\u2019s no one-size-fits-all answer.</p>
+<p><strong>If you\u2019d like help understanding how your current annuity fits your overall financial picture, reply to this email. Our review is complimentary and confidential.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
+  { id:'e-2-7', subject:"Are you getting the guarantees you were promised?", previewText:"It\u2019s worth checking that your annuity is delivering on its commitments.", sendDay:35, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>When you purchased your annuity, you were likely shown illustrations \u2014 projections of how your account could grow, what income you might receive, or what your beneficiaries would be paid. Those illustrations may have been a key reason you said yes.</p>
+<p>But here\u2019s something worth checking: are those projections actually playing out?</p>
+<h2>Common Gaps Between Promise and Reality</h2>
+<ul>
+<li><strong>Guaranteed minimum interest rates</strong> may be lower than what was illustrated in the \u201cnon-guaranteed\u201d column you were shown</li>
+<li><strong>Income benefit bases</strong> and <strong>account values</strong> are not the same thing \u2014 and the number that matters for withdrawal purposes may surprise you</li>
+<li><strong>Cap rates and participation rates</strong> on indexed annuities can change annually, potentially reducing your credited returns</li>
+<li><strong>Death benefit values</strong> may not have grown the way you expected, especially after fees and withdrawals</li>
+</ul>
+<p>None of this necessarily means something is wrong. Annuity contracts are complex, and it\u2019s natural for there to be a gap between initial expectations and actual performance. But you deserve to understand exactly where you stand.</p>
+<p><strong>We offer a complimentary annuity checkup that compares your original illustrations to your current contract values. Reply \u201ccheckup\u201d and we\u2019ll schedule a 20-minute review.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
+  { id:'e-2-8', subject:"How interest rate changes affect your annuity", previewText:"What rising and falling rates mean for annuity owners.", sendDay:42, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Interest rates have been a major topic in recent years, and for annuity owners, rate changes can have real implications \u2014 both positive and negative. Here\u2019s what you should know.</p>
+<h2>If You Own a Fixed Annuity</h2>
+<ul>
+<li>When rates rise, newer fixed annuities may offer higher guaranteed rates than your existing contract</li>
+<li>If you\u2019re past your surrender period, you may have the flexibility to explore better options</li>
+<li>If you\u2019re still in your surrender period, your current guaranteed rate may actually look favorable compared to what was available when rates were lower</li>
+</ul>
+<h2>If You Own a Variable Annuity</h2>
+<ul>
+<li>Rising rates can affect the bond sub-accounts within your annuity (bond values typically fall when rates rise)</li>
+<li>However, guaranteed income riders are generally unaffected by rate changes \u2014 those guarantees are contractual</li>
+<li>Higher rates may also mean that newer variable annuity contracts offer more competitive guarantees</li>
+</ul>
+<h2>If You Own a Fixed Indexed Annuity</h2>
+<ul>
+<li>Insurance companies may adjust cap rates and participation rates based on the rate environment</li>
+<li>Higher interest rates generally allow insurers to offer more favorable crediting terms</li>
+</ul>
+<p>The bottom line: interest rate changes don\u2019t automatically mean you should do anything differently. But they do create opportunities worth evaluating.</p>
+<p><strong>Want to understand how the current rate environment affects your specific annuity? Reply to this email for a complimentary review.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
+  { id:'e-2-9', subject:"Real client story: Discovering $8K in unnecessary fees", previewText:"A real-world example of why annuity reviews matter.", sendDay:49, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Last year, a couple in their early 60s \u2014 let\u2019s call them Jim and Diane \u2014 came to us for a second opinion on their retirement portfolio. They had a variable annuity they\u2019d owned for nine years and assumed it was performing well.</p>
+<h2>What We Found</h2>
+<ul>
+<li><strong>Two riders they weren\u2019t using.</strong> Jim and Diane had added a guaranteed minimum accumulation benefit and an enhanced death benefit when they purchased the contract. Combined rider fees: 1.85% per year. But their financial situation had changed \u2014 they no longer needed either feature, yet they were paying roughly $5,500 annually for them.</li>
+<li><strong>High-cost sub-accounts.</strong> The investment options inside their annuity had expense ratios averaging 1.10%. Comparable investments were available at a fraction of that cost.</li>
+<li><strong>Surrender period had ended.</strong> Jim and Diane didn\u2019t realize their seven-year surrender period had expired two years earlier. They had full flexibility to make changes \u2014 and no one had told them.</li>
+</ul>
+<p><strong>The outcome:</strong> After a careful analysis, Jim and Diane were able to restructure their position, eliminating approximately $8,000 in annual fees while maintaining the protections they actually needed.</p>
+<p>Every situation is unique, and past results don\u2019t guarantee future outcomes. But Jim and Diane\u2019s story illustrates why periodic reviews are so important.</p>
+<p><strong>Curious whether your annuity deserves a closer look? Reply to this email and we\u2019ll schedule a complimentary review.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432. Names and details changed to protect client privacy.</p>` },
+  { id:'e-2-10', subject:"Your annuity performance review checklist", previewText:"A simple framework for evaluating your annuity.", sendDay:56, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>You don\u2019t need to be a financial expert to evaluate your annuity. Here\u2019s a straightforward checklist you can use to assess whether your contract is still working for you.</p>
+<h2>Your Annuity Review Checklist</h2>
+<ul>
+<li><strong>\u2610 Do I know my total annual fees?</strong> Add up M&E charges, rider fees, administrative fees, and underlying fund expenses. If the total exceeds 3%, it\u2019s worth investigating whether lower-cost alternatives exist.</li>
+<li><strong>\u2610 Am I past my surrender period?</strong> Check your contract or annual statement for the surrender schedule. If penalties have expired, you have more options than you may realize.</li>
+<li><strong>\u2610 Am I using all the riders I\u2019m paying for?</strong> If you\u2019re paying for a guaranteed income rider but don\u2019t plan to annuitize, or a death benefit rider that\u2019s no longer necessary, you may be paying for features you don\u2019t need.</li>
+<li><strong>\u2610 How has my account value performed vs. my benefit base?</strong> These are two different numbers. Understanding both is critical for making informed decisions about withdrawals.</li>
+<li><strong>\u2610 Does my annuity still align with my retirement timeline?</strong> Your goals at 50 may be very different from your goals at 65. Make sure your annuity strategy has kept pace.</li>
+<li><strong>\u2610 When did I last review this contract?</strong> If it\u2019s been more than two years, it\u2019s time for a fresh look.</li>
+</ul>
+<p>If you checked fewer than four boxes with confidence, a professional review could be valuable.</p>
+<p><strong>Download our free Annuity Evaluation Worksheet by replying \u201cworksheet\u201d \u2014 or schedule a complimentary review by replying \u201creview.\u201d</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
+  { id:'e-2-11', subject:"Should you exchange your annuity? 3 factors to consider", previewText:"Understanding the 1035 exchange \u2014 and when it makes sense.", sendDay:63, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>If your current annuity isn\u2019t meeting your needs, you may have heard about something called a <strong>1035 exchange</strong>. Named after Section 1035 of the Internal Revenue Code, it allows you to transfer from one annuity to another without triggering a taxable event.</p>
+<p>But just because you <em>can</em> exchange doesn\u2019t mean you <em>should</em>. Here are three factors to weigh carefully.</p>
+<h2>1. Surrender Charges</h2>
+<p>If you\u2019re still within your surrender period, exchanging could trigger significant penalties \u2014 sometimes 5% to 8% of your account value. A new contract will also restart the surrender clock. Make sure the benefits of switching clearly outweigh these costs.</p>
+<h2>2. Loss of Existing Guarantees</h2>
+<p>Some older annuities carry guarantees that are no longer available in today\u2019s market \u2014 higher minimum interest rates, more generous income riders, or better death benefits. Before exchanging, understand exactly what you\u2019d be giving up.</p>
+<h2>3. Total Cost Comparison</h2>
+<p>Compare the all-in costs of your current contract with the proposed replacement. Lower fees in the new contract are only beneficial if the overall value proposition \u2014 including guarantees, investment options, and flexibility \u2014 is genuinely better.</p>
+<h2>The Bottom Line</h2>
+<p>A 1035 exchange can be a powerful tool when used appropriately. But it\u2019s not always the right move, and anyone who tells you otherwise without reviewing your specific situation isn\u2019t looking out for your best interests.</p>
+<p><strong>If you\u2019re considering an exchange \u2014 or just want to know if it\u2019s worth exploring \u2014 reply to this email. Our analysis is complimentary and comes with zero obligation.</strong></p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432. This is educational content only and should not be considered tax or legal advice. Consult your tax advisor before making any exchange decisions.</p>` },
+  { id:'e-2-12', subject:"Next steps for annuity optimization", previewText:"Our final email \u2014 and a standing invitation.", sendDay:70, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Over the past several weeks, we\u2019ve shared what we believe every annuity owner should know \u2014 from understanding hidden fees to evaluating whether your contract is still delivering on its promises.</p>
+<h2>Here\u2019s What We\u2019ve Covered</h2>
+<ul>
+<li>The four layers of annuity costs and how they compound over time</li>
+<li>The difference between fixed, variable, and indexed annuities</li>
+<li>How to verify that your guarantees are performing as illustrated</li>
+<li>The impact of interest rate changes on your contract</li>
+<li>A real-world example of how a review uncovered $8K in unnecessary fees</li>
+<li>A self-service checklist for evaluating your annuity\u2019s performance</li>
+<li>The three critical factors to weigh before considering a 1035 exchange</li>
+</ul>
+<h2>Where Do You Go From Here?</h2>
+<p>If any of these topics resonated with you, the natural next step is a personalized review. Here\u2019s what that looks like:</p>
+<ul>
+<li><strong>Step 1:</strong> Share your most recent annuity statement with us (we\u2019ll keep it confidential)</li>
+<li><strong>Step 2:</strong> We\u2019ll analyze your fees, guarantees, and performance in detail</li>
+<li><strong>Step 3:</strong> You\u2019ll receive a clear, written summary of our findings</li>
+<li><strong>Step 4:</strong> We\u2019ll discuss your options together \u2014 with absolutely no pressure to make changes</li>
+</ul>
+<p>The entire process takes about 20 minutes and is completely complimentary.</p>
+<p><strong>Ready to get started? Reply to this email, call us at (561) 555-0100, or visit our website to book a time.</strong></p>
+<p>Thank you for reading, {{first_name}}. Whatever you decide, we\u2019re here when you need us.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432. You are receiving this email because you opted in to educational content from Florida Financial Advisors. To unsubscribe, reply \u201cunsubscribe\u201d or click the link below.</p>` },
 ];
 
 const retirementEmails: EmailStep[] = [
@@ -652,14 +921,191 @@ const secondOpinionEmails: EmailStep[] = [
     body:`Hi {{first_name}},\n\nAfter hundreds of second opinions, here are the top 5 findings:\n\n1. Tax Inefficiency — no tax-loss harvesting or Roth conversion strategy\n2. Overlapping Holdings — same stocks in multiple funds\n3. Outdated Beneficiaries — life changed, forms didn't\n4. Insurance Gaps — too little coverage or overpaying\n5. No Written Plan — hard to measure progress without one\n\nAll fixable. First step is knowing where you stand.\n\nReply if you'd like us to take a look. Free and confidential.\n\nTalk soon,\nThe FFA North Team` },
   { id:'e-5-4', subject:"Last call: Your free financial second opinion", previewText:"We're here when you're ready.", sendDay:14, status:'active',
     body:`Hi {{first_name}},\n\nLast email in the series. Here's our promise:\n\n✓ Genuinely free — no hidden fees, no bait-and-switch\n✓ Confidential — what you share stays between us\n✓ Yours to keep — the analysis belongs to you\n✓ Zero pressure — we'll never push you\n\nReply "second opinion" and let's find a time.\n\nOr save this email and reach out whenever you're ready.\n\nWarm regards,\nThe FFA North Team` },
+  { id:'e-5-5', subject:"Why a financial second opinion is like a medical second opinion", previewText:"You would get one for your health. Why not your wealth?", sendDay:21, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Imagine your doctor recommends a major surgery. What would you do? Most people would seek a second opinion before making that decision. It is not about distrusting your doctor — it is about making sure you have the full picture.</p>
+
+<p>Your financial plan deserves the same level of care. Here is why the analogy holds:</p>
+
+<ul>
+  <li><strong>Diagnosis matters.</strong> Just as two doctors may interpret the same symptoms differently, two advisors may see different opportunities — or risks — in the same portfolio.</li>
+  <li><strong>Treatments vary.</strong> There is rarely one "right" approach. A second perspective can reveal strategies your current advisor may not specialize in.</li>
+  <li><strong>Peace of mind is priceless.</strong> Whether the second opinion confirms your current path or suggests improvements, you walk away more confident.</li>
+</ul>
+
+<p>A financial second opinion is not about finding fault. It is about making sure the plan you are following is truly the best one for your situation today.</p>
+
+<p>If you would like a fresh, objective look at your financial plan, simply reply to this email. There is no cost and no obligation.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-6', subject:"5 red flags that your financial plan needs a review", previewText:"How many of these apply to you?", sendDay:28, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Even well-constructed financial plans can drift off course over time. Here are five warning signs that it may be time for a closer look:</p>
+
+<h2>Your Financial Plan Red Flag Checklist</h2>
+
+<ul>
+  <li><strong>1. You have not updated your plan in over two years.</strong> Tax laws change, markets shift, and your life evolves. A plan from a few years ago may not reflect where you are today.</li>
+  <li><strong>2. You cannot clearly explain your advisor's fee structure.</strong> If you are unsure what you are paying — or how your advisor is compensated — that is a gap worth closing.</li>
+  <li><strong>3. Your beneficiary designations are outdated.</strong> Marriage, divorce, new children, or the loss of a loved one can all make existing designations incorrect.</li>
+  <li><strong>4. You do not have a written financial plan.</strong> Verbal guidance is not a plan. A written roadmap with specific goals and timelines is essential for measuring progress.</li>
+  <li><strong>5. Your advisor has not proactively contacted you this year.</strong> Regular communication is a sign of attentive service. Silence may indicate you are being overlooked.</li>
+</ul>
+
+<p>If even one of these resonated, a second opinion could provide valuable clarity. Reply to this email and we will schedule a confidential review at your convenience.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-7', subject:"What fiduciary duty means for your money", previewText:"Not all advisors are held to the same standard.", sendDay:35, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>When it comes to financial advice, there is a critical distinction that many people are unaware of: the difference between the <strong>fiduciary standard</strong> and the <strong>suitability standard</strong>.</p>
+
+<h2>Fiduciary vs. Suitability: What You Should Know</h2>
+
+<p><strong>Fiduciary standard:</strong> The advisor is legally required to act in your best interest. They must put your needs ahead of their own and disclose any potential conflicts of interest.</p>
+
+<p><strong>Suitability standard:</strong> The advisor must recommend products that are "suitable" for you — but not necessarily the <em>best</em> option. A suitable recommendation can still carry higher fees or conflicts of interest.</p>
+
+<p>Here is why this matters in practice:</p>
+
+<ul>
+  <li>Two different investment products may both be "suitable" for your situation, but one could charge significantly higher fees than the other.</li>
+  <li>Under the suitability standard, either recommendation would be acceptable. Under the fiduciary standard, the advisor would be obligated to recommend the lower-cost option if it better serves your interests.</li>
+  <li>Understanding which standard your current advisor follows is one of the most important questions you can ask.</li>
+</ul>
+
+<p>If you are not sure which standard your advisor follows, we are happy to help you evaluate your current advisory relationship — no cost, no pressure. Simply reply to this email to get started.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-8', subject:"The true cost of financial advisor fees", previewText:"Small percentages can add up to surprisingly big numbers.", sendDay:42, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Most investors focus on returns — but fees may have an even bigger impact on your long-term wealth. Here is a straightforward comparison to illustrate:</p>
+
+<h2>How Fees Compound Over Time</h2>
+
+<p>Consider a $750,000 portfolio growing at an average of 7% annually over 20 years:</p>
+
+<ul>
+  <li><strong>At 0.50% total fees:</strong> Your portfolio grows to approximately $2,534,000</li>
+  <li><strong>At 1.00% total fees:</strong> Approximately $2,172,000</li>
+  <li><strong>At 1.50% total fees:</strong> Approximately $1,860,000</li>
+  <li><strong>At 2.00% total fees:</strong> Approximately $1,592,000</li>
+</ul>
+
+<p>The difference between the lowest and highest fee scenario is nearly <strong>$942,000</strong> — on the same portfolio, with the same market returns.</p>
+
+<p>Important: lower fees do not always mean better value. The key is understanding what you are paying for and whether the services you receive justify the cost. Some advisors provide comprehensive financial planning, tax optimization, and estate coordination that more than offset their fees.</p>
+
+<p>If you would like to understand exactly what you are paying and what you are getting in return, our complimentary fee transparency review can help. Reply to this email to schedule yours.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-9', subject:"How to evaluate your current advisor's performance", previewText:"A simple framework you can use today.", sendDay:49, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Evaluating a financial advisor is not just about investment returns. Here is a practical framework you can use to assess whether your current advisory relationship is serving you well:</p>
+
+<h2>The 5-Point Advisor Evaluation Framework</h2>
+
+<ul>
+  <li><strong>1. Communication.</strong> Does your advisor reach out proactively — at least quarterly — with updates relevant to your situation? Or do you only hear from them when you initiate contact?</li>
+  <li><strong>2. Transparency.</strong> Can you clearly see what you are paying in fees? Does your advisor explain how they are compensated and whether they receive commissions on products they recommend?</li>
+  <li><strong>3. Comprehensiveness.</strong> Is your advisor looking at your full financial picture — investments, insurance, tax strategy, estate planning, and retirement income — or only managing one piece?</li>
+  <li><strong>4. Alignment.</strong> Has your advisor updated your plan to reflect major life changes? A good advisor adjusts your strategy as your circumstances evolve.</li>
+  <li><strong>5. Education.</strong> Does your advisor help you understand <em>why</em> they recommend what they do? You should feel informed, not confused.</li>
+</ul>
+
+<p>If your current advisor scores well on all five points, that is a great sign. If there are gaps, a second opinion can help you identify what might be improved.</p>
+
+<p>We are happy to walk through this framework with you. Reply to this email to set up a conversation.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-10', subject:"Questions to ask before making any financial changes", previewText:"Protect yourself with the right questions.", sendDay:56, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Whether you are considering switching advisors, restructuring your portfolio, or making any significant financial move, asking the right questions upfront can protect you from costly mistakes.</p>
+
+<h2>10 Questions Worth Asking</h2>
+
+<ul>
+  <li>What are the total fees — including fund expenses, platform fees, and advisory fees?</li>
+  <li>Are you a fiduciary? Will you put that in writing?</li>
+  <li>How are you compensated — fee-only, commission, or a combination?</li>
+  <li>What is your investment philosophy, and how does it align with my goals?</li>
+  <li>How will you coordinate with my CPA and estate attorney?</li>
+  <li>What happens to my account if you leave the firm?</li>
+  <li>How often will we meet, and what does ongoing service look like?</li>
+  <li>Can you provide references from clients in a similar situation?</li>
+  <li>What tax implications should I consider before making changes?</li>
+  <li>What is your process for adjusting my plan as my life changes?</li>
+</ul>
+
+<p>These questions apply to any advisor — including us. We believe informed clients make better decisions, and we welcome the scrutiny.</p>
+
+<p>If you would like to discuss any of these questions in the context of your own financial situation, reply to this email. We are here to help — with no agenda other than your confidence.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-11', subject:"Real story: Why the Chen family sought a second opinion", previewText:"What one family discovered about their financial plan.", sendDay:63, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>We recently worked with a family — we will call them the Chens — who had been with the same financial advisor for over a decade. They were not unhappy. They simply wanted to make sure they were on the right track as retirement approached.</p>
+
+<h2>What the Second Opinion Revealed</h2>
+
+<p>The Chens had a solid foundation, but our review uncovered several areas where adjustments could make a meaningful difference:</p>
+
+<ul>
+  <li><strong>Fee overlap.</strong> They were invested in multiple mutual funds that held many of the same underlying stocks — effectively paying multiple layers of fees for similar exposure.</li>
+  <li><strong>Tax-loss harvesting opportunities.</strong> Several positions had unrealized losses that could have been used to offset gains elsewhere in their portfolio.</li>
+  <li><strong>Outdated beneficiary designations.</strong> Two accounts still listed a former spouse as the primary beneficiary — an oversight that could have had serious consequences.</li>
+  <li><strong>Social Security timing.</strong> By adjusting their claiming strategy, we estimated they could meaningfully increase their combined lifetime benefits.</li>
+</ul>
+
+<p>The Chens appreciated the fresh perspective. Some findings confirmed their existing plan was sound; others led to improvements they had not considered.</p>
+
+<p>Every situation is different, but a second opinion can uncover what you did not know to look for. If you are curious about what a review might reveal for you, reply to this email. It is free and completely confidential.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-12', subject:"Your confidential financial review — no strings attached", previewText:"One conversation could change your financial future.", sendDay:70, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Over the past several weeks, we have shared insights on what a financial second opinion can reveal — from hidden fees and tax strategies to beneficiary oversights and advisor evaluation frameworks.</p>
+
+<p>Now we would like to offer you something simple: <strong>a confidential, one-on-one financial review with one of our senior advisors.</strong></p>
+
+<h2>Here Is Exactly What You Will Receive</h2>
+
+<ul>
+  <li>A comprehensive review of your current investment portfolio, insurance coverage, and retirement plan</li>
+  <li>A clear breakdown of your total fees and how they compare to industry benchmarks</li>
+  <li>Identification of any gaps, risks, or missed opportunities</li>
+  <li>A written summary of findings that is yours to keep — regardless of whether you choose to work with us</li>
+</ul>
+
+<h2>Our Commitment to You</h2>
+
+<ul>
+  <li>There is no cost for this review</li>
+  <li>There is no obligation to make any changes or move any accounts</li>
+  <li>Everything you share is held in strict confidence</li>
+  <li>You will never be pressured — this is about education, not sales</li>
+</ul>
+
+<p>If you have been thinking about whether your financial plan is truly optimized for where you are today, this is a simple first step.</p>
+
+<p>Reply to this email or call us at (561) 555-0100 to schedule your review. We look forward to the conversation.</p>
+
+<p>With warm regards,<br/>The FFA North Team</p>` },
 ];
 
 const campaignDefs: { name: string; serviceLine: ServiceLine; description: string; status: CampaignStatus; emails: EmailStep[] }[] = [
-  { name:'Insurance Portfolio Review', serviceLine:'Insurance Review', description:'A 4-email educational series targeting business owners and professionals aged 35-60 who likely haven\'t reviewed their insurance coverage in 3+ years. Addresses common pain points including outdated liability limits, insufficient life insurance for growing families, and the lack of umbrella policies. The goal is to move contacts from awareness to booking a complimentary 15-minute coverage review by positioning FFA as a no-pressure, education-first resource.', status:'active', emails:insuranceEmails },
-  { name:'Annuity Optimization Insights', serviceLine:'Under-Serviced Annuities', description:'Targets existing annuity holders — typically ages 50-70 — who may be unaware of hidden fees, surrender period expirations, or better-performing alternatives. The 4-email sequence progressively educates contacts about M&E charges, rider fees, and withdrawal optimization strategies. Ideal persona: someone who purchased an annuity years ago through another advisor and hasn\'t had a review since. Outcome: book a free 20-minute annuity health check.', status:'active', emails:annuityEmails },
+  { name:'Insurance Portfolio Review', serviceLine:'Insurance Review', description:'A 12-email educational series targeting business owners and professionals aged 35-60 who likely haven\'t reviewed their insurance coverage in 3+ years. Addresses common pain points including outdated liability limits, insufficient life insurance for growing families, and the lack of umbrella policies. The 70-day progressive sequence moves contacts from awareness through education to action, covering coverage gaps, business insurance, umbrella policies, case studies, and second-opinion positioning. The goal is to book a complimentary 15-minute coverage review by positioning FFA as a no-pressure, education-first resource.', status:'active', emails:insuranceEmails },
+  { name:'Annuity Optimization Insights', serviceLine:'Under-Serviced Annuities', description:'Targets existing annuity holders — typically ages 50-70 — who may be unaware of hidden fees, surrender period expirations, or better-performing alternatives. The 12-email, 70-day sequence progressively educates contacts about M&E charges, rider fees, withdrawal optimization strategies, fixed vs. variable annuity differences, interest rate impacts, and 1035 exchange considerations. Ideal persona: someone who purchased an annuity years ago through another advisor and hasn\'t had a review since. Includes real-world case studies and actionable checklists. Outcome: book a free 20-minute annuity health check.', status:'active', emails:annuityEmails },
   { name:'Retirement Readiness Check', serviceLine:'Retirement Planning', description:'A comprehensive 12-email educational series designed for pre-retirees (ages 50-65) who feel uncertain about their retirement readiness. The campaign progressively covers the five critical retirement questions, Social Security claiming and spousal coordination strategies, healthcare cost planning including Medicare and supplements, tax-efficient withdrawal sequencing and Roth conversions, inflation protection, estate planning essentials, and a real-world client case study. Pain points addressed: "Am I saving enough?", "When should I claim Social Security?", "What will healthcare cost me?", and "How do I make my money last?" Outcome: schedule a complimentary 30-minute Retirement Readiness Assessment.', status:'active', emails:retirementEmails },
   { name:'Investment Planning Essentials', serviceLine:'Investment Planning', description:'A comprehensive 12-email educational series for investors of all ages who want clarity on portfolio performance, fees, diversification, and tax efficiency. Targets professionals and business owners who suspect they may be overpaying in fees or holding a poorly diversified portfolio. The campaign progressively covers fee transparency and compounding impact, diversification beyond stocks and bonds, behavioral finance and staying disciplined during volatility, risk tolerance vs. risk capacity, tax-loss harvesting and year-round tax strategies, life milestone-triggered portfolio reviews, and a real-world case study demonstrating the value of a disciplined approach. Outcome: book a complimentary 30-minute Portfolio Analysis with full fee transparency, benchmark comparison, and actionable recommendations.', status:'active', emails:investmentEmails },
-  { name:'Get a Second Opinion', serviceLine:'Second-Opinion Positioning', description:'A trust-building campaign for affluent individuals and families who already have a financial advisor but may not be getting the best advice. Targets high-net-worth contacts ($500K+ in investable assets) who value thoroughness and objectivity. Uses the medical second opinion analogy to normalize the idea of an independent financial review. The 4-email sequence walks contacts through exactly what the process looks like, the top 5 findings from past reviews, and a zero-pressure commitment. Outcome: book a free, confidential Second Opinion Review covering investments, insurance, tax strategy, and estate planning.', status:'draft', emails:secondOpinionEmails },
+  { name:'Get a Second Opinion', serviceLine:'Second-Opinion Positioning', description:'A comprehensive 12-email trust-building campaign for affluent individuals and families who already have a financial advisor but may not be getting the best advice. Targets high-net-worth contacts ($500K+ in investable assets) who value thoroughness and objectivity. Uses the medical second opinion analogy to normalize the idea of an independent financial review. The sequence progressively covers what a second opinion looks like, common findings from past reviews, the fiduciary vs. suitability distinction, fee transparency and compounding impact, a 5-point advisor evaluation framework, essential questions to ask before making changes, an anonymized client case study, and a zero-pressure closing CTA. Outcome: book a free, confidential Second Opinion Review covering investments, insurance, tax strategy, and estate planning.', status:'active', emails:secondOpinionEmails },
 ];
 
 export const campaigns: Campaign[] = campaignDefs.map((def, i) => {
