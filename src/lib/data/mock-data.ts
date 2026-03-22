@@ -988,113 +988,173 @@ const investmentEmails: EmailStep[] = [
 ];
 
 const secondOpinionEmails: EmailStep[] = [
-  { id:'e-5-1', subject:"Thinking about a second opinion on your finances?", previewText:"You'd get one for your health. Why not your wealth?", sendDay:0, status:'active',
-    body:`Hi {{first_name}},\n\nWhen you get a serious medical diagnosis, the first thing most people do is get a second opinion.\n\nBut when it comes to your financial plan — something that affects your family's entire future — most people never get one.\n\nA fresh set of eyes can reveal:\n• Tax strategies you haven't considered\n• Fees you didn't know you were paying\n• Risks you didn't realize you were taking\n• Benefits you're not taking advantage of\n\nOur Second Opinion Review is free, confidential, and zero pressure.\n\nReply to this email and let's set up a time.\n\nWarm regards,\nThe FFA North Team` },
-  { id:'e-5-2', subject:"What a financial second opinion actually looks like", previewText:"No awkward sales pitch. Just answers.", sendDay:4, status:'active',
-    body:`Hi {{first_name}},\n\nHere's exactly what happens:\n\nStep 1: Brief intro call (10 min) — we learn about your situation.\nStep 2: You share whatever documents you're comfortable with.\nStep 3: We do a comprehensive analysis — investments, insurance, tax, estate, retirement.\nStep 4: We walk you through findings in plain English.\nStep 5: You decide what to do with the information.\n\nThat's it. No hard sell. No "limited time offer."\n\nInterested? Reply and we'll get started.\n\nBest,\nThe FFA North Team` },
-  { id:'e-5-3', subject:"5 things a second opinion might uncover", previewText:"The most common findings we see.", sendDay:8, status:'active',
-    body:`Hi {{first_name}},\n\nAfter hundreds of second opinions, here are the top 5 findings:\n\n1. Tax Inefficiency — no tax-loss harvesting or Roth conversion strategy\n2. Overlapping Holdings — same stocks in multiple funds\n3. Outdated Beneficiaries — life changed, forms didn't\n4. Insurance Gaps — too little coverage or overpaying\n5. No Written Plan — hard to measure progress without one\n\nAll fixable. First step is knowing where you stand.\n\nReply if you'd like us to take a look. Free and confidential.\n\nTalk soon,\nThe FFA North Team` },
-  { id:'e-5-4', subject:"Last call: Your free financial second opinion", previewText:"We're here when you're ready.", sendDay:14, status:'active',
-    body:`Hi {{first_name}},\n\nLast email in the series. Here's our promise:\n\n✓ Genuinely free — no hidden fees, no bait-and-switch\n✓ Confidential — what you share stays between us\n✓ Yours to keep — the analysis belongs to you\n✓ Zero pressure — we'll never push you\n\nReply "second opinion" and let's find a time.\n\nOr save this email and reach out whenever you're ready.\n\nWarm regards,\nThe FFA North Team` },
-  { id:'e-5-5', subject:"Why a financial second opinion is like a medical second opinion", previewText:"You would get one for your health. Why not your wealth?", sendDay:21, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-1', subject:"A fresh pair of eyes changes things", previewText:"What a second perspective could reveal about your plan.", sendDay:0, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Imagine your doctor recommends a major surgery. What would you do? Most people would seek a second opinion before making that decision. It is not about distrusting your doctor — it is about making sure you have the full picture.</p>
+<p>When something important is on the line, most people seek a second perspective. We do it with medical diagnoses, legal contracts, even home inspections. Yet when it comes to a financial plan that shapes our family's future, many of us never think to do the same.</p>
 
-<p>Your financial plan deserves the same level of care. Here is why the analogy holds:</p>
+<p>A fresh set of eyes on your finances can surface things that are easy to miss from the inside:</p>
 
 <ul>
-  <li><strong>Diagnosis matters.</strong> Just as two doctors may interpret the same symptoms differently, two advisors may see different opportunities — or risks — in the same portfolio.</li>
-  <li><strong>Treatments vary.</strong> There is rarely one "right" approach. A second perspective can reveal strategies your current advisor may not specialize in.</li>
-  <li><strong>Peace of mind is priceless.</strong> Whether the second opinion confirms your current path or suggests improvements, you walk away more confident.</li>
+  <li><strong>Tax-saving strategies</strong> that may not be part of your current approach</li>
+  <li><strong>Overlooked fees</strong> quietly compounding against your returns</li>
+  <li><strong>Coverage gaps</strong> that could leave your family exposed</li>
 </ul>
 
-<p>A financial second opinion is not about finding fault. It is about making sure the plan you are following is truly the best one for your situation today.</p>
+<p>The goal is not to find fault with what you have. It is to make sure your plan is working as hard as it can for where you are today.</p>
 
-<p>If you would like a fresh, objective look at your financial plan, simply reply to this email. There is no cost and no obligation.</p>
+<p>Would it be helpful to take a quick look together? Simply reply and we will find a convenient time.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-6', subject:"5 red flags that your financial plan needs a review", previewText:"How many of these apply to you?", sendDay:28, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-2', subject:"What a review actually looks like", previewText:"No surprises. Here is the step-by-step process.", sendDay:4, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Even well-constructed financial plans can drift off course over time. Here are five warning signs that it may be time for a closer look:</p>
+<p>One reason people hesitate to get a second opinion on their finances is uncertainty about what the process involves. So let us pull back the curtain.</p>
 
-<h2>Your Financial Plan Red Flag Checklist</h2>
+<p>Here is exactly how it works:</p>
 
 <ul>
-  <li><strong>1. You have not updated your plan in over two years.</strong> Tax laws change, markets shift, and your life evolves. A plan from a few years ago may not reflect where you are today.</li>
-  <li><strong>2. You cannot clearly explain your advisor's fee structure.</strong> If you are unsure what you are paying — or how your advisor is compensated — that is a gap worth closing.</li>
-  <li><strong>3. Your beneficiary designations are outdated.</strong> Marriage, divorce, new children, or the loss of a loved one can all make existing designations incorrect.</li>
-  <li><strong>4. You do not have a written financial plan.</strong> Verbal guidance is not a plan. A written roadmap with specific goals and timelines is essential for measuring progress.</li>
-  <li><strong>5. Your advisor has not proactively contacted you this year.</strong> Regular communication is a sign of attentive service. Silence may indicate you are being overlooked.</li>
+  <li><strong>A brief conversation.</strong> We spend about ten minutes learning what matters most to you right now.</li>
+  <li><strong>You share what you are comfortable with.</strong> Statements, account summaries, insurance policies — whatever you would like us to review.</li>
+  <li><strong>We do the analysis.</strong> Our team looks across investments, insurance, tax positioning, and estate coordination.</li>
+  <li><strong>We walk you through findings in plain language.</strong> No jargon, no pressure — just clear observations.</li>
 </ul>
 
-<p>If even one of these resonated, a second opinion could provide valuable clarity. Reply to this email and we will schedule a confidential review at your convenience.</p>
+<p>After that, the information is yours. You decide whether to act on it, file it away, or simply feel more confident about your current path.</p>
+
+<p>Would it be helpful to take a quick look together? Reply to this email and we will get you scheduled.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-7', subject:"What fiduciary duty means for your money", previewText:"Not all advisors are held to the same standard.", sendDay:35, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-3', subject:"The five most common blind spots", previewText:"What financial reviews uncover again and again.", sendDay:8, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>When it comes to financial advice, there is a critical distinction that many people are unaware of: the difference between the <strong>fiduciary standard</strong> and the <strong>suitability standard</strong>.</p>
+<p>After conducting hundreds of financial reviews, certain patterns come up again and again. These are not dramatic problems — they are quiet blind spots that accumulate over time.</p>
 
-<h2>Fiduciary vs. Suitability: What You Should Know</h2>
-
-<p><strong>Fiduciary standard:</strong> The advisor is legally required to act in your best interest. They must put your needs ahead of their own and disclose any potential conflicts of interest.</p>
-
-<p><strong>Suitability standard:</strong> The advisor must recommend products that are "suitable" for you — but not necessarily the <em>best</em> option. A suitable recommendation can still carry higher fees or conflicts of interest.</p>
-
-<p>Here is why this matters in practice:</p>
+<p>Here are the five findings we see most often:</p>
 
 <ul>
-  <li>Two different investment products may both be "suitable" for your situation, but one could charge significantly higher fees than the other.</li>
-  <li>Under the suitability standard, either recommendation would be acceptable. Under the fiduciary standard, the advisor would be obligated to recommend the lower-cost option if it better serves your interests.</li>
-  <li>Understanding which standard your current advisor follows is one of the most important questions you can ask.</li>
+  <li><strong>Tax inefficiency.</strong> No tax-loss harvesting strategy or Roth conversion planning in place.</li>
+  <li><strong>Overlapping holdings.</strong> Multiple funds owning the same underlying stocks, which reduces true diversification.</li>
+  <li><strong>Outdated beneficiaries.</strong> Life changed, but the forms on file did not keep up.</li>
+  <li><strong>Insurance mismatches.</strong> Either too little coverage or paying more than necessary for existing policies.</li>
 </ul>
 
-<p>If you are not sure which standard your advisor follows, we are happy to help you evaluate your current advisory relationship — no cost, no pressure. Simply reply to this email to get started.</p>
+<p>The encouraging part is that every one of these is fixable once you know it is there. The first step is simply understanding where things stand today.</p>
+
+<p>Would it be helpful to take a quick look together? Just reply to this email and we will set something up.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-8', subject:"The true cost of financial advisor fees", previewText:"Small percentages can add up to surprisingly big numbers.", sendDay:42, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-4', subject:"Why smart people seek second opinions", previewText:"It is not about doubt. It is about confidence.", sendDay:14, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Most investors focus on returns — but fees may have an even bigger impact on your long-term wealth. Here is a straightforward comparison to illustrate:</p>
+<p>There is a common misconception that seeking a second opinion means something is wrong. In reality, the most financially confident people we meet are the ones who actively invite outside perspectives.</p>
 
-<h2>How Fees Compound Over Time</h2>
-
-<p>Consider a $750,000 portfolio growing at an average of 7% annually over 20 years:</p>
+<p>Think of it this way: a second opinion does not replace your current approach. It either confirms you are on the right track — which is valuable peace of mind — or it highlights adjustments worth considering.</p>
 
 <ul>
-  <li><strong>At 0.50% total fees:</strong> Your portfolio grows to approximately $2,534,000</li>
-  <li><strong>At 1.00% total fees:</strong> Approximately $2,172,000</li>
-  <li><strong>At 1.50% total fees:</strong> Approximately $1,860,000</li>
-  <li><strong>At 2.00% total fees:</strong> Approximately $1,592,000</li>
+  <li><strong>Confirmation</strong> means you can move forward with greater confidence</li>
+  <li><strong>New insights</strong> mean you caught something early enough to act on it</li>
+  <li><strong>Either way</strong>, you walk away better informed than before</li>
 </ul>
 
-<p>The difference between the lowest and highest fee scenario is nearly <strong>$942,000</strong> — on the same portfolio, with the same market returns.</p>
+<p>There is no downside to knowing more about your own financial picture. And the conversation is always confidential.</p>
 
-<p>Important: lower fees do not always mean better value. The key is understanding what you are paying for and whether the services you receive justify the cost. Some advisors provide comprehensive financial planning, tax optimization, and estate coordination that more than offset their fees.</p>
-
-<p>If you would like to understand exactly what you are paying and what you are getting in return, our complimentary fee transparency review can help. Reply to this email to schedule yours.</p>
+<p>Would it be helpful to take a quick look together? Reply anytime — or save this email for when the timing feels right.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-9', subject:"How to evaluate your current advisor's performance", previewText:"A simple framework you can use today.", sendDay:49, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-5', subject:"The doctor analogy that changes minds", previewText:"A perspective shift that applies to your finances.", sendDay:21, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Evaluating a financial advisor is not just about investment returns. Here is a practical framework you can use to assess whether your current advisory relationship is serving you well:</p>
+<p>If your doctor recommended a major procedure, you would probably want another physician to weigh in before moving forward. Not because you distrust your doctor — but because important decisions deserve more than one perspective.</p>
 
-<h2>The 5-Point Advisor Evaluation Framework</h2>
+<p>The same logic applies to your financial plan. Here is why:</p>
 
 <ul>
-  <li><strong>1. Communication.</strong> Does your advisor reach out proactively — at least quarterly — with updates relevant to your situation? Or do you only hear from them when you initiate contact?</li>
-  <li><strong>2. Transparency.</strong> Can you clearly see what you are paying in fees? Does your advisor explain how they are compensated and whether they receive commissions on products they recommend?</li>
-  <li><strong>3. Comprehensiveness.</strong> Is your advisor looking at your full financial picture — investments, insurance, tax strategy, estate planning, and retirement income — or only managing one piece?</li>
-  <li><strong>4. Alignment.</strong> Has your advisor updated your plan to reflect major life changes? A good advisor adjusts your strategy as your circumstances evolve.</li>
-  <li><strong>5. Education.</strong> Does your advisor help you understand <em>why</em> they recommend what they do? You should feel informed, not confused.</li>
+  <li><strong>Different eyes see different things.</strong> Two qualified advisors may identify entirely different opportunities in the same portfolio.</li>
+  <li><strong>Approaches vary.</strong> There is rarely a single correct strategy. A second perspective can surface options your current plan may not include.</li>
+  <li><strong>Confidence grows with confirmation.</strong> Even if a review validates your current path, that reassurance has real value.</li>
 </ul>
 
-<p>If your current advisor scores well on all five points, that is a great sign. If there are gaps, a second opinion can help you identify what might be improved.</p>
+<p>A financial second opinion is not about finding fault. It is about making sure your plan reflects where you are today — not where you were when it was first created.</p>
 
-<p>We are happy to walk through this framework with you. Reply to this email to set up a conversation.</p>
+<p>Would it be helpful to take a quick look together? Simply reply and we will find a time that works for you.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-6', subject:"Signs your plan may need a refresh", previewText:"A quick checklist worth running through.", sendDay:28, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Even well-built financial plans can drift off course quietly. Life changes, tax laws shift, and strategies that made sense a few years ago may not fit today. Here are a few signals worth paying attention to:</p>
+
+<ul>
+  <li><strong>Your plan has not been updated in over two years.</strong> Markets evolve, regulations change, and your own goals may have shifted.</li>
+  <li><strong>You are unsure what you are paying in fees.</strong> If your advisor's compensation structure is unclear, that gap is worth closing.</li>
+  <li><strong>Your beneficiary designations may be outdated.</strong> Major life events can make existing designations incorrect without anyone noticing.</li>
+  <li><strong>You do not have a written plan.</strong> Without a documented roadmap, it is difficult to measure progress or hold anyone accountable.</li>
+</ul>
+
+<p>If even one of these resonated, a fresh perspective could provide useful clarity. None of these issues are unusual — they are simply the natural result of time passing.</p>
+
+<p>Would it be helpful to take a quick look together? Reply to this email and we will schedule a confidential conversation at your convenience.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-7', subject:"Fiduciary vs. suitable — big difference", previewText:"Not all financial advice is held to the same bar.", sendDay:35, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>There is a distinction in financial advice that many people are not aware of, and it can meaningfully affect the recommendations you receive. It comes down to two standards.</p>
+
+<p><strong>Fiduciary standard:</strong> The advisor is legally required to act in your best interest and disclose any conflicts of interest.</p>
+
+<p><strong>Suitability standard:</strong> The advisor must recommend products that are "suitable" for you — but not necessarily the best available option.</p>
+
+<p>Here is why the difference matters:</p>
+
+<ul>
+  <li>Two products may both be suitable, yet one could carry significantly higher fees</li>
+  <li>Under the suitability standard, either recommendation is acceptable</li>
+  <li>Under the fiduciary standard, the advisor must prioritize your interests first</li>
+</ul>
+
+<p>Knowing which standard your advisor follows is one of the most valuable questions you can ask. It shapes every recommendation they make on your behalf.</p>
+
+<p>Would it be helpful to take a quick look together at how your current advisory relationship is structured? Simply reply to this email.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-8', subject:"What small fee differences really cost", previewText:"The math behind percentages may surprise you.", sendDay:42, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Most investors focus on returns, which makes sense. But fees can have an equally powerful effect on long-term wealth — because they compound just like returns do, except in the wrong direction.</p>
+
+<p>Consider a hypothetical $750,000 portfolio growing at 7% annually over 20 years at different fee levels:</p>
+
+<ul>
+  <li><strong>At 0.50% fees:</strong> approximately $2,534,000</li>
+  <li><strong>At 1.00% fees:</strong> approximately $2,172,000</li>
+  <li><strong>At 1.50% fees:</strong> approximately $1,860,000</li>
+  <li><strong>At 2.00% fees:</strong> approximately $1,592,000</li>
+</ul>
+
+<p>That is a potential difference of nearly $942,000 on the same portfolio with the same market returns. These are hypothetical figures for illustration, and actual results will vary.</p>
+
+<p>That said, lower fees do not always mean better value. Comprehensive planning, tax optimization, and proactive service can more than justify their cost. The key is understanding what you are paying and what you are receiving in return.</p>
+
+<p>Would it be helpful to take a quick look together at your current fee structure? Reply to this email and we will walk through it with you.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-9', subject:"A simple way to evaluate any advisor", previewText:"Five questions that reveal a lot.", sendDay:49, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Evaluating a financial advisor goes well beyond investment returns. Here is a straightforward framework you can use to assess whether your current advisory relationship is serving you well:</p>
+
+<ul>
+  <li><strong>Communication.</strong> Does your advisor reach out proactively with relevant updates, or do you only hear from them when you initiate contact?</li>
+  <li><strong>Transparency.</strong> Can you clearly see what you are paying in fees and how your advisor is compensated?</li>
+  <li><strong>Comprehensiveness.</strong> Is your advisor looking at your full picture — investments, insurance, tax strategy, and estate planning — or just one piece?</li>
+  <li><strong>Alignment.</strong> Has your plan been updated to reflect major life changes?</li>
+</ul>
+
+<p>If your current advisor scores well across the board, that is a great sign. If there are gaps, they are worth understanding — even small improvements in any of these areas can make a meaningful difference over time.</p>
+
+<p>Would it be helpful to walk through this framework together as it relates to your situation? Just reply to this email.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
   { id:'e-5-10', subject:"Questions to ask before making any financial changes", previewText:"Protect yourself with the right questions.", sendDay:56, status:'active', bodyFormat:'html' as const,
