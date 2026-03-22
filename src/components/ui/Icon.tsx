@@ -6,7 +6,7 @@ import {
   HelpCircle, Send, ChevronDown, ChevronUp, Plus,
   Pencil, Trash2, Eye, Phone, Inbox, Check, X,
   FileText, Clock, MousePointerClick, Info,
-  AlertTriangle, ArrowRight, Copy, Sparkles,
+  AlertTriangle, ArrowRight, Copy, Sparkles, MailPlus,
   Target, TrendingDown, Lightbulb, LayoutDashboard,
   Upload, FileSpreadsheet, CircleAlert, CheckCircle2,
   type LucideProps,
@@ -62,6 +62,7 @@ const ICONS: Record<string, FC<LucideProps>> = {
   'file-spreadsheet': FileSpreadsheet,
   'circle-alert': CircleAlert,
   'check-circle': CheckCircle2,
+  'mail-plus': MailPlus,
 };
 
 export function Icon({

@@ -7,7 +7,8 @@ import { useModal } from '@/lib/context/ModalContext';
 import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Icon } from '@/components/ui/Icon';
-import { BarChart3, Send, Eye, MousePointerClick, MessageSquare, HelpCircle, CalendarDays, Plus, FileText, TrendingUp, Clock, CheckCircle2, Mail } from 'lucide-react';
+import { BarChart3, Send, Eye, MousePointerClick, MessageSquare, HelpCircle, CalendarDays, Clock, CheckCircle2, Mail } from 'lucide-react';
+import { ActivityTimeline } from '@/components/ui/ActivityTimeline';
 import Link from 'next/link';
 
 type TabKey = 'activity' | 'campaigns' | 'engagement';
@@ -194,64 +195,7 @@ export default function AudienceDetailPage() {
           {activeTab === 'activity' && (
             <div className="bg-white rounded-xl border border-neutral-200 p-6">
               <h3 className="text-base font-semibold text-neutral-900 mb-4">Activity Timeline</h3>
-              {contactActivities.length > 0 ? (
-                <div className="space-y-0">
-                  {contactActivities.map((act, i) => {
-                    const typeConfig: Record<string, { iconName: string; color: string; bg: string }> = {
-                      email_sent: { iconName: 'send', color: '#6366f1', bg: '#eef2ff' },
-                      email_opened: { iconName: 'eye', color: '#06b6d4', bg: '#ecfeff' },
-                      email_clicked: { iconName: 'mouse-click', color: '#d97706', bg: '#fffbeb' },
-                      reply_received: { iconName: 'message-square', color: '#059669', bg: '#ecfdf5' },
-                      info_requested: { iconName: 'help-circle', color: '#7c3aed', bg: '#f5f3ff' },
-                      appointment_scheduled: { iconName: 'calendar', color: '#dc2626', bg: '#fef2f2' },
-                      campaign_enrolled: { iconName: 'plus', color: '#6366f1', bg: '#eef2ff' },
-                      note_added: { iconName: 'file-text', color: '#64748b', bg: '#f8fafc' },
-                      stage_changed: { iconName: 'trending-up', color: '#7c3aed', bg: '#f5f3ff' },
-                    };
-                    const tc = typeConfig[act.type] || { iconName: 'clock', color: '#64748b', bg: '#f8fafc' };
-                    const isHighValue = ['reply_received', 'info_requested', 'appointment_scheduled'].includes(act.type);
-
-                    return (
-                      <div key={act.id} className={`flex gap-3 pb-4 transition-colors duration-200 ${isHighValue ? 'bg-amber-50/40 -mx-2 px-2 rounded-lg border-l-2 border-amber-300' : ''}`}>
-                        <div className="flex flex-col items-center">
-                          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ring-2 ring-white shadow-sm"
-                            style={{ backgroundColor: tc.bg, color: tc.color }}>
-                            <Icon name={tc.iconName} className="w-3.5 h-3.5" />
-                          </div>
-                          {i < contactActivities.length - 1 && (
-                            <div className="w-px flex-1 mt-1" style={{ background: `linear-gradient(to bottom, ${tc.color}30, #e5e7eb)` }} />
-                          )}
-                        </div>
-                        <div className="pt-0.5 flex-1 min-w-0">
-                          <p className={`text-[13px] ${isHighValue ? 'text-neutral-900 font-semibold' : 'text-neutral-700'}`}>{act.description}</p>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            <p className="text-[11px] text-neutral-400">
-                              {new Date(act.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                            </p>
-                            {act.campaignName && (
-                              <span className="text-[9px] px-1.5 py-0.5 bg-neutral-100 text-neutral-500 rounded-full">{act.campaignName}</span>
-                            )}
-                          </div>
-                          {act.emailBody && (
-                            <div className="mt-2 bg-neutral-50 border border-neutral-200 rounded-xl p-3">
-                              {act.emailSubject && (
-                                <p className="text-[11px] font-semibold text-neutral-700 mb-1">{act.emailSubject}</p>
-                              )}
-                              <p className="text-[12px] text-neutral-600 leading-relaxed">{act.emailBody}</p>
-                              <p className="text-[10px] text-neutral-400 mt-2">From: {contact.firstName} {contact.lastName} &lt;{contact.email}&gt;</p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <Clock className="w-6 h-6 text-neutral-300 mx-auto mb-2" />
-                  <p className="text-sm text-neutral-500">No activity yet</p>
-                </div>
-              )}
+              <ActivityTimeline activities={contactActivities} />
             </div>
           )}
 

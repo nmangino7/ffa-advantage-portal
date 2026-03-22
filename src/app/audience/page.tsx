@@ -199,7 +199,7 @@ export default function AudiencePage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -223,7 +223,7 @@ export default function AudiencePage() {
                 const daysSince = Math.floor((Date.now() - new Date(contact.lastContactDate).getTime()) / 86400000);
 
                 return (
-                  <tr key={contact.id} className="hover:bg-neutral-50 transition-all duration-200 hover:shadow-sm">
+                  <tr key={contact.id} className="even:bg-neutral-50/50 hover:bg-neutral-50 transition-all duration-200 hover:shadow-sm">
                     <td className="py-3 px-4">
                       <Link href={`/audience/${contact.id}`} className="font-semibold text-indigo-600 hover:text-indigo-800 text-[13px]">
                         {contact.firstName} {contact.lastName}
