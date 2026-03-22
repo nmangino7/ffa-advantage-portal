@@ -23,7 +23,7 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
   const TierIcon = TIER_ICON[lead.tier] || MessageSquare;
 
   return (
-    <div className="bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 hover:shadow-md transition-all duration-200 p-4">
+    <div className="bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 transition-all duration-200 p-4 card-hover">
       <div className="flex items-start gap-3">
         {/* Avatar */}
         <div

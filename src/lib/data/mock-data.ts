@@ -229,14 +229,71 @@ ADVISORS.forEach(a => {
 // ============================================
 
 const insuranceEmails: EmailStep[] = [
-  { id:'e-1-1', subject:"When's the last time you reviewed your insurance coverage?", previewText:"Life changes. Your coverage should too.", sendDay:0, status:'active',
-    body:`Hi {{first_name}},\n\nLife has a way of changing when we least expect it — a new home, a growing family, a career shift. But when was the last time your insurance coverage kept up?\n\nMany people set their policies years ago and haven't revisited them since. That can mean gaps in coverage you didn't know existed, or paying for protection you no longer need.\n\nAt Florida Financial Advisors, we believe everyone deserves a clear picture of where they stand. That's why we're offering a complimentary Insurance Coverage Review — no strings attached.\n\nIn just 15 minutes, we can help you:\n• Identify potential gaps in your current coverage\n• Make sure your beneficiaries are up to date\n• See if you're overpaying for what you have\n\nNo pressure. No sales pitch. Just clarity.\n\nWould that be helpful? Simply reply to this email and we'll set up a time that works for you.\n\nLooking forward to hearing from you,\nThe FFA North Team` },
-  { id:'e-1-2', subject:"3 insurance gaps most people don't know they have", previewText:"Are you accidentally underinsured?", sendDay:3, status:'active',
-    body:`Hi {{first_name}},\n\nDid you know that nearly 40% of Americans are underinsured — and most don't realize it until they need to file a claim?\n\nHere are 3 of the most common gaps we see:\n\n1. Liability Limits That Haven't Kept Up\nIf your net worth has grown since you set your policy, your liability coverage may not fully protect your assets anymore.\n\n2. Life Insurance That's Too Small (or Too Expensive)\nMany people either outgrew their coverage or are paying for a policy type that no longer makes sense for their situation.\n\n3. No Umbrella Policy\nAn umbrella policy is one of the most affordable ways to protect yourself from catastrophic claims — yet most people don't have one.\n\nThe good news? These are easy to fix once you know about them.\n\nWe'd love to help you take a closer look. Just reply "interested" and we'll reach out to schedule a quick, no-pressure review.\n\nWarm regards,\nThe FFA North Team` },
-  { id:'e-1-3', subject:"Your insurance questions, answered", previewText:"We hear these questions all the time.", sendDay:7, status:'active',
-    body:`Hi {{first_name}},\n\nWe talk to people about insurance every day, and the same questions come up again and again:\n\nQ: "Do I really need life insurance if my kids are grown?"\nA: It depends. Life insurance can also be a tool for estate planning, charitable giving, or leaving a legacy.\n\nQ: "Is my employer's coverage enough?"\nA: Usually not. Employer plans often cover only 1-2x your salary — far less than most families need.\n\nQ: "How often should I review my coverage?"\nA: At least every 2-3 years, or after any major life event.\n\nQ: "Can I save money without losing coverage?"\nA: Often, yes. We frequently find ways to restructure policies that maintain or improve coverage while reducing costs.\n\nHave a question we didn't cover? Just hit reply — we're here to help.\n\nBest,\nThe FFA North Team` },
-  { id:'e-1-4', subject:"Last chance: Free insurance coverage review", previewText:"Let's make sure you're fully protected.", sendDay:14, status:'active',
-    body:`Hi {{first_name}},\n\nThis is the last email in our series, and we wanted to reach out one more time.\n\nIf you've been meaning to review your insurance but haven't gotten around to it — we understand. Life's busy.\n\nHere's what a review with us looks like:\n✓ 15-minute phone or video call\n✓ We review your current policies together\n✓ You get a clear picture of where you stand\n✓ Zero obligation — it's completely free\n\nIf you'd like to take us up on this, simply reply with "Let's do it" and we'll get you scheduled.\n\nIf not, no hard feelings. We'll be here whenever you're ready.\n\nAll the best,\nThe FFA North Team` },
+  { id:'e-1-1', subject:"Quick question about your insurance coverage, {{first_name}}", previewText:"A 15-minute review could reveal surprises.", sendDay:0, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>I know you're busy, so I'll keep this brief.</p>
+<p>I came across something that surprised me recently: <strong>according to industry research, nearly 6 in 10 Americans haven't reviewed their insurance policies in the last three years</strong> — even though most have experienced at least one major life change in that time. A new home, a growing family, a career move, or even changes in the market can quietly create gaps between what you <em>have</em> and what you actually <em>need</em>.</p>
+<p>I'm not writing to sell you anything. I'm writing because we offer a <strong>complimentary Insurance Coverage Review</strong> — a quick, no-obligation conversation where we simply help you see where you stand today. Many people discover they're either overpaying or underprotected, and a fresh set of eyes can make a real difference.</p>
+<p>The review takes about 15 minutes and covers:</p>
+<ul>
+<li>Whether your current coverage still aligns with your life today</li>
+<li>Any gaps that may have developed over time</li>
+<li>Opportunities to potentially reduce costs without sacrificing protection</li>
+</ul>
+<p><strong>There are three easy ways to connect — pick whichever feels right:</strong></p>
+<ul>
+<li>Reply to this email with a day and time that works for you</li>
+<li>Call us directly at (561) 555-0100</li>
+<li>Book online anytime at ffa.com/review</li>
+</ul>
+<p>No pressure at all. If now isn't the right time, I completely understand.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Insurance products involve risk and may not be suitable for all individuals. No specific product recommendations are being made in this message. Past results do not guarantee future outcomes.</p>` },
+  { id:'e-1-2', subject:"The hidden gap in most insurance plans (2-min read)", previewText:"73% of families we review discover at least one gap.", sendDay:3, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>No pitch today — just something I thought was worth sharing.</p>
+<p>After reviewing hundreds of insurance portfolios over the years, we've noticed a pattern: <strong>73% of families we work with discover at least one meaningful gap in their coverage</strong>. Not because they made a mistake, but because life moved forward and their policies didn't.</p>
+<p>Here are three of the most common hidden gaps we see — and they tend to catch people off guard:</p>
+<ul>
+<li><strong>Liability limits that haven't kept pace with net worth.</strong> If your assets have grown since your policy was written, you may be exposed in ways your current coverage wasn't designed to handle.</li>
+<li><strong>Life insurance that no longer matches your life stage.</strong> Coverage purchased when the kids were small may not reflect your needs today — whether that means you're overpaying or, in some cases, underprotected for new responsibilities like aging parents or a business.</li>
+<li><strong>The missing umbrella.</strong> An umbrella policy is one of the most cost-effective ways to add a significant layer of protection, yet most families don't have one. For many, it can cost less than a dollar a day.</li>
+</ul>
+<p>None of these are urgent emergencies. But they're the kind of thing that's <em>much</em> better to discover on your own terms than at claim time.</p>
+<p>If any of this resonated, I'm happy to answer questions — just reply to this email. No strings attached.</p>
+<p>Best,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. The information provided is for general educational purposes only and does not constitute specific insurance advice. Individual coverage needs vary. Insurance products involve risk and may not be suitable for all individuals.</p>` },
+  { id:'e-1-3', subject:"How a Tampa family saved $3,200/year on coverage", previewText:"A real story about what a simple review uncovered.", sendDay:7, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>I wanted to share a quick story — with permission — because it's a good example of what a fresh look at coverage can uncover.</p>
+<p><strong>The situation:</strong> A family in the Tampa area (we'll call them the Garcias) came to us last year. They had auto, home, and life insurance through three different carriers — policies they'd set up over the course of a decade. They weren't unhappy, but they hadn't reviewed anything in about five years.</p>
+<p><strong>What we found:</strong> During a 20-minute review, we discovered two things:</p>
+<ul>
+<li>They were carrying duplicate disability coverage — one through Mr. Garcia's employer and a private policy from years earlier that overlapped almost entirely. Eliminating the redundancy saved them <strong>$2,400 per year</strong>.</li>
+<li>Their auto policies weren't bundled. A simple multi-policy adjustment with the same carrier saved another <strong>$800 annually</strong> — with no reduction in coverage.</li>
+</ul>
+<p><strong>The result:</strong> The Garcias kept the same (or better) protection across the board and redirected $3,200 a year toward their daughter's college savings plan. The whole process took less than a week.</p>
+<p>Every family's situation is different, and not every review produces savings like this. But the Garcias told us they were glad they took that first step.</p>
+<p><em>Would this kind of review be worth exploring for your situation?</em> If so, I'd be happy to set aside 15 minutes. Just reply and let me know.</p>
+<p>All the best,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. The story above is based on an actual client experience; names and details have been changed for privacy. Individual results vary — past outcomes do not guarantee future results. No specific product recommendations are being made in this message.</p>` },
+  { id:'e-1-4', subject:"Still thinking it over? No pressure at all, {{first_name}}", previewText:"Plus a free checklist — yours to keep either way.", sendDay:14, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>I've sent a couple of emails over the past two weeks, and I realize you may not have had a chance to read them — or they might not have been relevant right now. Either way, <strong>completely fine</strong>.</p>
+<p>I'm not here to follow up until you say yes. I'm here because I genuinely think a periodic insurance check-in is one of the most underrated financial moves a family can make — and most people simply don't have the time to initiate it on their own.</p>
+<p>In case it's useful, I put together a quick <strong>"5-Minute Insurance Health Check"</strong> — a simple checklist you can run through on your own, no advisor needed:</p>
+<ul>
+<li>When was each of your policies last updated?</li>
+<li>Have your beneficiaries changed since your policies were written?</li>
+<li>Has your home value, income, or family size changed significantly?</li>
+<li>Do you have liability coverage that matches your current net worth?</li>
+<li>Are you paying for any overlapping or redundant coverage?</li>
+</ul>
+<p>If you go through that list and everything checks out — great. You'll have peace of mind, and that's a win.</p>
+<p>If something gives you pause, we're here to help you think it through — no cost, no obligation.</p>
+<p><strong>And if this just isn't a priority right now, I respect that.</strong> Simply reply <em>"later"</em> and I'll circle back in six months. No hard feelings whatsoever.</p>
+<p>Wishing you and your family all the best,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. The checklist above is provided for general informational purposes only and does not constitute specific insurance advice. Individual coverage needs vary. Insurance products involve risk and may not be suitable for all individuals.</p>` },
   { id:'e-1-5', subject:"The hidden cost of outdated coverage", previewText:"Life changes create coverage gaps you can\u2019t afford to ignore.", sendDay:21, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
 <p>Here\u2019s something we see far too often: a client comes in with a policy they purchased ten years ago \u2014 before the second child, before the new home, before the business took off. On paper, they\u2019re \u201ccovered.\u201d In reality, they have significant gaps.</p>

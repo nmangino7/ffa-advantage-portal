@@ -37,7 +37,7 @@ export function ContentCard({ file, onDelete, onPreview, onDownload, thumbnailUr
   const isPdf = file.mimeType === 'application/pdf';
 
   return (
-    <div className="bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 hover:shadow-md transition-all duration-200 overflow-hidden group">
+    <div className="bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 transition-all duration-200 overflow-hidden group card-hover">
       {/* Thumbnail */}
       <div className="h-32 bg-neutral-50 flex items-center justify-center relative overflow-hidden">
         {isImage && thumbnailUrl ? (
