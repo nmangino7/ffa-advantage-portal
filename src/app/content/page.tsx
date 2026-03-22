@@ -6,15 +6,24 @@ import { useContent } from '@/lib/context/ContentContext';
 import { useModal } from '@/lib/context/ModalContext';
 import { useToast } from '@/lib/context/ToastContext';
 import { SERVICE_LINE_CONFIG, SERVICE_LINES, type ServiceLine, type ContentTemplate } from '@/lib/types';
+import { PRESENTATIONS, type PresentationDeck } from '@/lib/data/presentations';
 import { EmailPreviewCard } from '@/components/ui/EmailPreviewCard';
 import { FileUploadZone } from '@/components/ui/FileUploadZone';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { SkeletonCard } from '@/components/ui/SkeletonCard';
 import { Icon } from '@/components/ui/Icon';
-import { Plus, Search, Mail, FolderOpen, LayoutGrid, Sparkles } from 'lucide-react';
+import { Plus, Search, Mail, FolderOpen, LayoutGrid, Sparkles, Presentation, Download, Eye, ChevronDown, ChevronUp, FileText } from 'lucide-react';
 import Link from 'next/link';
 
-type ViewTab = 'all' | 'files' | 'templates';
+type ViewTab = 'all' | 'files' | 'templates' | 'presentations';
+
+const SERVICE_LINE_COLOR_MAP: Record<string, string> = {
+  'Insurance Review': '#2563eb',
+  'Under-Serviced Annuities': '#7c3aed',
+  'Retirement Planning': '#059669',
+  'Investment Planning': '#d97706',
+  'Second-Opinion Positioning': '#dc2626',
+};
 
 export default function ContentLibraryPage() {
   const { campaigns, customTemplates, isHydrated } = usePortal();
@@ -27,6 +36,8 @@ export default function ContentLibraryPage() {
   const [search, setSearch] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
+  const [expandedDeckId, setExpandedDeckId] = useState<string | null>(null);
+  const [downloadingDeckId, setDownloadingDeckId] = useState<string | null>(null);
 
   // Generate thumbnails for image files
   useEffect(() => {
@@ -94,6 +105,22 @@ export default function ContentLibraryPage() {
     return result;
   }, [files, serviceFilter, search]);
 
+  const filteredPresentations = useMemo(() => {
+    let result = PRESENTATIONS;
+    if (serviceFilter !== 'all') {
+      result = result.filter(p => p.serviceLine === serviceFilter);
+    }
+    if (search) {
+      const q = search.toLowerCase();
+      result = result.filter(p =>
+        p.title.toLowerCase().includes(q) ||
+        p.subtitle.toLowerCase().includes(q) ||
+        p.serviceLine.toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [serviceFilter, search]);
+
   const handleUpload = useCallback(async (fileList: File[]) => {
     for (const file of fileList) {
       await uploadFile(file);
@@ -134,8 +161,37 @@ export default function ContentLibraryPage() {
     URL.revokeObjectURL(url);
   }, [files, getFileUrl]);
 
+  const handleDownloadPresentation = useCallback(async (deck: PresentationDeck) => {
+    setDownloadingDeckId(deck.id);
+    try {
+      const response = await fetch('/api/ai/generate-presentation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deckId: deck.id }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate presentation');
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${deck.title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Presentation downloaded successfully');
+    } catch {
+      showToast('Failed to generate presentation PDF');
+    } finally {
+      setDownloadingDeckId(null);
+    }
+  }, [showToast]);
+
   const showFiles = viewTab === 'all' || viewTab === 'files';
   const showTemplates = viewTab === 'all' || viewTab === 'templates';
+  const showPresentations = viewTab === 'all' || viewTab === 'presentations';
 
   if (!isHydrated) {
     return (
@@ -157,7 +213,7 @@ export default function ContentLibraryPage() {
         <div>
           <h1 className="text-2xl font-semibold text-neutral-900">Content</h1>
           <p className="text-sm text-neutral-500 mt-1">
-            {files.length} files and {allTemplates.length} email templates
+            {files.length} files, {allTemplates.length} email templates, and {PRESENTATIONS.length} presentations
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -192,15 +248,17 @@ export default function ContentLibraryPage() {
             { key: 'all' as ViewTab, label: 'All', icon: LayoutGrid },
             { key: 'files' as ViewTab, label: `Files (${files.length})`, icon: FolderOpen },
             { key: 'templates' as ViewTab, label: `Templates (${allTemplates.length})`, icon: Mail },
+            { key: 'presentations' as ViewTab, label: `Presentations (${PRESENTATIONS.length})`, icon: Presentation },
           ]).map(tab => (
             <button
               key={tab.key}
-              onClick={() => { setViewTab(tab.key); setExpandedId(null); }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+              onClick={() => { setViewTab(tab.key); setExpandedId(null); setExpandedDeckId(null); }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all duration-300 ${
                 viewTab === tab.key
-                  ? 'bg-white text-neutral-900 shadow-sm'
+                  ? 'bg-white text-neutral-900 shadow-md'
                   : 'text-neutral-500 hover:text-neutral-700 hover:bg-white/50'
               }`}
+              style={viewTab === tab.key ? { boxShadow: '0 2px 8px rgba(99,102,241,0.12)' } : {}}
             >
               <tab.icon className="w-3.5 h-3.5" />
               {tab.label}
@@ -214,17 +272,17 @@ export default function ContentLibraryPage() {
             type="text"
             placeholder="Search content..."
             value={search}
-            onChange={e => { setSearch(e.target.value); setExpandedId(null); }}
-            className="w-full pl-9 pr-4 py-2 rounded-lg border border-neutral-200 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 bg-white"
+            onChange={e => { setSearch(e.target.value); setExpandedId(null); setExpandedDeckId(null); }}
+            className="w-full pl-9 pr-4 py-2 rounded-lg border border-neutral-200 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white transition-all duration-200"
           />
         </div>
       </div>
 
-      {/* Service Line Filters (shown for templates view) */}
-      {showTemplates && (
+      {/* Service Line Filters (shown for templates and presentations view) */}
+      {(showTemplates || showPresentations) && (
         <div className="flex flex-wrap gap-2 mb-6">
           <button
-            onClick={() => { setServiceFilter('all'); setExpandedId(null); }}
+            onClick={() => { setServiceFilter('all'); setExpandedId(null); setExpandedDeckId(null); }}
             className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
               serviceFilter === 'all'
                 ? 'bg-neutral-900 text-white'
@@ -239,7 +297,7 @@ export default function ContentLibraryPage() {
             return (
               <button
                 key={sl}
-                onClick={() => { setServiceFilter(sl); setExpandedId(null); }}
+                onClick={() => { setServiceFilter(sl); setExpandedId(null); setExpandedDeckId(null); }}
                 className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors flex items-center gap-1.5 ${
                   serviceFilter === sl
                     ? 'text-white'
@@ -301,6 +359,128 @@ export default function ContentLibraryPage() {
         </div>
       )}
 
+      {/* Presentations Section */}
+      {showPresentations && (
+        <div className="mb-8">
+          {viewTab === 'all' && (
+            <h2 className="text-sm font-semibold text-neutral-900 mb-4 uppercase tracking-wider section-divider">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+              Presentations
+            </h2>
+          )}
+
+          {filteredPresentations.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+              {filteredPresentations.map(deck => {
+                const accentColor = SERVICE_LINE_COLOR_MAP[deck.serviceLine] || '#6366f1';
+                const isExpanded = expandedDeckId === deck.id;
+                const isDownloading = downloadingDeckId === deck.id;
+
+                return (
+                  <div
+                    key={deck.id}
+                    className="bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-md transition-shadow"
+                    style={{ borderLeftWidth: '4px', borderLeftColor: accentColor }}
+                  >
+                    <div className="p-5">
+                      {/* Service line badge + slide count */}
+                      <div className="flex items-center justify-between mb-3">
+                        <span
+                          className="text-xs font-semibold px-2.5 py-1 rounded-full"
+                          style={{ color: accentColor, backgroundColor: `${accentColor}15` }}
+                        >
+                          {deck.serviceLine}
+                        </span>
+                        <span className="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded-full flex items-center gap-1">
+                          <FileText className="w-3 h-3" />
+                          {deck.slideCount} slides
+                        </span>
+                      </div>
+
+                      {/* Title + subtitle */}
+                      <h3 className="text-sm font-semibold text-neutral-900 leading-snug mb-1">
+                        {deck.title}
+                      </h3>
+                      <p className="text-xs text-neutral-500 mb-4 leading-relaxed">
+                        {deck.subtitle}
+                      </p>
+
+                      {/* Action buttons */}
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setExpandedDeckId(isExpanded ? null : deck.id)}
+                          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-neutral-200 text-neutral-700 hover:bg-neutral-50 text-xs font-semibold transition-colors"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                          Preview
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                        <button
+                          onClick={() => handleDownloadPresentation(deck)}
+                          disabled={isDownloading}
+                          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-white text-xs font-semibold transition-all disabled:opacity-60"
+                          style={{ background: `linear-gradient(135deg, ${accentColor}, ${accentColor}dd)` }}
+                        >
+                          {isDownloading ? (
+                            <>
+                              <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                              </svg>
+                              Generating...
+                            </>
+                          ) : (
+                            <>
+                              <Download className="w-3.5 h-3.5" />
+                              Download PDF
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Expanded slide list */}
+                    {isExpanded && (
+                      <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-4">
+                        <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">
+                          Slide Outline
+                        </p>
+                        <ol className="space-y-1.5">
+                          {deck.slides.map((slide, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-xs">
+                              <span
+                                className="w-5 h-5 rounded-full flex items-center justify-center text-white font-bold shrink-0 mt-0.5"
+                                style={{ backgroundColor: accentColor, fontSize: '9px' }}
+                              >
+                                {idx + 1}
+                              </span>
+                              <div className="min-w-0">
+                                <span className="font-medium text-neutral-800">{slide.title}</span>
+                                {slide.type !== 'content' && (
+                                  <span className="ml-1.5 text-neutral-400 capitalize">
+                                    ({slide.type.replace('-', ' ')})
+                                  </span>
+                                )}
+                              </div>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <Presentation className="w-8 h-8 text-neutral-300 mx-auto mb-3" />
+              <h3 className="text-base font-semibold text-neutral-900 mb-1">No presentations match your search</h3>
+              <p className="text-sm text-neutral-500">Try adjusting your search or filter.</p>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Templates Section */}
       {showTemplates && (
         <div>
@@ -315,6 +495,7 @@ export default function ContentLibraryPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {filteredTemplates.map(template => (
                 <EmailPreviewCard
+                  /* card-hover-premium applied via EmailPreviewCard wrapper */
                   key={template.template.id}
                   template={template}
                   expanded={expandedId === template.template.id}
