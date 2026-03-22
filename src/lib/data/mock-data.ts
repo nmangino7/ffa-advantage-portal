@@ -1157,50 +1157,41 @@ const secondOpinionEmails: EmailStep[] = [
 <p>Would it be helpful to walk through this framework together as it relates to your situation? Just reply to this email.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-10', subject:"Questions to ask before making any financial changes", previewText:"Protect yourself with the right questions.", sendDay:56, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-10', subject:"Questions worth asking any advisor", previewText:"Use these before making financial changes.", sendDay:56, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Whether you are considering switching advisors, restructuring your portfolio, or making any significant financial move, asking the right questions upfront can protect you from costly mistakes.</p>
+<p>Whether you are considering a new advisor, restructuring your portfolio, or making any significant financial move, the right questions upfront can save you from costly surprises down the road.</p>
 
-<h2>10 Questions Worth Asking</h2>
+<p>Here are a few worth keeping in your back pocket:</p>
 
 <ul>
-  <li>What are the total fees — including fund expenses, platform fees, and advisory fees?</li>
-  <li>Are you a fiduciary? Will you put that in writing?</li>
-  <li>How are you compensated — fee-only, commission, or a combination?</li>
-  <li>What is your investment philosophy, and how does it align with my goals?</li>
+  <li>What are the total fees — including fund expenses, platform costs, and advisory charges?</li>
+  <li>Are you a fiduciary, and will you put that in writing?</li>
   <li>How will you coordinate with my CPA and estate attorney?</li>
-  <li>What happens to my account if you leave the firm?</li>
-  <li>How often will we meet, and what does ongoing service look like?</li>
-  <li>Can you provide references from clients in a similar situation?</li>
-  <li>What tax implications should I consider before making changes?</li>
-  <li>What is your process for adjusting my plan as my life changes?</li>
+  <li>What does ongoing service look like after the initial plan is built?</li>
 </ul>
 
-<p>These questions apply to any advisor — including us. We believe informed clients make better decisions, and we welcome the scrutiny.</p>
+<p>These questions apply to any advisor — including us. We believe informed clients make better decisions, and we welcome the scrutiny. The more you understand about how your advisor operates, the more confidence you will have in the relationship.</p>
 
-<p>If you would like to discuss any of these questions in the context of your own financial situation, reply to this email. We are here to help — with no agenda other than your confidence.</p>
+<p>Would it be helpful to discuss any of these in the context of your own situation? Reply to this email and we will set up a time to talk.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-11', subject:"Real story: Why the Chen family sought a second opinion", previewText:"What one family discovered about their financial plan.", sendDay:63, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-11', subject:"What the Chen family discovered", previewText:"A real story about the value of a fresh look.", sendDay:63, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>We recently worked with a family — we will call them the Chens — who had been with the same financial advisor for over a decade. They were not unhappy. They simply wanted to make sure they were on the right track as retirement approached.</p>
+<p>We recently worked with a family — we will call them the Chens — who had been with the same advisor for over a decade. They were not unhappy. They simply wanted confirmation that their plan was still on track as retirement drew closer.</p>
 
-<h2>What the Second Opinion Revealed</h2>
-
-<p>The Chens had a solid foundation, but our review uncovered several areas where adjustments could make a meaningful difference:</p>
+<p>Their foundation was solid, but our review uncovered a few areas where adjustments could help:</p>
 
 <ul>
-  <li><strong>Fee overlap.</strong> They were invested in multiple mutual funds that held many of the same underlying stocks — effectively paying multiple layers of fees for similar exposure.</li>
-  <li><strong>Tax-loss harvesting opportunities.</strong> Several positions had unrealized losses that could have been used to offset gains elsewhere in their portfolio.</li>
-  <li><strong>Outdated beneficiary designations.</strong> Two accounts still listed a former spouse as the primary beneficiary — an oversight that could have had serious consequences.</li>
-  <li><strong>Social Security timing.</strong> By adjusting their claiming strategy, we estimated they could meaningfully increase their combined lifetime benefits.</li>
+  <li><strong>Fee overlap.</strong> Multiple mutual funds held the same underlying stocks, meaning they were paying layered fees for similar exposure.</li>
+  <li><strong>Unrealized tax opportunities.</strong> Several positions had losses that could have offset gains elsewhere in the portfolio.</li>
+  <li><strong>Outdated beneficiaries.</strong> Two accounts still named a former spouse — an oversight with potentially serious consequences.</li>
 </ul>
 
-<p>The Chens appreciated the fresh perspective. Some findings confirmed their existing plan was sound; others led to improvements they had not considered.</p>
+<p>Some findings confirmed their existing plan was sound. Others led to improvements they had not considered. The Chens told us the peace of mind alone was worth the conversation.</p>
 
-<p>Every situation is different, but a second opinion can uncover what you did not know to look for. If you are curious about what a review might reveal for you, reply to this email. It is free and completely confidential.</p>
+<p>Every situation is different, and past results do not predict future outcomes. But a second opinion can surface what you did not know to look for. Would it be helpful to take a quick look together? Reply to this email — it is confidential and there is no obligation.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
   { id:'e-5-12', subject:"Your confidential financial review — no strings attached", previewText:"One conversation could change your financial future.", sendDay:70, status:'active', bodyFormat:'html' as const,

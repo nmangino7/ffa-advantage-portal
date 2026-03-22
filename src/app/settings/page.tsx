@@ -5,7 +5,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { usePersistedState } from '@/lib/hooks/usePersistedState';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useToast } from '@/lib/context/ToastContext';
-import { Check, RotateCcw, Download, Info, Zap, Mail, Loader2, CheckCircle2 } from 'lucide-react';
+import { Check, RotateCcw, Download, Info, Zap, Mail, Loader2, CheckCircle2, ChevronDown, ChevronRight, Clock, ShieldCheck } from 'lucide-react';
 import { getEmailConfig, saveEmailConfig, type EmailConfig } from '@/lib/email-service';
 
 const sections = ['General', 'Email Integration', 'HubSpot', 'Compliance', 'Architecture', 'Roadmap'] as const;

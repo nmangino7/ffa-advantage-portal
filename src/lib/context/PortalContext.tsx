@@ -14,6 +14,32 @@ const KEYS = {
   version: 'ffa-storage-version',
 } as const;
 
+// ─── Portal summary type (for AI Copilot) ───────────────────
+export interface PortalSummary {
+  totalContacts: number;
+  byStage: Record<string, number>;
+  topContacts: Array<{
+    name: string;
+    intentScore: number;
+    stage: string;
+    company: string;
+    daysSinceContact: number;
+  }>;
+  campaigns: Array<{
+    name: string;
+    enrolled: number;
+    openRate: number;
+    status: string;
+  }>;
+  recentActivity: Array<{
+    contactName: string;
+    type: string;
+    description: string;
+    timestamp: string;
+  }>;
+  warmLeads: number;
+}
+
 // ─── Context type ────────────────────────────────────────────
 interface PortalContextType {
   contacts: Contact[];
@@ -22,6 +48,7 @@ interface PortalContextType {
   customTemplates: EmailStep[];
   advisors: Advisor[];
   isHydrated: boolean;
+  getPortalSummary: () => PortalSummary;
   enrollContact: (contactId: string, campaignIds: string[]) => void;
   assignAdvisor: (contactId: string, advisorName: string) => void;
   getAdvisorByName: (name: string) => Advisor | undefined;
@@ -327,6 +354,54 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     setCustomTemplates(prev => prev.filter(t => t.id !== id));
   }, []);
 
+  const getPortalSummary = useCallback((): PortalSummary => {
+    const now = Date.now();
+    const dayMs = 86_400_000;
+
+    const byStage: Record<string, number> = {};
+    for (const c of contacts) {
+      byStage[c.stage] = (byStage[c.stage] || 0) + 1;
+    }
+
+    const topContacts = [...contacts]
+      .sort((a, b) => b.intentScore - a.intentScore)
+      .slice(0, 10)
+      .map(c => ({
+        name: `${c.firstName} ${c.lastName}`,
+        intentScore: c.intentScore,
+        stage: c.stage,
+        company: c.company,
+        daysSinceContact: Math.round((now - new Date(c.lastContactDate).getTime()) / dayMs),
+      }));
+
+    const campaignSummaries = campaigns.map(c => ({
+      name: c.name,
+      enrolled: c.enrolledCount,
+      openRate: c.openRate,
+      status: c.status,
+    }));
+
+    const recentActivity = activities.slice(0, 10).map(a => ({
+      contactName: a.contactName,
+      type: a.type,
+      description: a.description,
+      timestamp: a.timestamp,
+    }));
+
+    const warmLeads = contacts.filter(c =>
+      c.intentScore >= 60 || c.stage === 'intent' || c.stage === 'qualified'
+    ).length;
+
+    return {
+      totalContacts: contacts.length,
+      byStage,
+      topContacts,
+      campaigns: campaignSummaries,
+      recentActivity,
+      warmLeads,
+    };
+  }, [contacts, campaigns, activities]);
+
   const resetToDefaults = useCallback(() => {
     clearAllData();
     setContacts([...seedContacts]);
@@ -343,7 +418,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   return (
     <PortalContext.Provider value={{
       contacts, campaigns, activities, customTemplates, advisors: seedAdvisors, isHydrated,
-      enrollContact, assignAdvisor, getAdvisorByName, scheduleCall,
+      getPortalSummary, enrollContact, assignAdvisor, getAdvisorByName, scheduleCall,
       addCampaign, updateCampaign, duplicateCampaign, toggleCampaignStatus,
       importContacts, moveContactStage, addTemplate, updateTemplate, deleteTemplate,
       resetToDefaults,
