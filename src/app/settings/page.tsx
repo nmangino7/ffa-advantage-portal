@@ -328,23 +328,60 @@ function EmailIntegrationSection() {
         )}
 
         {config.provider === 'resend' && (
-          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-3 mb-4">
-            <h3 className="text-xs font-semibold text-emerald-900">Resend Configuration</h3>
-            <p className="text-[10px] text-emerald-700">Get your API key from <strong>resend.com/api-keys</strong>. Resend is the simplest option — just paste your API key and you&apos;re ready to send.</p>
-            <div>
-              <label className="block text-xs font-medium text-neutral-500 mb-1">API Key</label>
-              <input type="password" value={(config as any).resendApiKey || ''} onChange={e => updateConfig({ resendApiKey: e.target.value } as any)} placeholder="re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" className="w-full px-3 py-2 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+          <div className="space-y-3 mb-4">
+            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-3">
+              <h3 className="text-xs font-semibold text-emerald-900">Resend Configuration</h3>
+              <p className="text-[10px] text-emerald-700">Get your API key from <strong>resend.com/api-keys</strong>. Resend is the simplest option — just paste your API key and you&apos;re ready to send.</p>
+              <div>
+                <label className="block text-xs font-medium text-neutral-500 mb-1">API Key</label>
+                <input type="password" value={(config as any).resendApiKey || ''} onChange={e => updateConfig({ resendApiKey: e.target.value } as any)} placeholder="re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" className="w-full px-3 py-2 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+              </div>
+            </div>
+            <div className="p-4 rounded-xl bg-amber-50 border border-amber-300 space-y-3">
+              <div className="flex items-start gap-2">
+                <span className="text-amber-600 text-base leading-none mt-0.5">&#9888;</span>
+                <div>
+                  <h3 className="text-xs font-semibold text-amber-900">Domain Verification Required</h3>
+                  <p className="text-[10px] text-amber-800 mt-1">To avoid spam folders, verify your sending domain in Resend. Without this, emails are sent from Resend&apos;s shared domain and may be flagged.</p>
+                </div>
+              </div>
+              <ol className="text-[10px] text-amber-900 space-y-1.5 pl-5 list-decimal">
+                <li>Go to <strong>resend.com &rarr; Domains &rarr; Add Domain</strong></li>
+                <li>Enter your domain (e.g., <code className="bg-amber-100 px-1 rounded">georgiafa.com</code>)</li>
+                <li>Add the <strong>DNS records</strong> Resend provides (MX, TXT for SPF, DKIM CNAME)</li>
+                <li>Click <strong>&quot;Verify DNS Records&quot;</strong> in Resend dashboard</li>
+                <li>Once verified, update your <strong>From Email</strong> below to use your domain</li>
+              </ol>
             </div>
           </div>
         )}
 
         {config.provider === 'sendgrid' && (
-          <div className="p-4 rounded-xl bg-indigo-50 border border-indigo-200 space-y-3 mb-4">
-            <h3 className="text-xs font-semibold text-indigo-900">SendGrid Configuration</h3>
-            <p className="text-[10px] text-indigo-700">Get your API key from <strong>app.sendgrid.com &rarr; Settings &rarr; API Keys</strong>. Use a key with &quot;Mail Send&quot; permission.</p>
-            <div>
-              <label className="block text-xs font-medium text-neutral-500 mb-1">API Key</label>
-              <input type="password" value={(config as any).sendgridApiKey || ''} onChange={e => updateConfig({ sendgridApiKey: e.target.value } as any)} placeholder="SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" className="w-full px-3 py-2 rounded-lg border border-indigo-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+          <div className="space-y-3 mb-4">
+            <div className="p-4 rounded-xl bg-indigo-50 border border-indigo-200 space-y-3">
+              <h3 className="text-xs font-semibold text-indigo-900">SendGrid Configuration</h3>
+              <p className="text-[10px] text-indigo-700">Get your API key from <strong>app.sendgrid.com &rarr; Settings &rarr; API Keys</strong>. Use a key with &quot;Mail Send&quot; permission.</p>
+              <div>
+                <label className="block text-xs font-medium text-neutral-500 mb-1">API Key</label>
+                <input type="password" value={(config as any).sendgridApiKey || ''} onChange={e => updateConfig({ sendgridApiKey: e.target.value } as any)} placeholder="SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" className="w-full px-3 py-2 rounded-lg border border-indigo-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+              </div>
+            </div>
+            <div className="p-4 rounded-xl bg-amber-50 border border-amber-300 space-y-3">
+              <div className="flex items-start gap-2">
+                <span className="text-amber-600 text-base leading-none mt-0.5">&#9888;</span>
+                <div>
+                  <h3 className="text-xs font-semibold text-amber-900">Domain Authentication Required</h3>
+                  <p className="text-[10px] text-amber-800 mt-1">Emails will go to <strong>spam</strong> unless you authenticate your sending domain in SendGrid. This removes the &quot;via sendgrid.net&quot; label and passes Gmail&apos;s authentication checks.</p>
+                </div>
+              </div>
+              <ol className="text-[10px] text-amber-900 space-y-1.5 pl-5 list-decimal">
+                <li>Go to <strong>app.sendgrid.com &rarr; Settings &rarr; Sender Authentication</strong></li>
+                <li>Click <strong>&quot;Authenticate Your Domain&quot;</strong></li>
+                <li>Enter your sending domain (e.g., <code className="bg-amber-100 px-1 rounded">georgiafa.com</code>)</li>
+                <li>SendGrid will give you <strong>3 CNAME records</strong> &mdash; add them to your DNS provider (GoDaddy, Cloudflare, etc.)</li>
+                <li>Return to SendGrid and click <strong>&quot;Verify&quot;</strong></li>
+                <li>Once verified, the &quot;via sendgrid.net&quot; label disappears and emails land in inbox</li>
+              </ol>
             </div>
           </div>
         )}

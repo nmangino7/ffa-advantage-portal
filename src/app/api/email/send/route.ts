@@ -29,6 +29,11 @@ export async function POST(request: NextRequest) {
     const fromName = emailRequest.fromAdvisor?.name || emailConfig.fromName;
     const fromEmail = emailRequest.fromAdvisor?.email || emailConfig.fromEmail;
 
+    // List-Unsubscribe headers (required by Gmail bulk sender guidelines)
+    const unsubUrl = emailConfig.unsubscribeUrl || 'https://ffanorth.com/unsubscribe';
+    const listUnsubscribeHeader = `<${unsubUrl}>, <mailto:unsubscribe@${fromEmail.split('@')[1] || 'ffanorth.com'}?subject=Unsubscribe>`;
+    const listUnsubscribePost = 'List-Unsubscribe=One-Click';
+
     const provider = emailConfig.provider;
 
     // ─── Simulation Mode ─────────────────────────────────────
@@ -230,6 +235,10 @@ export async function POST(request: NextRequest) {
             subject: emailRequest.subject,
             html: fullBody,
             reply_to: emailConfig.replyToEmail,
+            headers: {
+              'List-Unsubscribe': listUnsubscribeHeader,
+              'List-Unsubscribe-Post': listUnsubscribePost,
+            },
             tags: emailRequest.campaignId ? [{ name: 'campaign', value: emailRequest.campaignId }] : undefined,
           }),
         });
@@ -277,6 +286,10 @@ export async function POST(request: NextRequest) {
             reply_to: { email: emailConfig.replyToEmail },
             subject: emailRequest.subject,
             content: [{ type: 'text/html', value: fullBody }],
+            headers: {
+              'List-Unsubscribe': listUnsubscribeHeader,
+              'List-Unsubscribe-Post': listUnsubscribePost,
+            },
             categories: emailRequest.campaignName ? [emailRequest.campaignName] : undefined,
           }),
         });
@@ -318,6 +331,8 @@ export async function POST(request: NextRequest) {
         formData.append('subject', emailRequest.subject);
         formData.append('html', fullBody);
         formData.append('h:Reply-To', emailConfig.replyToEmail);
+        formData.append('h:List-Unsubscribe', listUnsubscribeHeader);
+        formData.append('h:List-Unsubscribe-Post', listUnsubscribePost);
         if (emailRequest.campaignId) formData.append('o:tag', emailRequest.campaignId);
 
         const mgRes = await fetch(`https://api.mailgun.net/v3/${emailConfig.mailgunDomain}/messages`, {
@@ -375,6 +390,10 @@ export async function POST(request: NextRequest) {
           replyTo: emailConfig.replyToEmail,
           subject: emailRequest.subject,
           html: fullBody,
+          headers: {
+            'List-Unsubscribe': listUnsubscribeHeader,
+            'List-Unsubscribe-Post': listUnsubscribePost,
+          },
         });
         return NextResponse.json({
           success: true,
