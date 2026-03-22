@@ -197,6 +197,85 @@ function EmailIntegrationSection() {
   const [config, setConfig] = useState<EmailConfig>(() => getEmailConfig());
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [verifyStatus, setVerifyStatus] = useState<'none' | 'pending' | 'verified' | 'checking' | 'error'>('none');
+  const [verifyError, setVerifyError] = useState('');
+  const [verifyLoading, setVerifyLoading] = useState(false);
+  const [showDomainAuth, setShowDomainAuth] = useState(false);
+
+  async function handleVerifySender() {
+    if (!config.sendgridApiKey) {
+      setVerifyStatus('error');
+      setVerifyError('Please enter your SendGrid API key first');
+      return;
+    }
+    setVerifyLoading(true);
+    setVerifyError('');
+    try {
+      // Parse company address into parts
+      const addressParts = config.companyAddress.split(',').map(s => s.trim());
+      const res = await fetch('/api/email/verify-sender', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          apiKey: config.sendgridApiKey,
+          fromName: config.fromName,
+          fromEmail: config.fromEmail,
+          replyTo: config.replyToEmail,
+          company: config.companyName,
+          address: addressParts[0] || config.companyAddress,
+          city: addressParts[1] || 'Tampa',
+          state: addressParts[2] || 'FL',
+          zip: addressParts[3] || '33602',
+          country: 'US',
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setVerifyStatus('pending');
+        showToast('Verification email sent! Check your inbox.');
+      } else {
+        setVerifyStatus('error');
+        setVerifyError(data.error || 'Failed to initiate verification');
+        showToast('Verification failed', 'error');
+      }
+    } catch {
+      setVerifyStatus('error');
+      setVerifyError('Network error - could not reach the API');
+      showToast('Verification failed', 'error');
+    } finally {
+      setVerifyLoading(false);
+    }
+  }
+
+  async function handleCheckVerification() {
+    if (!config.sendgridApiKey || !config.fromEmail) {
+      setVerifyStatus('error');
+      setVerifyError('API key and from email are required');
+      return;
+    }
+    setVerifyStatus('checking');
+    setVerifyError('');
+    try {
+      const params = new URLSearchParams({ apiKey: config.sendgridApiKey, email: config.fromEmail });
+      const res = await fetch(`/api/email/verify-sender?${params}`);
+      const data = await res.json();
+      if (data.error) {
+        setVerifyStatus('error');
+        setVerifyError(data.error);
+      } else if (data.status === 'verified') {
+        setVerifyStatus('verified');
+        updateConfig({ senderVerified: true });
+        showToast('Sender is verified!');
+      } else if (data.status === 'pending') {
+        setVerifyStatus('pending');
+      } else {
+        setVerifyStatus('none');
+      }
+    } catch {
+      setVerifyStatus('error');
+      setVerifyError('Network error - could not reach the API');
+    }
+  }
 
   function updateConfig(partial: Partial<EmailConfig>) {
     setConfig(prev => ({ ...prev, ...partial }));
@@ -360,28 +439,116 @@ function EmailIntegrationSection() {
           <div className="space-y-3 mb-4">
             <div className="p-4 rounded-xl bg-indigo-50 border border-indigo-200 space-y-3">
               <h3 className="text-xs font-semibold text-indigo-900">SendGrid Configuration</h3>
-              <p className="text-[10px] text-indigo-700">Get your API key from <strong>app.sendgrid.com &rarr; Settings &rarr; API Keys</strong>. Use a key with &quot;Mail Send&quot; permission.</p>
+              <p className="text-[10px] text-indigo-700">Get your API key from <strong>app.sendgrid.com &rarr; Settings &rarr; API Keys</strong>. Use a key with &quot;Mail Send&quot; and &quot;Sender Verification&quot; permissions.</p>
               <div>
                 <label className="block text-xs font-medium text-neutral-500 mb-1">API Key</label>
                 <input type="password" value={(config as any).sendgridApiKey || ''} onChange={e => updateConfig({ sendgridApiKey: e.target.value } as any)} placeholder="SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" className="w-full px-3 py-2 rounded-lg border border-indigo-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
               </div>
             </div>
-            <div className="p-4 rounded-xl bg-amber-50 border border-amber-300 space-y-3">
+
+            {/* Sender Verification Card */}
+            <div className="p-4 rounded-xl bg-amber-50 border border-amber-300 space-y-4">
               <div className="flex items-start gap-2">
-                <span className="text-amber-600 text-base leading-none mt-0.5">&#9888;</span>
-                <div>
-                  <h3 className="text-xs font-semibold text-amber-900">Domain Authentication Required</h3>
-                  <p className="text-[10px] text-amber-800 mt-1">Emails will go to <strong>spam</strong> unless you authenticate your sending domain in SendGrid. This removes the &quot;via sendgrid.net&quot; label and passes Gmail&apos;s authentication checks.</p>
+                <Zap className="w-4 h-4 text-indigo-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="text-xs font-semibold text-neutral-900">Sender Verification</h3>
+                  <p className="text-[10px] text-neutral-600 mt-0.5">
+                    Verify your sender email to improve deliverability and avoid spam folders.
+                  </p>
                 </div>
               </div>
-              <ol className="text-[10px] text-amber-900 space-y-1.5 pl-5 list-decimal">
-                <li>Go to <strong>app.sendgrid.com &rarr; Settings &rarr; Sender Authentication</strong></li>
-                <li>Click <strong>&quot;Authenticate Your Domain&quot;</strong></li>
-                <li>Enter your sending domain (e.g., <code className="bg-amber-100 px-1 rounded">georgiafa.com</code>)</li>
-                <li>SendGrid will give you <strong>3 CNAME records</strong> &mdash; add them to your DNS provider (GoDaddy, Cloudflare, etc.)</li>
-                <li>Return to SendGrid and click <strong>&quot;Verify&quot;</strong></li>
-                <li>Once verified, the &quot;via sendgrid.net&quot; label disappears and emails land in inbox</li>
-              </ol>
+
+              {/* Status Indicator */}
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-medium text-neutral-500">Status:</span>
+                {verifyStatus === 'none' && (
+                  <span className="inline-flex items-center gap-1.5 text-[11px] text-neutral-500">
+                    <span className="w-2 h-2 rounded-full bg-neutral-400" />
+                    Not Verified
+                  </span>
+                )}
+                {verifyStatus === 'pending' && (
+                  <span className="inline-flex items-center gap-1.5 text-[11px] text-amber-700 font-medium">
+                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                    Verification Pending &mdash; Check Your Inbox
+                  </span>
+                )}
+                {verifyStatus === 'verified' && (
+                  <span className="inline-flex items-center gap-1.5 text-[11px] text-emerald-700 font-medium">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    Verified
+                  </span>
+                )}
+                {verifyStatus === 'checking' && (
+                  <span className="inline-flex items-center gap-1.5 text-[11px] text-indigo-600">
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    Checking...
+                  </span>
+                )}
+                {verifyStatus === 'error' && (
+                  <span className="inline-flex items-center gap-1.5 text-[11px] text-red-600">
+                    <span className="w-2 h-2 rounded-full bg-red-500" />
+                    Error
+                  </span>
+                )}
+              </div>
+
+              {verifyError && (
+                <p className="text-[10px] text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-1.5">{verifyError}</p>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={handleVerifySender}
+                  disabled={verifyLoading || verifyStatus === 'verified'}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-[11px] font-semibold rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all disabled:opacity-40"
+                >
+                  {verifyLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Mail className="w-3 h-3" />}
+                  Verify My Email
+                </button>
+                <button
+                  onClick={handleCheckVerification}
+                  disabled={verifyStatus === 'checking'}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white text-neutral-700 text-[11px] font-semibold rounded-lg border border-neutral-200 hover:bg-neutral-50 transition-colors disabled:opacity-40"
+                >
+                  {verifyStatus === 'checking' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Clock className="w-3 h-3" />}
+                  Check Status
+                </button>
+              </div>
+
+              {verifyStatus === 'pending' && (
+                <p className="text-[10px] text-amber-800 bg-amber-100 border border-amber-200 rounded-lg px-3 py-2">
+                  After clicking &quot;Verify My Email&quot;, check your inbox for a verification email from SendGrid and click the confirmation link.
+                </p>
+              )}
+            </div>
+
+            {/* Collapsible Advanced Domain Authentication */}
+            <div className="rounded-xl border border-neutral-200 overflow-hidden">
+              <button
+                onClick={() => setShowDomainAuth(!showDomainAuth)}
+                className="w-full flex items-center gap-2 p-3 bg-neutral-50 hover:bg-neutral-100 transition-colors text-left"
+              >
+                {showDomainAuth ? <ChevronDown className="w-3.5 h-3.5 text-neutral-500" /> : <ChevronRight className="w-3.5 h-3.5 text-neutral-500" />}
+                <span className="text-[11px] font-semibold text-neutral-600">Advanced: Full Domain Authentication</span>
+                <span className="text-[9px] text-neutral-400 ml-auto">Best deliverability</span>
+              </button>
+              {showDomainAuth && (
+                <div className="p-4 space-y-3 border-t border-neutral-200 bg-white">
+                  <p className="text-[10px] text-neutral-600">
+                    For the best deliverability, authenticate your sending domain in SendGrid. This removes the &quot;via sendgrid.net&quot; label and passes Gmail&apos;s authentication checks.
+                  </p>
+                  <ol className="text-[10px] text-neutral-700 space-y-1.5 pl-5 list-decimal">
+                    <li>Go to <strong>app.sendgrid.com &rarr; Settings &rarr; Sender Authentication</strong></li>
+                    <li>Click <strong>&quot;Authenticate Your Domain&quot;</strong></li>
+                    <li>Enter your sending domain (e.g., <code className="bg-neutral-100 px-1 rounded">georgiafa.com</code>)</li>
+                    <li>SendGrid will give you <strong>3 CNAME records</strong> &mdash; add them to your DNS provider (GoDaddy, Cloudflare, etc.)</li>
+                    <li>Return to SendGrid and click <strong>&quot;Verify&quot;</strong></li>
+                    <li>Once verified, the &quot;via sendgrid.net&quot; label disappears and emails land in inbox</li>
+                  </ol>
+                </div>
+              )}
             </div>
           </div>
         )}
