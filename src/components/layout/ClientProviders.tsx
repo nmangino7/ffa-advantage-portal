@@ -13,6 +13,7 @@ import { TemplateEditorModal } from '@/components/modals/TemplateEditorModal';
 import { GlobalConfirmDialog } from '@/components/modals/GlobalConfirmDialog';
 import { SendTestEmailModal } from '@/components/modals/SendTestEmailModal';
 import { ImportContactsModal } from '@/components/modals/ImportContactsModal';
+import { AdvisorCopilot } from '@/components/ai/AdvisorCopilot';
 
 export function ClientProviders({ children }: { children: ReactNode }) {
   return (
@@ -29,6 +30,7 @@ export function ClientProviders({ children }: { children: ReactNode }) {
             <SendTestEmailModal />
             <ImportContactsModal />
             <ToastContainer />
+            <AdvisorCopilot />
           </ToastProvider>
         </ModalProvider>
       </ContentProvider>

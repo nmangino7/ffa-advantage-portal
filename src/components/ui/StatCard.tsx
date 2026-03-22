@@ -22,7 +22,7 @@ export function StatCard({
 
   return (
     <div
-      className="bg-white border border-neutral-200 rounded-xl overflow-hidden p-5 shadow-sm stat-card-glow card-hover-premium"
+      className="relative bg-white border border-neutral-200 rounded-xl overflow-hidden p-5 shadow-sm stat-card-glow card-hover-premium"
     >
       {/* Gradient left border */}
       <div

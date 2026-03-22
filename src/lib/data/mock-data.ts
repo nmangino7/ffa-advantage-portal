@@ -1194,210 +1194,167 @@ const secondOpinionEmails: EmailStep[] = [
 <p>Every situation is different, and past results do not predict future outcomes. But a second opinion can surface what you did not know to look for. Would it be helpful to take a quick look together? Reply to this email — it is confidential and there is no obligation.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-12', subject:"Your confidential financial review — no strings attached", previewText:"One conversation could change your financial future.", sendDay:70, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-12', subject:"An open invitation, whenever you are ready", previewText:"A confidential review with no strings attached.", sendDay:70, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Over the past several weeks, we have shared insights on what a financial second opinion can reveal — from hidden fees and tax strategies to beneficiary oversights and advisor evaluation frameworks.</p>
+<p>Over the past several weeks, we have explored what a financial second opinion can reveal — from overlooked fees and tax strategies to beneficiary oversights and advisor evaluation tips. We hope you found value in those insights, whether or not you decide to take the next step.</p>
 
-<p>Now we would like to offer you something simple: <strong>a confidential, one-on-one financial review with one of our senior advisors.</strong></p>
-
-<h2>Here Is Exactly What You Will Receive</h2>
+<p>If you are curious about how your plan looks through a fresh lens, here is what we offer:</p>
 
 <ul>
-  <li>A comprehensive review of your current investment portfolio, insurance coverage, and retirement plan</li>
-  <li>A clear breakdown of your total fees and how they compare to industry benchmarks</li>
-  <li>Identification of any gaps, risks, or missed opportunities</li>
-  <li>A written summary of findings that is yours to keep — regardless of whether you choose to work with us</li>
+  <li>A review of your current investments, insurance coverage, and retirement approach</li>
+  <li>A clear picture of your total fees and how they compare</li>
+  <li>Identification of any gaps or opportunities worth considering</li>
+  <li>A written summary of findings that belongs to you, no matter what</li>
 </ul>
 
-<h2>Our Commitment to You</h2>
+<p>There is no cost, no obligation to make changes, and everything you share stays strictly confidential. Our role is to educate — the decisions are always yours.</p>
 
-<ul>
-  <li>There is no cost for this review</li>
-  <li>There is no obligation to make any changes or move any accounts</li>
-  <li>Everything you share is held in strict confidence</li>
-  <li>You will never be pressured — this is about education, not sales</li>
-</ul>
+<p>Would it be helpful to take a quick look together? Reply to this email or reach out at (561) 555-0100 whenever the timing feels right. We look forward to the conversation.</p>
 
-<p>If you have been thinking about whether your financial plan is truly optimized for where you are today, this is a simple first step.</p>
-
-<p>Reply to this email or call us at (561) 555-0100 to schedule your review. We look forward to the conversation.</p>
-
-<p>With warm regards,<br/>The FFA North Team</p>` },
+<p>Warm regards,<br/>The FFA North Team</p>` },
 ];
 
 const crossSellingEmails: EmailStep[] = [
-  { id:'e-6-1', subject:"Beyond insurance: your complete financial picture", previewText:"Insurance is just one piece of the puzzle.", sendDay:0, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-1', subject:"We appreciate your trust", previewText:"And here is how we can help even more.", sendDay:0, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Thank you for exploring your insurance options with us. It tells us something important about you — you take protecting your family and your assets seriously.</p>
+<p>We wanted to start by saying thank you. Working with you on your insurance needs has been a genuine pleasure, and it tells us something important about you — you take protecting your family seriously.</p>
 
-<p>But here is something we have learned after working with hundreds of clients: insurance does not exist in a vacuum. It is one piece of a much larger financial picture that includes:</p>
+<p>Over time, we have noticed that insurance is often one piece of a larger puzzle. When it is managed in isolation from the rest of your financial life, small gaps can develop without anyone noticing:</p>
 
 <ul>
-  <li><strong>Retirement planning</strong> — ensuring your income lasts as long as you do</li>
-  <li><strong>Investment management</strong> — growing your wealth in alignment with your goals and risk tolerance</li>
-  <li><strong>Tax strategy</strong> — keeping more of what you earn through proactive planning</li>
-  <li><strong>Estate planning</strong> — making sure your assets go where you intend</li>
+  <li><strong>Retirement planning</strong> that ensures your income lasts</li>
+  <li><strong>Investment management</strong> aligned with your goals and risk tolerance</li>
+  <li><strong>Tax strategy</strong> to help you keep more of what you earn</li>
+  <li><strong>Estate coordination</strong> so your assets go where you intend</li>
 </ul>
 
-<p>When these areas are managed independently — often by different professionals who do not communicate with each other — gaps and redundancies can develop without anyone noticing.</p>
-
-<p>Over the next few weeks, we will share some insights on how these pieces fit together. No pressure, no sales pitch — just education that we hope you will find valuable.</p>
+<p>Over the next few weeks, we will share some thoughts on how these pieces work together. No pressure — just insights we hope you will find useful.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-2', subject:"How insurance, investments, and retirement planning work together", previewText:"Three pillars. One strategy.", sendDay:7, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-2', subject:"The bridge from insurance to retirement", previewText:"How your coverage connects to your bigger picture.", sendDay:7, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Most people manage their insurance, investments, and retirement planning as separate concerns. But in practice, these areas are deeply interconnected:</p>
+<p>Most people manage their insurance, investments, and retirement planning as separate concerns. In practice, though, these areas are deeply connected — and when they are coordinated, each one reinforces the others.</p>
 
-<h2>How They Connect</h2>
+<p>Here is what that looks like:</p>
 
 <ul>
-  <li><strong>Insurance affects your investment risk tolerance.</strong> If you have strong disability and life insurance coverage, you may be able to take on more investment risk — because your downside is protected. Without that coverage, a more conservative approach may be warranted.</li>
-  <li><strong>Investment performance affects your retirement timeline.</strong> Your portfolio growth rate directly influences when you can afford to retire and how much income you can generate.</li>
-  <li><strong>Retirement planning affects your insurance needs.</strong> As you approach retirement, your insurance requirements change. You may need less life insurance but more long-term care coverage.</li>
+  <li><strong>Insurance shapes investment risk.</strong> Strong disability and life coverage can allow you to take on more portfolio risk, because your downside is protected.</li>
+  <li><strong>Investment growth shapes your timeline.</strong> Your portfolio's performance directly influences when retirement becomes feasible and how much income you can generate.</li>
+  <li><strong>Retirement planning shapes insurance needs.</strong> As you approach retirement, you may need less life insurance but more long-term care coverage.</li>
 </ul>
 
-<p>When these three areas are coordinated, each one reinforces the others. When they are not, you may be paying for protection you do not need — or missing coverage that could be critical.</p>
+<p>When these pieces are not coordinated, you may be paying for protection you do not need — or missing coverage that could be critical. A quick alignment check can surface those disconnects before they become costly.</p>
 
-<p>If you would like to see how your insurance, investments, and retirement plan work together (or where they might not), we would be happy to walk through it with you. Reply to this email to get started.</p>
+<p>Would it be helpful to take a quick look together at how your strategies connect? Reply to this email and we will set something up.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-3', subject:"The 3 pillars of financial security", previewText:"Protection. Growth. Income. Are all three covered?", sendDay:14, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-3', subject:"Three pillars of lasting security", previewText:"Most people have addressed one. Few have all three.", sendDay:14, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>After years of working with individuals and families across a range of financial situations, we have found that lasting financial security rests on three pillars:</p>
-
-<h2>Pillar 1: Protection</h2>
-<p>This is your safety net — life insurance, disability coverage, liability protection, and an emergency fund. Without it, a single unexpected event can derail years of financial progress.</p>
-
-<h2>Pillar 2: Growth</h2>
-<p>This is your investment strategy — the engine that builds wealth over time. It includes your 401(k), IRAs, brokerage accounts, and any other investment vehicles. The goal is disciplined, diversified growth aligned with your timeline and risk tolerance.</p>
-
-<h2>Pillar 3: Income</h2>
-<p>This is your retirement income plan — how you will convert your accumulated assets into reliable income that lasts. It includes Social Security optimization, pension decisions, withdrawal sequencing, and tax-efficient distribution strategies.</p>
-
-<p>Most people have addressed at least one pillar. Few have all three working in concert. The gaps between them are where financial risk hides.</p>
-
-<p>Would you like to see how your three pillars stack up? Reply to this email and we will schedule a brief, no-obligation assessment.</p>
-
-<p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-4', subject:"Are your financial strategies working in harmony?", previewText:"Misalignment can cost more than you think.", sendDay:21, status:'active', bodyFormat:'html' as const,
-    body:`<p>Hi {{first_name}},</p>
-
-<p>Here is a scenario we see more often than you might expect:</p>
-
-<p>A client has a well-funded 401(k), adequate life insurance, and a financial advisor managing their portfolio. On paper, everything looks fine. But a closer look reveals:</p>
+<p>After years of working with individuals and families, we have found that lasting financial security generally rests on three pillars. Most people have addressed at least one — but the gaps between them are where risk tends to hide.</p>
 
 <ul>
-  <li>Their investment allocation is too aggressive for their timeline, but no one has revisited it since they were 15 years from retirement — now they are 5 years away.</li>
-  <li>Their life insurance is a whole life policy purchased 20 years ago that may no longer align with their current needs or estate plan.</li>
-  <li>They have no Roth conversion strategy, which means they are potentially missing an opportunity to reduce their future tax burden.</li>
-  <li>Their beneficiary designations across accounts contradict what their estate plan says.</li>
+  <li><strong>Protection.</strong> Your safety net — life insurance, disability coverage, liability protection, and an emergency fund. Without it, a single unexpected event can derail years of progress.</li>
+  <li><strong>Growth.</strong> Your investment strategy — the engine that builds wealth over time through disciplined, diversified approaches aligned with your timeline and risk tolerance.</li>
+  <li><strong>Income.</strong> Your retirement income plan — how you will convert accumulated assets into reliable income that lasts, including Social Security timing and tax-efficient withdrawals.</li>
 </ul>
 
-<p>None of these issues are catastrophic on their own. But together, they represent a financial plan that is working against itself in subtle but meaningful ways.</p>
+<p>When all three pillars work in concert, each one reinforces the others. When they are managed in isolation, even well-funded plans can have blind spots.</p>
 
-<p>A comprehensive review looks at all of your financial strategies as a system — not as isolated pieces. If you are curious about whether your strategies are aligned, we would be glad to help you find out.</p>
+<p>Would it be helpful to take a quick look together at how your three pillars stack up? Reply to this email and we will schedule a brief conversation.</p>
 
-<p>Reply to this email to schedule a conversation.</p>
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-6-4', subject:"When good plans quietly drift apart", previewText:"A common scenario that is worth checking for.", sendDay:21, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Here is a scenario we see more often than you might expect. A client has a well-funded 401(k), adequate life insurance, and an advisor managing their portfolio. On paper, everything looks fine. But a closer look reveals:</p>
+
+<ul>
+  <li>Their investment allocation has not been revisited since they were fifteen years from retirement — now they are five years away</li>
+  <li>A whole life policy purchased decades ago no longer aligns with their current estate plan</li>
+  <li>There is no Roth conversion strategy, which means a potential opportunity to reduce future taxes is going unused</li>
+  <li>Beneficiary designations across accounts contradict what the estate documents say</li>
+</ul>
+
+<p>None of these issues are catastrophic on their own. But together, they represent strategies that are quietly working against each other. A holistic review looks at all of your financial pieces as a connected system — not as isolated parts.</p>
+
+<p>Would it be helpful to take a quick look together at whether your strategies are still in alignment? Reply to this email to start a conversation.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-5', subject:"What a comprehensive financial review reveals", previewText:"See your finances from a new angle.", sendDay:28, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-5', subject:"What consolidation actually looks like", previewText:"A behind-the-scenes look at the review process.", sendDay:28, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>You may be wondering what, specifically, a comprehensive financial review looks like. Here is what we cover:</p>
-
-<h2>Our Comprehensive Review Process</h2>
+<p>You may be wondering what a comprehensive financial review actually involves. We like to be transparent about the process, so here is what we cover:</p>
 
 <ul>
-  <li><strong>Insurance audit.</strong> We review all current policies — life, disability, liability, long-term care — to identify gaps, overlaps, or opportunities for better coverage at lower cost.</li>
-  <li><strong>Investment analysis.</strong> We evaluate your portfolio for performance, fees, diversification, tax efficiency, and alignment with your stated goals and risk tolerance.</li>
-  <li><strong>Retirement projection.</strong> We model your retirement income from all sources — Social Security, pensions, investments, annuities — and stress-test it against different scenarios.</li>
-  <li><strong>Tax strategy review.</strong> We look for opportunities to reduce your tax burden today and in retirement through Roth conversions, tax-loss harvesting, and charitable strategies.</li>
-  <li><strong>Estate planning check.</strong> We verify that beneficiary designations, account titling, and estate documents are consistent and current.</li>
+  <li><strong>Insurance audit.</strong> A review of all current policies to identify gaps, overlaps, or opportunities for better coverage at lower cost.</li>
+  <li><strong>Investment analysis.</strong> An evaluation of your portfolio for fees, diversification, tax efficiency, and alignment with your goals.</li>
+  <li><strong>Retirement projection.</strong> Modeling your income from all sources and stress-testing it against different scenarios.</li>
+  <li><strong>Tax strategy review.</strong> Identifying opportunities to reduce your tax burden through approaches like Roth conversions and tax-loss harvesting.</li>
 </ul>
 
-<p>The review typically takes about 45 minutes and results in a written summary of findings. There is no cost and no obligation to act on anything we find.</p>
+<p>The review typically takes about 45 minutes and results in a written summary of findings that is yours to keep. There is no cost and no obligation to act on anything we find.</p>
 
-<p>If you would like to see your complete financial picture in one place, reply to this email and we will get you scheduled.</p>
+<p>Would it be helpful to see your complete financial picture in one place? Reply to this email and we will get you scheduled.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-6', subject:"Real story: How integrating services helped the Johnsons", previewText:"What one family gained from a comprehensive approach.", sendDay:35, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-6', subject:"How the Johnsons connected the dots", previewText:"A real story about the power of a full-picture view.", sendDay:35, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
 <p>We recently worked with a couple — we will call them the Johnsons — who came to us for an insurance review. What we discovered went well beyond insurance.</p>
 
-<h2>The Situation</h2>
-<p>The Johnsons had adequate life insurance, a 401(k) and IRA with a separate advisor, and no formal retirement income plan. Each piece had been set up independently over the years.</p>
+<p>The Johnsons had adequate life insurance, a 401(k) and IRA with a separate advisor, and no formal retirement income plan. Each piece had been set up independently over the years. When we looked at everything together, a few things stood out:</p>
 
-<h2>What We Found</h2>
 <ul>
-  <li><strong>Redundant coverage.</strong> They were paying for both an employer-provided and a private disability policy with overlapping benefits — an unnecessary expense.</li>
-  <li><strong>High investment fees.</strong> Their IRA was invested in actively managed funds charging over 1.4% in combined expenses. Comparable index-based alternatives were available at a fraction of the cost.</li>
-  <li><strong>Missing tax strategy.</strong> They were in a lower tax bracket than they would likely be in retirement, making the next several years an ideal window for partial Roth conversions.</li>
-  <li><strong>Uncoordinated beneficiaries.</strong> Their life insurance and retirement accounts named different beneficiaries than their estate plan specified.</li>
+  <li><strong>Redundant coverage.</strong> Two disability policies with overlapping benefits meant they were paying more than necessary.</li>
+  <li><strong>Elevated investment fees.</strong> Their IRA was in actively managed funds charging over 1.4% in combined expenses when comparable alternatives cost significantly less.</li>
+  <li><strong>A tax planning window.</strong> Their current bracket was lower than it would likely be in retirement — an ideal time for partial Roth conversions.</li>
 </ul>
 
-<h2>The Outcome</h2>
-<p>By addressing these issues together, the Johnsons were able to reduce unnecessary expenses, improve their tax positioning, and bring their entire financial plan into alignment.</p>
+<p>By addressing these issues together, the Johnsons were able to reduce unnecessary expenses and bring their entire plan into alignment. Every family's situation is unique, and results will vary. But the value of a full-picture view is consistent.</p>
 
-<p>Every family's situation is unique. But the value of looking at the full picture is consistent. If you would like a similar review, simply reply to this email.</p>
+<p>Would it be helpful to take a similar look at your situation? Simply reply to this email.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-7', subject:"Your financial health scorecard", previewText:"Rate yourself across 6 key areas.", sendDay:42, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-7', subject:"A two-minute financial checkup", previewText:"Four questions that reveal a lot about your plan.", sendDay:42, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Here is a quick self-assessment you can complete in a few minutes. For each area, give yourself a score from 1 (not addressed) to 5 (fully optimized):</p>
-
-<h2>Financial Health Scorecard</h2>
+<p>Sometimes the most useful exercise is also the simplest. Here is a quick self-assessment you can do right now — no spreadsheet required. Just answer honestly for each area:</p>
 
 <ul>
-  <li><strong>Emergency Fund:</strong> Do you have 3-6 months of living expenses in an accessible account? ___/5</li>
-  <li><strong>Insurance Coverage:</strong> Are your life, disability, and liability policies current and adequate for your situation? ___/5</li>
-  <li><strong>Investment Strategy:</strong> Is your portfolio diversified, tax-efficient, and aligned with your goals and timeline? ___/5</li>
-  <li><strong>Retirement Readiness:</strong> Do you know your target retirement income and have a plan to get there? ___/5</li>
-  <li><strong>Tax Planning:</strong> Are you using available strategies — Roth conversions, tax-loss harvesting, charitable giving — to minimize your tax burden? ___/5</li>
-  <li><strong>Estate Planning:</strong> Are your beneficiaries, wills, trusts, and powers of attorney current and coordinated? ___/5</li>
+  <li><strong>Emergency fund:</strong> Could you cover 3-6 months of living expenses without touching your investments?</li>
+  <li><strong>Insurance coverage:</strong> Are your life, disability, and liability policies current and adequate for your situation today?</li>
+  <li><strong>Investment strategy:</strong> Is your portfolio diversified, tax-efficient, and aligned with your timeline?</li>
+  <li><strong>Retirement readiness:</strong> Do you know, within a reasonable range, how much income you will need in retirement — and do you have a plan to get there?</li>
 </ul>
 
-<p><strong>Your total: ___/30</strong></p>
+<p>If you answered "not sure" to any of these, you are not alone. Each one represents an area where a brief conversation could provide real clarity and help you identify where small improvements make the biggest difference.</p>
 
-<p>If you scored below 20, there are likely meaningful opportunities to strengthen your financial position. Even scores above 20 often reveal one or two areas that could use attention.</p>
-
-<p>We would be happy to walk through your scorecard with you and identify where small improvements could make the biggest difference. Reply to this email to schedule a conversation.</p>
+<p>Would it be helpful to walk through your answers together? Reply to this email and we will schedule a conversation.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-8', subject:"Let's build your comprehensive financial plan", previewText:"All your financial strategies, working together.", sendDay:56, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-8', subject:"Bringing it all together", previewText:"Your finances as one connected plan, not scattered pieces.", sendDay:56, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Over the past several weeks, we have explored how insurance, investments, retirement planning, tax strategy, and estate planning work together as a system — and how gaps between them can quietly erode your financial security.</p>
+<p>Over the past several weeks, we have explored how insurance, investments, retirement planning, and tax strategy work together as a system — and how gaps between them can quietly undermine even well-funded plans.</p>
 
-<p>Now we would like to offer you a simple next step: <strong>a complimentary comprehensive financial planning session with one of our senior advisors.</strong></p>
-
-<h2>What to Expect</h2>
+<p>If you have been thinking about whether all the pieces of your financial life are truly working in concert, here is a simple next step we can offer:</p>
 
 <ul>
-  <li>A 45-minute conversation covering all major areas of your financial life</li>
-  <li>An objective assessment of how your current strategies work together — and where they might not</li>
-  <li>Identification of specific opportunities to reduce costs, improve coverage, and strengthen your long-term plan</li>
-  <li>A written summary of findings that is yours to keep</li>
+  <li>A 45-minute conversation covering the major areas of your financial life</li>
+  <li>An objective look at how your current strategies connect — and where they might not</li>
+  <li>Identification of specific opportunities worth considering</li>
+  <li>A written summary of findings that belongs to you, regardless of what you decide</li>
 </ul>
 
-<h2>What We Promise</h2>
+<p>There is no cost and no obligation. Having the conversation does not commit you to anything — our role is to educate, and the decisions are always yours.</p>
 
-<ul>
-  <li>No cost — this is a complimentary service</li>
-  <li>No obligation — you are not committing to anything by having the conversation</li>
-  <li>No pressure — our job is to educate, not to sell</li>
-</ul>
+<p>Would it be helpful to take a quick look together? Reply to this email or reach out at (561) 555-0100 whenever the timing feels right. We look forward to the conversation.</p>
 
-<p>If you have ever wondered whether all the pieces of your financial life are truly working together, this is an easy way to find out.</p>
-
-<p>Reply to this email or call us at (561) 555-0100 to schedule your session. We look forward to hearing from you.</p>
-
-<p>With warm regards,<br/>The FFA North Team</p>` },
+<p>Warm regards,<br/>The FFA North Team</p>` },
 ];
 
 const reEngagementEmails: EmailStep[] = [

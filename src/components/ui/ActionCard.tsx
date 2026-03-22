@@ -23,7 +23,7 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
   const TierIcon = TIER_ICON[lead.tier] || MessageSquare;
 
   return (
-    <div className="bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 transition-all duration-200 p-4 card-hover">
+    <div className="bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 transition-all duration-200 p-4 card-hover-premium">
       <div className="flex items-start gap-3">
         {/* Avatar */}
         <div
@@ -41,7 +41,11 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
             </Link>
             <span
               className="text-[10px] px-1.5 py-0.5 rounded-full font-medium inline-flex items-center gap-0.5"
-              style={{ backgroundColor: tc.bg, color: tc.color }}
+              style={{
+                backgroundColor: tc.bg,
+                color: tc.color,
+                boxShadow: `0 0 6px ${tc.color}20`,
+              }}
             >
               <TierIcon className="w-2.5 h-2.5" />
               {tc.label}
@@ -59,15 +63,23 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
 
           <p className="text-xs text-neutral-600 mt-1">{lead.lastAction.description}</p>
 
-          {/* Reply snippet */}
+          {/* Reply snippet with gradient left border */}
           {lead.lastAction.emailBody && (
             <div
-              className="mt-2 rounded-r-md px-3 py-2 border-l-2"
+              className="mt-2 rounded-r-md px-3 py-2"
               style={{
-                borderLeftColor: tc.color,
+                borderLeft: 'none',
                 background: `linear-gradient(to right, ${tc.bg}, transparent)`,
+                position: 'relative',
               }}
             >
+              {/* Gradient left border */}
+              <div
+                className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-md"
+                style={{
+                  background: `linear-gradient(180deg, ${tc.color}, ${tc.color}44)`,
+                }}
+              />
               {lead.lastAction.emailSubject && (
                 <p className="text-[10px] font-medium text-neutral-600 mb-0.5">{lead.lastAction.emailSubject}</p>
               )}
@@ -94,7 +106,7 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
                 </span>
                 <button
                   onClick={() => openAssignModal(lead.contact.id)}
-                  className="px-2.5 py-1 text-neutral-500 text-[11px] font-medium hover:text-indigo-600 transition-colors inline-flex items-center gap-1"
+                  className="px-2.5 py-1 text-neutral-500 text-[11px] font-medium hover:text-indigo-600 transition-all duration-200 inline-flex items-center gap-1"
                 >
                   <RefreshCw className="w-3 h-3" /> Reassign
                 </button>
@@ -102,20 +114,20 @@ export function ActionCard({ lead }: { lead: WarmLead }) {
             ) : (
               <button
                 onClick={() => openAssignModal(lead.contact.id)}
-                className="px-2.5 py-1 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-[11px] font-medium rounded-md hover:from-indigo-700 hover:to-violet-700 transition-all inline-flex items-center gap-1"
+                className="px-2.5 py-1 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-[11px] font-medium rounded-md hover:from-indigo-700 hover:to-violet-700 transition-all duration-200 hover:shadow-md hover:shadow-indigo-500/20 inline-flex items-center gap-1"
               >
                 <UserPlus className="w-3 h-3" /> Assign Advisor
               </button>
             )}
             <button
               onClick={() => openScheduleModal(lead.contact.id)}
-              className="px-2.5 py-1 bg-white text-neutral-600 text-[11px] font-medium rounded-md border border-neutral-200 hover:bg-neutral-50 transition-colors inline-flex items-center gap-1"
+              className="px-2.5 py-1 bg-white text-neutral-600 text-[11px] font-medium rounded-md border border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300 transition-all duration-200 inline-flex items-center gap-1"
             >
               <Phone className="w-3 h-3" /> Schedule Call
             </button>
             <Link
               href={`/audience/${lead.contact.id}`}
-              className="px-2.5 py-1 text-indigo-600 text-[11px] font-medium hover:text-indigo-800 transition-colors inline-flex items-center gap-1"
+              className="px-2.5 py-1 text-indigo-600 text-[11px] font-medium hover:text-indigo-800 transition-all duration-200 inline-flex items-center gap-1"
             >
               <Eye className="w-3 h-3" /> View
             </Link>

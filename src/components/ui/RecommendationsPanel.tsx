@@ -13,6 +13,12 @@ const PRIORITY_DOT: Record<string, string> = {
   low: 'bg-blue-400',
 };
 
+const PRIORITY_GLOW: Record<string, string> = {
+  high: '0 0 6px rgba(239, 68, 68, 0.4)',
+  medium: '0 0 6px rgba(245, 158, 11, 0.3)',
+  low: '0 0 6px rgba(96, 165, 250, 0.3)',
+};
+
 export function RecommendationsPanel() {
   const { contacts, campaigns, activities } = usePortal();
 
@@ -24,11 +30,10 @@ export function RecommendationsPanel() {
   if (recommendations.length === 0) return null;
 
   return (
-    <div className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">
+    <div className="glass-card-premium rounded-xl overflow-hidden gradient-border-animated">
       {/* Gradient left border accent */}
       <div className="flex">
-        <div className="w-1 shrink-0 bg-gradient-to-b from-indigo-500 to-violet-500" />
-        <div className="flex-1 p-5">
+        <div className="flex-1 p-5 pl-6">
           {/* Header */}
           <div className="flex items-center gap-2 mb-4">
             <div className="animate-pulse-glow">
@@ -47,9 +52,12 @@ export function RecommendationsPanel() {
                 key={rec.id}
                 className="flex items-start gap-3 group"
               >
-                {/* Priority dot */}
+                {/* Priority dot with glow */}
                 <div className="mt-1.5 shrink-0">
-                  <div className={`w-2 h-2 rounded-full ${PRIORITY_DOT[rec.priority]}`} />
+                  <div
+                    className={`w-2 h-2 rounded-full ${PRIORITY_DOT[rec.priority]}`}
+                    style={{ boxShadow: PRIORITY_GLOW[rec.priority] }}
+                  />
                 </div>
 
                 {/* Icon */}
@@ -63,10 +71,10 @@ export function RecommendationsPanel() {
                   <p className="text-xs text-neutral-500 mt-0.5">{rec.description}</p>
                 </div>
 
-                {/* CTA */}
+                {/* CTA with gradient hover */}
                 <Link
                   href={rec.actionHref}
-                  className="shrink-0 px-3 py-1.5 text-[11px] font-medium text-indigo-600 bg-indigo-50 rounded-full hover:bg-indigo-100 transition-colors"
+                  className="shrink-0 px-3 py-1.5 text-[11px] font-medium text-indigo-600 bg-indigo-50 rounded-full hover:bg-gradient-to-r hover:from-indigo-600 hover:to-violet-600 hover:text-white transition-all duration-300"
                 >
                   {rec.actionLabel}
                 </Link>
