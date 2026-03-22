@@ -67,9 +67,10 @@ export function EmailPreviewCard({
                 </div>
               )}
             </div>
-            <div className="px-4 py-4 text-[13px] text-neutral-700 leading-relaxed whitespace-pre-wrap">
-              {template.template.body}
-            </div>
+            <div
+              className="px-4 py-4 text-[13px] text-neutral-700 leading-relaxed [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:mt-3 [&_h2]:mb-1 [&_a]:text-indigo-600 [&_a]:underline [&_li]:mb-1 [&_strong]:font-semibold"
+              dangerouslySetInnerHTML={{ __html: template.template.body }}
+            />
             <div className="px-4 py-2 border-t border-neutral-100 bg-neutral-50">
               <p className="text-[10px] text-neutral-400">
                 Florida Financial Advisors &bull; 123 Main St, Suite 100 &bull; <span className="text-indigo-500 underline">Unsubscribe</span>

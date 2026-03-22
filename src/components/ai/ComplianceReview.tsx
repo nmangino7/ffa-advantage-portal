@@ -219,9 +219,10 @@ export function ComplianceReview({ templates = [] }: ComplianceReviewProps) {
                 <p className="text-sm font-medium text-neutral-700">
                   {selectedTemplate.subject}
                 </p>
-                <p className="text-sm text-neutral-500 whitespace-pre-wrap line-clamp-6">
-                  {selectedTemplate.body}
-                </p>
+                <div
+                  className="text-sm text-neutral-500 line-clamp-6 [&_p]:mb-1 [&_h2]:font-semibold [&_h2]:text-neutral-600 [&_ul]:list-disc [&_ul]:pl-4"
+                  dangerouslySetInnerHTML={{ __html: selectedTemplate.body }}
+                />
               </div>
             )}
           </div>

@@ -254,11 +254,19 @@ export function SendTestEmailModal() {
               <div className="p-3 rounded-lg bg-neutral-50 border border-neutral-100">
                 <p className="text-[11px] text-neutral-500">
                   <span className="font-semibold">Provider:</span>{' '}
-                  {getEmailConfig().provider === 'simulation'
-                    ? 'Simulation (no real email sent)'
-                    : getEmailConfig().provider === 'hubspot'
-                    ? 'HubSpot Transactional Email'
-                    : 'Microsoft Outlook (Graph API)'}
+                  {(() => {
+                    const p = getEmailConfig().provider;
+                    switch (p) {
+                      case 'simulation': return 'Simulation (no real email sent)';
+                      case 'hubspot': return 'HubSpot Transactional Email';
+                      case 'outlook': return 'Microsoft Outlook (Graph API)';
+                      case 'resend': return 'Resend';
+                      case 'sendgrid': return 'SendGrid';
+                      case 'mailgun': return 'Mailgun';
+                      case 'smtp': return 'SMTP';
+                      default: return p;
+                    }
+                  })()}
                 </p>
                 <p className="text-[11px] text-neutral-400 mt-0.5">
                   Subject will be prefixed with [TEST]. Configure in Settings &gt; Email Integration.
