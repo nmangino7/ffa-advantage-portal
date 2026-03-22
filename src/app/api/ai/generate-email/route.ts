@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAnthropicClient, parseAIJsonResponse } from '@/lib/ai-client';
-import { EMAIL_GENERATION_PROMPT } from '@/lib/ai-prompts';
+import { EMAIL_GENERATION_PROMPT, NEWS_CONTEXT_PROMPT } from '@/lib/ai-prompts';
 import type { AIEmailRequest, AIEmailResponse } from '@/lib/ai-types';
 
 export async function POST(request: NextRequest) {
   try {
     const body: AIEmailRequest = await request.json();
-    const { serviceLine, tone, topic, audience, sequencePosition, emailType } = body;
+    const { serviceLine, tone, topic, audience, sequencePosition, emailType, newsTopics } = body;
 
     if (!serviceLine || !tone || !topic || !audience) {
       return NextResponse.json(
@@ -17,13 +17,15 @@ export async function POST(request: NextRequest) {
 
     const client = getAnthropicClient();
 
+    const newsContext = newsTopics?.length ? NEWS_CONTEXT_PROMPT(newsTopics) : '';
+
     const userPrompt = `Generate a FINRA-compliant email for the following:
 - Service Line: ${serviceLine}
 - Tone: ${tone}
 - Topic: ${topic}
 - Target Audience: ${audience}
 ${sequencePosition ? `- Position in drip sequence: Email ${sequencePosition} of 4` : ''}${emailType ? `\n- Email Type: ${emailType}` : ''}
-
+${newsContext}
 Generate the email content now.`;
 
     const message = await client.messages.create({

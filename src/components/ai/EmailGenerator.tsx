@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Sparkles, Check, Copy, Save, Loader2 } from 'lucide-react';
+import { Sparkles, Check, Copy, Save, Loader2, Zap } from 'lucide-react';
 import type { AIEmailRequest, AIEmailResponse, AITone } from '@/lib/ai-types';
 import type { ServiceLine } from '@/lib/types';
 import { SERVICE_LINES } from '@/lib/types';
+import { FINANCIAL_NEWS_TOPICS } from '@/lib/ai-prompts';
 
 interface EmailGeneratorProps {
   onSaveTemplate: (email: AIEmailResponse) => void;
@@ -47,10 +48,34 @@ export function EmailGenerator({ onSaveTemplate }: EmailGeneratorProps) {
   const [topic, setTopic] = useState('');
   const [audience, setAudience] = useState('');
   const [sequencePosition, setSequencePosition] = useState<number | undefined>(undefined);
+  const [newsMode, setNewsMode] = useState(false);
+  const [selectedNewsTopics, setSelectedNewsTopics] = useState<string[]>(
+    FINANCIAL_NEWS_TOPICS.slice(0, 3)
+  );
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AIEmailResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  function toggleNewsMode() {
+    const next = !newsMode;
+    setNewsMode(next);
+    if (next) {
+      const defaults = FINANCIAL_NEWS_TOPICS.slice(0, 3);
+      setSelectedNewsTopics(defaults);
+      setTopic(defaults.join('; '));
+    }
+  }
+
+  function toggleNewsTopic(t: string) {
+    setSelectedNewsTopics((prev) => {
+      const updated = prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t];
+      if (newsMode) {
+        setTopic(updated.join('; '));
+      }
+      return updated;
+    });
+  }
 
   async function handleGenerate() {
     if (!topic.trim() || !audience.trim()) return;
@@ -66,6 +91,7 @@ export function EmailGenerator({ onSaveTemplate }: EmailGeneratorProps) {
       audience: audience.trim(),
       ...(sequencePosition !== undefined && { sequencePosition }),
       emailType,
+      ...(newsMode && selectedNewsTopics.length > 0 && { newsTopics: selectedNewsTopics }),
     };
 
     try {
@@ -116,6 +142,44 @@ export function EmailGenerator({ onSaveTemplate }: EmailGeneratorProps) {
         </div>
 
         <div className="space-y-5">
+          {/* News Mode Toggle */}
+          <div>
+            <button
+              type="button"
+              onClick={toggleNewsMode}
+              className={`inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all shadow-sm ${
+                newsMode
+                  ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-indigo-200'
+                  : 'bg-gradient-to-r from-indigo-50 to-violet-50 text-indigo-700 hover:from-indigo-100 hover:to-violet-100 border border-indigo-200'
+              }`}
+            >
+              <Zap className="h-4 w-4" />
+              Generate from This Week&apos;s News
+            </button>
+
+            {newsMode && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {FINANCIAL_NEWS_TOPICS.map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => toggleNewsTopic(t)}
+                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                      selectedNewsTopics.includes(t)
+                        ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                        : 'bg-neutral-100 text-neutral-500 border border-neutral-200 hover:bg-neutral-200'
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+                <p className="w-full text-xs text-neutral-400 mt-1">
+                  Select the news topics you want to reference in the generated email.
+                </p>
+              </div>
+            )}
+          </div>
+
           {/* Email Type */}
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1.5">Email Type</label>
