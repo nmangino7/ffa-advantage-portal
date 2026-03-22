@@ -210,9 +210,10 @@ export async function POST(request: NextRequest) {
 
     // ─── Resend Mode ────────────────────────────────────────
     if (provider === 'resend') {
-      if (!emailConfig.resendApiKey) {
+      const resendKey = emailConfig.resendApiKey || process.env.RESEND_API_KEY;
+      if (!resendKey) {
         return NextResponse.json(
-          { success: false, error: 'Resend API key is not configured', provider: 'resend' } satisfies SendEmailResponse,
+          { success: false, error: 'Resend API key is not configured. Add it in Settings or set RESEND_API_KEY env variable.', provider: 'resend' } satisfies SendEmailResponse,
           { status: 400 }
         );
       }
@@ -221,7 +222,7 @@ export async function POST(request: NextRequest) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${emailConfig.resendApiKey}`,
+            'Authorization': `Bearer ${resendKey}`,
           },
           body: JSON.stringify({
             from: `${fromName} <${fromEmail}>`,

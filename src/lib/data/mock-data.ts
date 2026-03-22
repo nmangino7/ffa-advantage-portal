@@ -11,7 +11,7 @@ import {
 } from '../types';
 
 // If this version changes, localStorage will be re-seeded with fresh mock data
-export const STORAGE_VERSION = 4;
+export const STORAGE_VERSION = 5;
 
 // Deterministic seed helpers
 function seededRandom(seed: number): () => number {
@@ -216,6 +216,24 @@ export const contacts: Contact[] = Array.from({ length: 200 }, (_, i) => {
     notes: pick(stageNotes[stage]),
     createdAt: randomDate(2018, 2023),
   };
+});
+
+// Add real contact for testing
+contacts.unshift({
+  id: 'contact-nick',
+  firstName: 'Nick',
+  lastName: 'Mangino',
+  email: 'rolltide7107@gmail.com',
+  phone: '(555) 000-0001',
+  company: '',
+  lastContactDate: new Date().toISOString().split('T')[0],
+  stage: 'qualified',
+  intentScore: 90,
+  campaigns: [],
+  assignedRep: 'Nick Mangino',
+  assignedRepEmail: 'nick.mangino@ffanorth.com',
+  notes: 'Test contact for email verification',
+  createdAt: new Date().toISOString().split('T')[0],
 });
 
 // Update advisor assigned counts from generated contacts
