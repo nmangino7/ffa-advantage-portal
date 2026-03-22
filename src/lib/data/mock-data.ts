@@ -1358,39 +1358,36 @@ const crossSellingEmails: EmailStep[] = [
 ];
 
 const reEngagementEmails: EmailStep[] = [
-  { id:'e-7-1', subject:"We noticed you have been quiet — here is what is new", previewText:"A lot has changed. We wanted you to know.", sendDay:0, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-1', subject:"Just a quick hello", previewText:"It has been a while, and we wanted to check in.", sendDay:0, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>It has been a while since we last connected, and we wanted to reach out — not to sell you anything, but to share a few updates that might be relevant to your financial planning.</p>
-
-<h2>What Is New at FFA North</h2>
+<p>It has been a while since we last connected, and we simply wanted to say hello. No agenda — just a few updates we thought might be relevant to you.</p>
 
 <ul>
-  <li><strong>Expanded retirement planning services.</strong> We have added comprehensive Social Security optimization modeling and retirement income stress-testing to our complimentary review process.</li>
-  <li><strong>New educational resources.</strong> We have published several new guides on tax-efficient withdrawal strategies, Medicare planning, and estate coordination — all available at no cost.</li>
-  <li><strong>Same commitment to education first.</strong> Our philosophy has not changed: we believe informed clients make the best decisions, and we will never pressure you into anything.</li>
+  <li><strong>Expanded retirement planning.</strong> We have added Social Security optimization modeling and retirement income stress-testing to our complimentary review process.</li>
+  <li><strong>New educational guides.</strong> We have published resources on tax-efficient withdrawal strategies, Medicare planning, and estate coordination — all available at no cost.</li>
+  <li><strong>Same philosophy.</strong> We still believe informed people make the best decisions, and we will never pressure you into anything.</li>
 </ul>
 
-<p>If any of this sounds relevant to where you are today, we would love to reconnect. If the timing is not right, that is perfectly fine — we will be here when it is.</p>
+<p>If any of this sounds relevant to where you are today, we would enjoy reconnecting. And if the timing is not right, that is completely fine — we will be here whenever it is.</p>
 
-<p>Simply reply to this email if you would like to hear more.</p>
+<p>Simply reply if you would like to hear more.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-2', subject:"3 financial trends you should know about in 2026", previewText:"What is shaping the financial landscape right now.", sendDay:7, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-2', subject:"Three trends worth watching right now", previewText:"Quick insights that may affect your planning.", sendDay:7, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Whether or not you are actively working on your financial plan right now, these three trends are worth keeping on your radar:</p>
+<p>Whether or not you are actively working on your financial plan right now, a few trends are worth keeping on your radar. We thought you might find these useful:</p>
 
-<h2>1. Interest Rates and What They Mean for Your Portfolio</h2>
-<p>The interest rate environment continues to evolve. If you have not reviewed your bond allocation, cash holdings, or fixed-income strategy recently, this is a good time to make sure your positioning still makes sense.</p>
+<ul>
+  <li><strong>Shifting interest rates.</strong> The rate environment continues to evolve. If you have not reviewed your bond allocation or cash holdings recently, it may be a good time to check that your positioning still fits.</li>
+  <li><strong>Tax provisions set to change.</strong> Several provisions from recent legislation are scheduled to sunset, which could affect tax brackets, estate exemptions, and retirement strategies. Planning ahead tends to work better than reacting.</li>
+  <li><strong>Rising healthcare costs.</strong> Healthcare inflation continues to outpace general inflation. For those approaching retirement, building a realistic cost projection is more important than ever — Medicare does not cover everything.</li>
+</ul>
 
-<h2>2. Tax Law Changes on the Horizon</h2>
-<p>Several provisions from recent tax legislation are set to sunset in the coming years, which could meaningfully impact your tax bracket, estate tax exemption, and retirement account strategies. Planning ahead — rather than reacting — can make a significant difference.</p>
+<p>Each of these trends can create both challenges and opportunities depending on your situation. If you would like to discuss how any of them might affect you, we are happy to help.</p>
 
-<h2>3. Rising Healthcare Costs in Retirement</h2>
-<p>Healthcare inflation continues to outpace general inflation. For those approaching retirement, building a realistic healthcare cost projection into your plan is more important than ever. Medicare does not cover everything, and the gaps can be substantial.</p>
-
-<p>If you would like to discuss how any of these trends might affect your personal situation, we are here to help. Reply to this email to start a conversation.</p>
+<p>Reply to this email anytime.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
   { id:'e-7-3', subject:"A quick financial health check you can do in 5 minutes", previewText:"Five questions. Five minutes. Real clarity.", sendDay:14, status:'active', bodyFormat:'html' as const,
