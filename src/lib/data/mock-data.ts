@@ -11,7 +11,7 @@ import {
 } from '../types';
 
 // If this version changes, localStorage will be re-seeded with fresh mock data
-export const STORAGE_VERSION = 4;
+export const STORAGE_VERSION = 5;
 
 // Deterministic seed helpers
 function seededRandom(seed: number): () => number {
