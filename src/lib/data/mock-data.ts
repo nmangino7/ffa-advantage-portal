@@ -218,6 +218,24 @@ export const contacts: Contact[] = Array.from({ length: 200 }, (_, i) => {
   };
 });
 
+// Add real contact for testing
+contacts.unshift({
+  id: 'contact-nick',
+  firstName: 'Nick',
+  lastName: 'Mangino',
+  email: 'rolltide7107@gmail.com',
+  phone: '(555) 000-0001',
+  company: '',
+  lastContactDate: new Date().toISOString().split('T')[0],
+  stage: 'qualified',
+  intentScore: 90,
+  campaigns: [],
+  assignedRep: 'Nick Mangino',
+  assignedRepEmail: 'nick.mangino@ffanorth.com',
+  notes: 'Test contact for email verification',
+  createdAt: new Date().toISOString().split('T')[0],
+});
+
 // Update advisor assigned counts from generated contacts
 ADVISORS.forEach(a => {
   const fullName = `${a.firstName} ${a.lastName}`;
