@@ -1390,45 +1390,42 @@ const reEngagementEmails: EmailStep[] = [
 <p>Reply to this email anytime.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-3', subject:"A quick financial health check you can do in 5 minutes", previewText:"Five questions. Five minutes. Real clarity.", sendDay:14, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-3', subject:"Something useful in five minutes", previewText:"A quick exercise that can clarify your top priority.", sendDay:14, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Sometimes the hardest part of financial planning is knowing where to start. Here is a simple five-minute exercise that can help you identify your biggest priority:</p>
+<p>Sometimes the hardest part of financial planning is knowing where to start. Here is a simple exercise that takes about five minutes and can help you zero in on your biggest priority.</p>
 
-<h2>Your 5-Minute Financial Health Check</h2>
-
-<p>Answer each question with Yes, No, or Not Sure:</p>
+<p>Answer each question with yes, no, or not sure:</p>
 
 <ul>
-  <li><strong>1.</strong> Do you have enough saved to cover 3-6 months of living expenses without touching your investments? <em>(Emergency fund)</em></li>
-  <li><strong>2.</strong> Have you reviewed your insurance coverage — life, disability, liability — in the past two years? <em>(Protection)</em></li>
-  <li><strong>3.</strong> Do you know, within a reasonable range, how much income you will need in retirement? <em>(Retirement planning)</em></li>
-  <li><strong>4.</strong> Have you reviewed your investment fees and performance in the past year? <em>(Investment management)</em></li>
-  <li><strong>5.</strong> Are your beneficiary designations, will, and powers of attorney up to date? <em>(Estate planning)</em></li>
+  <li>Do you have enough saved to cover 3-6 months of expenses without touching investments?</li>
+  <li>Have you reviewed your insurance coverage in the past two years?</li>
+  <li>Do you know roughly how much income you will need in retirement?</li>
+  <li>Have you looked at your investment fees and performance in the past year?</li>
 </ul>
 
-<p>If you answered "No" or "Not Sure" to any of these, you are not alone — and each one represents a straightforward area where a brief conversation could provide real clarity.</p>
+<p>If you answered "no" or "not sure" to any of these, you are in good company — most people have at least one area that could use some attention. Each one represents a straightforward topic where a brief conversation could provide real clarity.</p>
 
-<p>We are happy to discuss any of these with you, at no cost and with no obligation. Reply to this email and let us know which question resonated most.</p>
+<p>Would it be helpful to talk through whichever question resonated most? Reply to this email and we will take it from there — no cost and no obligation.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-4', subject:"New resources available: retirement planning toolkit", previewText:"Free guides, calculators, and checklists.", sendDay:21, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-4', subject:"A planning resource you might like", previewText:"Guides and checklists — yours to keep, no cost.", sendDay:21, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>We have put together a collection of retirement planning resources that we think you will find useful — whether you are just starting to think about retirement or are already well into your planning.</p>
+<p>We recently put together a collection of retirement planning resources and thought you might find them useful — whether you are actively planning or simply want to be better informed.</p>
 
-<h2>Our Retirement Planning Toolkit Includes:</h2>
+<p>The toolkit includes:</p>
 
 <ul>
-  <li><strong>The Retirement Income Gap Calculator.</strong> A simple worksheet to estimate your projected retirement income from all sources (Social Security, pensions, investments) and compare it to your anticipated expenses.</li>
-  <li><strong>Social Security Claiming Strategy Guide.</strong> A plain-English overview of when and how to claim — including spousal and survivor strategies that many people overlook.</li>
-  <li><strong>Healthcare Cost Estimator.</strong> A framework for projecting your healthcare expenses in retirement, including Medicare premiums, supplemental coverage, and out-of-pocket costs.</li>
-  <li><strong>Pre-Retirement Checklist.</strong> A comprehensive list of financial, legal, and administrative steps to complete in the 5 years leading up to retirement.</li>
+  <li><strong>Retirement income gap worksheet.</strong> A simple way to estimate your projected income from all sources and compare it to anticipated expenses.</li>
+  <li><strong>Social Security claiming guide.</strong> A plain-English overview of when and how to claim, including spousal strategies many people overlook.</li>
+  <li><strong>Healthcare cost framework.</strong> A tool for projecting retirement healthcare expenses, including Medicare premiums and supplemental coverage.</li>
+  <li><strong>Pre-retirement checklist.</strong> Key financial, legal, and administrative steps to consider in the years leading up to retirement.</li>
 </ul>
 
-<p>All of these resources are available at no cost. We created them because we believe better-informed people make better financial decisions.</p>
+<p>Everything is available at no cost. We created these resources because we believe better-informed people make better financial decisions — whether or not they work with us.</p>
 
-<p>Reply to this email with "send toolkit" and we will get these resources to you right away.</p>
+<p>Reply to this email with "send toolkit" and we will get them to you right away.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
   { id:'e-7-5', subject:"What has changed in financial planning this year", previewText:"Key updates that could affect your plan.", sendDay:28, status:'active', bodyFormat:'html' as const,
