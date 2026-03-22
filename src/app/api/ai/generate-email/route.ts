@@ -6,7 +6,7 @@ import type { AIEmailRequest, AIEmailResponse } from '@/lib/ai-types';
 export async function POST(request: NextRequest) {
   try {
     const body: AIEmailRequest = await request.json();
-    const { serviceLine, tone, topic, audience, sequencePosition } = body;
+    const { serviceLine, tone, topic, audience, sequencePosition, emailType } = body;
 
     if (!serviceLine || !tone || !topic || !audience) {
       return NextResponse.json(
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 - Tone: ${tone}
 - Topic: ${topic}
 - Target Audience: ${audience}
-${sequencePosition ? `- Position in drip sequence: Email ${sequencePosition} of 4` : ''}
+${sequencePosition ? `- Position in drip sequence: Email ${sequencePosition} of 4` : ''}${emailType ? `\n- Email Type: ${emailType}` : ''}
 
 Generate the email content now.`;
 

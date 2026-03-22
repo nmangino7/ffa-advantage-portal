@@ -146,15 +146,15 @@ export default function PipelinePage() {
 
                     const staggerClass = `stagger-${Math.min(cardIndex + 1, 8)}`;
                     return (
-                      <div key={contact.id} className={`bg-white rounded-xl border border-neutral-100 p-3 hover:border-indigo-200 hover:shadow-md transition-all duration-200 animate-fade-up ${staggerClass}`}>
+                      <div key={contact.id} className={`card-hover bg-white rounded-xl border border-neutral-100 p-3 hover:border-indigo-200 hover:shadow-md transition-all duration-200 animate-fade-up ${staggerClass}`} style={{ borderLeftWidth: '3px', borderLeftColor: stage.color }}>
                         <Link href={`/audience/${contact.id}`}>
                           <div className="flex items-center justify-between mb-1.5">
                             <p className="text-[13px] font-semibold text-neutral-900 truncate">{contact.firstName} {contact.lastName}</p>
                             {contact.intentScore > 0 && (
                               <span className={`text-[11px] font-semibold px-1.5 py-0.5 rounded-md ${
-                                contact.intentScore >= 70 ? 'bg-emerald-100 text-emerald-700' :
-                                contact.intentScore >= 30 ? 'bg-amber-100 text-amber-700' :
-                                'bg-neutral-100 text-neutral-500'
+                                contact.intentScore >= 70 ? 'bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200' :
+                                contact.intentScore >= 30 ? 'bg-amber-100 text-amber-700 ring-1 ring-amber-200' :
+                                'bg-neutral-100 text-neutral-600'
                               }`}>{contact.intentScore}</span>
                             )}
                           </div>

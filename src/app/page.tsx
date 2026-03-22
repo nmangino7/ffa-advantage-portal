@@ -114,6 +114,30 @@ export default function HomePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8 animate-fade-up">
+      {/* Welcome Hero */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 p-6 md:p-8 mb-8 text-white shadow-xl">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djJoLTJ2LTJoMnptMC00aDJ2MmgtMnYtMnptLTQgMHYyaC0ydi0yaDJ6bTIgMGgydjJoLTJ2LTJ6bS02LTJ2MmgtMnYtMmgyem0yIDBoMnYyaC0ydi0yem0yLTRoMnYyaC0ydi0yem0wLTR2MmgtMnYtMmgyek0yNiAyNnYyaC0ydi0yaDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30" />
+        <div className="relative z-10">
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, Nick</h1>
+          <p className="text-indigo-100 text-sm md:text-base max-w-xl">
+            {unassignedLeads.length > 0
+              ? `You have ${unassignedLeads.length} warm lead${unassignedLeads.length === 1 ? '' : 's'} needing attention and ${campaigns.filter(c => c.status === 'active').length} active campaigns running.`
+              : `All ${campaigns.filter(c => c.status === 'active').length} campaigns running smoothly. ${contacts.length} contacts in your pipeline.`
+            }
+          </p>
+          <div className="flex flex-wrap gap-3 mt-5">
+            <a href="/compose" className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium rounded-lg backdrop-blur-sm transition-colors border border-white/20">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              Compose Email
+            </a>
+            <a href="/warm-leads" className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium rounded-lg backdrop-blur-sm transition-colors border border-white/20">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /></svg>
+              View Warm Leads
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 stagger-1 animate-fade-up">
         <StatCard value={stats.totalContacts.toLocaleString()} label="Total Contacts" />

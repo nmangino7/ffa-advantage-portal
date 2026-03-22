@@ -41,7 +41,14 @@ export default function CampaignsPage() {
     active: 'bg-emerald-500',
     paused: 'bg-amber-500',
     draft: 'bg-neutral-400',
-    completed: 'bg-neutral-300',
+    completed: 'bg-blue-500',
+  };
+
+  const statusBadgeStyle: Record<string, string> = {
+    active: 'bg-emerald-100 text-emerald-700',
+    paused: 'bg-amber-100 text-amber-700',
+    draft: 'bg-neutral-100 text-neutral-600',
+    completed: 'bg-blue-100 text-blue-700',
   };
 
   if (loading || !isHydrated) {
@@ -118,7 +125,7 @@ export default function CampaignsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
         <div className="overflow-x-auto">
         <table className="w-full text-sm min-w-[700px]">
           <thead>
@@ -140,15 +147,25 @@ export default function CampaignsPage() {
               const clickPct = metrics.sent > 0 ? Math.round(metrics.clicked / metrics.sent * 100) : 0;
 
               return (
-                <tr key={campaign.id} className="group hover:bg-neutral-50/80 transition-all duration-200" style={{ boxShadow: `inset 3px 0 0 ${cfg.color}` }}>
+                <tr key={campaign.id} className="group card-hover hover:bg-neutral-50/80 transition-all duration-200" style={{ boxShadow: `inset 3px 0 0 ${cfg.color}` }}>
                   {/* Name + Status */}
                   <td className="py-3.5 px-4">
                     <div className="flex items-center gap-3">
-                      <span className={`w-2 h-2 rounded-full flex-shrink-0 ${statusDotColor[campaign.status] || 'bg-neutral-300'}`} />
-                      <div className="min-w-0">
-                        <Link href={`/campaigns/${campaign.id}`} className="text-sm font-semibold text-neutral-900 hover:text-indigo-600 transition-colors">
-                          {campaign.name}
-                        </Link>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <Link href={`/campaigns/${campaign.id}`} className="text-sm font-semibold text-neutral-900 hover:text-indigo-600 transition-colors">
+                            {campaign.name}
+                          </Link>
+                          <span className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusBadgeStyle[campaign.status] || 'bg-neutral-100 text-neutral-600'}`}>
+                            {campaign.status === 'active' && (
+                              <span className="relative flex h-1.5 w-1.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                              </span>
+                            )}
+                            {campaign.status.charAt(0).toUpperCase() + campaign.status.slice(1)}
+                          </span>
+                        </div>
                         <p className="text-xs text-neutral-500 truncate">{campaign.description}</p>
                       </div>
                     </div>

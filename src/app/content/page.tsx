@@ -170,8 +170,9 @@ export default function ContentLibraryPage() {
           </Link>
           <button
             onClick={() => document.getElementById('file-upload-trigger')?.click()}
-            className="border border-neutral-200 text-neutral-600 rounded-lg hover:bg-neutral-50 px-4 py-2 text-sm font-semibold transition-colors"
+            className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg hover:from-indigo-700 hover:to-violet-700 px-4 py-2 text-sm font-semibold transition-all inline-flex items-center gap-2"
           >
+            <Plus className="w-4 h-4" />
             Upload File
           </button>
           <button
@@ -186,7 +187,7 @@ export default function ContentLibraryPage() {
 
       {/* Filter Tabs + Search */}
       <div className="flex items-center gap-4 mb-6">
-        <div className="flex border border-neutral-200 rounded-lg p-0.5">
+        <div className="bg-neutral-100 p-1 rounded-xl inline-flex gap-1">
           {([
             { key: 'all' as ViewTab, label: 'All', icon: LayoutGrid },
             { key: 'files' as ViewTab, label: `Files (${files.length})`, icon: FolderOpen },
@@ -195,10 +196,10 @@ export default function ContentLibraryPage() {
             <button
               key={tab.key}
               onClick={() => { setViewTab(tab.key); setExpandedId(null); }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
                 viewTab === tab.key
-                  ? 'bg-neutral-900 text-white'
-                  : 'text-neutral-500 hover:text-neutral-700'
+                  ? 'bg-white text-neutral-900 shadow-sm'
+                  : 'text-neutral-500 hover:text-neutral-700 hover:bg-white/50'
               }`}
             >
               <tab.icon className="w-3.5 h-3.5" />

@@ -9,6 +9,7 @@ export interface AIEmailRequest {
   topic: string;
   audience: string;
   sequencePosition?: number;
+  emailType?: string;
 }
 
 export interface AIEmailResponse {

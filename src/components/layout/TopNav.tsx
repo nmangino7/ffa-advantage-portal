@@ -23,6 +23,7 @@ const mainNav: NavItem[] = [
   { href: '/content', label: 'Content', icon: 'file-text' },
   { href: '/ai-studio', label: 'AI Studio', icon: 'sparkles' },
   { href: '/warm-leads', label: 'Warm Leads', icon: 'flame' },
+  { href: '/compose', label: 'Compose', icon: 'mail-plus' },
 ];
 
 const settingsNav: NavItem[] = [

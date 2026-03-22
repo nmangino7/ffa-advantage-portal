@@ -208,6 +208,187 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // ─── Resend Mode ────────────────────────────────────────
+    if (provider === 'resend') {
+      if (!emailConfig.resendApiKey) {
+        return NextResponse.json(
+          { success: false, error: 'Resend API key is not configured', provider: 'resend' } satisfies SendEmailResponse,
+          { status: 400 }
+        );
+      }
+      try {
+        const resendRes = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${emailConfig.resendApiKey}`,
+          },
+          body: JSON.stringify({
+            from: `${fromName} <${fromEmail}>`,
+            to: [emailRequest.to],
+            subject: emailRequest.subject,
+            html: fullBody,
+            reply_to: emailConfig.replyToEmail,
+            tags: emailRequest.campaignId ? [{ name: 'campaign', value: emailRequest.campaignId }] : undefined,
+          }),
+        });
+        if (!resendRes.ok) {
+          const errorData = await resendRes.json().catch(() => ({}));
+          return NextResponse.json({
+            success: false,
+            error: `Resend API error: ${resendRes.status} - ${errorData?.message || resendRes.statusText}`,
+            provider: 'resend',
+          } satisfies SendEmailResponse);
+        }
+        const data = await resendRes.json();
+        return NextResponse.json({
+          success: true,
+          messageId: data.id || `resend-${Date.now()}`,
+          provider: 'resend',
+        } satisfies SendEmailResponse);
+      } catch (err) {
+        return NextResponse.json({
+          success: false,
+          error: `Resend request failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          provider: 'resend',
+        } satisfies SendEmailResponse);
+      }
+    }
+
+    // ─── SendGrid Mode ────────────────────────────────────────
+    if (provider === 'sendgrid') {
+      if (!emailConfig.sendgridApiKey) {
+        return NextResponse.json(
+          { success: false, error: 'SendGrid API key is not configured', provider: 'sendgrid' } satisfies SendEmailResponse,
+          { status: 400 }
+        );
+      }
+      try {
+        const sgRes = await fetch('https://api.sendgrid.com/v3/mail/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${emailConfig.sendgridApiKey}`,
+          },
+          body: JSON.stringify({
+            personalizations: [{ to: [{ email: emailRequest.to, name: emailRequest.toName }] }],
+            from: { email: fromEmail, name: fromName },
+            reply_to: { email: emailConfig.replyToEmail },
+            subject: emailRequest.subject,
+            content: [{ type: 'text/html', value: fullBody }],
+            categories: emailRequest.campaignName ? [emailRequest.campaignName] : undefined,
+          }),
+        });
+        if (!sgRes.ok) {
+          const errorData = await sgRes.json().catch(() => ({}));
+          const errMsg = errorData?.errors?.[0]?.message || sgRes.statusText;
+          return NextResponse.json({
+            success: false,
+            error: `SendGrid API error: ${sgRes.status} - ${errMsg}`,
+            provider: 'sendgrid',
+          } satisfies SendEmailResponse);
+        }
+        return NextResponse.json({
+          success: true,
+          messageId: sgRes.headers.get('x-message-id') || `sg-${Date.now()}`,
+          provider: 'sendgrid',
+        } satisfies SendEmailResponse);
+      } catch (err) {
+        return NextResponse.json({
+          success: false,
+          error: `SendGrid request failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          provider: 'sendgrid',
+        } satisfies SendEmailResponse);
+      }
+    }
+
+    // ─── Mailgun Mode ─────────────────────────────────────────
+    if (provider === 'mailgun') {
+      if (!emailConfig.mailgunApiKey || !emailConfig.mailgunDomain) {
+        return NextResponse.json(
+          { success: false, error: 'Mailgun API key and domain are required', provider: 'mailgun' } satisfies SendEmailResponse,
+          { status: 400 }
+        );
+      }
+      try {
+        const formData = new URLSearchParams();
+        formData.append('from', `${fromName} <${fromEmail}>`);
+        formData.append('to', `${emailRequest.toName} <${emailRequest.to}>`);
+        formData.append('subject', emailRequest.subject);
+        formData.append('html', fullBody);
+        formData.append('h:Reply-To', emailConfig.replyToEmail);
+        if (emailRequest.campaignId) formData.append('o:tag', emailRequest.campaignId);
+
+        const mgRes = await fetch(`https://api.mailgun.net/v3/${emailConfig.mailgunDomain}/messages`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Basic ${Buffer.from(`api:${emailConfig.mailgunApiKey}`).toString('base64')}`,
+          },
+          body: formData,
+        });
+        if (!mgRes.ok) {
+          const errorData = await mgRes.json().catch(() => ({}));
+          return NextResponse.json({
+            success: false,
+            error: `Mailgun API error: ${mgRes.status} - ${errorData?.message || mgRes.statusText}`,
+            provider: 'mailgun',
+          } satisfies SendEmailResponse);
+        }
+        const data = await mgRes.json();
+        return NextResponse.json({
+          success: true,
+          messageId: data.id || `mg-${Date.now()}`,
+          provider: 'mailgun',
+        } satisfies SendEmailResponse);
+      } catch (err) {
+        return NextResponse.json({
+          success: false,
+          error: `Mailgun request failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          provider: 'mailgun',
+        } satisfies SendEmailResponse);
+      }
+    }
+
+    // ─── SMTP Mode ────────────────────────────────────────────
+    if (provider === 'smtp') {
+      if (!emailConfig.smtpHost || !emailConfig.smtpUser || !emailConfig.smtpPass) {
+        return NextResponse.json(
+          { success: false, error: 'SMTP host, username, and password are required', provider: 'smtp' } satisfies SendEmailResponse,
+          { status: 400 }
+        );
+      }
+      try {
+        const nodemailer = await import('nodemailer');
+        const transporter = nodemailer.default.createTransport({
+          host: emailConfig.smtpHost,
+          port: emailConfig.smtpPort || 587,
+          secure: emailConfig.smtpSecure ?? false,
+          auth: {
+            user: emailConfig.smtpUser,
+            pass: emailConfig.smtpPass,
+          },
+        });
+        const info = await transporter.sendMail({
+          from: `"${fromName}" <${fromEmail}>`,
+          to: `"${emailRequest.toName}" <${emailRequest.to}>`,
+          replyTo: emailConfig.replyToEmail,
+          subject: emailRequest.subject,
+          html: fullBody,
+        });
+        return NextResponse.json({
+          success: true,
+          messageId: info.messageId || `smtp-${Date.now()}`,
+          provider: 'smtp',
+        } satisfies SendEmailResponse);
+      } catch (err) {
+        return NextResponse.json({
+          success: false,
+          error: `SMTP send failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          provider: 'smtp',
+        } satisfies SendEmailResponse);
+      }
+    }
+
     return NextResponse.json(
       { success: false, error: `Unknown provider: ${provider}`, provider: provider } satisfies SendEmailResponse,
       { status: 400 }

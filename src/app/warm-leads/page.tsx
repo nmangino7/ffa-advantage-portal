@@ -109,10 +109,10 @@ export default function WarmLeadsPage() {
 
       {/* Stat Numbers */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderTopWidth: '3px', borderTopColor: '#d97706' }}>
+        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderLeftWidth: '4px', borderLeftColor: '#6366f1' }}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
-              <Flame className="w-5 h-5 text-amber-600" />
+            <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
+              <Flame className="w-5 h-5 text-indigo-600" />
             </div>
             <div>
               <p className="text-2xl font-semibold text-neutral-900">{allLeads.length}</p>
@@ -120,7 +120,7 @@ export default function WarmLeadsPage() {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderTopWidth: '3px', borderTopColor: '#dc2626' }}>
+        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderLeftWidth: '4px', borderLeftColor: '#dc2626' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
               <Zap className="w-5 h-5 text-red-500" />
@@ -131,7 +131,7 @@ export default function WarmLeadsPage() {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderTopWidth: '3px', borderTopColor: '#059669' }}>
+        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderLeftWidth: '4px', borderLeftColor: '#059669' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
               <CalendarDays className="w-5 h-5 text-emerald-600" />
@@ -146,20 +146,16 @@ export default function WarmLeadsPage() {
 
       {/* Filters */}
       <div className="flex items-center justify-between mb-6">
-        <div className="flex gap-1.5">
+        <div className="bg-neutral-100 p-1 rounded-xl inline-flex gap-1">
           {(['all', 'replied', 'info_requested', 'engaged'] as const).map(tier => (
             <button
               key={tier}
               onClick={() => setTierFilter(tier)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all inline-flex items-center gap-1.5 ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 ${
                 tierFilter === tier
-                  ? 'text-white shadow-md'
-                  : 'border border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:shadow-sm'
+                  ? 'bg-white text-neutral-900 shadow-sm'
+                  : 'text-neutral-500 hover:text-neutral-700 hover:bg-white/50'
               }`}
-              style={tierFilter === tier
-                ? { backgroundColor: tier === 'all' ? '#171717' : TIER_META[tier].color }
-                : {}
-              }
             >
               {tier === 'replied' && <Flame className="w-3 h-3" />}
               {tier === 'info_requested' && <CalendarDays className="w-3 h-3" />}

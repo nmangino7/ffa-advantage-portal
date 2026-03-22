@@ -2,10 +2,19 @@
 // Client-side abstraction for email sending configuration
 
 export interface EmailConfig {
-  provider: 'hubspot' | 'outlook' | 'simulation';
+  provider: 'hubspot' | 'outlook' | 'simulation' | 'resend' | 'sendgrid' | 'mailgun' | 'smtp';
   hubspotApiKey?: string;
   outlookClientId?: string;
   outlookTenantId?: string;
+  resendApiKey?: string;
+  sendgridApiKey?: string;
+  mailgunApiKey?: string;
+  mailgunDomain?: string;
+  smtpHost?: string;
+  smtpPort?: number;
+  smtpUser?: string;
+  smtpPass?: string;
+  smtpSecure?: boolean;
   fromName: string;
   fromEmail: string;
   replyToEmail: string;

@@ -184,6 +184,136 @@ export default function GuidePage() {
         </div>
       </section>
 
+      {/* ─── Non-Pushy Follow-Up Playbook ─── */}
+      <div className="mt-12">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center text-white">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-neutral-900">The Non-Pushy Follow-Up Playbook</h2>
+            <p className="text-sm text-neutral-500">Research-backed strategies for financial advisor outreach</p>
+          </div>
+        </div>
+
+        {/* 7 Principles */}
+        <div className="bg-white rounded-xl border border-neutral-200 p-6 mb-6">
+          <h3 className="text-base font-semibold text-neutral-900 mb-4">7 Principles of Non-Pushy Client Engagement</h3>
+          <div className="space-y-4">
+            {[
+              {
+                num: '1',
+                title: 'Lead with Value, Not the Ask',
+                detail: 'Every touchpoint should give something before asking for anything. Share a relevant article, a market insight, or a useful tool. When prospects associate you with value, they come to you.',
+                example: '"I came across this article about changes to Florida insurance regulations that might affect your coverage. Thought of you — worth a quick read."',
+                color: 'from-blue-500 to-blue-600',
+              },
+              {
+                num: '2',
+                title: 'The 3-3-3 Rule',
+                detail: '3 touchpoints, 3 different channels, 3 different angles. Don\'t send the same message 3 times. Email #1: educational content. Email #2: a client success story (anonymized). Email #3: a specific, time-limited offer (free review). Each adds new value.',
+                example: 'Touch 1: "Here\'s what\'s changing with annuity rates." Touch 2: "A client in a similar situation saved $2,400/year." Touch 3: "We have 5 complimentary review slots open this month."',
+                color: 'from-violet-500 to-violet-600',
+              },
+              {
+                num: '3',
+                title: 'Acknowledge the Silence Gracefully',
+                detail: 'If someone hasn\'t responded after 2-3 emails, don\'t pretend it hasn\'t happened. Acknowledge it directly: "I know you\'re busy" or "I want to respect your time." This builds trust because it shows self-awareness.',
+                example: '"I\'ve sent a couple of emails and understand you might be busy. I\'ll keep sharing useful content, but there\'s zero pressure to respond. When the timing is right, I\'m here."',
+                color: 'from-amber-500 to-amber-600',
+              },
+              {
+                num: '4',
+                title: 'Use Social Proof, Not Pressure',
+                detail: 'Instead of "you need this," share what others in similar situations have done. "Many of our clients in Tampa have found value in reviewing their coverage after 3+ years." This lets prospects self-identify without feeling targeted.',
+                example: '"Last quarter, 23 families in the Tampa Bay area updated their retirement plans after discovering gaps. Most hadn\'t reviewed their plans in over 5 years."',
+                color: 'from-emerald-500 to-emerald-600',
+              },
+              {
+                num: '5',
+                title: 'Ask Permission to Follow Up',
+                detail: 'The most powerful non-pushy technique: ask if they want to hear from you. "Would it be helpful if I sent you occasional updates on retirement planning strategies?" A "yes" transforms cold outreach into requested communication.',
+                example: '"Would you find it helpful if I sent you a brief monthly market update relevant to your insurance coverage? Just reply \'yes\' and I\'ll add you to our educational newsletter."',
+                color: 'from-rose-500 to-rose-600',
+              },
+              {
+                num: '6',
+                title: 'Provide an Easy Exit',
+                detail: 'Always give prospects an easy way to say "no" or "not now." When people feel trapped, they ghost. When they feel free to leave, they\'re more likely to stay. "If this isn\'t relevant to you, just let me know and I\'ll stop reaching out."',
+                example: '"If reviewing your coverage isn\'t a priority right now, I completely understand. Just reply \'not now\' and I\'ll circle back in 6 months, or \'stop\' and I\'ll remove you from future emails."',
+                color: 'from-indigo-500 to-indigo-600',
+              },
+              {
+                num: '7',
+                title: 'The "Warm Lead Handoff" — Be Human',
+                detail: 'When a contact replies or clicks, the worst thing you can do is immediately pitch. Instead, thank them, ask a question, and listen. "Thanks for reaching out! Before we dive in, I\'d love to understand your current situation. What prompted you to look into this?"',
+                example: 'Prospect replies: "I\'m interested in the insurance review."\nAdvisor: "Great to hear from you, [Name]! Before we schedule anything, I\'d love to learn a bit about your current coverage and what\'s been on your mind. What prompted you to explore this?"',
+                color: 'from-cyan-500 to-cyan-600',
+              },
+            ].map(p => (
+              <div key={p.num} className="rounded-xl border border-neutral-100 overflow-hidden">
+                <div className="flex items-center gap-3 p-4 bg-neutral-50">
+                  <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${p.color} flex items-center justify-center text-white text-sm font-bold flex-shrink-0`}>
+                    {p.num}
+                  </div>
+                  <h4 className="text-sm font-semibold text-neutral-900">{p.title}</h4>
+                </div>
+                <div className="p-4 space-y-3">
+                  <p className="text-sm text-neutral-600 leading-relaxed">{p.detail}</p>
+                  <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-3">
+                    <p className="text-[10px] font-semibold text-indigo-500 uppercase tracking-wider mb-1">Example Script</p>
+                    <p className="text-xs text-indigo-800 leading-relaxed whitespace-pre-line">{p.example}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* What to Say After Silence */}
+        <div className="bg-white rounded-xl border border-neutral-200 p-6 mb-6">
+          <h3 className="text-base font-semibold text-neutral-900 mb-4">What to Say After Silence</h3>
+          <p className="text-sm text-neutral-500 mb-4">When a prospect goes quiet after initial engagement, use these research-backed re-engagement approaches:</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              { title: 'The Value Recap', script: '"Hi [Name], I wanted to share something that reminded me of our earlier conversation — [specific insight or article]. No need to respond, just thought you\'d find it useful."', when: '2 weeks after last contact' },
+              { title: 'The Honest Check-in', script: '"Hi [Name], I wanted to be upfront — I noticed we haven\'t connected in a while. I don\'t want to be a nuisance, so just let me know if you\'d prefer I reach out less frequently."', when: '4 weeks after last contact' },
+              { title: 'The Trigger Event', script: '"Hi [Name], with [relevant market event/regulation change], I thought this might be a good time to revisit our earlier discussion about your coverage. Would a quick 10-minute call be helpful?"', when: 'When something relevant happens' },
+              { title: 'The Graceful Close', script: '"Hi [Name], I\'ve enjoyed sharing financial insights with you. If your priorities have changed, I completely understand — just let me know and I\'ll stop reaching out. Either way, I wish you all the best."', when: '6+ weeks, final follow-up' },
+            ].map((item, i) => (
+              <div key={i} className="rounded-xl bg-neutral-50 border border-neutral-100 p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-sm font-semibold text-neutral-900">{item.title}</h4>
+                  <span className="text-[9px] font-medium text-neutral-400 bg-white px-2 py-0.5 rounded-full border border-neutral-100">{item.when}</span>
+                </div>
+                <p className="text-xs text-neutral-600 leading-relaxed italic">{item.script}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Warm Lead Handoff Scripts */}
+        <div className="bg-white rounded-xl border border-neutral-200 p-6">
+          <h3 className="text-base font-semibold text-neutral-900 mb-4">Warm Lead Handoff Scripts</h3>
+          <p className="text-sm text-neutral-500 mb-4">When a contact moves from automated campaign to personal advisor outreach:</p>
+          <div className="space-y-3">
+            {[
+              { trigger: 'Contact replied to an email', script: 'Hi [Name], thanks so much for getting back to me! I\'d love to learn more about what prompted your interest. Would you be open to a brief 15-minute call this week? I\'ll focus on listening to your situation — no pitch, just understanding where you are.' },
+              { trigger: 'Contact requested information', script: 'Hi [Name], I saw you requested more information about [topic]. I\'ve attached a brief overview that covers the key points. After you\'ve had a chance to review it, I\'d be happy to answer any questions over a quick call — completely on your schedule.' },
+              { trigger: 'Contact clicked multiple emails', script: 'Hi [Name], I noticed you\'ve been reading our educational emails about [service line] — great topics! Many people at this stage find a complimentary review helpful to see where they stand. Would that be useful for you? No obligation either way.' },
+              { trigger: 'Contact booked an appointment', script: 'Hi [Name], looking forward to our conversation on [date]! To make the most of our time together, it would be helpful if you could have a rough idea of your current [coverage/portfolio/plan] details. But don\'t stress about preparation — I\'m here to help guide the conversation.' },
+            ].map((item, i) => (
+              <div key={i} className="rounded-xl border border-neutral-100 p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Trigger: {item.trigger}</span>
+                </div>
+                <p className="text-sm text-neutral-700 leading-relaxed">{item.script}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Bottom CTA */}
       <div className="bg-neutral-50 rounded-xl border border-neutral-200 p-6 text-center">
         <h3 className="text-lg font-semibold text-neutral-900 mb-2">Ready to get started?</h3>

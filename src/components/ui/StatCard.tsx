@@ -15,8 +15,8 @@ export function StatCard({
 }) {
   return (
     <div
-      className="bg-white border border-neutral-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200"
-      style={accentColor ? { borderLeftWidth: '4px', borderLeftColor: accentColor } : undefined}
+      className="bg-white border border-neutral-200 rounded-xl overflow-hidden p-5 shadow-sm card-hover"
+      style={{ borderLeftWidth: '4px', borderLeftColor: accentColor || '#6366f1' }}
     >
       <div className="flex items-start justify-between">
         <div className="space-y-1">

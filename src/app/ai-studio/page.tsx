@@ -72,22 +72,19 @@ export default function AIStudioPage() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-8 animate-fade-up">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center animate-sparkle">
-            <Sparkles className="w-5 h-5 text-indigo-600" />
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 p-6 mb-6 text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent" />
+        <div className="relative z-10">
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="w-6 h-6" />
+            <h1 className="text-xl font-bold">AI Studio</h1>
           </div>
-          <div>
-            <h1 className="text-2xl font-semibold text-neutral-900">AI Studio</h1>
-            <p className="text-sm text-neutral-500">
-              Generate FINRA-compliant emails, newsletters, and run compliance audits
-            </p>
-          </div>
+          <p className="text-violet-100 text-sm max-w-lg">Generate FINRA-compliant emails, newsletters, and run compliance reviews — powered by Claude AI.</p>
         </div>
       </div>
 
       {/* Tab bar */}
-      <div className="flex gap-2 mb-8">
+      <div className="bg-neutral-100 p-1 rounded-xl inline-flex gap-1 mb-8">
         {TABS.map((tab) => {
           const TabIcon = tab.icon;
           return (
@@ -96,8 +93,8 @@ export default function AIStudioPage() {
               onClick={() => setActiveTab(tab.key)}
               className={`flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
                 activeTab === tab.key
-                  ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md'
-                  : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:shadow-sm'
+                  ? 'bg-white text-neutral-900 shadow-sm'
+                  : 'text-neutral-500 hover:text-neutral-700 hover:bg-white/50'
               }`}
             >
               <TabIcon className="w-4 h-4" />

@@ -10,6 +10,30 @@ interface EmailGeneratorProps {
   onSaveTemplate: (email: AIEmailResponse) => void;
 }
 
+const EMAIL_TYPES = [
+  { value: 'drip', label: 'Drip Campaign', description: 'Sales-oriented educational drip email' },
+  { value: 'market-update', label: 'Market Update', description: 'Educational market commentary' },
+  { value: 'check-in', label: 'Client Check-in', description: 'Personal touch, relationship building' },
+  { value: 'holiday', label: 'Holiday Greeting', description: 'Seasonal/holiday message' },
+  { value: 'event-invite', label: 'Event Invitation', description: 'Webinar, seminar, or workshop invite' },
+  { value: 'referral', label: 'Referral Request', description: 'Gentle ask for referrals' },
+  { value: 'thank-you', label: 'Thank You', description: 'Post-meeting or post-referral gratitude' },
+  { value: 'welcome', label: 'Welcome', description: 'New contact or new client welcome' },
+  { value: 'newsletter', label: 'Newsletter Excerpt', description: 'Highlight from latest newsletter' },
+] as const;
+
+const EMAIL_TYPE_PLACEHOLDERS: Record<string, string> = {
+  'drip': 'Describe the email topic or key message...',
+  'market-update': 'e.g., Q1 2026 market outlook, interest rate changes...',
+  'check-in': 'e.g., Checking in after our initial meeting...',
+  'holiday': 'e.g., Happy New Year, Thanksgiving gratitude...',
+  'event-invite': 'e.g., Annual retirement planning webinar...',
+  'referral': 'e.g., Asking for introductions to colleagues...',
+  'thank-you': 'e.g., Thank you for the referral last week...',
+  'welcome': 'e.g., Welcome to FFA North, here\'s what to expect...',
+  'newsletter': 'e.g., Key highlights from our monthly newsletter...',
+};
+
 const TONE_OPTIONS: { value: AITone; label: string }[] = [
   { value: 'professional', label: 'Professional' },
   { value: 'conversational', label: 'Conversational' },
@@ -17,6 +41,7 @@ const TONE_OPTIONS: { value: AITone; label: string }[] = [
 ];
 
 export function EmailGenerator({ onSaveTemplate }: EmailGeneratorProps) {
+  const [emailType, setEmailType] = useState<string>('drip');
   const [serviceLine, setServiceLine] = useState<ServiceLine>(SERVICE_LINES[0]);
   const [tone, setTone] = useState<AITone>('professional');
   const [topic, setTopic] = useState('');
@@ -40,6 +65,7 @@ export function EmailGenerator({ onSaveTemplate }: EmailGeneratorProps) {
       topic: topic.trim(),
       audience: audience.trim(),
       ...(sequencePosition !== undefined && { sequencePosition }),
+      emailType,
     };
 
     try {
@@ -90,6 +116,28 @@ export function EmailGenerator({ onSaveTemplate }: EmailGeneratorProps) {
         </div>
 
         <div className="space-y-5">
+          {/* Email Type */}
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1.5">Email Type</label>
+            <div className="flex flex-wrap gap-2">
+              {EMAIL_TYPES.map((et) => (
+                <button
+                  key={et.value}
+                  type="button"
+                  onClick={() => setEmailType(et.value)}
+                  title={et.description}
+                  className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                    emailType === et.value
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                  }`}
+                >
+                  {et.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Service Line */}
           <div>
             <label htmlFor="eg-service-line" className="block text-sm font-medium text-neutral-700 mb-1.5">
@@ -140,7 +188,7 @@ export function EmailGenerator({ onSaveTemplate }: EmailGeneratorProps) {
               rows={3}
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              placeholder="Describe the email topic or key message..."
+              placeholder={EMAIL_TYPE_PLACEHOLDERS[emailType] ?? 'Describe the email topic or key message...'}
               className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 resize-none"
             />
           </div>

@@ -252,22 +252,29 @@ function EmailIntegrationSection() {
         </div>
         <p className="text-xs text-neutral-500 mb-4">Select how emails are sent from the portal. Simulation mode logs sends without delivering real emails.</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
           {([
-            { key: 'simulation' as const, label: 'Simulation', desc: 'Log sends without delivering', color: 'bg-neutral-50 border-neutral-200' },
-            { key: 'hubspot' as const, label: 'HubSpot', desc: 'Transactional email API', color: 'bg-orange-50 border-orange-200' },
-            { key: 'outlook' as const, label: 'Outlook', desc: 'Microsoft Graph sendMail', color: 'bg-blue-50 border-blue-200' },
+            { key: 'simulation' as const, label: 'Simulation', desc: 'Log sends locally (testing)', color: 'bg-neutral-50 border-neutral-200', icon: '🔬' },
+            { key: 'resend' as const, label: 'Resend', desc: 'Simple email API — just needs an API key', color: 'bg-emerald-50 border-emerald-200', icon: '✉️' },
+            { key: 'sendgrid' as const, label: 'SendGrid', desc: 'Industry-standard email by Twilio', color: 'bg-indigo-50 border-indigo-200', icon: '📧' },
+            { key: 'mailgun' as const, label: 'Mailgun', desc: 'Reliable transactional email API', color: 'bg-red-50 border-red-200', icon: '📬' },
+            { key: 'smtp' as const, label: 'SMTP / Gmail', desc: 'Any email — Gmail, Yahoo, custom SMTP', color: 'bg-violet-50 border-violet-200', icon: '🔧' },
+            { key: 'hubspot' as const, label: 'HubSpot', desc: 'HubSpot transactional email API', color: 'bg-orange-50 border-orange-200', icon: '🟠' },
+            { key: 'outlook' as const, label: 'Outlook', desc: 'Microsoft Graph sendMail API', color: 'bg-blue-50 border-blue-200', icon: '🔵' },
           ]).map(p => (
             <button
               key={p.key}
-              onClick={() => updateConfig({ provider: p.key })}
+              onClick={() => updateConfig({ provider: p.key } as any)}
               className={`p-4 rounded-xl border-2 text-left transition-all ${
                 config.provider === p.key
                   ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-200'
                   : `${p.color} hover:border-neutral-300`
               }`}
             >
-              <p className="text-sm font-semibold text-neutral-900">{p.label}</p>
+              <div className="flex items-center gap-2">
+                <span className="text-lg">{p.icon}</span>
+                <p className="text-sm font-semibold text-neutral-900">{p.label}</p>
+              </div>
               <p className="text-[11px] text-neutral-500 mt-0.5">{p.desc}</p>
             </button>
           ))}
@@ -317,6 +324,74 @@ function EmailIntegrationSection() {
               </div>
             </div>
             <p className="text-[10px] text-blue-700">Note: The Client Secret should be set as an environment variable (OUTLOOK_CLIENT_SECRET) on the server.</p>
+          </div>
+        )}
+
+        {config.provider === 'resend' && (
+          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-3 mb-4">
+            <h3 className="text-xs font-semibold text-emerald-900">Resend Configuration</h3>
+            <p className="text-[10px] text-emerald-700">Get your API key from <strong>resend.com/api-keys</strong>. Resend is the simplest option — just paste your API key and you&apos;re ready to send.</p>
+            <div>
+              <label className="block text-xs font-medium text-neutral-500 mb-1">API Key</label>
+              <input type="password" value={(config as any).resendApiKey || ''} onChange={e => updateConfig({ resendApiKey: e.target.value } as any)} placeholder="re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" className="w-full px-3 py-2 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+            </div>
+          </div>
+        )}
+
+        {config.provider === 'sendgrid' && (
+          <div className="p-4 rounded-xl bg-indigo-50 border border-indigo-200 space-y-3 mb-4">
+            <h3 className="text-xs font-semibold text-indigo-900">SendGrid Configuration</h3>
+            <p className="text-[10px] text-indigo-700">Get your API key from <strong>app.sendgrid.com &rarr; Settings &rarr; API Keys</strong>. Use a key with &quot;Mail Send&quot; permission.</p>
+            <div>
+              <label className="block text-xs font-medium text-neutral-500 mb-1">API Key</label>
+              <input type="password" value={(config as any).sendgridApiKey || ''} onChange={e => updateConfig({ sendgridApiKey: e.target.value } as any)} placeholder="SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" className="w-full px-3 py-2 rounded-lg border border-indigo-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+            </div>
+          </div>
+        )}
+
+        {config.provider === 'mailgun' && (
+          <div className="p-4 rounded-xl bg-red-50 border border-red-200 space-y-3 mb-4">
+            <h3 className="text-xs font-semibold text-red-900">Mailgun Configuration</h3>
+            <p className="text-[10px] text-red-700">Get your API key from <strong>app.mailgun.com &rarr; API Security</strong>. You also need your sending domain.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-neutral-500 mb-1">API Key</label>
+                <input type="password" value={(config as any).mailgunApiKey || ''} onChange={e => updateConfig({ mailgunApiKey: e.target.value } as any)} placeholder="key-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" className="w-full px-3 py-2 rounded-lg border border-red-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-neutral-500 mb-1">Sending Domain</label>
+                <input type="text" value={(config as any).mailgunDomain || ''} onChange={e => updateConfig({ mailgunDomain: e.target.value } as any)} placeholder="mg.yourdomain.com" className="w-full px-3 py-2 rounded-lg border border-red-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {config.provider === 'smtp' && (
+          <div className="p-4 rounded-xl bg-violet-50 border border-violet-200 space-y-3 mb-4">
+            <h3 className="text-xs font-semibold text-violet-900">SMTP Configuration</h3>
+            <p className="text-[10px] text-violet-700">Works with Gmail, Yahoo, or any SMTP server. For Gmail, use an <strong>App Password</strong> (not your regular password) from myaccount.google.com &rarr; Security &rarr; App Passwords.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-neutral-500 mb-1">SMTP Host</label>
+                <input type="text" value={(config as any).smtpHost || ''} onChange={e => updateConfig({ smtpHost: e.target.value } as any)} placeholder="smtp.gmail.com" className="w-full px-3 py-2 rounded-lg border border-violet-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-neutral-500 mb-1">Port</label>
+                <input type="number" value={(config as any).smtpPort || 587} onChange={e => updateConfig({ smtpPort: parseInt(e.target.value) || 587 } as any)} className="w-full px-3 py-2 rounded-lg border border-violet-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-neutral-500 mb-1">Username / Email</label>
+                <input type="text" value={(config as any).smtpUser || ''} onChange={e => updateConfig({ smtpUser: e.target.value } as any)} placeholder="your.email@gmail.com" className="w-full px-3 py-2 rounded-lg border border-violet-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-neutral-500 mb-1">Password / App Password</label>
+                <input type="password" value={(config as any).smtpPass || ''} onChange={e => updateConfig({ smtpPass: e.target.value } as any)} placeholder="xxxx xxxx xxxx xxxx" className="w-full px-3 py-2 rounded-lg border border-violet-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+              </div>
+            </div>
+            <label className="flex items-center gap-2 text-xs text-violet-800 cursor-pointer">
+              <input type="checkbox" checked={(config as any).smtpSecure ?? false} onChange={e => updateConfig({ smtpSecure: e.target.checked } as any)} className="rounded border-violet-300" />
+              Use SSL/TLS (port 465). Leave unchecked for STARTTLS (port 587).
+            </label>
           </div>
         )}
       </div>
@@ -461,6 +536,27 @@ function HubSpotSection() {
 
   return (
     <div className="space-y-6">
+      {/* Quick Connect */}
+      <div className="bg-white rounded-xl border-2 border-orange-200 p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-2xl">🟠</span>
+          <div>
+            <h2 className="text-sm font-semibold text-neutral-900">HubSpot Quick Connect</h2>
+            <p className="text-xs text-neutral-500">Enter your Private App Token to enable HubSpot email sending</p>
+          </div>
+        </div>
+        <div className="space-y-3">
+          <div>
+            <label className="block text-xs font-medium text-neutral-500 mb-1">Private App Token</label>
+            <input type="password" placeholder="pat-na1-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" className="w-full px-3 py-2 rounded-lg border border-orange-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white" onChange={e => {
+              const config = getEmailConfig();
+              saveEmailConfig({ ...config, hubspotApiKey: e.target.value });
+            }} defaultValue={getEmailConfig().hubspotApiKey || ''} />
+          </div>
+          <p className="text-[10px] text-neutral-400">Go to HubSpot &rarr; Settings &rarr; Integrations &rarr; Private Apps &rarr; Create a private app with scopes: <code className="bg-neutral-100 px-1 rounded">crm.objects.contacts.read</code>, <code className="bg-neutral-100 px-1 rounded">content</code></p>
+        </div>
+      </div>
+
       <div className="bg-white rounded-xl border border-neutral-200 p-6">
         <h2 className="text-sm font-semibold text-neutral-900 mb-4">Integration Steps</h2>
         <div className="space-y-3">
