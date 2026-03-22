@@ -24,9 +24,9 @@ export default function SettingsPage() {
           <div className="bg-white rounded-xl border border-neutral-200 p-2 space-y-0.5 lg:sticky lg:top-20">
             {sections.map(s => (
               <button key={s} onClick={() => setActiveSection(s)}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                   activeSection === s
-                    ? 'bg-neutral-900 text-white'
+                    ? 'bg-gradient-to-r from-neutral-900 to-neutral-800 text-white shadow-sm'
                     : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50'
                 }`}>
                 {s}
@@ -95,7 +95,7 @@ function GeneralSection() {
       </div>
 
       {/* What Works Today */}
-      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+      <div className="bg-white rounded-xl border border-neutral-200 p-6" style={{ borderLeft: '3px solid #059669' }}>
         <h2 className="text-sm font-semibold text-neutral-900 mb-4">What Works Today</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {[
@@ -125,7 +125,7 @@ function GeneralSection() {
       </div>
 
       {/* Data Summary */}
-      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+      <div className="bg-white rounded-xl border border-neutral-200 p-6" style={{ borderLeft: '3px solid #2563eb' }}>
         <h2 className="text-sm font-semibold text-neutral-900 mb-4">Your Data</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           {[
@@ -171,7 +171,7 @@ function GeneralSection() {
       </div>
 
       {/* Email Provider */}
-      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+      <div className="bg-white rounded-xl border border-neutral-200 p-6" style={{ borderLeft: '3px solid #f59e0b' }}>
         <h2 className="text-sm font-semibold text-neutral-900 mb-1">Email Provider</h2>
         <p className="text-xs text-neutral-500 mb-4">Real email sending requires a HubSpot integration. See the HubSpot section for setup details.</p>
 
@@ -265,10 +265,10 @@ function EmailIntegrationSection() {
             <button
               key={p.key}
               onClick={() => updateConfig({ provider: p.key } as any)}
-              className={`p-4 rounded-xl border-2 text-left transition-all ${
+              className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
                 config.provider === p.key
-                  ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-200'
-                  : `${p.color} hover:border-neutral-300`
+                  ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-500/20 shadow-md shadow-indigo-100'
+                  : `${p.color} hover:border-neutral-300 hover:shadow-sm`
               }`}
             >
               <div className="flex items-center gap-2">
@@ -397,7 +397,7 @@ function EmailIntegrationSection() {
       </div>
 
       {/* Sender Information */}
-      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+      <div className="bg-white rounded-xl border border-neutral-200 p-6" style={{ borderLeft: '3px solid #6366f1' }}>
         <h2 className="text-sm font-semibold text-neutral-900 mb-4">Sender Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -407,7 +407,7 @@ function EmailIntegrationSection() {
               value={config.fromName}
               onChange={e => updateConfig({ fromName: e.target.value })}
               placeholder="FFA North Team"
-              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200"
             />
           </div>
           <div>
@@ -417,7 +417,7 @@ function EmailIntegrationSection() {
               value={config.fromEmail}
               onChange={e => updateConfig({ fromEmail: e.target.value })}
               placeholder="outreach@ffanorth.com"
-              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200"
             />
           </div>
           <div>
@@ -427,14 +427,14 @@ function EmailIntegrationSection() {
               value={config.replyToEmail}
               onChange={e => updateConfig({ replyToEmail: e.target.value })}
               placeholder="outreach@ffanorth.com"
-              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200"
             />
           </div>
         </div>
       </div>
 
       {/* CAN-SPAM Footer */}
-      <div className="bg-white rounded-xl border border-neutral-200 p-6">
+      <div className="bg-white rounded-xl border border-neutral-200 p-6" style={{ borderLeft: '3px solid #7c3aed' }}>
         <h2 className="text-sm font-semibold text-neutral-900 mb-1">CAN-SPAM Footer</h2>
         <p className="text-xs text-neutral-500 mb-4">This information is automatically appended to every outgoing email for compliance.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

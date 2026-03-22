@@ -75,7 +75,7 @@ export default function PipelinePage() {
             return (
               <div key={stage.key} className="flex items-center gap-1 flex-1">
                 <div className="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold"
-                  style={{ backgroundColor: stage.bgColor, color: stage.color }}>
+                  style={{ background: `linear-gradient(135deg, ${stage.bgColor}, ${stage.bgColor}90)`, color: stage.color }}>
                   <Icon name={stage.icon} className="w-4 h-4" />
                   <div className="text-left min-w-0">
                     <p className="text-[11px] font-semibold truncate">{stage.label}</p>
@@ -116,7 +116,7 @@ export default function PipelinePage() {
             <div key={stage.key} className="flex-shrink-0 w-[260px]">
               <div className="rounded-xl border border-neutral-200 bg-white overflow-hidden">
                 {/* Column header */}
-                <div className="p-4 border-b border-neutral-100" style={{ borderTopWidth: '3px', borderTopColor: stage.color, background: `linear-gradient(to bottom, ${stage.bgColor}, white)` }}>
+                <div className="p-4 border-b border-neutral-100" style={{ borderTopWidth: '3px', borderTopColor: stage.color, background: `linear-gradient(135deg, ${stage.bgColor}, ${stage.bgColor}80, white)` }}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
                       <Icon name={stage.icon} className="w-5 h-5" style={{ color: stage.color }} />
@@ -146,7 +146,7 @@ export default function PipelinePage() {
 
                     const staggerClass = `stagger-${Math.min(cardIndex + 1, 8)}`;
                     return (
-                      <div key={contact.id} className={`card-hover bg-white rounded-xl border border-neutral-100 p-3 hover:border-indigo-200 hover:shadow-md transition-all duration-200 animate-fade-up ${staggerClass}`} style={{ borderLeftWidth: '3px', borderLeftColor: stage.color }}>
+                      <div key={contact.id} className={`card-hover-premium bg-white rounded-xl border border-neutral-100 p-3 hover:border-indigo-200 hover:shadow-lg transition-all duration-300 animate-fade-up ${staggerClass}`} style={{ borderLeftWidth: '3px', borderLeftColor: stage.color }}>
                         <Link href={`/audience/${contact.id}`}>
                           <div className="flex items-center justify-between mb-1.5">
                             <p className="text-[13px] font-semibold text-neutral-900 truncate">{contact.firstName} {contact.lastName}</p>
@@ -191,7 +191,7 @@ export default function PipelinePage() {
 
                         {stageIndex < PIPELINE_STAGES.length - 1 && (
                           <button onClick={(e) => { e.preventDefault(); moveContactStage(contact.id, PIPELINE_STAGES[stageIndex + 1].key); }}
-                            className="mt-2 w-full text-[11px] py-1.5 rounded-lg bg-neutral-50 hover:bg-indigo-50 text-neutral-500 hover:text-indigo-600 font-medium transition-colors border border-neutral-100">
+                            className="mt-2 w-full text-[11px] py-1.5 rounded-lg bg-neutral-50 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-violet-50 text-neutral-500 hover:text-indigo-600 font-medium transition-all duration-200 border border-neutral-100">
                             Advance to {PIPELINE_STAGES[stageIndex + 1].label} &rarr;
                           </button>
                         )}

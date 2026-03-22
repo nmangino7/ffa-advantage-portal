@@ -61,16 +61,16 @@ export default function AudienceDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Contact Card */}
         <div className="lg:col-span-1 space-y-4">
-          <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden glass-card-premium">
             {/* Stage accent bar */}
             <div className="h-1.5" style={{ background: `linear-gradient(to right, ${stageMeta?.color || '#94a3b8'}, ${stageMeta?.color || '#94a3b8'}40)` }} />
             <div className="p-6">
             {/* Avatar & Name */}
             <div className="flex flex-col items-center text-center mb-6">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-semibold text-white mb-3 shadow-lg"
+              <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-semibold text-white mb-3"
                 style={{
                   backgroundColor: stageMeta?.color || '#94a3b8',
-                  boxShadow: `0 4px 14px ${stageMeta?.color || '#94a3b8'}30`,
+                  boxShadow: `0 6px 20px ${stageMeta?.color || '#94a3b8'}40, 0 2px 8px ${stageMeta?.color || '#94a3b8'}20`,
                 }}>
                 {contact.firstName[0]}{contact.lastName[0]}
               </div>
@@ -176,11 +176,12 @@ export default function AudienceDetailPage() {
           <div className="flex items-center gap-1 border-b border-neutral-200 mb-6">
             {tabs.map(tab => (
               <button key={tab.key} onClick={() => setActiveTab(tab.key)}
-                className={`px-4 py-2.5 text-sm font-semibold border-b-2 transition-colors ${
+                className={`px-4 py-2.5 text-sm font-semibold border-b-2 transition-all duration-300 ${
                   activeTab === tab.key
                     ? 'border-indigo-600 text-indigo-600'
                     : 'border-transparent text-neutral-500 hover:text-neutral-900'
-                }`}>
+                }`}
+                style={activeTab === tab.key ? { borderImage: 'linear-gradient(to right, #4f46e5, #7c3aed) 1' } : {}}>
                 {tab.label}
                 {tab.count !== undefined && (
                   <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full ${
@@ -193,7 +194,7 @@ export default function AudienceDetailPage() {
 
           {/* Activity Tab */}
           {activeTab === 'activity' && (
-            <div className="bg-white rounded-xl border border-neutral-200 p-6">
+            <div className="bg-white rounded-xl border border-neutral-200 p-6 transition-all duration-300 animate-fade-up">
               <h3 className="text-base font-semibold text-neutral-900 mb-4">Activity Timeline</h3>
               <ActivityTimeline activities={contactActivities} />
             </div>
@@ -201,7 +202,7 @@ export default function AudienceDetailPage() {
 
           {/* Campaigns Tab */}
           {activeTab === 'campaigns' && (
-            <div className="bg-white rounded-xl border border-neutral-200 p-6">
+            <div className="bg-white rounded-xl border border-neutral-200 p-6 transition-all duration-300 animate-fade-up">
               <h3 className="text-base font-semibold text-neutral-900 mb-4">Campaigns</h3>
               {contactCampaigns.length > 0 ? (
                 <div className="space-y-3">
@@ -257,7 +258,7 @@ export default function AudienceDetailPage() {
 
           {/* Engagement Tab */}
           {activeTab === 'engagement' && (
-            <div className="bg-white rounded-xl border border-neutral-200 p-6">
+            <div className="bg-white rounded-xl border border-neutral-200 p-6 transition-all duration-300 animate-fade-up">
               <h3 className="text-base font-semibold text-neutral-900 mb-4">Engagement Metrics</h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <EngagementBox label="Total Actions" value={engagement.totalActions} icon={<BarChart3 className="w-4 h-4" />} />
@@ -278,7 +279,8 @@ export default function AudienceDetailPage() {
 
 function EngagementBox({ label, value, icon, highlight }: { label: string; value: number; icon: React.ReactNode; highlight?: boolean }) {
   return (
-    <div className="bg-neutral-50 rounded-xl border border-neutral-200 p-4 text-center">
+    <div className={`bg-neutral-50 rounded-xl border p-4 text-center transition-all duration-300 hover:shadow-md ${highlight ? 'border-amber-100 bg-gradient-to-br from-amber-50 to-white' : 'border-neutral-200 bg-gradient-to-br from-neutral-50 to-white'}`}
+      style={highlight && value > 0 ? { borderLeft: '3px solid #f59e0b' } : {}}>
       <div className={`flex justify-center mb-1.5 ${highlight ? 'text-amber-500' : 'text-neutral-400'}`}>{icon}</div>
       <p className={`text-2xl font-semibold ${highlight ? 'text-amber-600' : 'text-neutral-900'}`}>{value}</p>
       <p className="text-[10px] text-neutral-500 mt-0.5">{label}</p>
