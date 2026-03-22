@@ -1428,45 +1428,38 @@ const reEngagementEmails: EmailStep[] = [
 <p>Reply to this email with "send toolkit" and we will get them to you right away.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-5', subject:"What has changed in financial planning this year", previewText:"Key updates that could affect your plan.", sendDay:28, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-5', subject:"Seasonal planning reminders", previewText:"A few timely items worth having on your radar.", sendDay:28, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Financial planning is not static — regulations, markets, and best practices evolve. Here are some of the most significant changes from the past year that may be relevant to your planning:</p>
-
-<h2>Key Updates Worth Knowing</h2>
+<p>Financial planning is not static — regulations shift, contribution limits change, and timely moves can make a meaningful difference. Here are a few seasonal reminders worth keeping on your radar:</p>
 
 <ul>
-  <li><strong>Retirement account contribution limits.</strong> Annual contribution limits for 401(k)s, IRAs, and other retirement accounts have been adjusted. If you have not updated your contribution amounts, you may be leaving tax-advantaged savings on the table.</li>
-  <li><strong>Required Minimum Distribution (RMD) changes.</strong> Recent legislation has adjusted the age at which RMDs begin and the rules around inherited IRAs. These changes can significantly impact your tax planning and withdrawal strategy.</li>
-  <li><strong>Estate and gift tax exemptions.</strong> Current elevated exemption amounts are scheduled to change. If you have a sizable estate, this is worth discussing with your advisor sooner rather than later.</li>
-  <li><strong>Medicare premium adjustments.</strong> Medicare Part B and Part D premiums have changed, and high-income surcharges (IRMAA) may apply if your modified adjusted gross income exceeds certain thresholds.</li>
+  <li><strong>Retirement contribution limits.</strong> Annual limits for 401(k)s and IRAs are periodically adjusted. If you have not updated your contributions recently, you may be leaving tax-advantaged savings on the table.</li>
+  <li><strong>RMD rule changes.</strong> Recent legislation adjusted when required minimum distributions begin and how inherited IRAs are handled. These changes can significantly impact withdrawal strategy and tax planning.</li>
+  <li><strong>Estate exemption window.</strong> Current elevated exemption amounts are scheduled to change. If you have a sizable estate, discussing this with your advisor sooner rather than later may be valuable.</li>
 </ul>
 
-<p>Each of these changes can create both challenges and opportunities — depending on your specific situation. If you would like to understand how they affect you, we are happy to walk through it together.</p>
+<p>Each of these can create both challenges and opportunities depending on your situation. Even a quick review of how they apply to you can be worthwhile.</p>
 
-<p>Reply to this email to schedule a brief, no-cost conversation.</p>
+<p>Would it be helpful to walk through any of these together? Reply to this email and we will set up a brief conversation at no cost.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-6', subject:"Our clients' most common question — answered", previewText:"It is the one thing everyone wants to know.", sendDay:35, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-6', subject:"The question everyone asks us", previewText:"It comes up in nearly every conversation we have.", sendDay:35, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>After thousands of client conversations, one question comes up more than any other:</p>
+<p>After thousands of client conversations, one question comes up more than any other. It is asked in different ways — "Do I have enough?" "Can I afford to retire?" "Will my money last?" — but the underlying concern is the same. People want to know they are on solid ground.</p>
 
-<p><em>"Am I going to be okay?"</em></p>
-
-<p>It is asked in different ways — "Do I have enough?" "Can I afford to retire?" "Will my money last?" — but the underlying concern is the same. People want to know that they are on solid ground.</p>
-
-<h2>Here Is What We Have Learned</h2>
+<p>Here is what we have learned:</p>
 
 <ul>
-  <li><strong>The question itself is healthy.</strong> Worrying about your financial future is not a sign of failure — it is a sign that you care. The people who should be concerned are the ones who never ask.</li>
-  <li><strong>The answer is almost always actionable.</strong> Whether you are ahead of schedule or behind, there are concrete steps you can take to improve your position. The key is knowing where you stand.</li>
-  <li><strong>Clarity reduces anxiety.</strong> The clients who feel most at peace are not always the wealthiest — they are the ones who have a clear plan, understand their numbers, and know what to expect.</li>
+  <li><strong>The question itself is healthy.</strong> Wondering about your financial future is a sign that you care. The people who should be concerned are the ones who never ask.</li>
+  <li><strong>The answer is almost always actionable.</strong> Whether you are ahead of schedule or behind, there are concrete steps that can improve your position. The key is knowing where you stand.</li>
+  <li><strong>Clarity reduces anxiety.</strong> The clients who feel most at peace are not always the wealthiest — they are the ones with a clear plan who understand their numbers.</li>
 </ul>
 
-<p>If you have been carrying this question around, we would be glad to help you find your answer. A 30-minute conversation is often all it takes to go from uncertainty to clarity.</p>
+<p>If you have been carrying this question around, a 30-minute conversation is often all it takes to move from uncertainty to clarity.</p>
 
-<p>Reply to this email and we will set up a time that works for you.</p>
+<p>Would it be helpful to set up a time to talk? Reply to this email whenever you are ready.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
   { id:'e-7-7', subject:"Is now the right time for a financial review?", previewText:"The short answer might surprise you.", sendDay:42, status:'active', bodyFormat:'html' as const,
