@@ -1462,40 +1462,35 @@ const reEngagementEmails: EmailStep[] = [
 <p>Would it be helpful to set up a time to talk? Reply to this email whenever you are ready.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-7', subject:"Is now the right time for a financial review?", previewText:"The short answer might surprise you.", sendDay:42, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-7', subject:"When is the right time for a review?", previewText:"The honest answer may not be what you expect.", sendDay:42, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>People often ask us when the "right" time is for a financial review. The honest answer: there is no perfect time — but there are several situations that make it especially valuable:</p>
-
-<h2>Consider a Review If:</h2>
+<p>People often ask us when the "right" time is for a financial review. The honest answer is that there is no perfect moment — but there are situations that make it especially worthwhile:</p>
 
 <ul>
-  <li><strong>Your life has changed.</strong> Marriage, divorce, a new child, a job change, an inheritance, or the loss of a loved one — any of these can shift your financial priorities.</li>
-  <li><strong>It has been more than two years.</strong> Even without a major life event, tax laws, markets, and your own goals evolve. A plan that was right two years ago may need updating.</li>
-  <li><strong>You feel uncertain.</strong> If you have a nagging sense that something is off — or you simply do not know where you stand — that feeling is worth exploring.</li>
-  <li><strong>You are approaching a milestone.</strong> Within 10 years of retirement, reaching a certain net worth, or becoming eligible for Medicare are all natural checkpoints.</li>
+  <li><strong>Your life has changed.</strong> Marriage, divorce, a new child, a job change, or an inheritance can all shift your financial priorities.</li>
+  <li><strong>It has been more than two years.</strong> Even without a major event, tax laws and markets evolve. A plan that fit two years ago may need refreshing.</li>
+  <li><strong>You feel uncertain.</strong> A nagging sense that something may be off is worth exploring — that instinct is usually pointing at something real.</li>
 </ul>
 
-<p>The truth is, a financial review is never wasted. At worst, it confirms you are on the right track. At best, it uncovers opportunities you did not know existed.</p>
+<p>The truth is, a financial review is rarely wasted. At worst, it confirms you are on the right track. At best, it surfaces opportunities you did not know existed.</p>
 
-<p>If any of these situations resonate with you, we would be happy to schedule a complimentary review. Reply to this email to get started.</p>
+<p>Would it be helpful to schedule a conversation? Reply to this email and we will find a time that works — no cost and no obligation.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-8', subject:"We are here when you are ready", previewText:"No rush. No pressure. Just an open door.", sendDay:56, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-8', subject:"The door is always open", previewText:"No rush, no pressure — just an open invitation.", sendDay:56, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
 <p>This is the last email in our series, and we want to leave you with something simple: an open invitation.</p>
 
-<h2>Whenever You Are Ready, We Are Here</h2>
-
 <p>We understand that timing matters. Maybe right now is not the right moment to focus on your financial plan — and that is perfectly okay. Life has a way of demanding our attention in different places at different times.</p>
 
-<p>But when the time is right — whether that is next week, next month, or next year — here is what we offer:</p>
+<p>Whenever the time does feel right — whether that is next week, next month, or next year — here is what we offer:</p>
 
 <ul>
   <li>A complimentary, no-obligation financial review</li>
-  <li>An experienced advisor who will listen to your concerns and answer your questions</li>
-  <li>A clear, written assessment of where you stand and what you might consider</li>
+  <li>An experienced advisor who will listen and answer your questions</li>
+  <li>A clear, written assessment that is yours to keep</li>
   <li>Zero pressure to make any changes or commitments</li>
 </ul>
 
@@ -1503,7 +1498,7 @@ const reEngagementEmails: EmailStep[] = [
 
 <p>We genuinely wish you the best, {{first_name}}, and we hope to hear from you someday.</p>
 
-<p>With warm regards,<br/>The FFA North Team<br/>(561) 555-0100</p>` },
+<p>Warm regards,<br/>The FFA North Team<br/>(561) 555-0100</p>` },
 ];
 
 const campaignDefs: { name: string; serviceLine: ServiceLine; description: string; status: CampaignStatus; emails: EmailStep[] }[] = [

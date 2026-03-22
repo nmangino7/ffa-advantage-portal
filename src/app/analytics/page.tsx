@@ -154,7 +154,7 @@ export default function AnalyticsPage() {
                 return (
                   <tr
                     key={campaign.id}
-                    className={`border-b border-neutral-50 hover:bg-neutral-50 transition-colors ${idx % 2 === 1 ? 'bg-neutral-50/50' : ''}`}
+                    className={`border-b border-neutral-50 hover:bg-indigo-50/30 transition-all duration-200 ${idx % 2 === 1 ? 'bg-neutral-50/50' : ''}`}
                   >
                     <td className="py-3 pr-4">
                       <Link

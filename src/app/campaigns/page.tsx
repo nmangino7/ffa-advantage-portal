@@ -45,10 +45,10 @@ export default function CampaignsPage() {
   };
 
   const statusBadgeStyle: Record<string, string> = {
-    active: 'bg-emerald-100 text-emerald-700',
-    paused: 'bg-amber-100 text-amber-700',
-    draft: 'bg-neutral-100 text-neutral-600',
-    completed: 'bg-blue-100 text-blue-700',
+    active: 'bg-gradient-to-r from-emerald-100 to-emerald-50 text-emerald-700',
+    paused: 'bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700',
+    draft: 'bg-gradient-to-r from-neutral-100 to-neutral-50 text-neutral-600',
+    completed: 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700',
   };
 
   if (loading || !isHydrated) {
@@ -125,7 +125,7 @@ export default function CampaignsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow card-hover-premium">
         <div className="overflow-x-auto">
         <table className="w-full text-sm min-w-[700px]">
           <thead>
@@ -147,7 +147,7 @@ export default function CampaignsPage() {
               const clickPct = metrics.sent > 0 ? Math.round(metrics.clicked / metrics.sent * 100) : 0;
 
               return (
-                <tr key={campaign.id} className="group card-hover hover:bg-neutral-50/80 transition-all duration-200" style={{ boxShadow: `inset 3px 0 0 ${cfg.color}` }}>
+                <tr key={campaign.id} className="group hover:bg-neutral-50/80 transition-all duration-300 border-l-3" style={{ boxShadow: `inset 3px 0 0 ${cfg.color}`, transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
                   {/* Name + Status */}
                   <td className="py-3.5 px-4">
                     <div className="flex items-center gap-3">
@@ -173,7 +173,7 @@ export default function CampaignsPage() {
 
                   {/* Service Line Badge */}
                   <td className="py-3.5 px-4">
-                    <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold px-3 py-1.5 rounded-full"
+                    <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold px-3.5 py-1.5 rounded-full shadow-sm"
                       style={{ backgroundColor: cfg.bgColor, color: cfg.color }}>
                       <Icon name={cfg.icon} className="w-3.5 h-3.5" />
                       {campaign.serviceLine}
@@ -205,7 +205,7 @@ export default function CampaignsPage() {
                     <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => toggleCampaignStatus(campaign.id)}
-                        className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors"
+                        className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 hover:bg-gradient-to-r hover:from-neutral-100 hover:to-neutral-50 transition-all duration-200"
                         title={campaign.status === 'active' ? 'Pause' : 'Resume'}
                       >
                         {campaign.status === 'active' ? (
@@ -221,7 +221,7 @@ export default function CampaignsPage() {
                       </button>
                       <button
                         onClick={() => { duplicateCampaign(campaign.id); showToast(`"${campaign.name}" duplicated as draft`); }}
-                        className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors"
+                        className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 hover:bg-gradient-to-r hover:from-neutral-100 hover:to-neutral-50 transition-all duration-200"
                         title="Duplicate"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -229,7 +229,7 @@ export default function CampaignsPage() {
                         </svg>
                       </button>
                       <Link href={`/campaigns/${campaign.id}/edit`}
-                        className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors"
+                        className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 hover:bg-gradient-to-r hover:from-neutral-100 hover:to-neutral-50 transition-all duration-200"
                         title="Edit"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

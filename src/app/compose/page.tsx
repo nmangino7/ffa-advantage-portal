@@ -187,7 +187,7 @@ export default function ComposePage() {
       <div className="flex items-center gap-3 mb-6 p-3 bg-white rounded-xl border border-neutral-200">
         <Zap className="w-4 h-4 text-neutral-400" />
         <span className="text-xs text-neutral-500">Sending via:</span>
-        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${currentProvider.color}`}>
+        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm ${currentProvider.color}`}>
           {currentProvider.label}
         </span>
         {emailConfig.provider === 'simulation' && (
@@ -197,7 +197,7 @@ export default function ComposePage() {
 
       <div className="space-y-5">
         {/* Recipient Card */}
-        <div className="bg-white rounded-xl border border-neutral-200 p-5">
+        <div className="bg-white rounded-xl border border-neutral-200 p-5 glass-card-premium">
           <div className="flex items-center gap-2 mb-3">
             <User className="w-4 h-4 text-neutral-400" />
             <label className="text-sm font-semibold text-neutral-900">To</label>
@@ -277,7 +277,7 @@ export default function ComposePage() {
         </div>
 
         {/* Template Picker */}
-        <div className="bg-white rounded-xl border border-neutral-200 p-5">
+        <div className="bg-white rounded-xl border border-neutral-200 p-5 glass-card-premium">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <FileText className="w-4 h-4 text-neutral-400" />
@@ -314,7 +314,7 @@ export default function ComposePage() {
         </div>
 
         {/* Subject */}
-        <div className="bg-white rounded-xl border border-neutral-200 p-5">
+        <div className="bg-white rounded-xl border border-neutral-200 p-5 glass-card-premium">
           <div className="flex items-center gap-2 mb-3">
             <Mail className="w-4 h-4 text-neutral-400" />
             <label className="text-sm font-semibold text-neutral-900">Subject</label>
@@ -329,7 +329,7 @@ export default function ComposePage() {
         </div>
 
         {/* Body Editor */}
-        <div className="bg-white rounded-xl border border-neutral-200 p-5">
+        <div className="bg-white rounded-xl border border-neutral-200 p-5 glass-card-premium">
           <div className="flex items-center justify-between mb-3">
             <label className="text-sm font-semibold text-neutral-900">Body</label>
             <button
@@ -342,7 +342,7 @@ export default function ComposePage() {
           </div>
 
           {showPreview ? (
-            <div className="min-h-[300px] p-4 border border-neutral-100 rounded-lg bg-neutral-50">
+            <div className="min-h-[300px] p-4 border border-neutral-100 rounded-lg bg-neutral-50 shadow-[0_2px_15px_rgba(0,0,0,0.04)]">
               <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: body || '<p class="text-neutral-300">Nothing to preview yet...</p>' }} />
             </div>
           ) : (
@@ -409,7 +409,7 @@ export default function ComposePage() {
           <button
             onClick={handleSend}
             disabled={!isFormValid || sending}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold rounded-xl hover:from-indigo-700 hover:to-violet-700 transition-all shadow-lg shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold rounded-xl hover:from-indigo-700 hover:to-violet-700 transition-all shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
           >
             {sending ? (
               <>

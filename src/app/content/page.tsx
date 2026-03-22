@@ -253,11 +253,12 @@ export default function ContentLibraryPage() {
             <button
               key={tab.key}
               onClick={() => { setViewTab(tab.key); setExpandedId(null); setExpandedDeckId(null); }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all duration-300 ${
                 viewTab === tab.key
-                  ? 'bg-white text-neutral-900 shadow-sm'
+                  ? 'bg-white text-neutral-900 shadow-md'
                   : 'text-neutral-500 hover:text-neutral-700 hover:bg-white/50'
               }`}
+              style={viewTab === tab.key ? { boxShadow: '0 2px 8px rgba(99,102,241,0.12)' } : {}}
             >
               <tab.icon className="w-3.5 h-3.5" />
               {tab.label}
@@ -272,7 +273,7 @@ export default function ContentLibraryPage() {
             placeholder="Search content..."
             value={search}
             onChange={e => { setSearch(e.target.value); setExpandedId(null); setExpandedDeckId(null); }}
-            className="w-full pl-9 pr-4 py-2 rounded-lg border border-neutral-200 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 bg-white"
+            className="w-full pl-9 pr-4 py-2 rounded-lg border border-neutral-200 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white transition-all duration-200"
           />
         </div>
       </div>
@@ -494,6 +495,7 @@ export default function ContentLibraryPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {filteredTemplates.map(template => (
                 <EmailPreviewCard
+                  /* card-hover-premium applied via EmailPreviewCard wrapper */
                   key={template.template.id}
                   template={template}
                   expanded={expandedId === template.template.id}

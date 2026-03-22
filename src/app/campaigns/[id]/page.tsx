@@ -140,7 +140,7 @@ export default function CampaignDetailPage() {
           </div>
 
           {/* Metrics Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 glass-card-premium rounded-xl p-3">
             <MetricBox label="Enrolled" value={campaign.enrolledCount} />
             <MetricBox label="Sent" value={detailed.sent} />
             <MetricBox label="Opened" value={detailed.opened} sub={`${detailed.sent > 0 ? Math.round(detailed.opened / detailed.sent * 100) : 0}%`} />
@@ -155,16 +155,17 @@ export default function CampaignDetailPage() {
 
       {/* Tabs */}
       <div className="border-b border-neutral-200 mb-6">
-        <div className="flex gap-6">
+        <div className="flex gap-6 relative">
           {tabs.map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`pb-3 text-sm font-semibold transition-colors border-b-2 ${
+              className={`pb-3 text-sm font-semibold transition-all duration-300 border-b-2 ${
                 activeTab === tab.key
-                  ? 'border-neutral-900 text-neutral-900'
+                  ? 'border-indigo-600 text-neutral-900'
                   : 'border-transparent text-neutral-500 hover:text-neutral-700'
               }`}
+              style={activeTab === tab.key ? { borderImage: 'linear-gradient(to right, #4f46e5, #7c3aed) 1' } : {}}
             >
               {tab.label}
             </button>
@@ -261,7 +262,7 @@ export default function CampaignDetailPage() {
             const stepOpened = Math.round(stepSent * (campaign.openRate / 100) * (1 - i * 0.08));
             const stepClicked = Math.round(stepSent * (campaign.clickRate / 100) * (1 + i * 0.1));
             return (
-              <div key={step.id} className="bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-md hover:border-neutral-300 transition-all duration-200">
+              <div key={step.id} className="bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-lg hover:border-neutral-300 transition-all duration-300 card-hover-premium">
                 <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-gradient-to-r from-neutral-50/80 to-white">
                   <div className="flex items-center gap-3">
                     <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold text-white" style={{ backgroundColor: cfg.color }}>
@@ -370,8 +371,8 @@ function MetricBox({ label, value, sub, highlight }: { label: string; value: num
   const rateColor = isRate ? (rateValue >= 20 ? 'text-emerald-600' : rateValue >= 10 ? 'text-amber-600' : 'text-neutral-900') : '';
 
   return (
-    <div className={`rounded-xl p-3 text-center transition-all duration-200 hover:shadow-sm ${
-      isGood ? 'bg-amber-50 border border-amber-100' : 'bg-neutral-50 border border-transparent'
+    <div className={`rounded-xl p-3 text-center transition-all duration-300 hover:shadow-md ${
+      isGood ? 'bg-gradient-to-br from-amber-50 to-amber-100/50 border border-amber-100' : 'bg-gradient-to-br from-neutral-50 to-white border border-neutral-100/50'
     }`}>
       <p className={`text-xl font-semibold ${isGood ? 'text-amber-600' : rateColor || 'text-neutral-900'}`}>{value}</p>
       {sub && <span className={`text-[10px] ${isGood ? 'text-amber-400' : 'text-neutral-400'}`}>{sub}</span>}

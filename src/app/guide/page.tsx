@@ -127,15 +127,15 @@ export default function GuidePage() {
         <h2 className="text-lg font-semibold text-neutral-900 mb-5">Step-by-Step Guide</h2>
         <div className="space-y-4">
           {steps.map((step, i) => (
-            <div key={step.number} className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+            <div key={step.number} className="bg-white rounded-xl border border-neutral-200 overflow-hidden card-hover-premium">
               <div className="flex items-start gap-5 p-6">
                 <div className="flex flex-col items-center flex-shrink-0">
                   <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white shadow-lg"
-                    style={{ background: `linear-gradient(135deg, ${step.color}, ${step.color}cc)` }}>
+                    style={{ background: `linear-gradient(135deg, ${step.color}, ${step.color}cc)`, boxShadow: `0 4px 14px ${step.color}30` }}>
                     {step.number}
                   </div>
                   {i < steps.length - 1 && (
-                    <div className="w-px h-6 mt-2" style={{ backgroundColor: step.color + '30' }} />
+                    <div className="w-px h-8 mt-2 bg-gradient-to-b" style={{ backgroundImage: `linear-gradient(to bottom, ${step.color}60, ${step.color}10)` }} />
                   )}
                 </div>
                 <div className="flex-1">
@@ -147,8 +147,8 @@ export default function GuidePage() {
                   </div>
                   <p className="text-sm text-neutral-600 leading-relaxed mb-4">{step.description}</p>
                   <Link href={step.href}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg text-white transition-colors hover:opacity-90"
-                    style={{ backgroundColor: step.color }}>
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg text-white transition-all duration-300 hover:shadow-lg"
+                    style={{ background: `linear-gradient(135deg, ${step.color}, ${step.color}dd)` }}>
                     {step.cta}
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -169,13 +169,13 @@ export default function GuidePage() {
             <div key={i}>
               <button
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-neutral-50 transition-colors"
+                className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-neutral-50 transition-all duration-300"
               >
                 <span className="text-sm font-semibold text-neutral-900 pr-4">{faq.q}</span>
                 <ChevronDown className={`w-4 h-4 text-neutral-400 flex-shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
               </button>
               {openFaq === i && (
-                <div className="px-5 pb-4">
+                <div className="px-5 pb-4 animate-fade-up">
                   <p className="text-sm text-neutral-600 leading-relaxed">{faq.a}</p>
                 </div>
               )}
@@ -253,7 +253,7 @@ export default function GuidePage() {
             ].map(p => (
               <div key={p.num} className="rounded-xl border border-neutral-100 overflow-hidden">
                 <div className="flex items-center gap-3 p-4 bg-neutral-50">
-                  <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${p.color} flex items-center justify-center text-white text-sm font-bold flex-shrink-0`}>
+                  <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${p.color} flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-md`}>
                     {p.num}
                   </div>
                   <h4 className="text-sm font-semibold text-neutral-900">{p.title}</h4>
@@ -319,10 +319,10 @@ export default function GuidePage() {
         <h3 className="text-lg font-semibold text-neutral-900 mb-2">Ready to get started?</h3>
         <p className="text-sm text-neutral-600 mb-4">Begin by reviewing your audience segments, then explore the email templates.</p>
         <div className="flex gap-3 justify-center">
-          <Link href="/audience" className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all">
+          <Link href="/audience" className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold rounded-lg hover:from-indigo-700 hover:to-violet-700 transition-all hover:shadow-lg hover:shadow-indigo-200">
             View Your Audience
           </Link>
-          <Link href="/content" className="px-5 py-2.5 bg-white text-neutral-700 text-sm font-semibold rounded-lg border border-neutral-200 hover:bg-neutral-50 transition-colors">
+          <Link href="/content" className="px-5 py-2.5 bg-white text-neutral-700 text-sm font-semibold rounded-lg border border-neutral-200 hover:bg-neutral-50 transition-all duration-200 hover:shadow-sm">
             Browse Templates
           </Link>
         </div>
