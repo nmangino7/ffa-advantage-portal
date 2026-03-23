@@ -1,21 +1,25 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useModal } from '@/lib/context/ModalContext';
+import { useToast } from '@/lib/context/ToastContext';
 import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
+import { PDF_COMPANIONS } from '@/lib/data/pdf-companions';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DripTimeline } from '@/components/ui/DripTimeline';
 import { Icon } from '@/components/ui/Icon';
-import { Flame, Pencil, Send } from 'lucide-react';
+import { Flame, Pencil, Send, FileText, Download } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CampaignDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { contacts, campaigns, activities, toggleCampaignStatus } = usePortal();
   const { openEnrollModal, openConfirmDialog, openSendTestModal } = useModal();
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState<'overview' | 'sequence' | 'contacts'>('overview');
+  const [downloadingPdfId, setDownloadingPdfId] = useState<string | null>(null);
 
   const campaign = campaigns.find(c => c.id === id);
   if (!campaign) return <div className="p-10 text-center text-neutral-400">Campaign not found</div>;
@@ -58,6 +62,32 @@ export default function CampaignDetailPage() {
       return { contact, action: act, tierLabel: tierMap[act.type] || 'Engaged' };
     }).filter(Boolean).slice(0, 3);
   }, [activities, contacts, id]);
+
+  const companions = PDF_COMPANIONS.filter(p => p.campaignId === id);
+
+  const handleDownloadCompanion = useCallback(async (companionId: string, title: string) => {
+    setDownloadingPdfId(companionId);
+    try {
+      const res = await fetch('/api/ai/generate-companion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ companionId }),
+      });
+      if (!res.ok) throw new Error('Failed to generate PDF');
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('PDF downloaded successfully');
+    } catch {
+      showToast('Failed to generate PDF');
+    } finally {
+      setDownloadingPdfId(null);
+    }
+  }, [showToast]);
 
   const tabs = [
     { key: 'overview' as const, label: 'Overview' },
@@ -222,6 +252,61 @@ export default function CampaignDetailPage() {
                           className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 px-2 py-1 bg-indigo-50 rounded-lg">
                           View
                         </Link>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* PDF Companion Documents */}
+          {companions.length > 0 && (
+            <div className="bg-white rounded-xl border border-neutral-200 p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <FileText className="w-5 h-5 text-indigo-600" />
+                <h2 className="text-sm font-semibold text-neutral-900">Companion Documents</h2>
+                <span className="text-xs font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full">{companions.length} PDF{companions.length > 1 ? 's' : ''}</span>
+              </div>
+              <p className="text-sm text-neutral-500 mb-4">Downloadable guides designed to accompany this campaign&apos;s email sequence.</p>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                {companions.map(comp => {
+                  const isDownloading = downloadingPdfId === comp.id;
+                  return (
+                    <div key={comp.id} className="border border-neutral-100 rounded-xl p-4 hover:shadow-md hover:border-neutral-200 transition-all duration-300 bg-gradient-to-br from-neutral-50/50 to-white">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: cfg.bgColor, color: cfg.color }}>
+                          <FileText className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sm font-semibold text-neutral-900 leading-snug">{comp.title}</h3>
+                          <p className="text-xs text-neutral-500 mt-0.5 line-clamp-2">{comp.description}</p>
+                          <div className="flex items-center gap-3 mt-2.5">
+                            <span className="text-[10px] text-neutral-400 font-medium">{comp.pageCount} pages</span>
+                            <span className="text-[10px] text-neutral-400 font-medium">{comp.sections.length} sections</span>
+                            <button
+                              onClick={() => handleDownloadCompanion(comp.id, comp.title)}
+                              disabled={isDownloading}
+                              className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg text-white transition-all disabled:opacity-60"
+                              style={{ background: `linear-gradient(135deg, ${cfg.color}, ${cfg.color}dd)` }}
+                            >
+                              {isDownloading ? (
+                                <>
+                                  <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24" fill="none">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                  </svg>
+                                  Generating...
+                                </>
+                              ) : (
+                                <>
+                                  <Download className="w-3 h-3" />
+                                  Download PDF
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   );

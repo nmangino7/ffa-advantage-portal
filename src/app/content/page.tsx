@@ -7,15 +7,16 @@ import { useModal } from '@/lib/context/ModalContext';
 import { useToast } from '@/lib/context/ToastContext';
 import { SERVICE_LINE_CONFIG, SERVICE_LINES, type ServiceLine, type ContentTemplate } from '@/lib/types';
 import { PRESENTATIONS, type PresentationDeck } from '@/lib/data/presentations';
+import { PDF_COMPANIONS, type PdfCompanion } from '@/lib/data/pdf-companions';
 import { EmailPreviewCard } from '@/components/ui/EmailPreviewCard';
 import { FileUploadZone } from '@/components/ui/FileUploadZone';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { SkeletonCard } from '@/components/ui/SkeletonCard';
 import { Icon } from '@/components/ui/Icon';
-import { Plus, Search, Mail, FolderOpen, LayoutGrid, Sparkles, Presentation, Download, Eye, ChevronDown, ChevronUp, FileText } from 'lucide-react';
+import { Plus, Search, Mail, FolderOpen, LayoutGrid, Sparkles, Presentation, Download, Eye, ChevronDown, ChevronUp, FileText, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 
-type ViewTab = 'all' | 'files' | 'templates' | 'presentations';
+type ViewTab = 'all' | 'files' | 'templates' | 'presentations' | 'companions';
 
 const SERVICE_LINE_COLOR_MAP: Record<string, string> = {
   'Insurance Review': '#2563eb',
@@ -38,6 +39,7 @@ export default function ContentLibraryPage() {
   const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
   const [expandedDeckId, setExpandedDeckId] = useState<string | null>(null);
   const [downloadingDeckId, setDownloadingDeckId] = useState<string | null>(null);
+  const [downloadingCompanionId, setDownloadingCompanionId] = useState<string | null>(null);
 
   // Generate thumbnails for image files
   useEffect(() => {
@@ -121,6 +123,46 @@ export default function ContentLibraryPage() {
     return result;
   }, [serviceFilter, search]);
 
+  const filteredCompanions = useMemo(() => {
+    let result = PDF_COMPANIONS;
+    if (serviceFilter !== 'all') {
+      result = result.filter(p => p.serviceLine === serviceFilter);
+    }
+    if (search) {
+      const q = search.toLowerCase();
+      result = result.filter(p =>
+        p.title.toLowerCase().includes(q) ||
+        p.subtitle.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [serviceFilter, search]);
+
+  const handleDownloadCompanion = useCallback(async (companion: PdfCompanion) => {
+    setDownloadingCompanionId(companion.id);
+    try {
+      const res = await fetch('/api/ai/generate-companion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ companionId: companion.id }),
+      });
+      if (!res.ok) throw new Error('Failed to generate PDF');
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${companion.title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Companion PDF downloaded successfully');
+    } catch {
+      showToast('Failed to generate companion PDF');
+    } finally {
+      setDownloadingCompanionId(null);
+    }
+  }, [showToast]);
+
   const handleUpload = useCallback(async (fileList: File[]) => {
     for (const file of fileList) {
       await uploadFile(file);
@@ -192,6 +234,7 @@ export default function ContentLibraryPage() {
   const showFiles = viewTab === 'all' || viewTab === 'files';
   const showTemplates = viewTab === 'all' || viewTab === 'templates';
   const showPresentations = viewTab === 'all' || viewTab === 'presentations';
+  const showCompanions = viewTab === 'all' || viewTab === 'companions';
 
   if (!isHydrated) {
     return (
@@ -213,7 +256,7 @@ export default function ContentLibraryPage() {
         <div>
           <h1 className="text-2xl font-semibold text-neutral-900">Content</h1>
           <p className="text-sm text-neutral-500 mt-1">
-            {files.length} files, {allTemplates.length} email templates, and {PRESENTATIONS.length} presentations
+            {files.length} files, {allTemplates.length} templates, {PRESENTATIONS.length} presentations, and {PDF_COMPANIONS.length} companion guides
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -249,6 +292,7 @@ export default function ContentLibraryPage() {
             { key: 'files' as ViewTab, label: `Files (${files.length})`, icon: FolderOpen },
             { key: 'templates' as ViewTab, label: `Templates (${allTemplates.length})`, icon: Mail },
             { key: 'presentations' as ViewTab, label: `Presentations (${PRESENTATIONS.length})`, icon: Presentation },
+            { key: 'companions' as ViewTab, label: `Guides (${PDF_COMPANIONS.length})`, icon: BookOpen },
           ]).map(tab => (
             <button
               key={tab.key}
@@ -475,6 +519,91 @@ export default function ContentLibraryPage() {
             <div className="text-center py-12">
               <Presentation className="w-8 h-8 text-neutral-300 mx-auto mb-3" />
               <h3 className="text-base font-semibold text-neutral-900 mb-1">No presentations match your search</h3>
+              <p className="text-sm text-neutral-500">Try adjusting your search or filter.</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Companion Guides Section */}
+      {showCompanions && (
+        <div className="mb-8">
+          {viewTab === 'all' && (
+            <h2 className="text-sm font-semibold text-neutral-900 mb-4 uppercase tracking-wider section-divider">
+              <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+              Companion Guides
+            </h2>
+          )}
+
+          {filteredCompanions.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+              {filteredCompanions.map(comp => {
+                const accentColor = SERVICE_LINE_COLOR_MAP[comp.serviceLine] || '#6366f1';
+                const isDownloading = downloadingCompanionId === comp.id;
+                const campaign = campaigns.find(c => c.id === comp.campaignId);
+
+                return (
+                  <div
+                    key={comp.id}
+                    className="bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-md transition-shadow"
+                    style={{ borderLeftWidth: '4px', borderLeftColor: accentColor }}
+                  >
+                    <div className="p-5">
+                      <div className="flex items-center justify-between mb-3">
+                        <span
+                          className="text-xs font-semibold px-2.5 py-1 rounded-full"
+                          style={{ color: accentColor, backgroundColor: `${accentColor}15` }}
+                        >
+                          {comp.serviceLine}
+                        </span>
+                        <span className="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded-full flex items-center gap-1">
+                          <FileText className="w-3 h-3" />
+                          {comp.pageCount} pages
+                        </span>
+                      </div>
+
+                      <h3 className="text-sm font-semibold text-neutral-900 leading-snug mb-1">
+                        {comp.title}
+                      </h3>
+                      <p className="text-xs text-neutral-500 mb-2 leading-relaxed">
+                        {comp.description}
+                      </p>
+                      {campaign && (
+                        <p className="text-[10px] text-neutral-400 mb-4">
+                          Companion to: <Link href={`/campaigns/${campaign.id}`} className="text-indigo-500 hover:text-indigo-700 font-medium">{campaign.name}</Link>
+                        </p>
+                      )}
+
+                      <button
+                        onClick={() => handleDownloadCompanion(comp)}
+                        disabled={isDownloading}
+                        className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-white text-xs font-semibold transition-all disabled:opacity-60"
+                        style={{ background: `linear-gradient(135deg, ${accentColor}, ${accentColor}dd)` }}
+                      >
+                        {isDownloading ? (
+                          <>
+                            <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                            Generating PDF...
+                          </>
+                        ) : (
+                          <>
+                            <Download className="w-3.5 h-3.5" />
+                            Download PDF Guide
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <BookOpen className="w-8 h-8 text-neutral-300 mx-auto mb-3" />
+              <h3 className="text-base font-semibold text-neutral-900 mb-1">No companion guides match your search</h3>
               <p className="text-sm text-neutral-500">Try adjusting your search or filter.</p>
             </div>
           )}
