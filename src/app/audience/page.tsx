@@ -137,10 +137,10 @@ export default function AudiencePage() {
           return (
             <button key={seg.stage.key}
               onClick={() => { setStageFilter(stageFilter === seg.stage.key ? 'all' : seg.stage.key); setPage(1); }}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 hover:scale-[1.02] ${
                 isActive
                   ? 'text-white shadow-md'
-                  : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:shadow-sm'
+                  : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:shadow-md'
               }`}
               style={isActive ? { backgroundColor: seg.stage.color } : { borderLeftWidth: '3px', borderLeftColor: seg.stage.color }}>
               <Icon name={seg.stage.icon} className="w-4 h-4" />
@@ -181,7 +181,7 @@ export default function AudiencePage() {
         <div className="flex-1 min-w-[250px]">
           <input type="text" placeholder="Search by name, email, or company..." value={search}
             onChange={e => { setSearch(e.target.value); setPage(1); }}
-            className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 bg-white" />
+            className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white transition-all duration-200" />
         </div>
         <select value={campaignFilter} onChange={e => { setCampaignFilter(e.target.value); setPage(1); }}
           className="px-3 py-2.5 rounded-lg border border-neutral-200 bg-white text-sm text-neutral-600 focus:outline-none focus:ring-2 focus:ring-indigo-600">
@@ -223,7 +223,7 @@ export default function AudiencePage() {
                 const daysSince = Math.floor((Date.now() - new Date(contact.lastContactDate).getTime()) / 86400000);
 
                 return (
-                  <tr key={contact.id} className="even:bg-neutral-50/50 hover:bg-neutral-50 transition-all duration-200 hover:shadow-sm">
+                  <tr key={contact.id} className="even:bg-gradient-to-r even:from-neutral-50/30 even:to-neutral-50/60 hover:bg-indigo-50/30 transition-all duration-300 hover:shadow-sm">
                     <td className="py-3 px-4">
                       <Link href={`/audience/${contact.id}`} className="font-semibold text-indigo-600 hover:text-indigo-800 text-[13px]">
                         {contact.firstName} {contact.lastName}
@@ -237,7 +237,7 @@ export default function AudiencePage() {
                       </span>
                     </td>
                     <td className="py-3 px-4">
-                      <span className={`font-semibold text-sm ${contact.intentScore >= 70 ? 'text-emerald-600' : contact.intentScore >= 30 ? 'text-amber-600' : 'text-neutral-400'}`}>
+                      <span className={`font-semibold text-sm inline-flex items-center justify-center w-8 h-8 rounded-lg ${contact.intentScore >= 70 ? 'text-emerald-600 bg-emerald-50 shadow-[0_0_8px_rgba(16,185,129,0.2)]' : contact.intentScore >= 30 ? 'text-amber-600 bg-amber-50 shadow-[0_0_8px_rgba(245,158,11,0.15)]' : 'text-neutral-400'}`}>
                         {contact.intentScore}
                       </span>
                     </td>

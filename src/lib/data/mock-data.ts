@@ -247,59 +247,51 @@ ADVISORS.forEach(a => {
 // ============================================
 
 const insuranceEmails: EmailStep[] = [
-  { id:'e-1-1', subject:"Quick question about your insurance coverage, {{first_name}}", previewText:"A 15-minute review could reveal surprises.", sendDay:0, status:'active', bodyFormat:'html',
+  { id:'e-1-1', subject:"A quick question about your coverage", previewText:"When did you last take a close look at your policies?", sendDay:0, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-<p>I know you're busy, so I'll keep this brief.</p>
-<p>I came across something that surprised me recently: <strong>according to industry research, nearly 6 in 10 Americans haven't reviewed their insurance policies in the last three years</strong> — even though most have experienced at least one major life change in that time. A new home, a growing family, a career move, or even changes in the market can quietly create gaps between what you <em>have</em> and what you actually <em>need</em>.</p>
-<p>I'm not writing to sell you anything. I'm writing because we offer a <strong>complimentary Insurance Coverage Review</strong> — a quick, no-obligation conversation where we simply help you see where you stand today. Many people discover they're either overpaying or underprotected, and a fresh set of eyes can make a real difference.</p>
-<p>The review takes about 15 minutes and covers:</p>
+<p>Here is something that caught my attention recently: according to industry data, nearly six in ten Americans have not reviewed their insurance policies in over three years. Meanwhile, most of those same people have gone through at least one major life change during that time.</p>
+<p>It makes sense when you think about it. Insurance is one of those things we set up and then move on from. But life has a way of quietly shifting the ground beneath our coverage.</p>
+<p>A few things worth considering:</p>
 <ul>
-<li>Whether your current coverage still aligns with your life today</li>
-<li>Any gaps that may have developed over time</li>
-<li>Opportunities to potentially reduce costs without sacrificing protection</li>
+<li><strong>Has your income, home value, or family size changed?</strong></li>
+<li><strong>Are your beneficiary designations still accurate?</strong></li>
+<li><strong>Does your liability coverage reflect your current net worth?</strong></li>
 </ul>
-<p><strong>There are three easy ways to connect — pick whichever feels right:</strong></p>
-<ul>
-<li>Reply to this email with a day and time that works for you</li>
-<li>Call us directly at (561) 555-0100</li>
-<li>Book online anytime at ffa.com/review</li>
-</ul>
-<p>No pressure at all. If now isn't the right time, I completely understand.</p>
+<p>If any of those gave you pause, you are not alone. A brief review can help you see where things stand today and whether any adjustments make sense.</p>
+<p>Would it be helpful to take a quick look together? I am happy to set aside 15 minutes whenever it works for you. Just reply to this email.</p>
 <p>Warm regards,<br/>The FFA North Team</p>
-<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Insurance products involve risk and may not be suitable for all individuals. No specific product recommendations are being made in this message. Past results do not guarantee future outcomes.</p>` },
-  { id:'e-1-2', subject:"The hidden gap in most insurance plans (2-min read)", previewText:"73% of families we review discover at least one gap.", sendDay:3, status:'active', bodyFormat:'html',
+<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Insurance products involve risk and may not be suitable for all individuals. Individual coverage needs vary.</p>` },
+  { id:'e-1-2', subject:"Something most people overlook", previewText:"Three common coverage gaps that tend to surprise families.", sendDay:3, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-<p>No pitch today — just something I thought was worth sharing.</p>
-<p>After reviewing hundreds of insurance portfolios over the years, we've noticed a pattern: <strong>73% of families we work with discover at least one meaningful gap in their coverage</strong>. Not because they made a mistake, but because life moved forward and their policies didn't.</p>
-<p>Here are three of the most common hidden gaps we see — and they tend to catch people off guard:</p>
+<p>After working with hundreds of families over the years, we have noticed a pattern: most people are doing a solid job with their insurance, but nearly everyone has at least one blind spot. Not because of any mistake, but simply because life evolved and the policies did not keep up.</p>
+<p>Here are three of the most common gaps we see:</p>
 <ul>
-<li><strong>Liability limits that haven't kept pace with net worth.</strong> If your assets have grown since your policy was written, you may be exposed in ways your current coverage wasn't designed to handle.</li>
-<li><strong>Life insurance that no longer matches your life stage.</strong> Coverage purchased when the kids were small may not reflect your needs today — whether that means you're overpaying or, in some cases, underprotected for new responsibilities like aging parents or a business.</li>
-<li><strong>The missing umbrella.</strong> An umbrella policy is one of the most cost-effective ways to add a significant layer of protection, yet most families don't have one. For many, it can cost less than a dollar a day.</li>
+<li><strong>Liability limits that have not kept pace with net worth.</strong> If your assets have grown since your policy was written, your current limits may leave you more exposed than you realize.</li>
+<li><strong>Life insurance that no longer matches your life stage.</strong> Coverage purchased when the kids were young may not reflect today's responsibilities, whether that means aging parents, a business, or simply different financial goals.</li>
+<li><strong>No umbrella policy.</strong> An umbrella policy adds a meaningful layer of protection and is often surprisingly affordable. Yet most families do not carry one.</li>
 </ul>
-<p>None of these are urgent emergencies. But they're the kind of thing that's <em>much</em> better to discover on your own terms than at claim time.</p>
-<p>If any of this resonated, I'm happy to answer questions — just reply to this email. No strings attached.</p>
-<p>Best,<br/>The FFA North Team</p>
-<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. The information provided is for general educational purposes only and does not constitute specific insurance advice. Individual coverage needs vary. Insurance products involve risk and may not be suitable for all individuals.</p>` },
-  { id:'e-1-3', subject:"How a Tampa family saved $3,200/year on coverage", previewText:"A real story about what a simple review uncovered.", sendDay:7, status:'active', bodyFormat:'html',
+<p>None of these are emergencies. But they are the kind of thing that is far better to discover on your own terms than at claim time.</p>
+<p>If any of this resonated, I am happy to answer questions. Just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. The information provided is for general educational purposes only. Individual coverage needs vary.</p>` },
+  { id:'e-1-3', subject:"What a simple review uncovered", previewText:"A real story about one family's coverage checkup.", sendDay:7, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-<p>I wanted to share a quick story — with permission — because it's a good example of what a fresh look at coverage can uncover.</p>
-<p><strong>The situation:</strong> A family in the Tampa area (we'll call them the Garcias) came to us last year. They had auto, home, and life insurance through three different carriers — policies they'd set up over the course of a decade. They weren't unhappy, but they hadn't reviewed anything in about five years.</p>
-<p><strong>What we found:</strong> During a 20-minute review, we discovered two things:</p>
+<p>I wanted to share a quick story because it illustrates something we see regularly.</p>
+<p>A family in our area — we will call them the Garcias — came to us last year. They had auto, home, and life insurance through three different carriers, policies they had set up over the course of a decade. Nothing seemed broken, but they had not reviewed anything in about five years.</p>
+<p>During a short review, we found two things:</p>
 <ul>
-<li>They were carrying duplicate disability coverage — one through Mr. Garcia's employer and a private policy from years earlier that overlapped almost entirely. Eliminating the redundancy saved them <strong>$2,400 per year</strong>.</li>
-<li>Their auto policies weren't bundled. A simple multi-policy adjustment with the same carrier saved another <strong>$800 annually</strong> — with no reduction in coverage.</li>
+<li><strong>Duplicate disability coverage.</strong> Mr. Garcia had both an employer plan and a private policy that overlapped almost entirely. Eliminating the redundancy saved them roughly $2,400 per year.</li>
+<li><strong>Unbundled auto policies.</strong> A straightforward multi-policy adjustment with the same carrier saved another $800 annually, with no reduction in coverage.</li>
 </ul>
-<p><strong>The result:</strong> The Garcias kept the same (or better) protection across the board and redirected $3,200 a year toward their daughter's college savings plan. The whole process took less than a week.</p>
-<p>Every family's situation is different, and not every review produces savings like this. But the Garcias told us they were glad they took that first step.</p>
-<p><em>Would this kind of review be worth exploring for your situation?</em> If so, I'd be happy to set aside 15 minutes. Just reply and let me know.</p>
-<p>All the best,<br/>The FFA North Team</p>
-<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. The story above is based on an actual client experience; names and details have been changed for privacy. Individual results vary — past outcomes do not guarantee future results. No specific product recommendations are being made in this message.</p>` },
-  { id:'e-1-4', subject:"Still thinking it over? No pressure at all, {{first_name}}", previewText:"Plus a free checklist — yours to keep either way.", sendDay:14, status:'active', bodyFormat:'html',
+<p>The Garcias kept the same protection across the board and redirected those savings toward their daughter's college fund. The whole process took less than a week.</p>
+<p>Every family's situation is different, and results vary. But the Garcias told us they were glad they took that first step.</p>
+<p>Would this kind of review be worth exploring for your situation? If so, just reply and we can find a time.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Names and details changed for privacy. Individual results vary.</p>` },
+  { id:'e-1-4', subject:"A simple checklist worth five minutes", previewText:"Run through this on your own, no advisor needed.", sendDay:14, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-<p>I've sent a couple of emails over the past two weeks, and I realize you may not have had a chance to read them — or they might not have been relevant right now. Either way, <strong>completely fine</strong>.</p>
-<p>I'm not here to follow up until you say yes. I'm here because I genuinely think a periodic insurance check-in is one of the most underrated financial moves a family can make — and most people simply don't have the time to initiate it on their own.</p>
-<p>In case it's useful, I put together a quick <strong>"5-Minute Insurance Health Check"</strong> — a simple checklist you can run through on your own, no advisor needed:</p>
+<p>I know your time is valuable, so I put together a quick self-check you can run through entirely on your own. No appointment needed, no strings attached.</p>
+<p><strong>Your 5-Minute Insurance Health Check:</strong></p>
 <ul>
 <li>When was each of your policies last updated?</li>
 <li>Have your beneficiaries changed since your policies were written?</li>
@@ -307,1200 +299,1142 @@ const insuranceEmails: EmailStep[] = [
 <li>Do you have liability coverage that matches your current net worth?</li>
 <li>Are you paying for any overlapping or redundant coverage?</li>
 </ul>
-<p>If you go through that list and everything checks out — great. You'll have peace of mind, and that's a win.</p>
-<p>If something gives you pause, we're here to help you think it through — no cost, no obligation.</p>
-<p><strong>And if this just isn't a priority right now, I respect that.</strong> Simply reply <em>"later"</em> and I'll circle back in six months. No hard feelings whatsoever.</p>
-<p>Wishing you and your family all the best,<br/>The FFA North Team</p>
-<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. The checklist above is provided for general informational purposes only and does not constitute specific insurance advice. Individual coverage needs vary. Insurance products involve risk and may not be suitable for all individuals.</p>` },
-  { id:'e-1-5', subject:"The hidden cost of outdated coverage", previewText:"Life changes create coverage gaps you can\u2019t afford to ignore.", sendDay:21, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>Here\u2019s something we see far too often: a client comes in with a policy they purchased ten years ago \u2014 before the second child, before the new home, before the business took off. On paper, they\u2019re \u201ccovered.\u201d In reality, they have significant gaps.</p>
-<h2>Life Events That Quietly Change Your Insurance Needs</h2>
-<ul>
-<li><strong>Marriage or divorce</strong> \u2014 beneficiaries, ownership structures, and liability exposure all shift</li>
-<li><strong>Buying or refinancing a home</strong> \u2014 replacement cost values change, and so should your coverage</li>
-<li><strong>Starting or growing a business</strong> \u2014 personal policies rarely cover business-related liabilities</li>
-<li><strong>Children reaching adulthood</strong> \u2014 your life insurance needs may look very different now</li>
-<li><strong>Aging parents</strong> \u2014 if you\u2019ve become a caregiver, your own coverage needs may have expanded</li>
-</ul>
-<p>The cost of outdated coverage isn\u2019t the premium you pay each month \u2014 it\u2019s the claim that gets denied because your policy no longer reflects your life.</p>
-<p>We offer a complimentary coverage gap review that takes about 15 minutes. No sales pitch \u2014 just a clear-eyed look at where you stand today.</p>
-<p><strong>Reply to this email or call us at (561) 555-0100 to schedule yours.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
-  { id:'e-1-6', subject:"5 questions every business owner should ask about their insurance", previewText:"Your business is your livelihood \u2014 make sure it\u2019s protected.", sendDay:28, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>If you own or operate a business, your insurance needs go well beyond a standard homeowners or auto policy. Yet many business owners rely on coverage that was set up years ago and never revisited.</p>
-<h2>Ask Yourself These 5 Questions</h2>
-<ul>
-<li><strong>1. Is my liability coverage keeping pace with revenue?</strong> A policy sized for a $500K operation may leave dangerous gaps at $2M.</li>
-<li><strong>2. Do I have key-person insurance?</strong> If you or a critical employee were suddenly unable to work, could the business survive financially?</li>
-<li><strong>3. Are my personal and business assets truly separated?</strong> Without proper coverage, a business lawsuit could put your personal assets at risk.</li>
-<li><strong>4. When did I last review my workers\u2019 compensation?</strong> Rates and requirements change \u2014 and audits can result in unexpected bills.</li>
-<li><strong>5. Do I have a business continuity plan?</strong> Insurance is one piece. Do you know what happens to your business if you can\u2019t run it for 90 days?</li>
-</ul>
-<p>If any of these gave you pause, you\u2019re not alone. Most business owners we work with discover at least one significant gap during their first review.</p>
-<p><strong>Schedule a complimentary business coverage review \u2014 reply to this email or call (561) 555-0100.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
-  { id:'e-1-7', subject:"How a Tampa family saved $12K by modernizing their coverage", previewText:"A real-world example of what a policy review can uncover.", sendDay:35, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>We recently worked with a family in the Tampa area \u2014 let\u2019s call them the Martins \u2014 who hadn\u2019t reviewed their insurance in over seven years. They assumed everything was fine. Here\u2019s what we found:</p>
-<h2>What the Review Uncovered</h2>
-<ul>
-<li><strong>Duplicate disability coverage</strong> \u2014 Mr. Martin had both an employer plan and a private policy covering the same benefit. Eliminating the overlap saved $3,200 per year.</li>
-<li><strong>Outdated life insurance</strong> \u2014 Their term policy was sized for when they had a mortgage and two young children. With the house paid off and both kids in college, they right-sized the coverage and redirected $4,100 annually toward retirement savings.</li>
-<li><strong>Missing umbrella policy</strong> \u2014 With a rental property and a teenage driver, their liability exposure was significant. We added a $1M umbrella policy for just $380 per year.</li>
-<li><strong>Auto insurance savings</strong> \u2014 A simple multi-policy bundling adjustment saved another $4,300 annually.</li>
-</ul>
-<p><strong>Net result:</strong> Better coverage in every category, plus approximately $12,000 in annual savings redirected to their financial plan.</p>
-<p>Every family\u2019s situation is different, and past results don\u2019t guarantee future outcomes. But the Martins\u2019 story illustrates why periodic reviews matter.</p>
-<p><strong>Want to see what a review might reveal for you? Reply to this email to get started.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432. Names and details changed to protect client privacy.</p>` },
-  { id:'e-1-8', subject:"Understanding umbrella policies: affordable protection most people overlook", previewText:"One of the best-kept secrets in personal insurance.", sendDay:42, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>If there\u2019s one type of insurance that consistently surprises people \u2014 both in how affordable it is and how much protection it provides \u2014 it\u2019s the personal umbrella policy.</p>
-<h2>What Is an Umbrella Policy?</h2>
-<p>An umbrella policy provides an extra layer of liability protection beyond what your homeowners, auto, and other policies cover. It kicks in when you exhaust the liability limits on your underlying policies.</p>
-<h2>Why It Matters More Than You Think</h2>
-<ul>
-<li><strong>Lawsuits are unpredictable.</strong> A serious auto accident, an injury on your property, or even a social media post can result in a judgment that exceeds your standard policy limits.</li>
-<li><strong>Your net worth is the target.</strong> The more assets you have, the more you have to lose. Courts can go after savings, investments, and even future earnings.</li>
-<li><strong>It\u2019s surprisingly affordable.</strong> A $1 million umbrella policy typically costs between $200 and $500 per year \u2014 far less than most people expect.</li>
-</ul>
-<h2>Who Should Consider One?</h2>
-<p>If you own a home, have investment accounts, employ household help, own rental property, have a swimming pool, or have a teenage driver \u2014 an umbrella policy deserves serious consideration.</p>
-<p>This is general education, not a recommendation for your specific situation. But if you\u2019d like to explore whether an umbrella policy makes sense for you, we\u2019re happy to help.</p>
-<p><strong>Schedule a complimentary review \u2014 just reply to this email.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
-  { id:'e-1-9', subject:"Your annual insurance checkup is due", previewText:"Just like your car and your health \u2014 your coverage needs regular attention.", sendDay:49, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>You wouldn\u2019t skip your annual physical. You wouldn\u2019t drive 30,000 miles without an oil change. So why do so many people go years \u2014 sometimes decades \u2014 without reviewing their insurance?</p>
-<h2>What\u2019s Changed in the Last 12 Months?</h2>
-<p>Think about the past year alone. Have you:</p>
-<ul>
-<li>Received a raise or changed jobs?</li>
-<li>Renovated your home or purchased property?</li>
-<li>Had a child, gotten married, or experienced a family change?</li>
-<li>Started a side business or taken on new professional responsibilities?</li>
-<li>Turned 50, 55, 60, or 65? (Age milestones often trigger coverage changes)</li>
-</ul>
-<p>Even if none of these apply, the insurance market itself has changed. New products, new pricing, and new features may be available that didn\u2019t exist when you last reviewed your policies.</p>
-<h2>A 15-Minute Checkup Can Save You Hours of Worry</h2>
-<p>Our annual insurance checkup is designed to be quick, thorough, and completely free. We\u2019ll review your current policies, flag any gaps, and let you know if there are opportunities to improve your coverage or reduce your costs.</p>
-<p><strong>Reply \u201ccheckup\u201d to this email and we\u2019ll get you on the calendar this week.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
-  { id:'e-1-10', subject:"What your current agent might not be telling you", previewText:"A second set of eyes never hurts.", sendDay:56, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>Let us be clear upfront: we\u2019re not here to criticize your current insurance agent. Many agents do excellent work. But here\u2019s a reality worth acknowledging \u2014 every professional has blind spots, and the insurance industry has structural incentives that don\u2019t always align with your interests.</p>
-<h2>Things Worth Asking About</h2>
-<ul>
-<li><strong>Captive vs. independent.</strong> If your agent represents a single carrier, they can only offer you that company\u2019s products \u2014 even if a better option exists elsewhere.</li>
-<li><strong>Commission structures.</strong> Some products pay agents significantly higher commissions than others. That doesn\u2019t mean the recommendation is wrong, but it\u2019s worth understanding.</li>
-<li><strong>Proactive reviews.</strong> When\u2019s the last time your agent reached out to review your coverage \u2014 without you asking? Regular check-ins are a hallmark of good service.</li>
-<li><strong>Holistic perspective.</strong> Insurance doesn\u2019t exist in a vacuum. It\u2019s part of your broader financial picture, including estate planning, tax strategy, and retirement goals.</li>
-</ul>
-<p>A second opinion isn\u2019t about finding fault \u2014 it\u2019s about gaining confidence. Either you\u2019ll confirm you\u2019re in great shape, or you\u2019ll discover opportunities you didn\u2019t know existed. Either way, you win.</p>
-<p><strong>Request your complimentary second-opinion review \u2014 reply to this email or call (561) 555-0100.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
-  { id:'e-1-11', subject:"Free insurance gap analysis \u2014 limited availability this month", previewText:"We\u2019re opening up a handful of complimentary review slots.", sendDay:63, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>We\u2019re setting aside time this month to conduct a limited number of complimentary Insurance Gap Analyses for individuals and families in our community. I wanted to make sure you had the opportunity before our calendar fills up.</p>
-<h2>What\u2019s Included in the Gap Analysis</h2>
-<ul>
-<li><strong>Full policy inventory</strong> \u2014 we\u2019ll catalog every policy you currently hold and identify what\u2019s covered and what isn\u2019t</li>
-<li><strong>Life event alignment</strong> \u2014 we\u2019ll check whether your coverage reflects your current life situation, not the one you had five years ago</li>
-<li><strong>Cost comparison</strong> \u2014 we\u2019ll look at whether you\u2019re paying a fair price for the coverage you have</li>
-<li><strong>Risk assessment</strong> \u2014 we\u2019ll identify your biggest uninsured or underinsured risks</li>
-<li><strong>Written summary</strong> \u2014 you\u2019ll receive a clear, one-page report with findings and suggestions, yours to keep regardless of what you decide</li>
-</ul>
-<p>The analysis takes about 20 minutes and can be done over the phone or on a video call \u2014 whichever you prefer.</p>
-<p>There\u2019s truly no obligation. We offer these because they\u2019re the best way to demonstrate the value of working with an advisor who looks at your full financial picture.</p>
-<p><strong>Reply to this email to reserve your spot, or call us at (561) 555-0100.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
-  { id:'e-1-12', subject:"Final thoughts on protecting what matters most", previewText:"Our last email \u2014 and an open invitation.", sendDay:70, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>This is the final email in our insurance education series, and I want to end with something simple.</p>
-<p>Insurance isn\u2019t exciting. Nobody wakes up eager to review their policies. But the purpose of insurance is deeply personal \u2014 it\u2019s about protecting the people, the home, the business, and the future you\u2019ve worked so hard to build.</p>
-<h2>What We\u2019ve Covered Together</h2>
-<ul>
-<li>Why coverage gaps form silently over time</li>
-<li>The questions every homeowner and business owner should be asking</li>
-<li>How periodic reviews can improve coverage while reducing costs</li>
-<li>The role of umbrella policies in a comprehensive protection plan</li>
-<li>Why a second opinion on your coverage is always a smart move</li>
-</ul>
-<p>Whether you\u2019re ready for a conversation today or a year from now, our door is open. We don\u2019t believe in high-pressure tactics \u2014 we believe in being here when you need us.</p>
-<p><strong>If you\u2019d like to schedule a complimentary review at any time, you can:</strong></p>
-<ul>
-<li>Reply to this email</li>
-<li>Call us at (561) 555-0100</li>
-<li>Visit our website to book online</li>
-</ul>
-<p>Thank you for your time, {{first_name}}. It\u2019s been a pleasure sharing these insights with you.</p>
+<p>If you go through that list and everything checks out, that is great news. You will have peace of mind, and that is a win on its own.</p>
+<p>If something gives you pause, we are here to help you think it through. No cost, no obligation.</p>
+<p>And if this is simply not a priority right now, I completely understand. Save this email and come back to it whenever the timing feels right.</p>
 <p>Warm regards,<br/>The FFA North Team</p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432. You are receiving this email because you opted in to educational content from Florida Financial Advisors. To unsubscribe, reply \u201cunsubscribe\u201d or click the link below.</p>` },
+<p style="font-size:12px;color:#888;">This is an educational communication from Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. This checklist is for general informational purposes only. Individual coverage needs vary.</p>` },
+  { id:'e-1-5', subject:"Life changes your policies might miss", previewText:"Major milestones quietly reshape your coverage needs.", sendDay:21, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Here is something we see often: someone comes in with a policy purchased years ago, before the second child, the new home, or the career change. On paper, they are covered. In practice, the coverage no longer fits their life.</p>
+<p>A few life events that commonly create gaps:</p>
+<ul>
+<li><strong>Marriage or divorce</strong> — beneficiaries, ownership structures, and liability exposure all shift</li>
+<li><strong>Buying or refinancing a home</strong> — replacement cost values change, and coverage should follow</li>
+<li><strong>Starting or growing a business</strong> — personal policies rarely cover business-related liabilities</li>
+<li><strong>Children reaching adulthood</strong> — your life insurance needs may look very different now</li>
+</ul>
+<p>The real cost of outdated coverage is not the premium you pay each month. It is the claim that gets denied because your policy no longer reflects your life.</p>
+<p>If you have experienced any of these changes recently, it may be worth a quick review. Happy to chat if you would like to explore this further.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Individual coverage needs vary.</p>` },
+  { id:'e-1-6', subject:"Bundling: simple move, real savings", previewText:"Consolidating policies can simplify your life and your costs.", sendDay:28, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>If you carry auto, home, and other policies through different carriers, there is a good chance you are paying more than you need to. Bundling is one of those straightforward strategies that often gets overlooked.</p>
+<p>Here is why it can make a difference:</p>
+<ul>
+<li><strong>Multi-policy discounts.</strong> Most carriers offer meaningful discounts when you consolidate policies under one roof. The savings can be substantial.</li>
+<li><strong>Simplified management.</strong> One carrier, one bill, one point of contact. It makes renewals and claims easier to track.</li>
+<li><strong>Better coordination.</strong> When your policies are designed to work together, you are less likely to end up with gaps or overlapping coverage.</li>
+</ul>
+<p>That said, bundling is not always the right move. Sometimes a specialized carrier offers better coverage for a specific need. The key is comparing your options with the full picture in view.</p>
+<p>If you are curious whether bundling could benefit your situation, I am happy to walk through it with you. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Individual coverage needs and potential savings vary.</p>` },
+  { id:'e-1-7', subject:"When was your last beneficiary check?", previewText:"Outdated designations can override even your will.", sendDay:35, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Here is a fact that surprises many people: your beneficiary designations on insurance policies and retirement accounts typically override your will. That means if your designations are outdated, your assets may not go where you intend, regardless of what your estate documents say.</p>
+<p>A few situations where this becomes critical:</p>
+<ul>
+<li><strong>After a divorce.</strong> If you have not updated your designations, an ex-spouse may still be listed as beneficiary on life insurance or retirement accounts.</li>
+<li><strong>After the birth of a child.</strong> Newer children may not be included unless you have specifically updated your forms.</li>
+<li><strong>After a family loss.</strong> If a named beneficiary has passed away, your assets could end up in probate rather than going to the people you choose.</li>
+</ul>
+<p>Reviewing your beneficiary designations takes just a few minutes and can prevent significant heartache for your family down the road.</p>
+<p>If you would like a hand reviewing your current designations across all your policies, we are happy to help. Just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. This is general educational content and does not constitute legal advice. Consult an attorney for estate planning guidance.</p>` },
+  { id:'e-1-8', subject:"The case for an umbrella policy", previewText:"Broad protection that costs less than you might think.", sendDay:42, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>If there is one type of insurance that consistently surprises people — both in how affordable it is and how much protection it provides — it is the personal umbrella policy.</p>
+<p>An umbrella policy adds an extra layer of liability protection beyond your homeowners and auto coverage. It kicks in when you exhaust the limits on your underlying policies.</p>
+<p>Here is why it deserves a closer look:</p>
+<ul>
+<li><strong>Lawsuits are unpredictable.</strong> A serious auto accident, an injury on your property, or even an incident involving your pet can result in a judgment that exceeds standard policy limits.</li>
+<li><strong>Your assets are at stake.</strong> The more you have built, the more you stand to lose. Courts can go after savings, investments, and even future earnings.</li>
+<li><strong>The cost is often modest.</strong> A $1 million umbrella policy typically runs between $200 and $500 per year, depending on your situation.</li>
+</ul>
+<p>This is general education, not a specific recommendation. But if you own a home, have investments, or have a teenage driver, an umbrella policy is worth considering.</p>
+<p>Would it be helpful to explore whether this fits your situation? Just reply and we can talk it through.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Coverage availability and pricing vary by individual circumstances.</p>` },
+  { id:'e-1-9', subject:"Is your home covered at today's value?", previewText:"Replacement costs may have shifted more than you realize.", sendDay:49, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Construction costs and home values have shifted significantly in recent years. If your homeowners policy has not been updated to reflect those changes, you could find yourself underinsured at exactly the wrong moment.</p>
+<p>Here are a few things worth checking:</p>
+<ul>
+<li><strong>Replacement cost vs. market value.</strong> Your policy should cover what it would cost to rebuild your home, not just what it would sell for. These two numbers can be very different.</li>
+<li><strong>Renovations and additions.</strong> If you have updated your kitchen, added a room, or finished a basement, your coverage may not reflect the added value.</li>
+<li><strong>Personal property limits.</strong> Standard policies cap coverage for jewelry, electronics, and collectibles. If your possessions have grown, you may need a rider.</li>
+</ul>
+<p>Taking a few minutes to verify your coverage now can save you a great deal of stress if you ever need to file a claim. Most carriers allow you to adjust mid-term without much hassle.</p>
+<p>If you would like help assessing whether your current coverage keeps pace with your home's value, I would be happy to walk through it with you.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Individual coverage needs and property values vary.</p>` },
+  { id:'e-1-10', subject:"Disability coverage: the overlooked safety net", previewText:"Your ability to earn income may be your most valuable asset.", sendDay:56, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Most people insure their home, their car, and their health. But surprisingly few have adequate coverage for something arguably more valuable: their ability to earn a living.</p>
+<p>Consider this: according to the Social Security Administration, more than one in four of today's 20-year-olds will experience a disability before reaching retirement age. Yet disability insurance is one of the most commonly overlooked types of coverage.</p>
+<p>A few things to keep in mind:</p>
+<ul>
+<li><strong>Employer coverage may not be enough.</strong> Group disability plans often cover only 50-60% of your base salary, may not include bonuses, and benefits are typically taxable if your employer pays the premiums.</li>
+<li><strong>Watch for overlap.</strong> If you have both an employer plan and a private policy, make sure they complement rather than duplicate each other.</li>
+<li><strong>Definition of disability matters.</strong> Some policies use an "own occupation" definition, while others use "any occupation." The difference can be significant when it comes to receiving benefits.</li>
+</ul>
+<p>Disability coverage is not the most exciting topic, but it is one of the most important pieces of a well-rounded protection plan.</p>
+<p>Happy to chat if you would like to explore how this fits into your overall picture.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Individual coverage needs vary. This is educational content only.</p>` },
+  { id:'e-1-11', subject:"Your annual review checklist", previewText:"A practical guide for staying on top of your coverage.", sendDay:63, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Just like your car needs regular maintenance, your insurance portfolio benefits from an annual checkup. Here is a straightforward checklist you can use as a starting point:</p>
+<ul>
+<li><strong>Review all policy declarations pages.</strong> Confirm that coverage amounts, deductibles, and limits still make sense for your current situation.</li>
+<li><strong>Update beneficiary designations.</strong> Check every policy and retirement account. Make sure the people listed are the ones you intend.</li>
+<li><strong>Verify your home's replacement cost.</strong> Construction costs change, renovations add value, and your coverage should keep pace.</li>
+<li><strong>Assess your liability exposure.</strong> Has your net worth grown? Do you have new assets, a rental property, or a teenage driver? Your liability limits should reflect your current risk profile.</li>
+<li><strong>Check for overlapping coverage.</strong> Duplicate policies waste money. Make sure each policy serves a distinct purpose.</li>
+<li><strong>Compare your premiums.</strong> Rates change. It is worth checking whether you are still getting competitive pricing for the coverage you carry.</li>
+</ul>
+<p>If you can check every item on this list with confidence, you are in good shape. If any of them give you pause, a professional review can help fill in the gaps.</p>
+<p>Would it be helpful to go through this together? Just reply and we can set up a time.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. This checklist is for general informational purposes only.</p>` },
+  { id:'e-1-12', subject:"Thought you'd find this helpful", previewText:"A final note and an open invitation from our team.", sendDay:70, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>This is the last email in our insurance education series, and I want to close with something simple.</p>
+<p>Insurance is not glamorous. Nobody wakes up excited to review their policies. But the purpose behind it is deeply personal — it is about protecting the people, the home, and the future you have worked hard to build.</p>
+<p>Over the past several weeks, we have covered:</p>
+<ul>
+<li>Why coverage gaps form quietly over time</li>
+<li>How life changes can reshape your insurance needs</li>
+<li>The role of umbrella policies and disability coverage</li>
+<li>Why beneficiary reviews and annual checkups matter</li>
+</ul>
+<p>Whether you are ready for a conversation today or sometime down the road, our door is always open. We do not believe in high-pressure tactics — we believe in being here when you need us.</p>
+<p>If you would ever like to schedule a complimentary review, simply reply to this email. We would be glad to help.</p>
+<p>Thank you for your time, {{first_name}}. It has been a pleasure sharing these insights with you.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. You are receiving this email because you opted in to educational content from Florida Financial Advisors.</p>` },
 ];
 
 const annuityEmails: EmailStep[] = [
-  { id:'e-2-1', subject:"Is your annuity still working as hard as you are?", previewText:"Annuities aren't set-it-and-forget-it.", sendDay:0, status:'active',
-    body:`Hi {{first_name}},\n\nIf you own an annuity, you're already ahead of the game. But here's something many people don't realize: annuities aren't a "set it and forget it" product.\n\nOver time, your financial situation changes — and so does the annuity market. Newer products may offer better rates, lower fees, or features that align more closely with where you are today.\n\nThat doesn't mean your current annuity is wrong. It just means it's worth a checkup.\n\nWe help people evaluate their existing annuity positions every day. No cost, no obligation — just an honest look.\n\nWould a quick review be helpful? Reply to this email and we'll find a time.\n\nWarm regards,\nThe FFA North Team` },
-  { id:'e-2-2', subject:"What most people don't know about their annuity fees", previewText:"Hidden costs could be eating into your returns.", sendDay:3, status:'active',
-    body:`Hi {{first_name}},\n\nAnnuities are powerful financial tools — but they can also be complex. And complexity sometimes hides costs:\n\n• Mortality & Expense (M&E) Charges — can range from 0.5% to 1.5% per year\n• Surrender Charges — penalties you may not know about\n• Rider Fees — are you using the riders you're paying for?\n• Fund Expenses — underlying investments have their own fees too\n\nNone of this means your annuity is a bad deal — but a periodic review ensures you're getting the value you expect.\n\nWe're happy to walk through your annuity with you. Just reply if you're interested.\n\nBest,\nThe FFA North Team` },
-  { id:'e-2-3', subject:"3 annuity questions you should be asking", previewText:"Make sure your annuity is right for you.", sendDay:7, status:'active',
-    body:`Hi {{first_name}},\n\n1. "Am I past my surrender period?"\nIf yes, you have more flexibility than you think.\n\n2. "Am I maximizing my withdrawal strategy?"\nMany owners leave money on the table by not optimizing distributions.\n\n3. "Has my risk tolerance changed?"\nThe allocation inside your annuity should reflect who you are today.\n\nReply "review" if you'd like us to take a look. Free, confidential, about 20 minutes.\n\nTalk soon,\nThe FFA North Team` },
-  { id:'e-2-4', subject:"One last thing about your annuity", previewText:"We're here when you're ready.", sendDay:14, status:'active',
-    body:`Hi {{first_name}},\n\nOur Annuity Review is:\n✓ Free and confidential\n✓ Takes about 20 minutes\n✓ Covers fees, performance, and alternatives\n✓ No pressure to make any changes\n\nJust reply "I'm in" and we'll schedule a time.\n\nWarm regards,\nThe FFA North Team` },
-  { id:'e-2-5', subject:"Hidden fees in annuities: what you need to know", previewText:"Understanding the true cost of your annuity contract.", sendDay:21, status:'active', bodyFormat:'html',
+  { id:'e-2-1', subject:"A thought about your annuity", previewText:"When did you last check in on how it is performing?", sendDay:0, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-<p>When you purchased your annuity, you likely focused on the guarantees, the growth potential, or the income promise. That makes sense \u2014 those are the features that matter most. But there\u2019s another side of the equation that deserves equal attention: the fees.</p>
-<h2>The Four Layers of Annuity Costs</h2>
+<p>If you own an annuity, you have already taken an important step toward building financial stability. But here is something worth knowing: annuities are not a set-it-and-forget-it product.</p>
+<p>Over time, both your financial situation and the annuity market evolve. Newer contracts may offer different features, fee structures, or benefits compared to what was available when you purchased yours.</p>
+<p>That does not mean your current annuity is wrong. It simply means a periodic checkup can be valuable, just like a regular visit to your doctor.</p>
+<p>A few questions worth considering:</p>
 <ul>
-<li><strong>Mortality and Expense (M&E) charges</strong> \u2014 This is the insurance company\u2019s charge for providing the guarantees in your contract. It typically ranges from 0.50% to 1.50% annually, deducted from your account value. Older contracts often carry higher M&E charges than what\u2019s available today.</li>
-<li><strong>Administrative fees</strong> \u2014 Annual maintenance charges that can be a flat fee ($25\u2013$50) or a percentage of your account. Small, but they add up over decades.</li>
-<li><strong>Rider fees</strong> \u2014 If you added optional benefits like a guaranteed lifetime withdrawal benefit or enhanced death benefit, each rider carries its own annual charge \u2014 often 0.50% to 1.25% each.</li>
-<li><strong>Underlying fund expenses</strong> \u2014 For variable annuities, the mutual fund sub-accounts have their own expense ratios, just like funds in a 401(k).</li>
+<li><strong>Do you know your total annual fees?</strong></li>
+<li><strong>Are you past your surrender period?</strong></li>
+<li><strong>Does your annuity still align with your current goals?</strong></li>
 </ul>
-<p>Added together, total annual costs on some older variable annuities can exceed 3.5% per year. That\u2019s a significant drag on growth over time.</p>
-<p>We\u2019re not saying your annuity is a bad deal \u2014 but understanding what you\u2019re paying is the first step toward knowing if you\u2019re getting fair value.</p>
-<p><strong>Want us to help you decode your annuity\u2019s fee structure? Reply to this email for a complimentary fee review.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
-  { id:'e-2-6', subject:"Fixed vs. variable annuities explained", previewText:"Understanding the two main types \u2014 and which might suit you better.", sendDay:28, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>Not all annuities are created equal. If you own one \u2014 or are considering one \u2014 it\u2019s important to understand the fundamental differences between the two most common types.</p>
-<h2>Fixed Annuities</h2>
-<ul>
-<li>Your principal is protected from market losses</li>
-<li>You earn a guaranteed interest rate for a set period</li>
-<li>Predictable, stable growth \u2014 but typically lower long-term returns</li>
-<li>Generally lower fees than variable annuities</li>
-<li>Best suited for conservative investors prioritizing safety over growth</li>
-</ul>
-<h2>Variable Annuities</h2>
-<ul>
-<li>Your money is invested in sub-accounts (similar to mutual funds)</li>
-<li>Returns depend on market performance \u2014 higher upside, but also downside risk</li>
-<li>Often include optional riders for income or death benefit guarantees (at additional cost)</li>
-<li>Higher fee structures due to investment management and insurance charges</li>
-<li>Better suited for investors with longer time horizons who can tolerate volatility</li>
-</ul>
-<h2>There Are Also Fixed Indexed Annuities</h2>
-<p>These are a hybrid \u2014 your principal is protected, but your returns are linked to a market index (like the S&P 500), subject to caps and participation rates. They\u2019ve become increasingly popular, but the crediting methods can be complex.</p>
-<p>The right type depends entirely on your goals, timeline, and risk tolerance. There\u2019s no one-size-fits-all answer.</p>
-<p><strong>If you\u2019d like help understanding how your current annuity fits your overall financial picture, reply to this email. Our review is complimentary and confidential.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
-  { id:'e-2-7', subject:"Are you getting the guarantees you were promised?", previewText:"It\u2019s worth checking that your annuity is delivering on its commitments.", sendDay:35, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>When you purchased your annuity, you were likely shown illustrations \u2014 projections of how your account could grow, what income you might receive, or what your beneficiaries would be paid. Those illustrations may have been a key reason you said yes.</p>
-<p>But here\u2019s something worth checking: are those projections actually playing out?</p>
-<h2>Common Gaps Between Promise and Reality</h2>
-<ul>
-<li><strong>Guaranteed minimum interest rates</strong> may be lower than what was illustrated in the \u201cnon-guaranteed\u201d column you were shown</li>
-<li><strong>Income benefit bases</strong> and <strong>account values</strong> are not the same thing \u2014 and the number that matters for withdrawal purposes may surprise you</li>
-<li><strong>Cap rates and participation rates</strong> on indexed annuities can change annually, potentially reducing your credited returns</li>
-<li><strong>Death benefit values</strong> may not have grown the way you expected, especially after fees and withdrawals</li>
-</ul>
-<p>None of this necessarily means something is wrong. Annuity contracts are complex, and it\u2019s natural for there to be a gap between initial expectations and actual performance. But you deserve to understand exactly where you stand.</p>
-<p><strong>We offer a complimentary annuity checkup that compares your original illustrations to your current contract values. Reply \u201ccheckup\u201d and we\u2019ll schedule a 20-minute review.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
-  { id:'e-2-8', subject:"How interest rate changes affect your annuity", previewText:"What rising and falling rates mean for annuity owners.", sendDay:42, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>Interest rates have been a major topic in recent years, and for annuity owners, rate changes can have real implications \u2014 both positive and negative. Here\u2019s what you should know.</p>
-<h2>If You Own a Fixed Annuity</h2>
-<ul>
-<li>When rates rise, newer fixed annuities may offer higher guaranteed rates than your existing contract</li>
-<li>If you\u2019re past your surrender period, you may have the flexibility to explore better options</li>
-<li>If you\u2019re still in your surrender period, your current guaranteed rate may actually look favorable compared to what was available when rates were lower</li>
-</ul>
-<h2>If You Own a Variable Annuity</h2>
-<ul>
-<li>Rising rates can affect the bond sub-accounts within your annuity (bond values typically fall when rates rise)</li>
-<li>However, guaranteed income riders are generally unaffected by rate changes \u2014 those guarantees are contractual</li>
-<li>Higher rates may also mean that newer variable annuity contracts offer more competitive guarantees</li>
-</ul>
-<h2>If You Own a Fixed Indexed Annuity</h2>
-<ul>
-<li>Insurance companies may adjust cap rates and participation rates based on the rate environment</li>
-<li>Higher interest rates generally allow insurers to offer more favorable crediting terms</li>
-</ul>
-<p>The bottom line: interest rate changes don\u2019t automatically mean you should do anything differently. But they do create opportunities worth evaluating.</p>
-<p><strong>Want to understand how the current rate environment affects your specific annuity? Reply to this email for a complimentary review.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
-  { id:'e-2-9', subject:"Real client story: Discovering $8K in unnecessary fees", previewText:"A real-world example of why annuity reviews matter.", sendDay:49, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>Last year, a couple in their early 60s \u2014 let\u2019s call them Jim and Diane \u2014 came to us for a second opinion on their retirement portfolio. They had a variable annuity they\u2019d owned for nine years and assumed it was performing well.</p>
-<h2>What We Found</h2>
-<ul>
-<li><strong>Two riders they weren\u2019t using.</strong> Jim and Diane had added a guaranteed minimum accumulation benefit and an enhanced death benefit when they purchased the contract. Combined rider fees: 1.85% per year. But their financial situation had changed \u2014 they no longer needed either feature, yet they were paying roughly $5,500 annually for them.</li>
-<li><strong>High-cost sub-accounts.</strong> The investment options inside their annuity had expense ratios averaging 1.10%. Comparable investments were available at a fraction of that cost.</li>
-<li><strong>Surrender period had ended.</strong> Jim and Diane didn\u2019t realize their seven-year surrender period had expired two years earlier. They had full flexibility to make changes \u2014 and no one had told them.</li>
-</ul>
-<p><strong>The outcome:</strong> After a careful analysis, Jim and Diane were able to restructure their position, eliminating approximately $8,000 in annual fees while maintaining the protections they actually needed.</p>
-<p>Every situation is unique, and past results don\u2019t guarantee future outcomes. But Jim and Diane\u2019s story illustrates why periodic reviews are so important.</p>
-<p><strong>Curious whether your annuity deserves a closer look? Reply to this email and we\u2019ll schedule a complimentary review.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432. Names and details changed to protect client privacy.</p>` },
-  { id:'e-2-10', subject:"Your annuity performance review checklist", previewText:"A simple framework for evaluating your annuity.", sendDay:56, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>You don\u2019t need to be a financial expert to evaluate your annuity. Here\u2019s a straightforward checklist you can use to assess whether your contract is still working for you.</p>
-<h2>Your Annuity Review Checklist</h2>
-<ul>
-<li><strong>\u2610 Do I know my total annual fees?</strong> Add up M&E charges, rider fees, administrative fees, and underlying fund expenses. If the total exceeds 3%, it\u2019s worth investigating whether lower-cost alternatives exist.</li>
-<li><strong>\u2610 Am I past my surrender period?</strong> Check your contract or annual statement for the surrender schedule. If penalties have expired, you have more options than you may realize.</li>
-<li><strong>\u2610 Am I using all the riders I\u2019m paying for?</strong> If you\u2019re paying for a guaranteed income rider but don\u2019t plan to annuitize, or a death benefit rider that\u2019s no longer necessary, you may be paying for features you don\u2019t need.</li>
-<li><strong>\u2610 How has my account value performed vs. my benefit base?</strong> These are two different numbers. Understanding both is critical for making informed decisions about withdrawals.</li>
-<li><strong>\u2610 Does my annuity still align with my retirement timeline?</strong> Your goals at 50 may be very different from your goals at 65. Make sure your annuity strategy has kept pace.</li>
-<li><strong>\u2610 When did I last review this contract?</strong> If it\u2019s been more than two years, it\u2019s time for a fresh look.</li>
-</ul>
-<p>If you checked fewer than four boxes with confidence, a professional review could be valuable.</p>
-<p><strong>Download our free Annuity Evaluation Worksheet by replying \u201cworksheet\u201d \u2014 or schedule a complimentary review by replying \u201creview.\u201d</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432</p>` },
-  { id:'e-2-11', subject:"Should you exchange your annuity? 3 factors to consider", previewText:"Understanding the 1035 exchange \u2014 and when it makes sense.", sendDay:63, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>If your current annuity isn\u2019t meeting your needs, you may have heard about something called a <strong>1035 exchange</strong>. Named after Section 1035 of the Internal Revenue Code, it allows you to transfer from one annuity to another without triggering a taxable event.</p>
-<p>But just because you <em>can</em> exchange doesn\u2019t mean you <em>should</em>. Here are three factors to weigh carefully.</p>
-<h2>1. Surrender Charges</h2>
-<p>If you\u2019re still within your surrender period, exchanging could trigger significant penalties \u2014 sometimes 5% to 8% of your account value. A new contract will also restart the surrender clock. Make sure the benefits of switching clearly outweigh these costs.</p>
-<h2>2. Loss of Existing Guarantees</h2>
-<p>Some older annuities carry guarantees that are no longer available in today\u2019s market \u2014 higher minimum interest rates, more generous income riders, or better death benefits. Before exchanging, understand exactly what you\u2019d be giving up.</p>
-<h2>3. Total Cost Comparison</h2>
-<p>Compare the all-in costs of your current contract with the proposed replacement. Lower fees in the new contract are only beneficial if the overall value proposition \u2014 including guarantees, investment options, and flexibility \u2014 is genuinely better.</p>
-<h2>The Bottom Line</h2>
-<p>A 1035 exchange can be a powerful tool when used appropriately. But it\u2019s not always the right move, and anyone who tells you otherwise without reviewing your specific situation isn\u2019t looking out for your best interests.</p>
-<p><strong>If you\u2019re considering an exchange \u2014 or just want to know if it\u2019s worth exploring \u2014 reply to this email. Our analysis is complimentary and comes with zero obligation.</strong></p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432. This is educational content only and should not be considered tax or legal advice. Consult your tax advisor before making any exchange decisions.</p>` },
-  { id:'e-2-12', subject:"Next steps for annuity optimization", previewText:"Our final email \u2014 and a standing invitation.", sendDay:70, status:'active', bodyFormat:'html',
-    body:`<p>Hi {{first_name}},</p>
-<p>Over the past several weeks, we\u2019ve shared what we believe every annuity owner should know \u2014 from understanding hidden fees to evaluating whether your contract is still delivering on its promises.</p>
-<h2>Here\u2019s What We\u2019ve Covered</h2>
-<ul>
-<li>The four layers of annuity costs and how they compound over time</li>
-<li>The difference between fixed, variable, and indexed annuities</li>
-<li>How to verify that your guarantees are performing as illustrated</li>
-<li>The impact of interest rate changes on your contract</li>
-<li>A real-world example of how a review uncovered $8K in unnecessary fees</li>
-<li>A self-service checklist for evaluating your annuity\u2019s performance</li>
-<li>The three critical factors to weigh before considering a 1035 exchange</li>
-</ul>
-<h2>Where Do You Go From Here?</h2>
-<p>If any of these topics resonated with you, the natural next step is a personalized review. Here\u2019s what that looks like:</p>
-<ul>
-<li><strong>Step 1:</strong> Share your most recent annuity statement with us (we\u2019ll keep it confidential)</li>
-<li><strong>Step 2:</strong> We\u2019ll analyze your fees, guarantees, and performance in detail</li>
-<li><strong>Step 3:</strong> You\u2019ll receive a clear, written summary of our findings</li>
-<li><strong>Step 4:</strong> We\u2019ll discuss your options together \u2014 with absolutely no pressure to make changes</li>
-</ul>
-<p>The entire process takes about 20 minutes and is completely complimentary.</p>
-<p><strong>Ready to get started? Reply to this email, call us at (561) 555-0100, or visit our website to book a time.</strong></p>
-<p>Thank you for reading, {{first_name}}. Whatever you decide, we\u2019re here when you need us.</p>
+<p>Would a quick review be helpful? I am happy to walk through your annuity with you. Just reply to this email.</p>
 <p>Warm regards,<br/>The FFA North Team</p>
-<p style="font-size:12px;color:#888;">Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432. You are receiving this email because you opted in to educational content from Florida Financial Advisors. To unsubscribe, reply \u201cunsubscribe\u201d or click the link below.</p>` },
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Annuity contracts involve fees and limitations. Individual situations vary.</p>` },
+  { id:'e-2-2', subject:"Understanding your annuity fees", previewText:"Complexity sometimes hides costs worth knowing about.", sendDay:3, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Annuities can be powerful financial tools, but their fee structures are often layered and not always easy to see on a statement. Here is a quick breakdown of the costs most annuity owners carry:</p>
+<ul>
+<li><strong>Mortality and Expense (M&E) charges</strong> — the insurance company's charge for providing guarantees, typically ranging from 0.50% to 1.50% annually</li>
+<li><strong>Surrender charges</strong> — penalties for withdrawing more than the allowed amount during the surrender period, sometimes lasting seven to ten years</li>
+<li><strong>Rider fees</strong> — optional benefits like income guarantees or enhanced death benefits carry their own annual charges, often 0.50% to 1.25% each</li>
+<li><strong>Underlying fund expenses</strong> — for variable annuities, the sub-accounts have their own expense ratios on top of everything else</li>
+</ul>
+<p>Added together, total annual costs on some older contracts can exceed 3% per year. That is a meaningful drag on growth over time.</p>
+<p>None of this means your annuity is a bad deal. But understanding what you are paying is the first step toward knowing whether you are getting fair value.</p>
+<p>If you would like help decoding your fee structure, just reply to this email. We are happy to take a look.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Fee examples are illustrative. Actual fees vary by contract.</p>` },
+  { id:'e-2-3', subject:"Three questions every annuity owner should ask", previewText:"Simple checks that can reveal a lot about your contract.", sendDay:7, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>You do not need to be a financial expert to evaluate your annuity. These three questions can tell you a great deal about where you stand:</p>
+<ul>
+<li><strong>"Am I past my surrender period?"</strong> If yes, you have more flexibility than you may realize. Many owners do not check, and their surrender period quietly expires without anyone telling them.</li>
+<li><strong>"Am I using all the riders I am paying for?"</strong> If you are paying for a guaranteed income rider but have no plans to annuitize, or a death benefit rider that is no longer necessary, you may be carrying costs that no longer serve you.</li>
+<li><strong>"Has my risk tolerance changed?"</strong> The allocation inside a variable annuity should reflect who you are today, not who you were when you signed the paperwork years ago.</li>
+</ul>
+<p>If you could not answer any of these with confidence, you are far from alone. Most annuity owners we meet have not revisited these details since the day they purchased their contract.</p>
+<p>We offer a complimentary annuity review that covers all three areas and more. It takes about 20 minutes and is completely confidential. Just reply if you are interested.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Individual annuity features and fees vary by contract.</p>` },
+  { id:'e-2-4', subject:"Your surrender schedule explained", previewText:"Knowing your timeline opens up options you may not expect.", sendDay:14, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>One of the most important but least understood features of an annuity is the surrender schedule. Here is a quick primer on what it means and why it matters.</p>
+<p>When you purchase an annuity, the insurance company typically imposes a surrender period — usually five to ten years. During that time, withdrawals beyond a specified amount (often 10% of your account value per year) trigger a penalty called a surrender charge.</p>
+<p>What many people do not realize:</p>
+<ul>
+<li><strong>Surrender charges decrease over time.</strong> They typically start high (6-8%) and drop by roughly one percentage point per year until they reach zero.</li>
+<li><strong>Once the period ends, you have full flexibility.</strong> You can withdraw, transfer, or exchange your annuity without penalty.</li>
+<li><strong>Many owners miss this milestone.</strong> Your insurance company is not required to notify you when your surrender period expires. It often passes unnoticed.</li>
+</ul>
+<p>Knowing where you stand on your surrender schedule is essential for making informed decisions about your annuity. It can be the difference between being locked in and having real choices.</p>
+<p>If you are unsure where you are in your surrender period, I am happy to help you find out. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Surrender charges vary by contract. Consult your annuity documents for specific terms.</p>` },
+  { id:'e-2-5', subject:"Income riders: are you using yours?", previewText:"A benefit you are paying for may be going untapped.", sendDay:21, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Many annuity contracts include optional income riders — features designed to provide a predictable stream of income in retirement. They can be a valuable part of your financial plan, but they also come with costs that are worth understanding.</p>
+<p>Here is what you should know:</p>
+<ul>
+<li><strong>Income riders have their own fees.</strong> These are typically charged annually, whether or not you have activated the rider. Over time, these costs reduce your account value.</li>
+<li><strong>The benefit base is not your account value.</strong> Many owners confuse the two. Your income benefit base is a calculation used to determine your guaranteed withdrawal amount — it is not money you can take as a lump sum.</li>
+<li><strong>Timing your activation matters.</strong> Starting withdrawals too early or too late can affect the value you ultimately receive from the rider.</li>
+</ul>
+<p>If you have an income rider on your annuity, it is worth reviewing whether you are getting value from it — and whether your activation strategy aligns with your retirement timeline.</p>
+<p>Happy to chat if you would like to explore this further. Just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Rider features and costs vary by contract. This is educational content only.</p>` },
+  { id:'e-2-6', subject:"Fixed vs. variable: a quick comparison", previewText:"Understanding the key differences between annuity types.", sendDay:28, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Not all annuities work the same way. If you own one or are evaluating your options, understanding the fundamental differences between the main types can help you make more informed decisions.</p>
+<p><strong>Fixed annuities</strong> offer principal protection and a guaranteed interest rate for a set period. They provide predictable, stable growth but typically deliver lower long-term returns. They generally carry lower fees and are well suited for conservative investors.</p>
+<p><strong>Variable annuities</strong> invest your money in sub-accounts similar to mutual funds. Returns depend on market performance, which means higher potential upside but also downside risk. They often include optional riders at additional cost and carry higher fee structures overall.</p>
+<p><strong>Fixed indexed annuities</strong> are a hybrid. Your principal is protected, but returns are linked to a market index like the S&P 500, subject to caps and participation rates. The crediting methods can be complex and change from year to year.</p>
+<p>The right type depends entirely on your goals, timeline, and comfort with risk. There is no single best answer for everyone.</p>
+<p>If you would like help understanding how your current annuity fits your overall financial picture, I am happy to walk through it with you. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. All annuity types involve trade-offs. Individual suitability varies.</p>` },
+  { id:'e-2-7', subject:"Tax-deferred growth: what it means for you", previewText:"An annuity benefit that often goes underappreciated.", sendDay:35, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>One of the core benefits of an annuity is tax-deferred growth. Your investment earnings are not taxed until you withdraw them. Over many years, this can make a meaningful difference in how your money compounds.</p>
+<p>Here is why it matters:</p>
+<ul>
+<li><strong>Compounding without annual tax drag.</strong> In a taxable account, you owe taxes each year on dividends and capital gains. Inside an annuity, those earnings continue compounding without being reduced by annual taxes.</li>
+<li><strong>Control over timing.</strong> You decide when to take withdrawals, which gives you some control over when you recognize taxable income. This can be especially valuable in retirement when managing your tax bracket.</li>
+<li><strong>Important caveat.</strong> When you do withdraw, earnings are taxed as ordinary income rather than at the lower capital gains rate. And withdrawals before age 59-1/2 may be subject to a 10% penalty.</li>
+</ul>
+<p>Tax-deferred growth is a genuine advantage, but it works best when it is part of a broader strategy that considers your other accounts, your expected tax bracket in retirement, and your withdrawal timeline.</p>
+<p>If you would like to discuss how your annuity's tax benefits fit into your larger financial plan, just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. This is educational content and does not constitute tax advice. Consult your tax professional for guidance specific to your situation.</p>` },
+  { id:'e-2-8', subject:"Legacy planning with your annuity", previewText:"Your contract may offer options for your beneficiaries.", sendDay:42, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>When most people think about annuities, they focus on income and growth. But your annuity may also play a role in your legacy planning — and it is worth understanding how.</p>
+<p>A few things to consider:</p>
+<ul>
+<li><strong>Death benefit provisions.</strong> Most annuity contracts include a death benefit that passes to your named beneficiaries. Some offer an enhanced death benefit rider that can lock in a higher value, though this comes at an additional cost.</li>
+<li><strong>Beneficiary designations matter.</strong> Like life insurance, annuity beneficiary designations typically override your will. Make sure they are current and reflect your wishes.</li>
+<li><strong>Tax implications for heirs.</strong> Inherited annuities are generally subject to income tax on the gains. The rules differ depending on whether the beneficiary is a spouse or non-spouse, and the distribution options available can vary.</li>
+</ul>
+<p>Understanding how your annuity fits into your estate plan can help ensure your intentions are carried out the way you want. It is one of those details that is easy to overlook but important to get right.</p>
+<p>If you would like to review the legacy provisions of your annuity contract, I would be glad to help. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. This is educational content and does not constitute estate planning or tax advice.</p>` },
+  { id:'e-2-9', subject:"What a review uncovered for one couple", previewText:"A real example of why periodic annuity checkups matter.", sendDay:49, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>I wanted to share a brief story that illustrates why we believe in regular annuity reviews. Names and details have been changed for privacy.</p>
+<p>A couple in their early 60s — we will call them Jim and Diane — came to us with a variable annuity they had owned for nine years. They assumed it was performing well and had not reviewed it since the day they purchased it.</p>
+<p>Here is what we found:</p>
+<ul>
+<li><strong>Two riders they were not using.</strong> They had added a guaranteed accumulation benefit and an enhanced death benefit at purchase. Combined rider fees totaled 1.85% per year, but their financial situation had changed and they no longer needed either feature.</li>
+<li><strong>High-cost sub-accounts.</strong> The investment options inside their annuity had expense ratios averaging 1.10%, well above comparable alternatives.</li>
+<li><strong>An expired surrender period.</strong> Their seven-year surrender period had ended two years earlier, giving them full flexibility they did not know they had.</li>
+</ul>
+<p>After a careful analysis, Jim and Diane were able to restructure their position and reduce their annual costs by approximately $8,000 while maintaining the protections they actually needed.</p>
+<p>Every situation is unique, and past results do not predict future outcomes. But their experience shows what a fresh set of eyes can reveal.</p>
+<p>Would a similar review be worthwhile for your situation? Just reply and we can set up a time.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Names and details changed for privacy. Individual results vary.</p>` },
+  { id:'e-2-10', subject:"RMDs and your annuity: what to know", previewText:"Required distributions add a layer of complexity worth planning for.", sendDay:56, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>If your annuity is held inside a qualified account like an IRA, Required Minimum Distributions (RMDs) are something you will need to plan for. Here is a quick overview of what that means.</p>
+<ul>
+<li><strong>RMDs apply to qualified annuities.</strong> If your annuity is inside a traditional IRA or other qualified account, you must begin taking distributions by age 73 (under current rules). Non-qualified annuities are not subject to RMDs.</li>
+<li><strong>Annuitized contracts may satisfy RMDs.</strong> If your annuity is paying you regular income through annuitization, those payments may count toward your RMD requirement. But the rules are specific and worth confirming.</li>
+<li><strong>Coordination is key.</strong> If you own multiple IRAs, you can take your total RMD from any combination of accounts. This flexibility can help you optimize which accounts you draw from and when.</li>
+</ul>
+<p>RMD planning is one of those areas where a little forethought can save you from unnecessary tax consequences and potential penalties. It is especially important if your annuity represents a significant portion of your retirement savings.</p>
+<p>If you would like to discuss how your annuity fits into your RMD strategy, I am happy to help. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. This is educational content and does not constitute tax advice. Consult your tax professional for your specific situation.</p>` },
+  { id:'e-2-11', subject:"Benchmarking your annuity's performance", previewText:"How to know if your contract is delivering fair value.", sendDay:63, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>One of the most common questions we hear from annuity owners is: "How do I know if my annuity is performing well?" It is a fair question, and the answer requires looking beyond a single number.</p>
+<p>Here is a simple framework for benchmarking your annuity:</p>
+<ul>
+<li><strong>Compare net returns, not gross.</strong> Your annuity's growth after all fees is what matters. A contract that shows 7% gross returns but charges 3% in total fees delivers only 4% net.</li>
+<li><strong>Use the right benchmark.</strong> A fixed annuity should be compared to other fixed-income alternatives, not the stock market. A variable annuity should be compared to portfolios with a similar risk profile.</li>
+<li><strong>Factor in the guarantees.</strong> If your annuity provides downside protection or guaranteed income, that has value. Pure return comparisons may not capture the full picture.</li>
+<li><strong>Consider the alternatives.</strong> What would your money be doing if it were not in this annuity? That comparison helps you understand the opportunity cost.</li>
+</ul>
+<p>Performance evaluation is not about declaring your annuity good or bad. It is about making sure the value you receive justifies the costs you pay.</p>
+<p>If you would like help running these numbers for your specific contract, just reply. We are happy to walk through it with you.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Past performance does not predict future results. Individual contract features vary.</p>` },
+  { id:'e-2-12', subject:"Thought you'd find this valuable", previewText:"A final note and an open invitation from our team.", sendDay:70, status:'active', bodyFormat:'html',
+    body:`<p>Hi {{first_name}},</p>
+<p>Over the past several weeks, we have shared what we believe every annuity owner should know — from understanding fee structures and surrender schedules to evaluating income riders, tax-deferred growth, and legacy planning.</p>
+<p>Here is a quick recap of what we covered:</p>
+<ul>
+<li>How annuity fees are layered and what they add up to</li>
+<li>The importance of knowing your surrender schedule</li>
+<li>How income riders work and when to activate them</li>
+<li>Key differences between fixed, variable, and indexed annuities</li>
+<li>Tax-deferred growth benefits and RMD considerations</li>
+<li>How to benchmark your contract's performance</li>
+</ul>
+<p>If any of these topics resonated with you, the natural next step is a personalized review. It takes about 20 minutes, is completely complimentary, and comes with no obligation. You will walk away with a clear understanding of where your annuity stands and what your options are.</p>
+<p>Whether you are ready for that conversation today or sometime in the future, our door is always open. Simply reply to this email whenever the timing feels right.</p>
+<p>Thank you for your time, {{first_name}}. It has been a pleasure sharing these insights with you.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. You are receiving this email because you opted in to educational content from Florida Financial Advisors.</p>` },
 ];
 
 const retirementEmails: EmailStep[] = [
-  { id:'e-3-1', subject:"Are you retirement-ready? (A quick self-check)", previewText:"5 questions that reveal where you stand.", sendDay:0, status:'active',
-    body:`Hi {{first_name}},\n\nNo matter where you are on the retirement timeline, these questions reveal a lot:\n\n1. Do you know your "number"?\n2. Are you maximizing your tax-advantaged accounts?\n3. Do you have a plan for healthcare before Medicare?\n4. Have you thought about Social Security timing?\n5. Is your portfolio allocated for where you are today?\n\nIf you answered "not sure" to any of these, you're not alone.\n\nWe'd love to help you get a clearer picture — no cost, no obligation.\n\nReply to this email if you'd like to chat.\n\nTo your future,\nThe FFA North Team` },
-  { id:'e-3-2', subject:"The Social Security decision that could cost you $100K+", previewText:"When you claim matters more than you think.", sendDay:4, status:'active',
-    body:`Hi {{first_name}},\n\nThe decision of when to claim Social Security can be worth over $100,000 in lifetime benefits.\n\n• Claim at 62: Benefits reduced by up to 30%\n• Claim at Full Retirement Age (66-67): Full benefit\n• Wait until 70: Grows ~8% per year past FRA\n\nThe "right" answer depends on your health, spouse, income sources, and overall plan.\n\nWe help people model this decision every day. Reply to this email if you'd like us to run the numbers.\n\nBest regards,\nThe FFA North Team` },
-  { id:'e-3-3', subject:"The retirement expense most people forget", previewText:"It's not housing. It's not travel.", sendDay:8, status:'active',
-    body:`Hi {{first_name}},\n\nThe expense that catches most retirees off guard is healthcare.\n\nThe average 65-year-old couple will spend roughly $315,000 on healthcare in retirement.\n\n• Medicare doesn't cover everything\n• Supplemental coverage costs vary wildly\n• Long-term care is the wildcard\n\nWith planning, you can prepare. Want to see how healthcare costs fit into your picture? Reply and we'll talk.\n\nWarm regards,\nThe FFA North Team` },
-  { id:'e-3-4', subject:"Your free Retirement Readiness Review", previewText:"Let's build your retirement picture together.", sendDay:14, status:'active',
-    body:`Hi {{first_name}},\n\nOur Retirement Readiness Review covers:\n✓ Where you stand vs. your goals\n✓ Social Security optimization\n✓ Income planning strategies\n✓ Healthcare cost projections\n✓ Tax-efficient withdrawal strategies\n\nIt's complimentary — about 30 minutes — and you'll walk away with clarity.\n\nReply "Let's do it" and we'll get you on the calendar.\n\nHere's to your future,\nThe FFA North Team` },
-  { id:'step-ret-5', subject:"The retirement income gap: are you prepared?", previewText:"What happens when your paycheck stops?", sendDay:21, status:'active', bodyFormat:'html' as const,
+  { id:'e-3-1', subject:"A quick retirement self-check", previewText:"Five questions that reveal more than you might expect.", sendDay:0, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-
-<p>Here is a question that keeps many pre-retirees up at night: <strong>Will my savings actually replace my paycheck?</strong></p>
-
-<p>The reality is that most Americans face a significant gap between the retirement income they will need and the income their current savings are projected to provide. According to research from the Employee Benefit Research Institute, nearly half of households are at risk of not having enough to cover essential expenses in retirement.</p>
-
-<h2>Understanding Your Income Gap</h2>
-
-<p>Your retirement income gap is the difference between:</p>
+<p>No matter where you are on the retirement timeline, these five questions can reveal a lot about your readiness:</p>
 <ul>
-  <li>The monthly income you will need to maintain your lifestyle</li>
-  <li>The combined income from Social Security, pensions, and projected portfolio withdrawals</li>
+<li><strong>Do you know your "number"?</strong> That is, the amount of savings you need to maintain your desired lifestyle in retirement.</li>
+<li><strong>Are you maximizing your tax-advantaged accounts?</strong> Contributions to 401(k)s, IRAs, and HSAs can make a significant difference over time.</li>
+<li><strong>Do you have a plan for healthcare before Medicare?</strong> If you retire before 65, this gap can be one of your largest expenses.</li>
+<li><strong>Have you thought about Social Security timing?</strong> When you claim can affect your lifetime benefits by tens of thousands of dollars.</li>
+<li><strong>Is your portfolio positioned for where you are today?</strong> The right allocation at 40 is very different from the right allocation at 60.</li>
 </ul>
-
-<p>Most financial professionals suggest planning for 75-85% of your pre-retirement income, though the right number depends on your unique circumstances — your health, where you plan to live, and how you envision spending your time.</p>
-
-<p>The good news? Once you quantify the gap, you can build a strategy to close it. Small adjustments today — increasing contributions, optimizing asset allocation, or adjusting your timeline — can make a meaningful difference.</p>
-
-<p>We help people calculate and close their income gap every day. <strong>Schedule a complimentary consultation</strong> and we will walk through your numbers together.</p>
-
-<p>Simply reply to this email to get started.</p>
-
-<p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'step-ret-6', subject:"Social Security strategies most people miss", previewText:"Timing and coordination can add tens of thousands.", sendDay:28, status:'active', bodyFormat:'html' as const,
+<p>If any of those gave you pause, you are not alone. Most people we talk to are uncertain about at least one or two of these areas.</p>
+<p>Would it be helpful to talk through your answers together? I am happy to set aside some time. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. This is educational content only. Individual retirement needs vary.</p>` },
+  { id:'e-3-2', subject:"The Social Security timing question", previewText:"When you claim can be worth six figures over your lifetime.", sendDay:4, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-
-<p>Social Security may be the single most important retirement decision you make — yet most people spend more time planning a vacation than planning their claiming strategy.</p>
-
-<h2>Three Strategies Worth Knowing</h2>
-
+<p>The decision of when to claim Social Security is one of the most impactful financial choices you will make in retirement. The difference between a good strategy and a suboptimal one can amount to tens of thousands — sometimes over $100,000 — in lifetime benefits.</p>
+<p>Here is a simplified overview of the trade-offs:</p>
 <ul>
-  <li><strong>Delayed claiming for higher guaranteed income.</strong> For every year you delay past your Full Retirement Age (up to 70), your benefit grows by approximately 8%. That is a guaranteed increase that is difficult to replicate with any investment.</li>
-  <li><strong>Spousal coordination.</strong> If you are married, the order and timing of when each spouse claims can significantly affect your combined lifetime benefits. One spouse claiming early while the other delays is a strategy that works well for many couples.</li>
-  <li><strong>Tax-aware claiming.</strong> Social Security benefits can be taxable depending on your other income sources. Coordinating your claiming strategy with Roth conversions and other income can help reduce your overall tax burden in retirement.</li>
+<li><strong>Claim at 62:</strong> You receive benefits earlier, but they are permanently reduced by up to 30% compared to your full retirement age benefit.</li>
+<li><strong>Claim at full retirement age (66-67):</strong> You receive your full calculated benefit.</li>
+<li><strong>Delay until 70:</strong> Your benefit grows by approximately 8% per year past full retirement age. That is a meaningful increase in guaranteed lifetime income.</li>
 </ul>
-
-<p>The difference between a good strategy and a suboptimal one can amount to tens of thousands of dollars over your lifetime. And once you start receiving benefits, your options become much more limited.</p>
-
-<p>We offer a complimentary Social Security optimization analysis as part of our retirement planning process. <strong>Reply to this email</strong> and we will run the numbers for your specific situation.</p>
-
-<p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'step-ret-7', subject:"Healthcare costs in retirement: planning ahead", previewText:"Medicare is just the starting point.", sendDay:35, status:'active', bodyFormat:'html' as const,
+<p>The right answer depends on several factors: your health, your spouse's situation, your other income sources, and your overall financial plan. There is no one-size-fits-all answer.</p>
+<p>We help people model this decision regularly. If you would like us to walk through the scenarios for your specific situation, just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Social Security benefits vary by individual. This is educational content only.</p>` },
+  { id:'e-3-3', subject:"The retirement cost most people miss", previewText:"It is not housing, travel, or daily living expenses.", sendDay:8, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-
-<p>When most people think about retirement expenses, they think about housing, travel, and daily living costs. But the expense that often has the biggest impact on a retirement plan is <strong>healthcare</strong>.</p>
-
-<h2>What Medicare Covers — and What It Does Not</h2>
-
-<p>Medicare is an important foundation, but it was never designed to cover everything:</p>
+<p>When people picture retirement expenses, they tend to think about housing, travel, and everyday living costs. But there is one expense that consistently catches retirees off guard: healthcare.</p>
+<p>According to various industry estimates, a 65-year-old couple may need $300,000 or more to cover healthcare costs throughout retirement. That figure can vary widely depending on your health, location, and coverage choices.</p>
+<p>A few realities worth planning for:</p>
 <ul>
-  <li><strong>Part A</strong> covers hospital stays but comes with deductibles and copays</li>
-  <li><strong>Part B</strong> covers doctor visits and outpatient care — with a monthly premium that increases based on income</li>
-  <li><strong>Part D</strong> helps with prescription drugs but has its own costs and coverage gaps</li>
-  <li><strong>Long-term care</strong> — such as assisted living or in-home care — is generally <em>not</em> covered by Medicare at all</li>
+<li><strong>Medicare does not cover everything.</strong> There are premiums, deductibles, copays, and significant gaps — particularly for dental, vision, and hearing.</li>
+<li><strong>Supplemental coverage varies.</strong> Medicare Supplement and Medicare Advantage plans have very different cost structures and trade-offs.</li>
+<li><strong>Long-term care is the wild card.</strong> Neither Medicare nor most health insurance covers extended nursing home or assisted living stays.</li>
 </ul>
-
-<h2>Bridging the Gaps</h2>
-
-<p>Many retirees choose a Medicare Supplement (Medigap) or Medicare Advantage plan to reduce out-of-pocket exposure. The right choice depends on your health history, preferred doctors, prescription needs, and risk tolerance.</p>
-
-<p>If you are retiring before 65, you also need a strategy for the gap years before Medicare eligibility — a period when coverage can be especially expensive.</p>
-
-<p>Healthcare planning is a critical piece of any retirement strategy. <strong>Download our complimentary guide, "Healthcare in Retirement: What You Need to Know,"</strong> by replying to this email.</p>
-
-<p>To your health and your future,<br/>The FFA North Team</p>` },
-  { id:'step-ret-8', subject:"Tax-efficient withdrawal strategies", previewText:"The order you draw from accounts matters more than you think.", sendDay:42, status:'active', bodyFormat:'html' as const,
+<p>The good news is that with thoughtful planning, healthcare costs can be anticipated and managed. The key is building them into your retirement projections rather than hoping for the best.</p>
+<p>Would it be helpful to look at how healthcare costs fit into your retirement picture? Just reply and we can set up a time.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Healthcare cost estimates are approximations and vary by individual. This is educational content only.</p>` },
+  { id:'e-3-4', subject:"Income planning: beyond the savings number", previewText:"How you withdraw matters as much as how much you saved.", sendDay:14, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-
-<p>Most people focus on how much they have saved for retirement. Far fewer think about <strong>how they will withdraw it</strong> — and that can be just as important.</p>
-
-<h2>Why Withdrawal Order Matters</h2>
-
-<p>In retirement, you likely have money in accounts with different tax treatments:</p>
+<p>Most retirement conversations focus on one question: "Do I have enough saved?" It is an important question, but it is only half the picture. Equally important is how you turn those savings into reliable income.</p>
+<p>Here are a few concepts worth understanding:</p>
 <ul>
-  <li><strong>Tax-deferred accounts</strong> (Traditional IRA, 401(k)) — withdrawals are taxed as ordinary income</li>
-  <li><strong>Tax-free accounts</strong> (Roth IRA, Roth 401(k)) — qualified withdrawals owe no tax</li>
-  <li><strong>Taxable accounts</strong> (brokerage) — taxed at capital gains rates, which are often lower</li>
+<li><strong>The 4% rule is a starting point, not a law.</strong> The idea of withdrawing 4% of your portfolio annually has been a common guideline, but it does not account for your specific tax situation, market conditions, or spending patterns.</li>
+<li><strong>Multiple income sources add stability.</strong> Social Security, pensions, annuity income, and portfolio withdrawals can work together to create a more resilient income plan than relying on any single source.</li>
+<li><strong>Sequence of returns matters.</strong> A market downturn in your first few years of retirement can have an outsized impact on how long your money lasts, even if long-term averages remain strong.</li>
 </ul>
-
-<p>The conventional wisdom of "draw from taxable first, then tax-deferred, then Roth last" is a reasonable starting point, but it is not always optimal. A more nuanced approach considers your tax bracket each year and may include:</p>
-
-<ul>
-  <li><strong>Roth conversions</strong> in lower-income years to reduce future Required Minimum Distributions</li>
-  <li><strong>Strategic Roth withdrawals</strong> to manage your Medicare premium surcharges (IRMAA)</li>
-  <li><strong>Tax bracket management</strong> — filling up lower brackets with taxable income to keep more money growing tax-free</li>
-</ul>
-
-<p>A well-designed withdrawal strategy can potentially extend the life of your portfolio and reduce the total taxes you pay over your retirement. <strong>Schedule a complimentary consultation</strong> and we can discuss which approach may make sense for your situation.</p>
-
-<p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'step-ret-9', subject:"How inflation affects your retirement timeline", previewText:"Your purchasing power is quietly eroding.", sendDay:49, status:'active', bodyFormat:'html' as const,
+<p>Building a solid income distribution strategy before you retire gives you the confidence to enjoy your retirement rather than worry through it.</p>
+<p>If you would like to explore what a retirement income plan could look like for your situation, I am happy to walk through it with you. Just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Withdrawal strategies depend on individual circumstances. This is educational content only.</p>` },
+  { id:'step-ret-5', subject:"Tax brackets in retirement", previewText:"Your tax situation may look different than you expect.", sendDay:21, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
-
-<p>Inflation has been front-page news in recent years, and for good reason. But even in more typical years, inflation quietly reshapes every retirement plan.</p>
-
-<h2>The Purchasing Power Problem</h2>
-
-<p>Consider this: at just 3% annual inflation, something that costs $1,000 today will cost roughly $1,800 in twenty years. If your retirement could last 25 or 30 years, the impact compounds significantly.</p>
-
-<p>This means your retirement plan needs to account not just for today's expenses, but for expenses that may double over your lifetime.</p>
-
-<h2>Strategies to Help Protect Your Purchasing Power</h2>
-
+<p>Many people assume their tax rate will drop significantly in retirement. For some, that is true. But for others, the combination of Social Security benefits, Required Minimum Distributions, and other income sources can push them into a higher bracket than they anticipated.</p>
+<p>A few things worth understanding:</p>
 <ul>
-  <li><strong>Maintain some growth-oriented investments</strong> even in retirement — a portfolio that is too conservative may not keep pace with rising costs</li>
-  <li><strong>Consider Social Security timing</strong> — delayed benefits grow at 8% per year, which can serve as a built-in inflation hedge</li>
-  <li><strong>Review your plan annually</strong> — inflation assumptions from five years ago may no longer be accurate</li>
-  <li><strong>Build in margin</strong> — a plan that works only if everything goes perfectly is not truly a plan</li>
+<li><strong>Up to 85% of Social Security can be taxable.</strong> Depending on your total income, a significant portion of your Social Security benefits may be subject to federal income tax.</li>
+<li><strong>RMDs create taxable income.</strong> Once you reach age 73, Required Minimum Distributions from traditional IRAs and 401(k)s are mandatory and fully taxable as ordinary income.</li>
+<li><strong>Roth conversions can help.</strong> Converting traditional IRA funds to a Roth during lower-income years can reduce future RMDs and create a source of tax-free income in retirement.</li>
 </ul>
-
-<p>Inflation does not have to derail your retirement. With thoughtful planning, you can build a strategy designed to maintain your lifestyle regardless of economic conditions.</p>
-
-<p><strong>Schedule a complimentary consultation</strong> to discuss how inflation is factored into your current plan. Reply to get started.</p>
-
-<p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'step-ret-10', subject:"Estate planning essentials for retirement", previewText:"Protect what you have built for the people you love.", sendDay:56, status:'active', bodyFormat:'html' as const,
+<p>Tax bracket management is one of the most underappreciated aspects of retirement planning. A little foresight can make a meaningful difference in how much of your savings you actually get to keep.</p>
+<p>If you would like to explore how taxes might affect your retirement income, I am happy to walk through it with you. Just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. This is educational content and does not constitute tax advice. Consult your tax professional.</p>` },
+  { id:'step-ret-6', subject:"Catch-up contributions: a useful tool", previewText:"If you are 50 or older, you have extra options.", sendDay:28, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
-
-<p>Estate planning is one of those topics people know is important but often put off. The truth is, retirement is the ideal time to get your estate plan in order — or to review one you created years ago.</p>
-
-<h2>Five Things to Review Now</h2>
-
+<p>If you are 50 or older, the IRS allows you to make additional "catch-up" contributions to your retirement accounts beyond the standard limits. It is one of those provisions that is easy to overlook but can make a real difference.</p>
+<p>Here is a quick summary of the current opportunities:</p>
 <ul>
-  <li><strong>Beneficiary designations.</strong> These override your will. If you have had a life change — marriage, divorce, birth, or loss — your designations may be out of date. We see this more often than you might expect.</li>
-  <li><strong>Power of attorney.</strong> Both financial and healthcare powers of attorney ensure that someone you trust can act on your behalf if you are unable to.</li>
-  <li><strong>Trust considerations.</strong> Depending on the size of your estate and your goals, a trust can help avoid probate, reduce estate taxes, and protect assets for your heirs.</li>
-  <li><strong>Required Minimum Distributions and your estate.</strong> If you have significant IRA balances, the SECURE Act changed the rules for inherited IRAs. Your beneficiaries may face a 10-year distribution window that could create a substantial tax burden.</li>
-  <li><strong>Charitable giving strategies.</strong> Qualified Charitable Distributions and donor-advised funds can help you support causes you care about while potentially reducing your tax liability.</li>
+<li><strong>401(k) and 403(b) plans</strong> allow an additional catch-up contribution on top of the standard employee limit for those 50 and older.</li>
+<li><strong>Traditional and Roth IRAs</strong> also offer a smaller but still meaningful catch-up amount for the same age group.</li>
+<li><strong>Health Savings Accounts (HSAs)</strong> allow additional contributions for those 55 and older, and HSA funds can be used tax-free for qualified medical expenses in retirement.</li>
 </ul>
-
-<p>Estate planning works best as part of a comprehensive retirement strategy — not in isolation. <strong>Download our complimentary guide, "Estate Planning Essentials,"</strong> by replying to this email.</p>
-
-<p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'step-ret-11', subject:"Real story: How the Martinez family secured their retirement", previewText:"A real-world example of comprehensive planning in action.", sendDay:63, status:'active', bodyFormat:'html' as const,
+<p>These extra contributions compound over time. If you have ten or fifteen years until retirement, the additional savings can add up to a significant sum.</p>
+<p>Even if you cannot maximize every account, contributing a little more where you can is a step worth considering. The key is understanding which accounts offer the most benefit for your specific tax and retirement situation.</p>
+<p>Happy to chat if you would like to explore your options. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Contribution limits change annually. This is educational content only.</p>` },
+  { id:'step-ret-7', subject:"Sequence of returns: a risk worth knowing", previewText:"When you retire can matter as much as how much you saved.", sendDay:35, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
-
-<p>We would like to share a story about a couple we will call the Martinez family (names and details changed for privacy).</p>
-
-<h2>Where They Started</h2>
-
-<p>Carlos and Maria came to us five years before their planned retirement. They had done a lot of things right — saved consistently, avoided major debt, and paid off their home. But they had some concerns:</p>
+<p>Here is a concept that does not get enough attention: sequence of returns risk. It is the idea that the order in which you experience investment returns matters enormously when you are withdrawing from your portfolio.</p>
+<p>Consider two retirees with identical savings and identical average returns over 20 years. If one experiences poor returns in the first few years of retirement while making withdrawals, their portfolio may run out of money years earlier than the other — even though the long-term average was the same.</p>
+<p>Why does this happen?</p>
 <ul>
-  <li>Their savings were concentrated in Carlos's 401(k) with limited diversification</li>
-  <li>They had no strategy for when to claim Social Security</li>
-  <li>Maria had a small pension, but they were unsure how it fit into their overall plan</li>
-  <li>They had not reviewed their estate documents since their children were young</li>
+<li><strong>Withdrawals during downturns lock in losses.</strong> When you sell investments at depressed prices to fund living expenses, those shares are no longer available to participate in the eventual recovery.</li>
+<li><strong>The early years matter most.</strong> The first five to ten years of retirement have a disproportionate impact on whether your portfolio can sustain your withdrawals for the long term.</li>
+<li><strong>Planning can mitigate the risk.</strong> Strategies like maintaining a cash reserve, using a bucket approach, or having guaranteed income sources can help buffer against poor early returns.</li>
 </ul>
-
-<h2>What We Did Together</h2>
-
-<p>Over the course of several meetings, we helped the Martinez family build a comprehensive plan. We modeled different Social Security claiming scenarios and identified a strategy that was projected to provide significantly more lifetime income. We diversified their investment holdings and created a tax-efficient withdrawal sequence. We also connected them with an estate attorney to update their documents.</p>
-
-<h2>Where They Are Today</h2>
-
-<p>Carlos retired on schedule and Maria followed a year later. They feel confident about their income, their healthcare coverage, and the legacy they will leave their family.</p>
-
-<p>Every family's situation is unique, but the process works the same way: understand where you are, define where you want to go, and build a plan to get there. <strong>Schedule a complimentary consultation</strong> and let us start building your plan.</p>
-
-<p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'step-ret-12', subject:"Your personalized retirement readiness assessment", previewText:"Let us build a clear picture of your retirement future.", sendDay:70, status:'active', bodyFormat:'html' as const,
+<p>Sequence risk is one of several reasons why a well-thought-out withdrawal strategy matters as much as how much you have saved.</p>
+<p>If you would like to discuss how to build this kind of resilience into your retirement plan, just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Investment returns are not guaranteed and past performance does not predict future results.</p>` },
+  { id:'step-ret-8', subject:"Picturing your retirement lifestyle", previewText:"Planning works best when it starts with what matters to you.", sendDay:42, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
-
-<p>Over the past several weeks, we have shared insights on some of the most important aspects of retirement planning — from Social Security and healthcare costs to tax-efficient withdrawals and estate planning.</p>
-
-<p>Now we would like to offer you something more personal.</p>
-
-<h2>Your Complimentary Retirement Readiness Assessment</h2>
-
-<p>This is not a generic calculator or a one-size-fits-all report. It is a personalized review conducted by one of our experienced advisors, tailored to your specific situation. Here is what we will cover:</p>
-
+<p>Most retirement planning conversations jump straight to numbers: savings rates, portfolio balances, withdrawal percentages. But the most effective planning starts with a different kind of question: <strong>What do you actually want your retirement to look like?</strong></p>
+<p>Here are a few areas worth thinking about:</p>
 <ul>
-  <li><strong>Income gap analysis</strong> — how your projected retirement income compares to your anticipated needs</li>
-  <li><strong>Social Security optimization</strong> — the claiming strategy that may work best for you and your spouse</li>
-  <li><strong>Healthcare cost projection</strong> — a realistic estimate of your medical expenses in retirement</li>
-  <li><strong>Tax efficiency review</strong> — opportunities to reduce your lifetime tax burden through smart withdrawal sequencing</li>
-  <li><strong>Estate and beneficiary checkup</strong> — making sure your wishes are properly documented</li>
+<li><strong>Where will you live?</strong> Staying in your current home, downsizing, relocating to a different state, or splitting time between two places all have very different financial implications.</li>
+<li><strong>How will you spend your time?</strong> Travel, hobbies, volunteering, part-time work, or spending more time with family all shape your budget in different ways.</li>
+<li><strong>What does "enough" look like?</strong> Some people want to maintain their current lifestyle exactly. Others are happy to simplify. Knowing your target makes the math much clearer.</li>
 </ul>
-
-<p>The assessment takes about 30 minutes, is completely complimentary, and comes with zero obligation. You will walk away with a clear picture of where you stand and actionable next steps.</p>
-
-<p><strong>Ready to get started? Reply to this email or call us directly at (561) 555-0100 to schedule your assessment.</strong></p>
-
-<p>We look forward to helping you plan the retirement you deserve.</p>
-
-<p>All the best,<br/>The FFA North Team</p>` },
+<p>Once you have a clear picture of the life you want, building the financial plan to support it becomes much more straightforward. The numbers serve the vision, not the other way around.</p>
+<p>If you would like to talk through what your ideal retirement looks like and what it might take to get there, I would enjoy that conversation. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Individual retirement needs and goals vary.</p>` },
+  { id:'step-ret-9', subject:"Estate planning basics for retirement", previewText:"Protecting what you have built for the people you love.", sendDay:49, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+<p>Estate planning is one of those topics people know is important but often put off. Retirement is an ideal time to get your plan in order — or to review one you created years ago.</p>
+<p>Five things worth reviewing now:</p>
+<ul>
+<li><strong>Beneficiary designations.</strong> These override your will. If you have had a life change, your designations may be outdated. We see this more often than you might expect.</li>
+<li><strong>Power of attorney.</strong> Both financial and healthcare powers of attorney ensure someone you trust can act on your behalf if you are unable to.</li>
+<li><strong>Trust considerations.</strong> Depending on the size of your estate and your goals, a trust can help avoid probate, reduce estate taxes, and protect assets for your heirs.</li>
+<li><strong>Inherited IRA rules.</strong> The SECURE Act changed the rules for inherited IRAs. Your beneficiaries may face a 10-year distribution window that could create a meaningful tax burden.</li>
+<li><strong>Charitable giving strategies.</strong> Qualified Charitable Distributions and donor-advised funds can help you support causes you care about while potentially reducing your tax liability.</li>
+</ul>
+<p>Estate planning works best as part of a comprehensive retirement strategy, not in isolation. If you have not reviewed these areas recently, it may be time for a fresh look.</p>
+<p>Happy to chat if you would like to discuss any of these topics. Just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. This is educational content and does not constitute legal or tax advice.</p>` },
+  { id:'step-ret-10', subject:"Thinking about your legacy", previewText:"Retirement planning is not just about you — it is about what you leave behind.", sendDay:56, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+<p>For many people, retirement planning is not only about funding their own lifestyle. It is also about the legacy they want to leave — for their children, grandchildren, or the causes they care about.</p>
+<p>Here are a few legacy-related topics worth considering:</p>
+<ul>
+<li><strong>How much is "enough" for you vs. your heirs?</strong> Some people want to spend freely and leave whatever remains. Others have specific goals for what they want to pass on. Both approaches are valid, but they lead to very different financial strategies.</li>
+<li><strong>Tax-efficient wealth transfer.</strong> The way you pass on assets matters. Roth accounts, life insurance, and trusts each have different tax implications for your beneficiaries.</li>
+<li><strong>Charitable legacy.</strong> If giving is important to you, there are strategies that can benefit both the causes you support and your overall tax situation during your lifetime.</li>
+</ul>
+<p>Legacy planning is deeply personal. There is no right or wrong answer — only what is right for you and your family. The important thing is to be intentional about it rather than leaving things to chance.</p>
+<p>If you would like to explore how legacy goals fit into your broader retirement plan, I would be happy to talk it through. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Individual estate and legacy planning needs vary. This is educational content only.</p>` },
+  { id:'step-ret-11', subject:"Predictable income in retirement", previewText:"Understanding the building blocks of retirement income.", sendDay:63, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+<p>One of the biggest concerns people have about retirement is outliving their money. Guaranteed income sources can help address that concern by providing a floor of predictable income that does not depend on market performance.</p>
+<p>Here are the most common sources of guaranteed retirement income:</p>
+<ul>
+<li><strong>Social Security.</strong> For most retirees, this is the foundation. Benefits are adjusted for inflation and last a lifetime, making Social Security one of the most valuable assets in your retirement plan.</li>
+<li><strong>Pensions.</strong> If you have one, it provides predictable monthly income. Understanding your payout options — lump sum vs. annuity, survivor benefits — is critical before making an election.</li>
+<li><strong>Annuities.</strong> Insurance products that can convert a lump sum into a stream of guaranteed income. They come in many forms, each with different features, costs, and trade-offs.</li>
+</ul>
+<p>The right mix of guaranteed and portfolio-based income depends on your spending needs, risk tolerance, and other assets. Some people feel comfortable relying more heavily on their investment portfolio. Others sleep better knowing a larger portion of their expenses is covered by guaranteed sources.</p>
+<p>If you would like to explore what role guaranteed income should play in your retirement plan, just reply to this email. I would be happy to walk through it with you.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Guarantees are subject to the claims-paying ability of the issuing insurance company. This is educational content only.</p>` },
+  { id:'step-ret-12', subject:"Your retirement roadmap starts here", previewText:"A personalized look at where you stand and where you are headed.", sendDay:70, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+<p>Over the past several weeks, we have shared insights on some of the most important aspects of retirement planning — from Social Security timing and healthcare costs to tax strategies, legacy goals, and building reliable income.</p>
+<p>Here is what we covered together:</p>
+<ul>
+<li>A retirement readiness self-assessment</li>
+<li>Social Security claiming strategies</li>
+<li>Healthcare cost planning and Medicare basics</li>
+<li>Income distribution and tax bracket management</li>
+<li>Sequence of returns risk and catch-up contributions</li>
+<li>Estate planning, legacy goals, and guaranteed income</li>
+</ul>
+<p>If any of these topics resonated with you, the natural next step is a personalized Retirement Readiness Assessment. Here is what that looks like:</p>
+<ul>
+<li>A one-on-one conversation with one of our experienced advisors</li>
+<li>A clear picture of where you stand relative to your goals</li>
+<li>Specific, actionable ideas tailored to your situation</li>
+</ul>
+<p>The assessment takes about 30 minutes, is completely complimentary, and comes with no obligation. Whether you are five years from retirement or fifteen, having a clear roadmap makes a difference.</p>
+<p>Would it be helpful to set up a time? Simply reply to this email and we will take it from there.</p>
+<p>Thank you for your time, {{first_name}}. It has been a pleasure sharing these insights with you.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. You are receiving this email because you opted in to educational content from Florida Financial Advisors.</p>` },
 ];
 
 const investmentEmails: EmailStep[] = [
-  { id:'e-4-1', subject:"How is your portfolio really performing?", previewText:"The answer might surprise you.", sendDay:0, status:'active',
-    body:`Hi {{first_name}},\n\nHow did YOUR investments perform — after fees, after inflation, adjusted for risk?\n\nMost people can't answer that. We think you deserve to know.\n\nOur complimentary Portfolio Review gives you:\n• Your actual returns vs. benchmarks\n• Total fee breakdown\n• Risk alignment assessment\n• Opportunities you might be missing\n\nNo jargon. No sales pitch. Just clarity.\n\nReply to this email and we'll set up a time.\n\nBest regards,\nThe FFA North Team` },
-  { id:'e-4-2', subject:"The hidden cost dragging down your returns", previewText:"Most investors don't realize what they're paying.", sendDay:4, status:'active',
-    body:`Hi {{first_name}},\n\nFees could cost you hundreds of thousands over your investing lifetime:\n\n• $500K at 7% for 25 years (0.5% fees) = $2.71M\n• Same portfolio at 1.5% fees = $2.09M\n• That's a $620,000 difference — just from fees.\n\nWe help clients understand exactly what they're paying.\n\nIf you'd like a fee transparency review, just reply. Free, 20 minutes.\n\nTo your wealth,\nThe FFA North Team` },
-  { id:'e-4-3', subject:"Is your portfolio actually diversified?", previewText:"Owning lots of funds doesn't mean you're diversified.", sendDay:8, status:'active',
-    body:`Hi {{first_name}},\n\nCommon diversification mistakes:\n• Owning 5 large-cap growth funds and calling it "diversified"\n• Underexposed to international markets\n• Not enough fixed income near retirement\n• Concentrated positions in a single stock\n\nTrue diversification means assets that don't all move together.\n\nWe'd be happy to run a diversification analysis — free. Reply if interested.\n\nWarm regards,\nThe FFA North Team` },
-  { id:'e-4-4', subject:"Your complimentary portfolio review awaits", previewText:"See how your investments really stack up.", sendDay:14, status:'active',
-    body:`Hi {{first_name}},\n\nOur Portfolio Review includes:\n✓ Performance vs. benchmarks\n✓ Total fee transparency\n✓ Diversification assessment\n✓ Risk alignment check\n✓ Tax efficiency opportunities\n\nFree, 30 minutes, no obligation.\n\nReply "I'm ready" and we'll find a time.\n\nBest,\nThe FFA North Team` },
-  { id:'step-inv-5', subject:"Market volatility and your portfolio: staying the course", previewText:"Why your reaction to a downturn matters more than the downturn itself.", sendDay:21, status:'active', bodyFormat:'html' as const,
+  { id:'e-4-1', subject:"A question about your investments", previewText:"How did your portfolio really perform last year?", sendDay:0, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-
-<p>When markets drop sharply, every instinct tells us to do something — sell, move to cash, wait it out on the sidelines. It feels like the safe choice. But decades of market data tell a different story.</p>
-
-<h2>The Real Risk: Missing the Recovery</h2>
-
-<p>Some of the market's strongest days historically have occurred shortly after its worst days. Investors who moved to cash during downturns and waited for things to "settle down" have often missed the recovery that followed.</p>
-
-<p>Research from J.P. Morgan has shown that missing just the 10 best days in the market over a 20-year period could cut your total returns by more than half. And the challenge is that no one can consistently predict which days those will be.</p>
-
-<h2>What You Can Do Instead</h2>
-
+<p>Here is a question that sounds simple but most investors cannot answer: How did your portfolio actually perform last year — after fees, after inflation, and adjusted for risk?</p>
+<p>It is not a trick question. It is just that the number on your statement rarely tells the whole story. Understanding your real, net returns is the foundation of making informed decisions about your financial future.</p>
+<p>A few things worth looking at:</p>
 <ul>
-  <li><strong>Review your allocation.</strong> Make sure your portfolio reflects your actual time horizon, not your emotional state during a downturn.</li>
-  <li><strong>Rebalance thoughtfully.</strong> Market drops can create opportunities to buy assets at lower prices through disciplined rebalancing.</li>
-  <li><strong>Focus on what you can control.</strong> Your savings rate, your tax strategy, and your diversification are all within your control — market returns are not.</li>
-  <li><strong>Talk to your advisor.</strong> A calm conversation during turbulent markets is one of the most valuable things an advisor can provide.</li>
+<li><strong>Returns vs. an appropriate benchmark.</strong> How does your portfolio compare to a diversified index with a similar risk profile?</li>
+<li><strong>Total fees paid.</strong> Fund expenses, advisory fees, and transaction costs all reduce what you actually earn.</li>
+<li><strong>Risk-adjusted performance.</strong> A portfolio that earned 10% but took twice the risk of the market may not be as impressive as it appears.</li>
 </ul>
-
-<p>Volatility is the price of admission for long-term growth. Having a plan — and sticking to it — has historically been one of the most effective investment strategies available.</p>
-
-<p><strong>Schedule a complimentary consultation</strong> if you would like to discuss how your portfolio is positioned. Reply to this email to get started.</p>
-
-<p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'step-inv-6', subject:"Diversification beyond stocks and bonds", previewText:"There is a wider world of investment options.", sendDay:28, status:'active', bodyFormat:'html' as const,
+<p>We believe every investor deserves clarity about how their money is really working. If you would like a straightforward look at your portfolio's performance, I am happy to walk through it with you.</p>
+<p>Would that be helpful? Just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Past performance does not predict future results. This is educational content only.</p>` },
+  { id:'e-4-2', subject:"What risk tolerance really means", previewText:"It is more nuanced than most questionnaires suggest.", sendDay:4, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-
-<p>When most people hear "diversification," they think of owning a mix of stocks and bonds. That is an important foundation — but it is only part of the picture.</p>
-
-<h2>Expanding Your Investment Toolkit</h2>
-
-<p>A well-diversified portfolio may include exposure to asset classes that do not move in lockstep with the traditional stock and bond markets:</p>
-
-<ul>
-  <li><strong>Real estate investment trusts (REITs).</strong> These provide exposure to commercial and residential real estate without the complexity of owning property directly. They have historically offered attractive income and diversification benefits.</li>
-  <li><strong>International and emerging market equities.</strong> While domestic stocks have performed well in recent years, international markets represent roughly half of global market capitalization. Meaningful overseas exposure can reduce concentration risk.</li>
-  <li><strong>Treasury Inflation-Protected Securities (TIPS).</strong> These government bonds adjust their principal value with inflation, providing a hedge that traditional bonds do not offer.</li>
-  <li><strong>Commodities and natural resources.</strong> These can provide a buffer during inflationary periods when both stocks and bonds may struggle.</li>
-</ul>
-
-<h2>The Key Principle</h2>
-
-<p>True diversification means owning assets that respond differently to the same economic conditions. The goal is not to find the single best-performing asset — it is to build a portfolio that is resilient across a range of scenarios.</p>
-
-<p>Wondering how your portfolio's diversification measures up? <strong>Download our complimentary guide, "Building a Resilient Portfolio,"</strong> by replying to this email.</p>
-
-<p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'step-inv-7', subject:"Understanding investment fees and their long-term impact", previewText:"Small percentages, big consequences over time.", sendDay:35, status:'active', bodyFormat:'html' as const,
-    body:`<p>Hi {{first_name}},</p>
-
-<p>In our earlier email, we shared how fees can cost investors hundreds of thousands of dollars over a lifetime. Today, we want to go deeper — because understanding <em>what</em> you are paying is the first step to making informed decisions.</p>
-
-<h2>The Layers of Investment Fees</h2>
-
-<p>Most investors pay fees at multiple levels, and many are not clearly disclosed:</p>
-
-<ul>
-  <li><strong>Expense ratios.</strong> Every mutual fund and ETF charges an annual fee, expressed as a percentage of your assets. These can range from 0.03% for a simple index fund to over 1.5% for actively managed funds.</li>
-  <li><strong>Advisory fees.</strong> If you work with a financial advisor, you typically pay an additional fee — often 0.5% to 1.5% of assets under management annually.</li>
-  <li><strong>Transaction costs.</strong> Trading commissions, bid-ask spreads, and market impact costs all reduce your returns, though they are rarely itemized on statements.</li>
-  <li><strong>Account fees.</strong> Custodial fees, account maintenance charges, and transfer fees can also add up over time.</li>
-</ul>
-
-<h2>Fees Are Not Inherently Bad</h2>
-
-<p>The question is not whether you are paying fees — it is whether you are getting value for what you pay. Good financial advice, proper tax management, and behavioral coaching during volatile markets can be worth far more than their cost. The key is transparency.</p>
-
-<p>We believe you deserve to know exactly what you are paying and what you are receiving in return. <strong>Schedule a complimentary fee transparency review</strong> — reply to this email and we will analyze your current costs.</p>
-
-<p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'step-inv-8', subject:"Risk tolerance vs. risk capacity: know the difference", previewText:"How you feel about risk is only half the equation.", sendDay:42, status:'active', bodyFormat:'html' as const,
-    body:`<p>Hi {{first_name}},</p>
-
-<p>Most investment questionnaires ask how you <em>feel</em> about risk. But your feelings are only one side of the coin. Equally important is your <strong>capacity</strong> to take risk.</p>
-
-<h2>Risk Tolerance vs. Risk Capacity</h2>
-
-<p><strong>Risk tolerance</strong> is emotional — it is how much volatility you can stomach without losing sleep or making impulsive decisions. It is personal and psychological.</p>
-
-<p><strong>Risk capacity</strong> is financial — it is how much risk you can objectively afford to take given your income, savings, time horizon, and obligations. It is mathematical.</p>
-
-<h2>Why Both Matter</h2>
-
+<p>Most investment questionnaires ask how you feel about risk. But your feelings are only one side of the coin. Equally important is your capacity to take risk — and the two do not always align.</p>
+<p><strong>Risk tolerance</strong> is emotional. It is how much volatility you can stomach without losing sleep or making impulsive decisions.</p>
+<p><strong>Risk capacity</strong> is financial. It is how much risk you can objectively afford given your income, savings, time horizon, and obligations.</p>
 <p>Consider two scenarios:</p>
 <ul>
-  <li>A 35-year-old with a long time horizon and steady income has high risk <em>capacity</em> but may have low risk <em>tolerance</em> after experiencing a market downturn. An overly conservative portfolio could cost them significant growth over decades.</li>
-  <li>A 60-year-old nearing retirement may feel comfortable taking aggressive risks (high tolerance) but may not have the time horizon to recover from a major loss (low capacity). Taking too much risk could jeopardize their retirement.</li>
+<li>A 35-year-old with decades until retirement has high risk capacity but may have low tolerance after experiencing a market downturn. An overly conservative portfolio could cost them significant growth.</li>
+<li>A 60-year-old nearing retirement may feel comfortable with aggressive investments but may not have the time horizon to recover from a major loss.</li>
 </ul>
-
-<p>The best investment strategy aligns both dimensions. A portfolio that matches your capacity but ignores your tolerance will lead to poor decisions during downturns. A portfolio that matches your tolerance but ignores your capacity may leave you short of your goals.</p>
-
-<p>We help our clients find the right balance. <strong>Schedule a complimentary consultation</strong> to discuss your personal risk profile — reply to this email to get started.</p>
-
-<p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'step-inv-9', subject:"Tax-loss harvesting and other year-round tax strategies", previewText:"Tax planning is not just a December activity.", sendDay:49, status:'active', bodyFormat:'html' as const,
+<p>The best investment strategy aligns both dimensions. A portfolio that ignores your tolerance will lead to poor decisions during downturns. A portfolio that ignores your capacity may leave you short of your goals.</p>
+<p>If you are curious about how your current portfolio matches your actual risk profile, I am happy to discuss it. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Individual risk profiles vary. This is educational content only.</p>` },
+  { id:'e-4-3', subject:"Diversification: beyond the basics", previewText:"Owning many funds does not always mean you are diversified.", sendDay:8, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-
-<p>Many investors think about taxes only at year-end. But some of the most effective tax strategies work best when they are implemented throughout the year.</p>
-
-<h2>Strategies Worth Knowing</h2>
-
+<p>Diversification is one of the most talked-about concepts in investing, yet it is often misunderstood. Owning ten mutual funds does not necessarily mean you are diversified — especially if they all hold similar stocks.</p>
+<p>Here are some common diversification gaps we see:</p>
 <ul>
-  <li><strong>Tax-loss harvesting.</strong> When an investment declines in value, selling it can generate a tax loss that offsets gains elsewhere in your portfolio. The proceeds can be reinvested in a similar (but not identical) holding to maintain your market exposure. This is most effective when done opportunistically throughout the year — not just in December.</li>
-  <li><strong>Asset location.</strong> Placing tax-inefficient investments (like taxable bonds or REITs) in tax-advantaged accounts and tax-efficient investments (like index funds) in taxable accounts can improve your after-tax returns without changing your overall allocation.</li>
-  <li><strong>Gain deferral and recognition.</strong> Timing the realization of capital gains to manage your tax bracket — for example, recognizing gains in a year when your income is lower — can reduce your total tax bill.</li>
-  <li><strong>Qualified Charitable Distributions.</strong> If you are over 70-1/2 and charitably inclined, donating directly from your IRA can satisfy your Required Minimum Distribution without increasing your taxable income.</li>
+<li><strong>Style concentration.</strong> Owning multiple large-cap growth funds creates overlap, not diversification. True diversification includes different styles, sizes, and sectors.</li>
+<li><strong>Home country bias.</strong> Many investors are heavily weighted toward domestic stocks, even though international markets represent roughly half of global market capitalization.</li>
+<li><strong>Missing asset classes.</strong> A portfolio of only stocks and bonds misses opportunities in real estate, commodities, or inflation-protected securities that can improve resilience.</li>
+<li><strong>Single stock risk.</strong> Concentrated positions — whether from company stock, inheritance, or past success — can create outsized risk that a diversified portfolio is designed to avoid.</li>
 </ul>
-
-<p>These strategies require ongoing attention and coordination between your investment management and tax planning. That is exactly the kind of comprehensive approach we provide.</p>
-
-<p><strong>Download our complimentary guide, "Year-Round Tax Strategies for Investors,"</strong> by replying to this email.</p>
-
-<p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'step-inv-10', subject:"How life milestones should trigger portfolio reviews", previewText:"Major life changes call for investment checkups.", sendDay:56, status:'active', bodyFormat:'html' as const,
+<p>True diversification means owning assets that respond differently to the same economic conditions. The goal is not to find the single best performer — it is to build a portfolio that holds up across a range of scenarios.</p>
+<p>If you would like to see how your portfolio's diversification measures up, I am happy to take a look. Just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Diversification does not ensure a profit or protect against loss. This is educational content only.</p>` },
+  { id:'e-4-4', subject:"The real impact of investment fees", previewText:"Small percentages can lead to surprisingly large differences.", sendDay:14, status:'active', bodyFormat:'html',
     body:`<p>Hi {{first_name}},</p>
-
+<p>Investment fees are easy to overlook because they are expressed as small percentages. But over a lifetime of investing, those small percentages compound into significant sums.</p>
+<p>Consider a hypothetical example: a $500,000 portfolio earning an average of 7% annually over 25 years.</p>
+<ul>
+<li><strong>At 0.5% total fees:</strong> the portfolio grows to approximately $2.71 million</li>
+<li><strong>At 1.5% total fees:</strong> approximately $2.09 million</li>
+<li><strong>The difference:</strong> roughly $620,000 — from the same starting point and the same market returns</li>
+</ul>
+<p>Most investors pay fees at multiple levels: fund expense ratios, advisory fees, transaction costs, and account fees. Many of these are not clearly itemized on your statements.</p>
+<p>That said, fees are not inherently bad. Good financial advice, proper tax management, and behavioral coaching during volatile markets can be worth far more than their cost. The key is transparency — knowing what you pay and what you receive in return.</p>
+<p>If you would like to understand the total fees you are currently paying, I am happy to walk through it with you. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. The example above is hypothetical and for illustration only. Actual results will vary.</p>` },
+  { id:'step-inv-5', subject:"Staying the course during volatility", previewText:"Your reaction matters more than the downturn itself.", sendDay:21, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+<p>When markets drop sharply, every instinct tells us to do something — sell, move to cash, wait on the sidelines until things calm down. It feels like the safe choice. But decades of market data tell a different story.</p>
+<p>Some of the market's strongest days have historically occurred shortly after its worst days. Investors who moved to cash during downturns and waited for things to settle often missed the recovery that followed.</p>
+<p>Research has shown that missing just the ten best days in the market over a 20-year period could cut your total returns by more than half. The challenge is that no one can consistently predict which days those will be.</p>
+<p>Here is what you can do instead:</p>
+<ul>
+<li><strong>Review your allocation.</strong> Make sure your portfolio reflects your actual time horizon, not your emotional state during a downturn.</li>
+<li><strong>Rebalance thoughtfully.</strong> Market drops can create opportunities to buy assets at lower prices through disciplined rebalancing.</li>
+<li><strong>Focus on what you can control.</strong> Your savings rate, tax strategy, and diversification are within your control. Market returns are not.</li>
+</ul>
+<p>Volatility is the price of admission for long-term growth. Having a plan and sticking to it has historically been one of the most effective investment strategies available.</p>
+<p>If you would like to discuss how your portfolio is positioned for turbulent markets, just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Past performance does not predict future results. This is educational content only.</p>` },
+  { id:'step-inv-6', subject:"Asset allocation by life stage", previewText:"Your portfolio should evolve as your life evolves.", sendDay:28, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+<p>Your investment needs at 35 are very different from your needs at 55 or 70. Yet many investors set their portfolio allocation once and rarely revisit it, even as their life circumstances change dramatically.</p>
+<p>Here is a general framework for how allocation considerations tend to shift over time:</p>
+<ul>
+<li><strong>Early career (20s-30s).</strong> With decades until retirement, you generally have the capacity to take more risk. A heavier allocation to growth-oriented investments allows time for compounding to work in your favor.</li>
+<li><strong>Mid-career (40s-50s).</strong> As retirement draws closer, gradually shifting toward a more balanced allocation can help protect what you have built while still pursuing growth.</li>
+<li><strong>Pre-retirement (late 50s-60s).</strong> The transition from accumulation to distribution is one of the most critical periods. Reducing concentration risk and building income-producing positions becomes more important.</li>
+<li><strong>In retirement (65+).</strong> The focus shifts to sustainability, income, and inflation protection. But even in retirement, maintaining some growth exposure is important for a portfolio that may need to last 25 to 30 years.</li>
+</ul>
+<p>These are generalizations, of course. Your personal situation — health, income needs, other assets, and goals — should drive the specifics.</p>
+<p>If your portfolio has not been adjusted to reflect where you are in life today, it may be worth a conversation. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Asset allocation does not ensure a profit or protect against loss. Individual situations vary.</p>` },
+  { id:'step-inv-7', subject:"Tax-efficient investing strategies", previewText:"What you keep after taxes matters more than what you earn.", sendDay:35, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+<p>Many investors focus on gross returns, but what truly matters is what you keep after taxes. A few thoughtful strategies can make a meaningful difference in your after-tax wealth over time.</p>
+<p>Here are some approaches worth knowing about:</p>
+<ul>
+<li><strong>Tax-loss harvesting.</strong> When an investment declines in value, selling it can generate a tax loss that offsets gains elsewhere in your portfolio. The proceeds can be reinvested in a similar holding to maintain your market exposure.</li>
+<li><strong>Asset location.</strong> Placing tax-inefficient investments like taxable bonds in tax-advantaged accounts, and tax-efficient investments like index funds in taxable accounts, can improve your after-tax returns.</li>
+<li><strong>Gain timing.</strong> Recognizing capital gains in years when your income is lower can reduce your tax rate on those gains. This is especially relevant around retirement transitions.</li>
+<li><strong>Qualified Charitable Distributions.</strong> If you are over 70-1/2 and charitably inclined, donating directly from your IRA can satisfy your Required Minimum Distribution without increasing your taxable income.</li>
+</ul>
+<p>These strategies require ongoing attention and coordination between your investment management and tax planning. That is the kind of comprehensive approach that can add real value over time.</p>
+<p>If you would like to discuss how tax-efficient strategies could apply to your portfolio, just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. This is educational content and does not constitute tax advice. Consult your tax professional.</p>` },
+  { id:'step-inv-8', subject:"The discipline of rebalancing", previewText:"A simple habit that can improve long-term outcomes.", sendDay:42, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+<p>Over time, market movements cause your portfolio to drift from its original allocation. Stocks that have done well grow to represent a larger share of your portfolio, while underperforming assets shrink. Left unchecked, your portfolio may take on more risk than you intended.</p>
+<p>Rebalancing is the process of bringing your portfolio back to its target allocation. Here is why it matters:</p>
+<ul>
+<li><strong>It manages risk.</strong> After a strong stock market run, your portfolio may be more heavily weighted toward equities than you planned. Rebalancing restores the risk level you originally chose.</li>
+<li><strong>It enforces discipline.</strong> Rebalancing essentially means selling some of what has risen and buying some of what has fallen. It is a systematic way to avoid chasing performance.</li>
+<li><strong>It can be done tax-efficiently.</strong> Using new contributions, dividends, or tax-advantaged accounts to rebalance can minimize the tax impact of selling appreciated positions.</li>
+</ul>
+<p>There is no perfect rebalancing frequency. Some investors rebalance on a schedule (quarterly or annually), while others use threshold triggers (rebalancing when any asset class drifts more than a set percentage from its target). Both approaches can work well.</p>
+<p>If you are unsure whether your portfolio has drifted from its intended allocation, I am happy to take a look. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Rebalancing does not ensure a profit or protect against loss. This is educational content only.</p>` },
+  { id:'step-inv-9', subject:"The cost of waiting to invest", previewText:"Time in the market has historically mattered more than timing.", sendDay:49, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+<p>One of the most common investment mistakes is not a bad stock pick or a poorly timed trade. It is simply waiting too long to get started or to make adjustments you know you should make.</p>
+<p>Here is why delay can be so costly:</p>
+<ul>
+<li><strong>Compounding needs time to work.</strong> The earlier your money is invested, the more time it has to grow. Even modest returns can produce meaningful results over decades.</li>
+<li><strong>Waiting for the "right time" rarely works.</strong> Research has consistently shown that time in the market tends to matter more than timing the market. Investors who try to wait for a perfect entry point often miss significant gains.</li>
+<li><strong>Inaction is a decision.</strong> Keeping money in a savings account or an underperforming portfolio has an opportunity cost. The question is not just what you might lose by investing, but what you might miss by not investing.</li>
+</ul>
+<p>None of this means you should rush into anything without a plan. Thoughtful, informed action is always better than hasty decisions. But if you have been meaning to review your investment approach and keep putting it off, consider this a gentle nudge.</p>
+<p>Happy to chat if you would like to explore what a more intentional investment strategy could look like for your situation. Just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Investing involves risk including potential loss of principal. Past performance does not predict future results.</p>` },
+  { id:'step-inv-10', subject:"Values-based investing: a growing trend", previewText:"Aligning your portfolio with what matters to you.", sendDay:56, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+<p>A growing number of investors are interested in aligning their portfolios with their personal values — whether that means prioritizing environmental sustainability, social responsibility, or strong corporate governance. This approach is broadly known as ESG investing.</p>
+<p>Here is a quick overview:</p>
+<ul>
+<li><strong>What it is.</strong> ESG investing considers environmental, social, and governance factors alongside traditional financial analysis when selecting investments. It is not about sacrificing returns — it is about incorporating a broader set of criteria into your decision-making.</li>
+<li><strong>Performance considerations.</strong> Research on ESG performance is mixed and evolving. Some studies suggest ESG-focused portfolios can perform comparably to traditional portfolios over the long term, while others highlight trade-offs depending on the specific approach and time period.</li>
+<li><strong>Implementation options.</strong> ESG strategies range from simple screening (excluding certain industries) to active engagement (investing in companies working to improve their practices). The right approach depends on your priorities and how actively you want your values reflected.</li>
+</ul>
+<p>Values-based investing is not for everyone, and it involves trade-offs worth understanding. But if aligning your investments with your values is important to you, there are more options available today than ever before.</p>
+<p>If you are curious about how this might work within your portfolio, I am happy to discuss it. Just reply to this email.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. ESG investing involves trade-offs and does not ensure a profit. This is educational content only.</p>` },
+  { id:'step-inv-11', subject:"Why regular portfolio reviews matter", previewText:"Your investments should evolve as your life does.", sendDay:63, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
 <p>Your investments should evolve as your life evolves. Yet many people set their portfolio once and rarely revisit it — even as their circumstances change dramatically.</p>
-
-<h2>Life Events That Warrant a Portfolio Review</h2>
-
+<p>Here are some life events that typically warrant a portfolio review:</p>
 <ul>
-  <li><strong>Career changes.</strong> A new job, promotion, or transition to self-employment can change your income, benefits, and retirement account options. Your investment strategy should reflect your new reality.</li>
-  <li><strong>Marriage or divorce.</strong> Combining finances — or separating them — affects your tax situation, estate plan, and overall investment approach.</li>
-  <li><strong>Having or adopting children.</strong> Education funding, increased insurance needs, and a longer financial planning horizon all impact how your portfolio should be structured.</li>
-  <li><strong>Receiving an inheritance or windfall.</strong> A sudden increase in assets requires thoughtful integration into your existing plan to avoid concentration risk and tax surprises.</li>
-  <li><strong>Approaching retirement.</strong> The transition from accumulation to distribution is one of the most significant shifts in your financial life. Your portfolio should begin reflecting this change years before your retirement date.</li>
-  <li><strong>Loss of a spouse or family member.</strong> Beyond the emotional impact, this often requires a complete reassessment of income needs, beneficiary designations, and financial goals.</li>
+<li><strong>Career changes.</strong> A new job, promotion, or transition to self-employment can change your income, benefits, and retirement account options.</li>
+<li><strong>Marriage or divorce.</strong> Combining or separating finances affects your tax situation, estate plan, and overall investment approach.</li>
+<li><strong>Having children.</strong> Education funding, increased insurance needs, and a longer planning horizon all impact how your portfolio should be structured.</li>
+<li><strong>Receiving an inheritance.</strong> A sudden increase in assets requires thoughtful integration to avoid concentration risk and tax surprises.</li>
+<li><strong>Approaching retirement.</strong> The shift from accumulation to distribution is one of the most significant transitions in your financial life.</li>
 </ul>
-
-<p>If you have experienced a significant life change recently — or expect one in the near future — it may be time to revisit your investment approach.</p>
-
-<p><strong>Schedule a complimentary consultation</strong> to discuss how your portfolio aligns with where you are today. Reply to this email or call us at (561) 555-0100.</p>
-
-<p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'step-inv-11', subject:"Real results: How a disciplined approach outperforms", previewText:"Patience and process over prediction and impulse.", sendDay:63, status:'active', bodyFormat:'html' as const,
+<p>Even without a major life event, an annual review helps ensure your portfolio stays aligned with your goals, risk profile, and time horizon. Markets shift, tax laws change, and new opportunities emerge.</p>
+<p>If you have experienced a significant change recently or simply have not reviewed your portfolio in a while, it may be worth a conversation. Just reply to this email.</p>
+<p>Best regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. Individual circumstances vary. This is educational content only.</p>` },
+  { id:'step-inv-12', subject:"Thought you'd find this useful", previewText:"A final note and an open invitation from our team.", sendDay:70, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
-
-<p>We would like to share a story that illustrates why we believe in disciplined, evidence-based investing (details changed to protect privacy).</p>
-
-<h2>The Situation</h2>
-
-<p>A business owner — we will call him David — came to us after years of managing his own portfolio. He was a smart, successful professional, but his investment approach was reactive: buying what was hot, selling after downturns, and frequently shifting strategies based on headlines.</p>
-
-<p>When we reviewed his accounts, we found that despite a strong market over the prior decade, his actual returns had significantly lagged a simple balanced portfolio. The culprit was not bad investments — it was bad timing.</p>
-
-<h2>The Approach</h2>
-
-<p>Together, we built a diversified portfolio aligned with his goals, time horizon, and risk profile. We established a systematic rebalancing schedule and a clear investment policy that removed emotion from the equation. Most importantly, we agreed on a plan to follow during market turbulence — before it happened.</p>
-
-<h2>The Outcome</h2>
-
-<p>Over the following years, David's portfolio experienced the same market ups and downs as everyone else. But because he had a plan and a partner to help him stick to it, he avoided the costly mistakes that had held him back before.</p>
-
-<p>Past results do not guarantee future performance, and every investor's situation is unique. But the principle holds: <strong>a disciplined process, consistently followed, has historically been one of the most reliable paths to long-term investment success.</strong></p>
-
-<p>Ready to bring more discipline to your investment approach? <strong>Reply to this email to schedule a complimentary consultation.</strong></p>
-
-<p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'step-inv-12', subject:"Your complimentary portfolio analysis awaits", previewText:"A clear, unbiased look at where you stand.", sendDay:70, status:'active', bodyFormat:'html' as const,
-    body:`<p>Hi {{first_name}},</p>
-
-<p>Over the past several weeks, we have shared insights on market volatility, diversification, fees, risk management, tax strategies, and the importance of aligning your investments with your life. We hope you have found these emails valuable.</p>
-
-<p>Now we would like to offer you something more personal.</p>
-
-<h2>Your Complimentary Portfolio Analysis</h2>
-
-<p>This is a thorough, one-on-one review conducted by one of our experienced advisors. Here is what we will cover:</p>
-
+<p>Over the past several weeks, we have shared insights on portfolio performance, risk assessment, diversification, fees, market volatility, tax strategies, rebalancing, and the importance of aligning your investments with your life stage and values.</p>
+<p>Here is what we covered together:</p>
 <ul>
-  <li><strong>Performance evaluation</strong> — how your portfolio has performed relative to appropriate benchmarks, adjusted for risk</li>
-  <li><strong>Fee transparency report</strong> — a complete accounting of what you are paying across all layers of fees</li>
-  <li><strong>Diversification analysis</strong> — identifying concentration risks, overlapping holdings, and gaps in your allocation</li>
-  <li><strong>Risk alignment assessment</strong> — ensuring your portfolio matches both your risk tolerance and your risk capacity</li>
-  <li><strong>Tax efficiency opportunities</strong> — strategies that may reduce your tax burden without changing your investment goals</li>
+<li>How to evaluate your portfolio's real performance</li>
+<li>Understanding risk tolerance vs. risk capacity</li>
+<li>Diversification beyond the basics</li>
+<li>The long-term impact of investment fees</li>
+<li>Staying disciplined during market volatility</li>
+<li>Tax-efficient investing strategies and rebalancing</li>
+<li>Values-based investing and regular portfolio reviews</li>
 </ul>
-
-<p>The analysis takes about 30 minutes, is completely complimentary, and comes with no obligation whatsoever. You will leave with a clear understanding of where you stand and specific, actionable ideas for improvement.</p>
-
-<p><strong>Ready to get started? Reply to this email or call us directly at (561) 555-0100 to schedule your portfolio analysis.</strong></p>
-
-<p>We look forward to working with you.</p>
-
-<p>All the best,<br/>The FFA North Team</p>` },
+<p>If any of these topics resonated with you, the natural next step is a personalized portfolio analysis. It takes about 30 minutes, is completely complimentary, and comes with no obligation. You will walk away with a clear understanding of where you stand and specific ideas for improvement.</p>
+<p>Whether you are ready for that conversation today or sometime in the future, our door is always open. Simply reply to this email whenever the timing feels right.</p>
+<p>Thank you for your time, {{first_name}}. It has been a pleasure sharing these insights with you.</p>
+<p>Warm regards,<br/>The FFA North Team</p>
+<p style="font-size:12px;color:#888;">Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432. You are receiving this email because you opted in to educational content from Florida Financial Advisors.</p>` },
 ];
 
 const secondOpinionEmails: EmailStep[] = [
-  { id:'e-5-1', subject:"Thinking about a second opinion on your finances?", previewText:"You'd get one for your health. Why not your wealth?", sendDay:0, status:'active',
-    body:`Hi {{first_name}},\n\nWhen you get a serious medical diagnosis, the first thing most people do is get a second opinion.\n\nBut when it comes to your financial plan — something that affects your family's entire future — most people never get one.\n\nA fresh set of eyes can reveal:\n• Tax strategies you haven't considered\n• Fees you didn't know you were paying\n• Risks you didn't realize you were taking\n• Benefits you're not taking advantage of\n\nOur Second Opinion Review is free, confidential, and zero pressure.\n\nReply to this email and let's set up a time.\n\nWarm regards,\nThe FFA North Team` },
-  { id:'e-5-2', subject:"What a financial second opinion actually looks like", previewText:"No awkward sales pitch. Just answers.", sendDay:4, status:'active',
-    body:`Hi {{first_name}},\n\nHere's exactly what happens:\n\nStep 1: Brief intro call (10 min) — we learn about your situation.\nStep 2: You share whatever documents you're comfortable with.\nStep 3: We do a comprehensive analysis — investments, insurance, tax, estate, retirement.\nStep 4: We walk you through findings in plain English.\nStep 5: You decide what to do with the information.\n\nThat's it. No hard sell. No "limited time offer."\n\nInterested? Reply and we'll get started.\n\nBest,\nThe FFA North Team` },
-  { id:'e-5-3', subject:"5 things a second opinion might uncover", previewText:"The most common findings we see.", sendDay:8, status:'active',
-    body:`Hi {{first_name}},\n\nAfter hundreds of second opinions, here are the top 5 findings:\n\n1. Tax Inefficiency — no tax-loss harvesting or Roth conversion strategy\n2. Overlapping Holdings — same stocks in multiple funds\n3. Outdated Beneficiaries — life changed, forms didn't\n4. Insurance Gaps — too little coverage or overpaying\n5. No Written Plan — hard to measure progress without one\n\nAll fixable. First step is knowing where you stand.\n\nReply if you'd like us to take a look. Free and confidential.\n\nTalk soon,\nThe FFA North Team` },
-  { id:'e-5-4', subject:"Last call: Your free financial second opinion", previewText:"We're here when you're ready.", sendDay:14, status:'active',
-    body:`Hi {{first_name}},\n\nLast email in the series. Here's our promise:\n\n✓ Genuinely free — no hidden fees, no bait-and-switch\n✓ Confidential — what you share stays between us\n✓ Yours to keep — the analysis belongs to you\n✓ Zero pressure — we'll never push you\n\nReply "second opinion" and let's find a time.\n\nOr save this email and reach out whenever you're ready.\n\nWarm regards,\nThe FFA North Team` },
-  { id:'e-5-5', subject:"Why a financial second opinion is like a medical second opinion", previewText:"You would get one for your health. Why not your wealth?", sendDay:21, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-1', subject:"A fresh pair of eyes changes things", previewText:"What a second perspective could reveal about your plan.", sendDay:0, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Imagine your doctor recommends a major surgery. What would you do? Most people would seek a second opinion before making that decision. It is not about distrusting your doctor — it is about making sure you have the full picture.</p>
+<p>When something important is on the line, most people seek a second perspective. We do it with medical diagnoses, legal contracts, even home inspections. Yet when it comes to a financial plan that shapes our family's future, many of us never think to do the same.</p>
 
-<p>Your financial plan deserves the same level of care. Here is why the analogy holds:</p>
+<p>A fresh set of eyes on your finances can surface things that are easy to miss from the inside:</p>
 
 <ul>
-  <li><strong>Diagnosis matters.</strong> Just as two doctors may interpret the same symptoms differently, two advisors may see different opportunities — or risks — in the same portfolio.</li>
-  <li><strong>Treatments vary.</strong> There is rarely one "right" approach. A second perspective can reveal strategies your current advisor may not specialize in.</li>
-  <li><strong>Peace of mind is priceless.</strong> Whether the second opinion confirms your current path or suggests improvements, you walk away more confident.</li>
+  <li><strong>Tax-saving strategies</strong> that may not be part of your current approach</li>
+  <li><strong>Overlooked fees</strong> quietly compounding against your returns</li>
+  <li><strong>Coverage gaps</strong> that could leave your family exposed</li>
 </ul>
 
-<p>A financial second opinion is not about finding fault. It is about making sure the plan you are following is truly the best one for your situation today.</p>
+<p>The goal is not to find fault with what you have. It is to make sure your plan is working as hard as it can for where you are today.</p>
 
-<p>If you would like a fresh, objective look at your financial plan, simply reply to this email. There is no cost and no obligation.</p>
+<p>Would it be helpful to take a quick look together? Simply reply and we will find a convenient time.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-6', subject:"5 red flags that your financial plan needs a review", previewText:"How many of these apply to you?", sendDay:28, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-2', subject:"What a review actually looks like", previewText:"No surprises. Here is the step-by-step process.", sendDay:4, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Even well-constructed financial plans can drift off course over time. Here are five warning signs that it may be time for a closer look:</p>
+<p>One reason people hesitate to get a second opinion on their finances is uncertainty about what the process involves. So let us pull back the curtain.</p>
 
-<h2>Your Financial Plan Red Flag Checklist</h2>
+<p>Here is exactly how it works:</p>
 
 <ul>
-  <li><strong>1. You have not updated your plan in over two years.</strong> Tax laws change, markets shift, and your life evolves. A plan from a few years ago may not reflect where you are today.</li>
-  <li><strong>2. You cannot clearly explain your advisor's fee structure.</strong> If you are unsure what you are paying — or how your advisor is compensated — that is a gap worth closing.</li>
-  <li><strong>3. Your beneficiary designations are outdated.</strong> Marriage, divorce, new children, or the loss of a loved one can all make existing designations incorrect.</li>
-  <li><strong>4. You do not have a written financial plan.</strong> Verbal guidance is not a plan. A written roadmap with specific goals and timelines is essential for measuring progress.</li>
-  <li><strong>5. Your advisor has not proactively contacted you this year.</strong> Regular communication is a sign of attentive service. Silence may indicate you are being overlooked.</li>
+  <li><strong>A brief conversation.</strong> We spend about ten minutes learning what matters most to you right now.</li>
+  <li><strong>You share what you are comfortable with.</strong> Statements, account summaries, insurance policies — whatever you would like us to review.</li>
+  <li><strong>We do the analysis.</strong> Our team looks across investments, insurance, tax positioning, and estate coordination.</li>
+  <li><strong>We walk you through findings in plain language.</strong> No jargon, no pressure — just clear observations.</li>
 </ul>
 
-<p>If even one of these resonated, a second opinion could provide valuable clarity. Reply to this email and we will schedule a confidential review at your convenience.</p>
+<p>After that, the information is yours. You decide whether to act on it, file it away, or simply feel more confident about your current path.</p>
+
+<p>Would it be helpful to take a quick look together? Reply to this email and we will get you scheduled.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-7', subject:"What fiduciary duty means for your money", previewText:"Not all advisors are held to the same standard.", sendDay:35, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-3', subject:"The five most common blind spots", previewText:"What financial reviews uncover again and again.", sendDay:8, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>When it comes to financial advice, there is a critical distinction that many people are unaware of: the difference between the <strong>fiduciary standard</strong> and the <strong>suitability standard</strong>.</p>
+<p>After conducting hundreds of financial reviews, certain patterns come up again and again. These are not dramatic problems — they are quiet blind spots that accumulate over time.</p>
 
-<h2>Fiduciary vs. Suitability: What You Should Know</h2>
-
-<p><strong>Fiduciary standard:</strong> The advisor is legally required to act in your best interest. They must put your needs ahead of their own and disclose any potential conflicts of interest.</p>
-
-<p><strong>Suitability standard:</strong> The advisor must recommend products that are "suitable" for you — but not necessarily the <em>best</em> option. A suitable recommendation can still carry higher fees or conflicts of interest.</p>
-
-<p>Here is why this matters in practice:</p>
+<p>Here are the five findings we see most often:</p>
 
 <ul>
-  <li>Two different investment products may both be "suitable" for your situation, but one could charge significantly higher fees than the other.</li>
-  <li>Under the suitability standard, either recommendation would be acceptable. Under the fiduciary standard, the advisor would be obligated to recommend the lower-cost option if it better serves your interests.</li>
-  <li>Understanding which standard your current advisor follows is one of the most important questions you can ask.</li>
+  <li><strong>Tax inefficiency.</strong> No tax-loss harvesting strategy or Roth conversion planning in place.</li>
+  <li><strong>Overlapping holdings.</strong> Multiple funds owning the same underlying stocks, which reduces true diversification.</li>
+  <li><strong>Outdated beneficiaries.</strong> Life changed, but the forms on file did not keep up.</li>
+  <li><strong>Insurance mismatches.</strong> Either too little coverage or paying more than necessary for existing policies.</li>
 </ul>
 
-<p>If you are not sure which standard your advisor follows, we are happy to help you evaluate your current advisory relationship — no cost, no pressure. Simply reply to this email to get started.</p>
+<p>The encouraging part is that every one of these is fixable once you know it is there. The first step is simply understanding where things stand today.</p>
+
+<p>Would it be helpful to take a quick look together? Just reply to this email and we will set something up.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-8', subject:"The true cost of financial advisor fees", previewText:"Small percentages can add up to surprisingly big numbers.", sendDay:42, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-4', subject:"Why smart people seek second opinions", previewText:"It is not about doubt. It is about confidence.", sendDay:14, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Most investors focus on returns — but fees may have an even bigger impact on your long-term wealth. Here is a straightforward comparison to illustrate:</p>
+<p>There is a common misconception that seeking a second opinion means something is wrong. In reality, the most financially confident people we meet are the ones who actively invite outside perspectives.</p>
 
-<h2>How Fees Compound Over Time</h2>
-
-<p>Consider a $750,000 portfolio growing at an average of 7% annually over 20 years:</p>
+<p>Think of it this way: a second opinion does not replace your current approach. It either confirms you are on the right track — which is valuable peace of mind — or it highlights adjustments worth considering.</p>
 
 <ul>
-  <li><strong>At 0.50% total fees:</strong> Your portfolio grows to approximately $2,534,000</li>
-  <li><strong>At 1.00% total fees:</strong> Approximately $2,172,000</li>
-  <li><strong>At 1.50% total fees:</strong> Approximately $1,860,000</li>
-  <li><strong>At 2.00% total fees:</strong> Approximately $1,592,000</li>
+  <li><strong>Confirmation</strong> means you can move forward with greater confidence</li>
+  <li><strong>New insights</strong> mean you caught something early enough to act on it</li>
+  <li><strong>Either way</strong>, you walk away better informed than before</li>
 </ul>
 
-<p>The difference between the lowest and highest fee scenario is nearly <strong>$942,000</strong> — on the same portfolio, with the same market returns.</p>
+<p>There is no downside to knowing more about your own financial picture. And the conversation is always confidential.</p>
 
-<p>Important: lower fees do not always mean better value. The key is understanding what you are paying for and whether the services you receive justify the cost. Some advisors provide comprehensive financial planning, tax optimization, and estate coordination that more than offset their fees.</p>
-
-<p>If you would like to understand exactly what you are paying and what you are getting in return, our complimentary fee transparency review can help. Reply to this email to schedule yours.</p>
+<p>Would it be helpful to take a quick look together? Reply anytime — or save this email for when the timing feels right.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-9', subject:"How to evaluate your current advisor's performance", previewText:"A simple framework you can use today.", sendDay:49, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-5', subject:"The doctor analogy that changes minds", previewText:"A perspective shift that applies to your finances.", sendDay:21, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Evaluating a financial advisor is not just about investment returns. Here is a practical framework you can use to assess whether your current advisory relationship is serving you well:</p>
+<p>If your doctor recommended a major procedure, you would probably want another physician to weigh in before moving forward. Not because you distrust your doctor — but because important decisions deserve more than one perspective.</p>
 
-<h2>The 5-Point Advisor Evaluation Framework</h2>
+<p>The same logic applies to your financial plan. Here is why:</p>
 
 <ul>
-  <li><strong>1. Communication.</strong> Does your advisor reach out proactively — at least quarterly — with updates relevant to your situation? Or do you only hear from them when you initiate contact?</li>
-  <li><strong>2. Transparency.</strong> Can you clearly see what you are paying in fees? Does your advisor explain how they are compensated and whether they receive commissions on products they recommend?</li>
-  <li><strong>3. Comprehensiveness.</strong> Is your advisor looking at your full financial picture — investments, insurance, tax strategy, estate planning, and retirement income — or only managing one piece?</li>
-  <li><strong>4. Alignment.</strong> Has your advisor updated your plan to reflect major life changes? A good advisor adjusts your strategy as your circumstances evolve.</li>
-  <li><strong>5. Education.</strong> Does your advisor help you understand <em>why</em> they recommend what they do? You should feel informed, not confused.</li>
+  <li><strong>Different eyes see different things.</strong> Two qualified advisors may identify entirely different opportunities in the same portfolio.</li>
+  <li><strong>Approaches vary.</strong> There is rarely a single correct strategy. A second perspective can surface options your current plan may not include.</li>
+  <li><strong>Confidence grows with confirmation.</strong> Even if a review validates your current path, that reassurance has real value.</li>
 </ul>
 
-<p>If your current advisor scores well on all five points, that is a great sign. If there are gaps, a second opinion can help you identify what might be improved.</p>
+<p>A financial second opinion is not about finding fault. It is about making sure your plan reflects where you are today — not where you were when it was first created.</p>
 
-<p>We are happy to walk through this framework with you. Reply to this email to set up a conversation.</p>
+<p>Would it be helpful to take a quick look together? Simply reply and we will find a time that works for you.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-10', subject:"Questions to ask before making any financial changes", previewText:"Protect yourself with the right questions.", sendDay:56, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-6', subject:"Signs your plan may need a refresh", previewText:"A quick checklist worth running through.", sendDay:28, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Whether you are considering switching advisors, restructuring your portfolio, or making any significant financial move, asking the right questions upfront can protect you from costly mistakes.</p>
-
-<h2>10 Questions Worth Asking</h2>
+<p>Even well-built financial plans can drift off course quietly. Life changes, tax laws shift, and strategies that made sense a few years ago may not fit today. Here are a few signals worth paying attention to:</p>
 
 <ul>
-  <li>What are the total fees — including fund expenses, platform fees, and advisory fees?</li>
-  <li>Are you a fiduciary? Will you put that in writing?</li>
-  <li>How are you compensated — fee-only, commission, or a combination?</li>
-  <li>What is your investment philosophy, and how does it align with my goals?</li>
+  <li><strong>Your plan has not been updated in over two years.</strong> Markets evolve, regulations change, and your own goals may have shifted.</li>
+  <li><strong>You are unsure what you are paying in fees.</strong> If your advisor's compensation structure is unclear, that gap is worth closing.</li>
+  <li><strong>Your beneficiary designations may be outdated.</strong> Major life events can make existing designations incorrect without anyone noticing.</li>
+  <li><strong>You do not have a written plan.</strong> Without a documented roadmap, it is difficult to measure progress or hold anyone accountable.</li>
+</ul>
+
+<p>If even one of these resonated, a fresh perspective could provide useful clarity. None of these issues are unusual — they are simply the natural result of time passing.</p>
+
+<p>Would it be helpful to take a quick look together? Reply to this email and we will schedule a confidential conversation at your convenience.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-7', subject:"Fiduciary vs. suitable — big difference", previewText:"Not all financial advice is held to the same bar.", sendDay:35, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>There is a distinction in financial advice that many people are not aware of, and it can meaningfully affect the recommendations you receive. It comes down to two standards.</p>
+
+<p><strong>Fiduciary standard:</strong> The advisor is legally required to act in your best interest and disclose any conflicts of interest.</p>
+
+<p><strong>Suitability standard:</strong> The advisor must recommend products that are "suitable" for you — but not necessarily the best available option.</p>
+
+<p>Here is why the difference matters:</p>
+
+<ul>
+  <li>Two products may both be suitable, yet one could carry significantly higher fees</li>
+  <li>Under the suitability standard, either recommendation is acceptable</li>
+  <li>Under the fiduciary standard, the advisor must prioritize your interests first</li>
+</ul>
+
+<p>Knowing which standard your advisor follows is one of the most valuable questions you can ask. It shapes every recommendation they make on your behalf.</p>
+
+<p>Would it be helpful to take a quick look together at how your current advisory relationship is structured? Simply reply to this email.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-8', subject:"What small fee differences really cost", previewText:"The math behind percentages may surprise you.", sendDay:42, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Most investors focus on returns, which makes sense. But fees can have an equally powerful effect on long-term wealth — because they compound just like returns do, except in the wrong direction.</p>
+
+<p>Consider a hypothetical $750,000 portfolio growing at 7% annually over 20 years at different fee levels:</p>
+
+<ul>
+  <li><strong>At 0.50% fees:</strong> approximately $2,534,000</li>
+  <li><strong>At 1.00% fees:</strong> approximately $2,172,000</li>
+  <li><strong>At 1.50% fees:</strong> approximately $1,860,000</li>
+  <li><strong>At 2.00% fees:</strong> approximately $1,592,000</li>
+</ul>
+
+<p>That is a potential difference of nearly $942,000 on the same portfolio with the same market returns. These are hypothetical figures for illustration, and actual results will vary.</p>
+
+<p>That said, lower fees do not always mean better value. Comprehensive planning, tax optimization, and proactive service can more than justify their cost. The key is understanding what you are paying and what you are receiving in return.</p>
+
+<p>Would it be helpful to take a quick look together at your current fee structure? Reply to this email and we will walk through it with you.</p>
+
+<p>Best regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-9', subject:"A simple way to evaluate any advisor", previewText:"Five questions that reveal a lot.", sendDay:49, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Evaluating a financial advisor goes well beyond investment returns. Here is a straightforward framework you can use to assess whether your current advisory relationship is serving you well:</p>
+
+<ul>
+  <li><strong>Communication.</strong> Does your advisor reach out proactively with relevant updates, or do you only hear from them when you initiate contact?</li>
+  <li><strong>Transparency.</strong> Can you clearly see what you are paying in fees and how your advisor is compensated?</li>
+  <li><strong>Comprehensiveness.</strong> Is your advisor looking at your full picture — investments, insurance, tax strategy, and estate planning — or just one piece?</li>
+  <li><strong>Alignment.</strong> Has your plan been updated to reflect major life changes?</li>
+</ul>
+
+<p>If your current advisor scores well across the board, that is a great sign. If there are gaps, they are worth understanding — even small improvements in any of these areas can make a meaningful difference over time.</p>
+
+<p>Would it be helpful to walk through this framework together as it relates to your situation? Just reply to this email.</p>
+
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-5-10', subject:"Questions worth asking any advisor", previewText:"Use these before making financial changes.", sendDay:56, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Whether you are considering a new advisor, restructuring your portfolio, or making any significant financial move, the right questions upfront can save you from costly surprises down the road.</p>
+
+<p>Here are a few worth keeping in your back pocket:</p>
+
+<ul>
+  <li>What are the total fees — including fund expenses, platform costs, and advisory charges?</li>
+  <li>Are you a fiduciary, and will you put that in writing?</li>
   <li>How will you coordinate with my CPA and estate attorney?</li>
-  <li>What happens to my account if you leave the firm?</li>
-  <li>How often will we meet, and what does ongoing service look like?</li>
-  <li>Can you provide references from clients in a similar situation?</li>
-  <li>What tax implications should I consider before making changes?</li>
-  <li>What is your process for adjusting my plan as my life changes?</li>
+  <li>What does ongoing service look like after the initial plan is built?</li>
 </ul>
 
-<p>These questions apply to any advisor — including us. We believe informed clients make better decisions, and we welcome the scrutiny.</p>
+<p>These questions apply to any advisor — including us. We believe informed clients make better decisions, and we welcome the scrutiny. The more you understand about how your advisor operates, the more confidence you will have in the relationship.</p>
 
-<p>If you would like to discuss any of these questions in the context of your own financial situation, reply to this email. We are here to help — with no agenda other than your confidence.</p>
+<p>Would it be helpful to discuss any of these in the context of your own situation? Reply to this email and we will set up a time to talk.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-11', subject:"Real story: Why the Chen family sought a second opinion", previewText:"What one family discovered about their financial plan.", sendDay:63, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-11', subject:"What the Chen family discovered", previewText:"A real story about the value of a fresh look.", sendDay:63, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>We recently worked with a family — we will call them the Chens — who had been with the same financial advisor for over a decade. They were not unhappy. They simply wanted to make sure they were on the right track as retirement approached.</p>
+<p>We recently worked with a family — we will call them the Chens — who had been with the same advisor for over a decade. They were not unhappy. They simply wanted confirmation that their plan was still on track as retirement drew closer.</p>
 
-<h2>What the Second Opinion Revealed</h2>
-
-<p>The Chens had a solid foundation, but our review uncovered several areas where adjustments could make a meaningful difference:</p>
+<p>Their foundation was solid, but our review uncovered a few areas where adjustments could help:</p>
 
 <ul>
-  <li><strong>Fee overlap.</strong> They were invested in multiple mutual funds that held many of the same underlying stocks — effectively paying multiple layers of fees for similar exposure.</li>
-  <li><strong>Tax-loss harvesting opportunities.</strong> Several positions had unrealized losses that could have been used to offset gains elsewhere in their portfolio.</li>
-  <li><strong>Outdated beneficiary designations.</strong> Two accounts still listed a former spouse as the primary beneficiary — an oversight that could have had serious consequences.</li>
-  <li><strong>Social Security timing.</strong> By adjusting their claiming strategy, we estimated they could meaningfully increase their combined lifetime benefits.</li>
+  <li><strong>Fee overlap.</strong> Multiple mutual funds held the same underlying stocks, meaning they were paying layered fees for similar exposure.</li>
+  <li><strong>Unrealized tax opportunities.</strong> Several positions had losses that could have offset gains elsewhere in the portfolio.</li>
+  <li><strong>Outdated beneficiaries.</strong> Two accounts still named a former spouse — an oversight with potentially serious consequences.</li>
 </ul>
 
-<p>The Chens appreciated the fresh perspective. Some findings confirmed their existing plan was sound; others led to improvements they had not considered.</p>
+<p>Some findings confirmed their existing plan was sound. Others led to improvements they had not considered. The Chens told us the peace of mind alone was worth the conversation.</p>
 
-<p>Every situation is different, but a second opinion can uncover what you did not know to look for. If you are curious about what a review might reveal for you, reply to this email. It is free and completely confidential.</p>
+<p>Every situation is different, and past results do not predict future outcomes. But a second opinion can surface what you did not know to look for. Would it be helpful to take a quick look together? Reply to this email — it is confidential and there is no obligation.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-5-12', subject:"Your confidential financial review — no strings attached", previewText:"One conversation could change your financial future.", sendDay:70, status:'active', bodyFormat:'html' as const,
+  { id:'e-5-12', subject:"An open invitation, whenever you are ready", previewText:"A confidential review with no strings attached.", sendDay:70, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Over the past several weeks, we have shared insights on what a financial second opinion can reveal — from hidden fees and tax strategies to beneficiary oversights and advisor evaluation frameworks.</p>
+<p>Over the past several weeks, we have explored what a financial second opinion can reveal — from overlooked fees and tax strategies to beneficiary oversights and advisor evaluation tips. We hope you found value in those insights, whether or not you decide to take the next step.</p>
 
-<p>Now we would like to offer you something simple: <strong>a confidential, one-on-one financial review with one of our senior advisors.</strong></p>
-
-<h2>Here Is Exactly What You Will Receive</h2>
+<p>If you are curious about how your plan looks through a fresh lens, here is what we offer:</p>
 
 <ul>
-  <li>A comprehensive review of your current investment portfolio, insurance coverage, and retirement plan</li>
-  <li>A clear breakdown of your total fees and how they compare to industry benchmarks</li>
-  <li>Identification of any gaps, risks, or missed opportunities</li>
-  <li>A written summary of findings that is yours to keep — regardless of whether you choose to work with us</li>
+  <li>A review of your current investments, insurance coverage, and retirement approach</li>
+  <li>A clear picture of your total fees and how they compare</li>
+  <li>Identification of any gaps or opportunities worth considering</li>
+  <li>A written summary of findings that belongs to you, no matter what</li>
 </ul>
 
-<h2>Our Commitment to You</h2>
+<p>There is no cost, no obligation to make changes, and everything you share stays strictly confidential. Our role is to educate — the decisions are always yours.</p>
 
-<ul>
-  <li>There is no cost for this review</li>
-  <li>There is no obligation to make any changes or move any accounts</li>
-  <li>Everything you share is held in strict confidence</li>
-  <li>You will never be pressured — this is about education, not sales</li>
-</ul>
+<p>Would it be helpful to take a quick look together? Reply to this email or reach out at (561) 555-0100 whenever the timing feels right. We look forward to the conversation.</p>
 
-<p>If you have been thinking about whether your financial plan is truly optimized for where you are today, this is a simple first step.</p>
-
-<p>Reply to this email or call us at (561) 555-0100 to schedule your review. We look forward to the conversation.</p>
-
-<p>With warm regards,<br/>The FFA North Team</p>` },
+<p>Warm regards,<br/>The FFA North Team</p>` },
 ];
 
 const crossSellingEmails: EmailStep[] = [
-  { id:'e-6-1', subject:"Beyond insurance: your complete financial picture", previewText:"Insurance is just one piece of the puzzle.", sendDay:0, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-1', subject:"We appreciate your trust", previewText:"And here is how we can help even more.", sendDay:0, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Thank you for exploring your insurance options with us. It tells us something important about you — you take protecting your family and your assets seriously.</p>
+<p>We wanted to start by saying thank you. Working with you on your insurance needs has been a genuine pleasure, and it tells us something important about you — you take protecting your family seriously.</p>
 
-<p>But here is something we have learned after working with hundreds of clients: insurance does not exist in a vacuum. It is one piece of a much larger financial picture that includes:</p>
+<p>Over time, we have noticed that insurance is often one piece of a larger puzzle. When it is managed in isolation from the rest of your financial life, small gaps can develop without anyone noticing:</p>
 
 <ul>
-  <li><strong>Retirement planning</strong> — ensuring your income lasts as long as you do</li>
-  <li><strong>Investment management</strong> — growing your wealth in alignment with your goals and risk tolerance</li>
-  <li><strong>Tax strategy</strong> — keeping more of what you earn through proactive planning</li>
-  <li><strong>Estate planning</strong> — making sure your assets go where you intend</li>
+  <li><strong>Retirement planning</strong> that ensures your income lasts</li>
+  <li><strong>Investment management</strong> aligned with your goals and risk tolerance</li>
+  <li><strong>Tax strategy</strong> to help you keep more of what you earn</li>
+  <li><strong>Estate coordination</strong> so your assets go where you intend</li>
 </ul>
 
-<p>When these areas are managed independently — often by different professionals who do not communicate with each other — gaps and redundancies can develop without anyone noticing.</p>
-
-<p>Over the next few weeks, we will share some insights on how these pieces fit together. No pressure, no sales pitch — just education that we hope you will find valuable.</p>
+<p>Over the next few weeks, we will share some thoughts on how these pieces work together. No pressure — just insights we hope you will find useful.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-2', subject:"How insurance, investments, and retirement planning work together", previewText:"Three pillars. One strategy.", sendDay:7, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-2', subject:"The bridge from insurance to retirement", previewText:"How your coverage connects to your bigger picture.", sendDay:7, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Most people manage their insurance, investments, and retirement planning as separate concerns. But in practice, these areas are deeply interconnected:</p>
+<p>Most people manage their insurance, investments, and retirement planning as separate concerns. In practice, though, these areas are deeply connected — and when they are coordinated, each one reinforces the others.</p>
 
-<h2>How They Connect</h2>
+<p>Here is what that looks like:</p>
 
 <ul>
-  <li><strong>Insurance affects your investment risk tolerance.</strong> If you have strong disability and life insurance coverage, you may be able to take on more investment risk — because your downside is protected. Without that coverage, a more conservative approach may be warranted.</li>
-  <li><strong>Investment performance affects your retirement timeline.</strong> Your portfolio growth rate directly influences when you can afford to retire and how much income you can generate.</li>
-  <li><strong>Retirement planning affects your insurance needs.</strong> As you approach retirement, your insurance requirements change. You may need less life insurance but more long-term care coverage.</li>
+  <li><strong>Insurance shapes investment risk.</strong> Strong disability and life coverage can allow you to take on more portfolio risk, because your downside is protected.</li>
+  <li><strong>Investment growth shapes your timeline.</strong> Your portfolio's performance directly influences when retirement becomes feasible and how much income you can generate.</li>
+  <li><strong>Retirement planning shapes insurance needs.</strong> As you approach retirement, you may need less life insurance but more long-term care coverage.</li>
 </ul>
 
-<p>When these three areas are coordinated, each one reinforces the others. When they are not, you may be paying for protection you do not need — or missing coverage that could be critical.</p>
+<p>When these pieces are not coordinated, you may be paying for protection you do not need — or missing coverage that could be critical. A quick alignment check can surface those disconnects before they become costly.</p>
 
-<p>If you would like to see how your insurance, investments, and retirement plan work together (or where they might not), we would be happy to walk through it with you. Reply to this email to get started.</p>
+<p>Would it be helpful to take a quick look together at how your strategies connect? Reply to this email and we will set something up.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-3', subject:"The 3 pillars of financial security", previewText:"Protection. Growth. Income. Are all three covered?", sendDay:14, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-3', subject:"Three pillars of lasting security", previewText:"Most people have addressed one. Few have all three.", sendDay:14, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>After years of working with individuals and families across a range of financial situations, we have found that lasting financial security rests on three pillars:</p>
-
-<h2>Pillar 1: Protection</h2>
-<p>This is your safety net — life insurance, disability coverage, liability protection, and an emergency fund. Without it, a single unexpected event can derail years of financial progress.</p>
-
-<h2>Pillar 2: Growth</h2>
-<p>This is your investment strategy — the engine that builds wealth over time. It includes your 401(k), IRAs, brokerage accounts, and any other investment vehicles. The goal is disciplined, diversified growth aligned with your timeline and risk tolerance.</p>
-
-<h2>Pillar 3: Income</h2>
-<p>This is your retirement income plan — how you will convert your accumulated assets into reliable income that lasts. It includes Social Security optimization, pension decisions, withdrawal sequencing, and tax-efficient distribution strategies.</p>
-
-<p>Most people have addressed at least one pillar. Few have all three working in concert. The gaps between them are where financial risk hides.</p>
-
-<p>Would you like to see how your three pillars stack up? Reply to this email and we will schedule a brief, no-obligation assessment.</p>
-
-<p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-4', subject:"Are your financial strategies working in harmony?", previewText:"Misalignment can cost more than you think.", sendDay:21, status:'active', bodyFormat:'html' as const,
-    body:`<p>Hi {{first_name}},</p>
-
-<p>Here is a scenario we see more often than you might expect:</p>
-
-<p>A client has a well-funded 401(k), adequate life insurance, and a financial advisor managing their portfolio. On paper, everything looks fine. But a closer look reveals:</p>
+<p>After years of working with individuals and families, we have found that lasting financial security generally rests on three pillars. Most people have addressed at least one — but the gaps between them are where risk tends to hide.</p>
 
 <ul>
-  <li>Their investment allocation is too aggressive for their timeline, but no one has revisited it since they were 15 years from retirement — now they are 5 years away.</li>
-  <li>Their life insurance is a whole life policy purchased 20 years ago that may no longer align with their current needs or estate plan.</li>
-  <li>They have no Roth conversion strategy, which means they are potentially missing an opportunity to reduce their future tax burden.</li>
-  <li>Their beneficiary designations across accounts contradict what their estate plan says.</li>
+  <li><strong>Protection.</strong> Your safety net — life insurance, disability coverage, liability protection, and an emergency fund. Without it, a single unexpected event can derail years of progress.</li>
+  <li><strong>Growth.</strong> Your investment strategy — the engine that builds wealth over time through disciplined, diversified approaches aligned with your timeline and risk tolerance.</li>
+  <li><strong>Income.</strong> Your retirement income plan — how you will convert accumulated assets into reliable income that lasts, including Social Security timing and tax-efficient withdrawals.</li>
 </ul>
 
-<p>None of these issues are catastrophic on their own. But together, they represent a financial plan that is working against itself in subtle but meaningful ways.</p>
+<p>When all three pillars work in concert, each one reinforces the others. When they are managed in isolation, even well-funded plans can have blind spots.</p>
 
-<p>A comprehensive review looks at all of your financial strategies as a system — not as isolated pieces. If you are curious about whether your strategies are aligned, we would be glad to help you find out.</p>
+<p>Would it be helpful to take a quick look together at how your three pillars stack up? Reply to this email and we will schedule a brief conversation.</p>
 
-<p>Reply to this email to schedule a conversation.</p>
+<p>Warm regards,<br/>The FFA North Team</p>` },
+  { id:'e-6-4', subject:"When good plans quietly drift apart", previewText:"A common scenario that is worth checking for.", sendDay:21, status:'active', bodyFormat:'html' as const,
+    body:`<p>Hi {{first_name}},</p>
+
+<p>Here is a scenario we see more often than you might expect. A client has a well-funded 401(k), adequate life insurance, and an advisor managing their portfolio. On paper, everything looks fine. But a closer look reveals:</p>
+
+<ul>
+  <li>Their investment allocation has not been revisited since they were fifteen years from retirement — now they are five years away</li>
+  <li>A whole life policy purchased decades ago no longer aligns with their current estate plan</li>
+  <li>There is no Roth conversion strategy, which means a potential opportunity to reduce future taxes is going unused</li>
+  <li>Beneficiary designations across accounts contradict what the estate documents say</li>
+</ul>
+
+<p>None of these issues are catastrophic on their own. But together, they represent strategies that are quietly working against each other. A holistic review looks at all of your financial pieces as a connected system — not as isolated parts.</p>
+
+<p>Would it be helpful to take a quick look together at whether your strategies are still in alignment? Reply to this email to start a conversation.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-5', subject:"What a comprehensive financial review reveals", previewText:"See your finances from a new angle.", sendDay:28, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-5', subject:"What consolidation actually looks like", previewText:"A behind-the-scenes look at the review process.", sendDay:28, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>You may be wondering what, specifically, a comprehensive financial review looks like. Here is what we cover:</p>
-
-<h2>Our Comprehensive Review Process</h2>
+<p>You may be wondering what a comprehensive financial review actually involves. We like to be transparent about the process, so here is what we cover:</p>
 
 <ul>
-  <li><strong>Insurance audit.</strong> We review all current policies — life, disability, liability, long-term care — to identify gaps, overlaps, or opportunities for better coverage at lower cost.</li>
-  <li><strong>Investment analysis.</strong> We evaluate your portfolio for performance, fees, diversification, tax efficiency, and alignment with your stated goals and risk tolerance.</li>
-  <li><strong>Retirement projection.</strong> We model your retirement income from all sources — Social Security, pensions, investments, annuities — and stress-test it against different scenarios.</li>
-  <li><strong>Tax strategy review.</strong> We look for opportunities to reduce your tax burden today and in retirement through Roth conversions, tax-loss harvesting, and charitable strategies.</li>
-  <li><strong>Estate planning check.</strong> We verify that beneficiary designations, account titling, and estate documents are consistent and current.</li>
+  <li><strong>Insurance audit.</strong> A review of all current policies to identify gaps, overlaps, or opportunities for better coverage at lower cost.</li>
+  <li><strong>Investment analysis.</strong> An evaluation of your portfolio for fees, diversification, tax efficiency, and alignment with your goals.</li>
+  <li><strong>Retirement projection.</strong> Modeling your income from all sources and stress-testing it against different scenarios.</li>
+  <li><strong>Tax strategy review.</strong> Identifying opportunities to reduce your tax burden through approaches like Roth conversions and tax-loss harvesting.</li>
 </ul>
 
-<p>The review typically takes about 45 minutes and results in a written summary of findings. There is no cost and no obligation to act on anything we find.</p>
+<p>The review typically takes about 45 minutes and results in a written summary of findings that is yours to keep. There is no cost and no obligation to act on anything we find.</p>
 
-<p>If you would like to see your complete financial picture in one place, reply to this email and we will get you scheduled.</p>
+<p>Would it be helpful to see your complete financial picture in one place? Reply to this email and we will get you scheduled.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-6', subject:"Real story: How integrating services helped the Johnsons", previewText:"What one family gained from a comprehensive approach.", sendDay:35, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-6', subject:"How the Johnsons connected the dots", previewText:"A real story about the power of a full-picture view.", sendDay:35, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
 <p>We recently worked with a couple — we will call them the Johnsons — who came to us for an insurance review. What we discovered went well beyond insurance.</p>
 
-<h2>The Situation</h2>
-<p>The Johnsons had adequate life insurance, a 401(k) and IRA with a separate advisor, and no formal retirement income plan. Each piece had been set up independently over the years.</p>
+<p>The Johnsons had adequate life insurance, a 401(k) and IRA with a separate advisor, and no formal retirement income plan. Each piece had been set up independently over the years. When we looked at everything together, a few things stood out:</p>
 
-<h2>What We Found</h2>
 <ul>
-  <li><strong>Redundant coverage.</strong> They were paying for both an employer-provided and a private disability policy with overlapping benefits — an unnecessary expense.</li>
-  <li><strong>High investment fees.</strong> Their IRA was invested in actively managed funds charging over 1.4% in combined expenses. Comparable index-based alternatives were available at a fraction of the cost.</li>
-  <li><strong>Missing tax strategy.</strong> They were in a lower tax bracket than they would likely be in retirement, making the next several years an ideal window for partial Roth conversions.</li>
-  <li><strong>Uncoordinated beneficiaries.</strong> Their life insurance and retirement accounts named different beneficiaries than their estate plan specified.</li>
+  <li><strong>Redundant coverage.</strong> Two disability policies with overlapping benefits meant they were paying more than necessary.</li>
+  <li><strong>Elevated investment fees.</strong> Their IRA was in actively managed funds charging over 1.4% in combined expenses when comparable alternatives cost significantly less.</li>
+  <li><strong>A tax planning window.</strong> Their current bracket was lower than it would likely be in retirement — an ideal time for partial Roth conversions.</li>
 </ul>
 
-<h2>The Outcome</h2>
-<p>By addressing these issues together, the Johnsons were able to reduce unnecessary expenses, improve their tax positioning, and bring their entire financial plan into alignment.</p>
+<p>By addressing these issues together, the Johnsons were able to reduce unnecessary expenses and bring their entire plan into alignment. Every family's situation is unique, and results will vary. But the value of a full-picture view is consistent.</p>
 
-<p>Every family's situation is unique. But the value of looking at the full picture is consistent. If you would like a similar review, simply reply to this email.</p>
+<p>Would it be helpful to take a similar look at your situation? Simply reply to this email.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-7', subject:"Your financial health scorecard", previewText:"Rate yourself across 6 key areas.", sendDay:42, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-7', subject:"A two-minute financial checkup", previewText:"Four questions that reveal a lot about your plan.", sendDay:42, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Here is a quick self-assessment you can complete in a few minutes. For each area, give yourself a score from 1 (not addressed) to 5 (fully optimized):</p>
-
-<h2>Financial Health Scorecard</h2>
+<p>Sometimes the most useful exercise is also the simplest. Here is a quick self-assessment you can do right now — no spreadsheet required. Just answer honestly for each area:</p>
 
 <ul>
-  <li><strong>Emergency Fund:</strong> Do you have 3-6 months of living expenses in an accessible account? ___/5</li>
-  <li><strong>Insurance Coverage:</strong> Are your life, disability, and liability policies current and adequate for your situation? ___/5</li>
-  <li><strong>Investment Strategy:</strong> Is your portfolio diversified, tax-efficient, and aligned with your goals and timeline? ___/5</li>
-  <li><strong>Retirement Readiness:</strong> Do you know your target retirement income and have a plan to get there? ___/5</li>
-  <li><strong>Tax Planning:</strong> Are you using available strategies — Roth conversions, tax-loss harvesting, charitable giving — to minimize your tax burden? ___/5</li>
-  <li><strong>Estate Planning:</strong> Are your beneficiaries, wills, trusts, and powers of attorney current and coordinated? ___/5</li>
+  <li><strong>Emergency fund:</strong> Could you cover 3-6 months of living expenses without touching your investments?</li>
+  <li><strong>Insurance coverage:</strong> Are your life, disability, and liability policies current and adequate for your situation today?</li>
+  <li><strong>Investment strategy:</strong> Is your portfolio diversified, tax-efficient, and aligned with your timeline?</li>
+  <li><strong>Retirement readiness:</strong> Do you know, within a reasonable range, how much income you will need in retirement — and do you have a plan to get there?</li>
 </ul>
 
-<p><strong>Your total: ___/30</strong></p>
+<p>If you answered "not sure" to any of these, you are not alone. Each one represents an area where a brief conversation could provide real clarity and help you identify where small improvements make the biggest difference.</p>
 
-<p>If you scored below 20, there are likely meaningful opportunities to strengthen your financial position. Even scores above 20 often reveal one or two areas that could use attention.</p>
-
-<p>We would be happy to walk through your scorecard with you and identify where small improvements could make the biggest difference. Reply to this email to schedule a conversation.</p>
+<p>Would it be helpful to walk through your answers together? Reply to this email and we will schedule a conversation.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-6-8', subject:"Let's build your comprehensive financial plan", previewText:"All your financial strategies, working together.", sendDay:56, status:'active', bodyFormat:'html' as const,
+  { id:'e-6-8', subject:"Bringing it all together", previewText:"Your finances as one connected plan, not scattered pieces.", sendDay:56, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Over the past several weeks, we have explored how insurance, investments, retirement planning, tax strategy, and estate planning work together as a system — and how gaps between them can quietly erode your financial security.</p>
+<p>Over the past several weeks, we have explored how insurance, investments, retirement planning, and tax strategy work together as a system — and how gaps between them can quietly undermine even well-funded plans.</p>
 
-<p>Now we would like to offer you a simple next step: <strong>a complimentary comprehensive financial planning session with one of our senior advisors.</strong></p>
-
-<h2>What to Expect</h2>
+<p>If you have been thinking about whether all the pieces of your financial life are truly working in concert, here is a simple next step we can offer:</p>
 
 <ul>
-  <li>A 45-minute conversation covering all major areas of your financial life</li>
-  <li>An objective assessment of how your current strategies work together — and where they might not</li>
-  <li>Identification of specific opportunities to reduce costs, improve coverage, and strengthen your long-term plan</li>
-  <li>A written summary of findings that is yours to keep</li>
+  <li>A 45-minute conversation covering the major areas of your financial life</li>
+  <li>An objective look at how your current strategies connect — and where they might not</li>
+  <li>Identification of specific opportunities worth considering</li>
+  <li>A written summary of findings that belongs to you, regardless of what you decide</li>
 </ul>
 
-<h2>What We Promise</h2>
+<p>There is no cost and no obligation. Having the conversation does not commit you to anything — our role is to educate, and the decisions are always yours.</p>
 
-<ul>
-  <li>No cost — this is a complimentary service</li>
-  <li>No obligation — you are not committing to anything by having the conversation</li>
-  <li>No pressure — our job is to educate, not to sell</li>
-</ul>
+<p>Would it be helpful to take a quick look together? Reply to this email or reach out at (561) 555-0100 whenever the timing feels right. We look forward to the conversation.</p>
 
-<p>If you have ever wondered whether all the pieces of your financial life are truly working together, this is an easy way to find out.</p>
-
-<p>Reply to this email or call us at (561) 555-0100 to schedule your session. We look forward to hearing from you.</p>
-
-<p>With warm regards,<br/>The FFA North Team</p>` },
+<p>Warm regards,<br/>The FFA North Team</p>` },
 ];
 
 const reEngagementEmails: EmailStep[] = [
-  { id:'e-7-1', subject:"We noticed you have been quiet — here is what is new", previewText:"A lot has changed. We wanted you to know.", sendDay:0, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-1', subject:"Just a quick hello", previewText:"It has been a while, and we wanted to check in.", sendDay:0, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>It has been a while since we last connected, and we wanted to reach out — not to sell you anything, but to share a few updates that might be relevant to your financial planning.</p>
-
-<h2>What Is New at FFA North</h2>
+<p>It has been a while since we last connected, and we simply wanted to say hello. No agenda — just a few updates we thought might be relevant to you.</p>
 
 <ul>
-  <li><strong>Expanded retirement planning services.</strong> We have added comprehensive Social Security optimization modeling and retirement income stress-testing to our complimentary review process.</li>
-  <li><strong>New educational resources.</strong> We have published several new guides on tax-efficient withdrawal strategies, Medicare planning, and estate coordination — all available at no cost.</li>
-  <li><strong>Same commitment to education first.</strong> Our philosophy has not changed: we believe informed clients make the best decisions, and we will never pressure you into anything.</li>
+  <li><strong>Expanded retirement planning.</strong> We have added Social Security optimization modeling and retirement income stress-testing to our complimentary review process.</li>
+  <li><strong>New educational guides.</strong> We have published resources on tax-efficient withdrawal strategies, Medicare planning, and estate coordination — all available at no cost.</li>
+  <li><strong>Same philosophy.</strong> We still believe informed people make the best decisions, and we will never pressure you into anything.</li>
 </ul>
 
-<p>If any of this sounds relevant to where you are today, we would love to reconnect. If the timing is not right, that is perfectly fine — we will be here when it is.</p>
+<p>If any of this sounds relevant to where you are today, we would enjoy reconnecting. And if the timing is not right, that is completely fine — we will be here whenever it is.</p>
 
-<p>Simply reply to this email if you would like to hear more.</p>
+<p>Simply reply if you would like to hear more.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-2', subject:"3 financial trends you should know about in 2026", previewText:"What is shaping the financial landscape right now.", sendDay:7, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-2', subject:"Three trends worth watching right now", previewText:"Quick insights that may affect your planning.", sendDay:7, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Whether or not you are actively working on your financial plan right now, these three trends are worth keeping on your radar:</p>
+<p>Whether or not you are actively working on your financial plan right now, a few trends are worth keeping on your radar. We thought you might find these useful:</p>
 
-<h2>1. Interest Rates and What They Mean for Your Portfolio</h2>
-<p>The interest rate environment continues to evolve. If you have not reviewed your bond allocation, cash holdings, or fixed-income strategy recently, this is a good time to make sure your positioning still makes sense.</p>
+<ul>
+  <li><strong>Shifting interest rates.</strong> The rate environment continues to evolve. If you have not reviewed your bond allocation or cash holdings recently, it may be a good time to check that your positioning still fits.</li>
+  <li><strong>Tax provisions set to change.</strong> Several provisions from recent legislation are scheduled to sunset, which could affect tax brackets, estate exemptions, and retirement strategies. Planning ahead tends to work better than reacting.</li>
+  <li><strong>Rising healthcare costs.</strong> Healthcare inflation continues to outpace general inflation. For those approaching retirement, building a realistic cost projection is more important than ever — Medicare does not cover everything.</li>
+</ul>
 
-<h2>2. Tax Law Changes on the Horizon</h2>
-<p>Several provisions from recent tax legislation are set to sunset in the coming years, which could meaningfully impact your tax bracket, estate tax exemption, and retirement account strategies. Planning ahead — rather than reacting — can make a significant difference.</p>
+<p>Each of these trends can create both challenges and opportunities depending on your situation. If you would like to discuss how any of them might affect you, we are happy to help.</p>
 
-<h2>3. Rising Healthcare Costs in Retirement</h2>
-<p>Healthcare inflation continues to outpace general inflation. For those approaching retirement, building a realistic healthcare cost projection into your plan is more important than ever. Medicare does not cover everything, and the gaps can be substantial.</p>
-
-<p>If you would like to discuss how any of these trends might affect your personal situation, we are here to help. Reply to this email to start a conversation.</p>
+<p>Reply to this email anytime.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-3', subject:"A quick financial health check you can do in 5 minutes", previewText:"Five questions. Five minutes. Real clarity.", sendDay:14, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-3', subject:"Something useful in five minutes", previewText:"A quick exercise that can clarify your top priority.", sendDay:14, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Sometimes the hardest part of financial planning is knowing where to start. Here is a simple five-minute exercise that can help you identify your biggest priority:</p>
+<p>Sometimes the hardest part of financial planning is knowing where to start. Here is a simple exercise that takes about five minutes and can help you zero in on your biggest priority.</p>
 
-<h2>Your 5-Minute Financial Health Check</h2>
-
-<p>Answer each question with Yes, No, or Not Sure:</p>
+<p>Answer each question with yes, no, or not sure:</p>
 
 <ul>
-  <li><strong>1.</strong> Do you have enough saved to cover 3-6 months of living expenses without touching your investments? <em>(Emergency fund)</em></li>
-  <li><strong>2.</strong> Have you reviewed your insurance coverage — life, disability, liability — in the past two years? <em>(Protection)</em></li>
-  <li><strong>3.</strong> Do you know, within a reasonable range, how much income you will need in retirement? <em>(Retirement planning)</em></li>
-  <li><strong>4.</strong> Have you reviewed your investment fees and performance in the past year? <em>(Investment management)</em></li>
-  <li><strong>5.</strong> Are your beneficiary designations, will, and powers of attorney up to date? <em>(Estate planning)</em></li>
+  <li>Do you have enough saved to cover 3-6 months of expenses without touching investments?</li>
+  <li>Have you reviewed your insurance coverage in the past two years?</li>
+  <li>Do you know roughly how much income you will need in retirement?</li>
+  <li>Have you looked at your investment fees and performance in the past year?</li>
 </ul>
 
-<p>If you answered "No" or "Not Sure" to any of these, you are not alone — and each one represents a straightforward area where a brief conversation could provide real clarity.</p>
+<p>If you answered "no" or "not sure" to any of these, you are in good company — most people have at least one area that could use some attention. Each one represents a straightforward topic where a brief conversation could provide real clarity.</p>
 
-<p>We are happy to discuss any of these with you, at no cost and with no obligation. Reply to this email and let us know which question resonated most.</p>
+<p>Would it be helpful to talk through whichever question resonated most? Reply to this email and we will take it from there — no cost and no obligation.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-4', subject:"New resources available: retirement planning toolkit", previewText:"Free guides, calculators, and checklists.", sendDay:21, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-4', subject:"A planning resource you might like", previewText:"Guides and checklists — yours to keep, no cost.", sendDay:21, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>We have put together a collection of retirement planning resources that we think you will find useful — whether you are just starting to think about retirement or are already well into your planning.</p>
+<p>We recently put together a collection of retirement planning resources and thought you might find them useful — whether you are actively planning or simply want to be better informed.</p>
 
-<h2>Our Retirement Planning Toolkit Includes:</h2>
+<p>The toolkit includes:</p>
 
 <ul>
-  <li><strong>The Retirement Income Gap Calculator.</strong> A simple worksheet to estimate your projected retirement income from all sources (Social Security, pensions, investments) and compare it to your anticipated expenses.</li>
-  <li><strong>Social Security Claiming Strategy Guide.</strong> A plain-English overview of when and how to claim — including spousal and survivor strategies that many people overlook.</li>
-  <li><strong>Healthcare Cost Estimator.</strong> A framework for projecting your healthcare expenses in retirement, including Medicare premiums, supplemental coverage, and out-of-pocket costs.</li>
-  <li><strong>Pre-Retirement Checklist.</strong> A comprehensive list of financial, legal, and administrative steps to complete in the 5 years leading up to retirement.</li>
+  <li><strong>Retirement income gap worksheet.</strong> A simple way to estimate your projected income from all sources and compare it to anticipated expenses.</li>
+  <li><strong>Social Security claiming guide.</strong> A plain-English overview of when and how to claim, including spousal strategies many people overlook.</li>
+  <li><strong>Healthcare cost framework.</strong> A tool for projecting retirement healthcare expenses, including Medicare premiums and supplemental coverage.</li>
+  <li><strong>Pre-retirement checklist.</strong> Key financial, legal, and administrative steps to consider in the years leading up to retirement.</li>
 </ul>
 
-<p>All of these resources are available at no cost. We created them because we believe better-informed people make better financial decisions.</p>
+<p>Everything is available at no cost. We created these resources because we believe better-informed people make better financial decisions — whether or not they work with us.</p>
 
-<p>Reply to this email with "send toolkit" and we will get these resources to you right away.</p>
+<p>Reply to this email with "send toolkit" and we will get them to you right away.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-5', subject:"What has changed in financial planning this year", previewText:"Key updates that could affect your plan.", sendDay:28, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-5', subject:"Seasonal planning reminders", previewText:"A few timely items worth having on your radar.", sendDay:28, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>Financial planning is not static — regulations, markets, and best practices evolve. Here are some of the most significant changes from the past year that may be relevant to your planning:</p>
-
-<h2>Key Updates Worth Knowing</h2>
+<p>Financial planning is not static — regulations shift, contribution limits change, and timely moves can make a meaningful difference. Here are a few seasonal reminders worth keeping on your radar:</p>
 
 <ul>
-  <li><strong>Retirement account contribution limits.</strong> Annual contribution limits for 401(k)s, IRAs, and other retirement accounts have been adjusted. If you have not updated your contribution amounts, you may be leaving tax-advantaged savings on the table.</li>
-  <li><strong>Required Minimum Distribution (RMD) changes.</strong> Recent legislation has adjusted the age at which RMDs begin and the rules around inherited IRAs. These changes can significantly impact your tax planning and withdrawal strategy.</li>
-  <li><strong>Estate and gift tax exemptions.</strong> Current elevated exemption amounts are scheduled to change. If you have a sizable estate, this is worth discussing with your advisor sooner rather than later.</li>
-  <li><strong>Medicare premium adjustments.</strong> Medicare Part B and Part D premiums have changed, and high-income surcharges (IRMAA) may apply if your modified adjusted gross income exceeds certain thresholds.</li>
+  <li><strong>Retirement contribution limits.</strong> Annual limits for 401(k)s and IRAs are periodically adjusted. If you have not updated your contributions recently, you may be leaving tax-advantaged savings on the table.</li>
+  <li><strong>RMD rule changes.</strong> Recent legislation adjusted when required minimum distributions begin and how inherited IRAs are handled. These changes can significantly impact withdrawal strategy and tax planning.</li>
+  <li><strong>Estate exemption window.</strong> Current elevated exemption amounts are scheduled to change. If you have a sizable estate, discussing this with your advisor sooner rather than later may be valuable.</li>
 </ul>
 
-<p>Each of these changes can create both challenges and opportunities — depending on your specific situation. If you would like to understand how they affect you, we are happy to walk through it together.</p>
+<p>Each of these can create both challenges and opportunities depending on your situation. Even a quick review of how they apply to you can be worthwhile.</p>
 
-<p>Reply to this email to schedule a brief, no-cost conversation.</p>
+<p>Would it be helpful to walk through any of these together? Reply to this email and we will set up a brief conversation at no cost.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-6', subject:"Our clients' most common question — answered", previewText:"It is the one thing everyone wants to know.", sendDay:35, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-6', subject:"The question everyone asks us", previewText:"It comes up in nearly every conversation we have.", sendDay:35, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>After thousands of client conversations, one question comes up more than any other:</p>
+<p>After thousands of client conversations, one question comes up more than any other. It is asked in different ways — "Do I have enough?" "Can I afford to retire?" "Will my money last?" — but the underlying concern is the same. People want to know they are on solid ground.</p>
 
-<p><em>"Am I going to be okay?"</em></p>
-
-<p>It is asked in different ways — "Do I have enough?" "Can I afford to retire?" "Will my money last?" — but the underlying concern is the same. People want to know that they are on solid ground.</p>
-
-<h2>Here Is What We Have Learned</h2>
+<p>Here is what we have learned:</p>
 
 <ul>
-  <li><strong>The question itself is healthy.</strong> Worrying about your financial future is not a sign of failure — it is a sign that you care. The people who should be concerned are the ones who never ask.</li>
-  <li><strong>The answer is almost always actionable.</strong> Whether you are ahead of schedule or behind, there are concrete steps you can take to improve your position. The key is knowing where you stand.</li>
-  <li><strong>Clarity reduces anxiety.</strong> The clients who feel most at peace are not always the wealthiest — they are the ones who have a clear plan, understand their numbers, and know what to expect.</li>
+  <li><strong>The question itself is healthy.</strong> Wondering about your financial future is a sign that you care. The people who should be concerned are the ones who never ask.</li>
+  <li><strong>The answer is almost always actionable.</strong> Whether you are ahead of schedule or behind, there are concrete steps that can improve your position. The key is knowing where you stand.</li>
+  <li><strong>Clarity reduces anxiety.</strong> The clients who feel most at peace are not always the wealthiest — they are the ones with a clear plan who understand their numbers.</li>
 </ul>
 
-<p>If you have been carrying this question around, we would be glad to help you find your answer. A 30-minute conversation is often all it takes to go from uncertainty to clarity.</p>
+<p>If you have been carrying this question around, a 30-minute conversation is often all it takes to move from uncertainty to clarity.</p>
 
-<p>Reply to this email and we will set up a time that works for you.</p>
+<p>Would it be helpful to set up a time to talk? Reply to this email whenever you are ready.</p>
 
 <p>Best regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-7', subject:"Is now the right time for a financial review?", previewText:"The short answer might surprise you.", sendDay:42, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-7', subject:"When is the right time for a review?", previewText:"The honest answer may not be what you expect.", sendDay:42, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
-<p>People often ask us when the "right" time is for a financial review. The honest answer: there is no perfect time — but there are several situations that make it especially valuable:</p>
-
-<h2>Consider a Review If:</h2>
+<p>People often ask us when the "right" time is for a financial review. The honest answer is that there is no perfect moment — but there are situations that make it especially worthwhile:</p>
 
 <ul>
-  <li><strong>Your life has changed.</strong> Marriage, divorce, a new child, a job change, an inheritance, or the loss of a loved one — any of these can shift your financial priorities.</li>
-  <li><strong>It has been more than two years.</strong> Even without a major life event, tax laws, markets, and your own goals evolve. A plan that was right two years ago may need updating.</li>
-  <li><strong>You feel uncertain.</strong> If you have a nagging sense that something is off — or you simply do not know where you stand — that feeling is worth exploring.</li>
-  <li><strong>You are approaching a milestone.</strong> Within 10 years of retirement, reaching a certain net worth, or becoming eligible for Medicare are all natural checkpoints.</li>
+  <li><strong>Your life has changed.</strong> Marriage, divorce, a new child, a job change, or an inheritance can all shift your financial priorities.</li>
+  <li><strong>It has been more than two years.</strong> Even without a major event, tax laws and markets evolve. A plan that fit two years ago may need refreshing.</li>
+  <li><strong>You feel uncertain.</strong> A nagging sense that something may be off is worth exploring — that instinct is usually pointing at something real.</li>
 </ul>
 
-<p>The truth is, a financial review is never wasted. At worst, it confirms you are on the right track. At best, it uncovers opportunities you did not know existed.</p>
+<p>The truth is, a financial review is rarely wasted. At worst, it confirms you are on the right track. At best, it surfaces opportunities you did not know existed.</p>
 
-<p>If any of these situations resonate with you, we would be happy to schedule a complimentary review. Reply to this email to get started.</p>
+<p>Would it be helpful to schedule a conversation? Reply to this email and we will find a time that works — no cost and no obligation.</p>
 
 <p>Warm regards,<br/>The FFA North Team</p>` },
-  { id:'e-7-8', subject:"We are here when you are ready", previewText:"No rush. No pressure. Just an open door.", sendDay:56, status:'active', bodyFormat:'html' as const,
+  { id:'e-7-8', subject:"The door is always open", previewText:"No rush, no pressure — just an open invitation.", sendDay:56, status:'active', bodyFormat:'html' as const,
     body:`<p>Hi {{first_name}},</p>
 
 <p>This is the last email in our series, and we want to leave you with something simple: an open invitation.</p>
 
-<h2>Whenever You Are Ready, We Are Here</h2>
-
 <p>We understand that timing matters. Maybe right now is not the right moment to focus on your financial plan — and that is perfectly okay. Life has a way of demanding our attention in different places at different times.</p>
 
-<p>But when the time is right — whether that is next week, next month, or next year — here is what we offer:</p>
+<p>Whenever the time does feel right — whether that is next week, next month, or next year — here is what we offer:</p>
 
 <ul>
   <li>A complimentary, no-obligation financial review</li>
-  <li>An experienced advisor who will listen to your concerns and answer your questions</li>
-  <li>A clear, written assessment of where you stand and what you might consider</li>
+  <li>An experienced advisor who will listen and answer your questions</li>
+  <li>A clear, written assessment that is yours to keep</li>
   <li>Zero pressure to make any changes or commitments</li>
 </ul>
 
@@ -1508,7 +1442,7 @@ const reEngagementEmails: EmailStep[] = [
 
 <p>We genuinely wish you the best, {{first_name}}, and we hope to hear from you someday.</p>
 
-<p>With warm regards,<br/>The FFA North Team<br/>(561) 555-0100</p>` },
+<p>Warm regards,<br/>The FFA North Team<br/>(561) 555-0100</p>` },
 ];
 
 const campaignDefs: { name: string; serviceLine: ServiceLine; description: string; status: CampaignStatus; emails: EmailStep[] }[] = [

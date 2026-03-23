@@ -36,11 +36,19 @@ export default function TopNav() {
   const { contacts, activities } = usePortal();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     setMobileOpen(false);
     setSettingsOpen(false);
   }, [pathname]);
+
+  // Track scroll for glass effect
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 8);
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => window.removeEventListener('scroll', handler);
+  }, []);
 
   // Close settings dropdown on outside click
   useEffect(() => {
@@ -85,10 +93,14 @@ export default function TopNav() {
   return (
     <>
       {/* Desktop top nav */}
-      <header className="hidden md:flex fixed top-0 left-0 right-0 h-14 bg-white border-b border-neutral-200 z-50 items-center px-6">
+      <header className={`hidden md:flex fixed top-0 left-0 right-0 h-14 z-50 items-center px-6 transition-all duration-300 ${
+        scrolled
+          ? 'glass-card-premium border-b border-white/40 shadow-sm'
+          : 'bg-white border-b border-neutral-200'
+      }`}>
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 mr-10 shrink-0">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-center text-white font-black text-[9px] tracking-tight shadow-md hover:shadow-indigo-400/50 transition-shadow duration-300">
+        <Link href="/" className="flex items-center gap-2 mr-10 shrink-0 group">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-center text-white font-black text-[9px] tracking-tight shadow-md hover:shadow-indigo-400/50 transition-all duration-300 group-hover:scale-[1.02]">
             FFA
           </div>
           <span className="text-sm font-semibold text-neutral-900 tracking-tight">Advantage</span>
@@ -102,14 +114,26 @@ export default function TopNav() {
               href={item.href}
               className={`relative px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 inline-flex items-center gap-1.5 ${
                 isActive(item.href)
-                  ? 'text-indigo-700 bg-indigo-50'
+                  ? 'text-indigo-700'
                   : 'text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50'
               }`}
             >
               {item.icon && <Icon name={item.icon} className="w-3.5 h-3.5" />}
               {item.label}
+              {/* Animated underline indicator */}
+              {isActive(item.href) && (
+                <span
+                  className="absolute bottom-0 left-2 right-2 h-[2px] rounded-full"
+                  style={{
+                    background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
+                    animation: 'scaleIn 0.2s ease-out forwards',
+                  }}
+                />
+              )}
               {item.href === '/warm-leads' && warmLeadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full px-1">
+                <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full px-1 animate-glow" style={{
+                  boxShadow: '0 0 8px rgba(239, 68, 68, 0.4)',
+                }}>
                   {warmLeadCount}
                 </span>
               )}
@@ -155,7 +179,11 @@ export default function TopNav() {
       </header>
 
       {/* Mobile top bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-neutral-200 z-50 flex items-center px-4 gap-3">
+      <div className={`md:hidden fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-4 gap-3 transition-all duration-300 ${
+        scrolled
+          ? 'glass-card-premium border-b border-white/40'
+          : 'bg-white border-b border-neutral-200'
+      }`}>
         <button
           onClick={() => setMobileOpen(true)}
           className="w-9 h-9 rounded-md bg-neutral-50 flex items-center justify-center text-neutral-700 hover:bg-neutral-100 transition-colors"

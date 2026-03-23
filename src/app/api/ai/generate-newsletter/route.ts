@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAnthropicClient, parseAIJsonResponse } from '@/lib/ai-client';
-import { NEWSLETTER_GENERATION_PROMPT } from '@/lib/ai-prompts';
+import { NEWSLETTER_GENERATION_PROMPT, NEWS_CONTEXT_PROMPT } from '@/lib/ai-prompts';
 import type { AINewsletterRequest, AINewsletterResponse } from '@/lib/ai-types';
 
 export async function POST(request: NextRequest) {
   try {
     const body: AINewsletterRequest = await request.json();
-    const { serviceLine, topics, audienceDescription, sections } = body;
+    const { serviceLine, topics, audienceDescription, sections, newsTopics } = body;
 
     if (!serviceLine || !topics?.length || !audienceDescription || !sections) {
       return NextResponse.json(
@@ -17,12 +17,14 @@ export async function POST(request: NextRequest) {
 
     const client = getAnthropicClient();
 
+    const newsContext = newsTopics?.length ? NEWS_CONTEXT_PROMPT(newsTopics) : '';
+
     const userPrompt = `Generate a FINRA-compliant newsletter for the following:
 - Service Line: ${serviceLine}
 - Topics to cover: ${topics.join(', ')}
 - Target Audience: ${audienceDescription}
 - Number of sections: ${sections}
-
+${newsContext}
 Generate the newsletter content now.`;
 
     const message = await client.messages.create({

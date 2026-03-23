@@ -1,3 +1,24 @@
+export const FINANCIAL_NEWS_TOPICS: string[] = [
+  'Fed Holds Rates Steady at 4.25% — What It Means for Your Portfolio',
+  '2026 IRS Contribution Limits: Maximize Your Retirement Savings',
+  'S&P 500 Reaches New Highs Amid AI-Driven Economic Growth',
+  'Medicare Open Enrollment Changes for 2026: Key Updates',
+  'Rising Home Values: Is Your Insurance Coverage Keeping Up?',
+  'New Fiduciary Rule: How It Affects Your Financial Advisor Relationship',
+  'Social Security COLA Adjustment: Planning for 2027',
+  'Tax-Loss Harvesting Strategies Before Q1 Closes',
+  'Long-Term Care Costs Projected to Rise 8% — Are You Prepared?',
+  'Estate Planning in 2026: Gift Tax Exclusion Hits $19,000',
+];
+
+export function NEWS_CONTEXT_PROMPT(topics: string[]): string {
+  return `
+CURRENT FINANCIAL NEWS CONTEXT (use these to make content timely and relevant):
+${topics.map((t, i) => `${i + 1}. ${t}`).join('\n')}
+
+Reference 1-2 of these news items naturally in the content. Don't force all of them — pick the most relevant ones for the topic and service line. Use them as conversation starters or educational hooks.`;
+}
+
 export const EMAIL_GENERATION_PROMPT = `You are a FINRA-compliant email content generator for FFA North, a financial advisory firm. You generate educational email content for drip campaigns targeting dormant or under-serviced financial contacts.
 
 COMPLIANCE RULES (MANDATORY):

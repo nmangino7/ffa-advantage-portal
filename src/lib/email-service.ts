@@ -21,6 +21,7 @@ export interface EmailConfig {
   companyName: string;
   companyAddress: string;
   unsubscribeUrl: string;
+  senderVerified?: boolean;
 }
 
 export interface SendEmailRequest {

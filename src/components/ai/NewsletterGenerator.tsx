@@ -1,16 +1,23 @@
 'use client';
 
 import { useState, useCallback, type KeyboardEvent, type FormEvent } from 'react';
-import { Sparkles, Check, Download, FileText, Loader2, X, Plus } from 'lucide-react';
+import { Sparkles, Check, Download, FileText, Loader2, X, Plus, Zap } from 'lucide-react';
 import type { AINewsletterRequest, AINewsletterResponse, PDFGenerateRequest } from '@/lib/ai-types';
 import type { ServiceLine } from '@/lib/types';
 import { SERVICE_LINES } from '@/lib/types';
+import { FINANCIAL_NEWS_TOPICS } from '@/lib/ai-prompts';
 
 interface NewsletterGeneratorProps {
   onSaveToLibrary?: (title: string, pdfBlob: Blob) => void;
 }
 
 export function NewsletterGenerator({ onSaveToLibrary }: NewsletterGeneratorProps) {
+  // News mode state
+  const [newsMode, setNewsMode] = useState(false);
+  const [selectedNewsTopics, setSelectedNewsTopics] = useState<string[]>(
+    FINANCIAL_NEWS_TOPICS.slice(0, 3)
+  );
+
   // Form state
   const [serviceLine, setServiceLine] = useState<ServiceLine>('Insurance Review');
   const [topics, setTopics] = useState<string[]>([]);
@@ -50,6 +57,30 @@ export function NewsletterGenerator({ onSaveToLibrary }: NewsletterGeneratorProp
     [addTopic]
   );
 
+  const toggleNewsMode = useCallback(() => {
+    const next = !newsMode;
+    setNewsMode(next);
+    if (next) {
+      const defaults = FINANCIAL_NEWS_TOPICS.slice(0, 3);
+      setSelectedNewsTopics(defaults);
+      setTopics(defaults);
+      setTopicInput('');
+    }
+  }, [newsMode]);
+
+  const toggleNewsTopic = useCallback(
+    (t: string) => {
+      setSelectedNewsTopics((prev) => {
+        const updated = prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t];
+        if (newsMode) {
+          setTopics(updated);
+        }
+        return updated;
+      });
+    },
+    [newsMode]
+  );
+
   const handleGenerate = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
@@ -69,6 +100,7 @@ export function NewsletterGenerator({ onSaveToLibrary }: NewsletterGeneratorProp
           topics,
           audienceDescription,
           sections: sectionCount,
+          ...(newsMode && selectedNewsTopics.length > 0 && { newsTopics: selectedNewsTopics }),
         };
 
         const res = await fetch('/api/ai/generate-newsletter', {
@@ -90,7 +122,7 @@ export function NewsletterGenerator({ onSaveToLibrary }: NewsletterGeneratorProp
         setIsGenerating(false);
       }
     },
-    [serviceLine, topics, audienceDescription, sectionCount]
+    [serviceLine, topics, audienceDescription, sectionCount, newsMode, selectedNewsTopics]
   );
 
   const generatePdfBlob = useCallback(async (): Promise<Blob | null> => {
@@ -164,6 +196,44 @@ export function NewsletterGenerator({ onSaveToLibrary }: NewsletterGeneratorProp
         </div>
 
         <form onSubmit={handleGenerate} className="space-y-5">
+          {/* News Mode Toggle */}
+          <div>
+            <button
+              type="button"
+              onClick={toggleNewsMode}
+              className={`inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all shadow-sm ${
+                newsMode
+                  ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-indigo-200'
+                  : 'bg-gradient-to-r from-indigo-50 to-violet-50 text-indigo-700 hover:from-indigo-100 hover:to-violet-100 border border-indigo-200'
+              }`}
+            >
+              <Zap className="h-4 w-4" />
+              Generate from This Week&apos;s News
+            </button>
+
+            {newsMode && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {FINANCIAL_NEWS_TOPICS.map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => toggleNewsTopic(t)}
+                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                      selectedNewsTopics.includes(t)
+                        ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                        : 'bg-neutral-100 text-neutral-500 border border-neutral-200 hover:bg-neutral-200'
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+                <p className="w-full text-xs text-neutral-400 mt-1">
+                  Select the news topics to include as newsletter sections.
+                </p>
+              </div>
+            )}
+          </div>
+
           {/* Service Line */}
           <div>
             <label htmlFor="nl-service-line" className="block text-sm font-medium text-neutral-700 mb-1.5">

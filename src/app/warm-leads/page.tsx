@@ -95,7 +95,7 @@ export default function WarmLeadsPage() {
       {/* Alert Banner for unassigned high-priority leads */}
       {needingAssignment > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center shrink-0 animate-pulse">
             <Zap className="w-5 h-5 text-red-600" />
           </div>
           <div className="flex-1">
@@ -109,7 +109,7 @@ export default function WarmLeadsPage() {
 
       {/* Stat Numbers */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderLeftWidth: '4px', borderLeftColor: '#6366f1' }}>
+        <div className="bg-white rounded-xl border border-neutral-200 p-5 stat-card-glow transition-all duration-300 hover:shadow-lg" style={{ borderLeftWidth: '4px', borderLeftColor: '#6366f1' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
               <Flame className="w-5 h-5 text-indigo-600" />
@@ -120,7 +120,7 @@ export default function WarmLeadsPage() {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderLeftWidth: '4px', borderLeftColor: '#dc2626' }}>
+        <div className="bg-white rounded-xl border border-neutral-200 p-5 transition-all duration-300 hover:shadow-lg" style={{ borderLeftWidth: '4px', borderLeftColor: '#dc2626' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
               <Zap className="w-5 h-5 text-red-500" />
@@ -128,10 +128,13 @@ export default function WarmLeadsPage() {
             <div>
               <p className="text-2xl font-semibold text-neutral-900">{needingAssignment}</p>
               <p className="text-xs text-neutral-500">Needing Assignment</p>
+              {needingAssignment > 0 && (
+                <span className="inline-flex items-center mt-1 text-[9px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded-full animate-pulse">ACTION NEEDED</span>
+              )}
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-neutral-200 p-5" style={{ borderLeftWidth: '4px', borderLeftColor: '#059669' }}>
+        <div className="bg-white rounded-xl border border-neutral-200 p-5 transition-all duration-300 hover:shadow-lg" style={{ borderLeftWidth: '4px', borderLeftColor: '#059669' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
               <CalendarDays className="w-5 h-5 text-emerald-600" />
@@ -185,7 +188,7 @@ export default function WarmLeadsPage() {
             const meta = TIER_META[lead.tier];
             return (
               <div key={lead.contact.id} className="relative">
-                <div className="absolute left-0 top-3 bottom-3 w-1 rounded-full" style={{ backgroundColor: meta.color }} />
+                <div className="absolute left-0 top-3 bottom-3 w-1 rounded-full transition-all duration-300" style={{ backgroundColor: meta.color, boxShadow: lead.tier === 'replied' ? `0 0 8px ${meta.color}60` : 'none' }} />
                 <div className="pl-4">
                   <ActionCard lead={lead} />
                 </div>

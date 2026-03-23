@@ -10,6 +10,7 @@ export interface AIEmailRequest {
   audience: string;
   sequencePosition?: number;
   emailType?: string;
+  newsTopics?: string[];
 }
 
 export interface AIEmailResponse {
@@ -24,6 +25,7 @@ export interface AINewsletterRequest {
   topics: string[];
   audienceDescription: string;
   sections: number;
+  newsTopics?: string[];
 }
 
 export interface AINewsletterResponse {

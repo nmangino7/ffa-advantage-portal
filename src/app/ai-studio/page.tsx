@@ -74,6 +74,7 @@ export default function AIStudioPage() {
       {/* Header */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 p-6 mb-6 text-white">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent" />
+        <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 1px, transparent 1px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2) 1px, transparent 1px), radial-gradient(circle at 40% 80%, rgba(255,255,255,0.25) 1px, transparent 1px)', backgroundSize: '60px 60px, 80px 80px, 100px 100px' }} />
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-6 h-6" />
@@ -91,11 +92,12 @@ export default function AIStudioPage() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
+              className={`flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 ${
                 activeTab === tab.key
-                  ? 'bg-white text-neutral-900 shadow-sm'
+                  ? 'bg-white text-neutral-900 shadow-md'
                   : 'text-neutral-500 hover:text-neutral-700 hover:bg-white/50'
               }`}
+              style={activeTab === tab.key ? { boxShadow: '0 2px 8px rgba(99,102,241,0.15)' } : {}}
             >
               <TabIcon className="w-4 h-4" />
               {tab.label}

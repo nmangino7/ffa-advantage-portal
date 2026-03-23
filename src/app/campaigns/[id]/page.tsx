@@ -1,21 +1,25 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { usePortal } from '@/lib/context/PortalContext';
 import { useModal } from '@/lib/context/ModalContext';
+import { useToast } from '@/lib/context/ToastContext';
 import { PIPELINE_STAGES, SERVICE_LINE_CONFIG } from '@/lib/types';
+import { PDF_COMPANIONS } from '@/lib/data/pdf-companions';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DripTimeline } from '@/components/ui/DripTimeline';
 import { Icon } from '@/components/ui/Icon';
-import { Flame, Pencil, Send } from 'lucide-react';
+import { Flame, Pencil, Send, FileText, Download } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CampaignDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { contacts, campaigns, activities, toggleCampaignStatus } = usePortal();
   const { openEnrollModal, openConfirmDialog, openSendTestModal } = useModal();
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState<'overview' | 'sequence' | 'contacts'>('overview');
+  const [downloadingPdfId, setDownloadingPdfId] = useState<string | null>(null);
 
   const campaign = campaigns.find(c => c.id === id);
   if (!campaign) return <div className="p-10 text-center text-neutral-400">Campaign not found</div>;
@@ -58,6 +62,32 @@ export default function CampaignDetailPage() {
       return { contact, action: act, tierLabel: tierMap[act.type] || 'Engaged' };
     }).filter(Boolean).slice(0, 3);
   }, [activities, contacts, id]);
+
+  const companions = PDF_COMPANIONS.filter(p => p.campaignId === id);
+
+  const handleDownloadCompanion = useCallback(async (companionId: string, title: string) => {
+    setDownloadingPdfId(companionId);
+    try {
+      const res = await fetch('/api/ai/generate-companion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ companionId }),
+      });
+      if (!res.ok) throw new Error('Failed to generate PDF');
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('PDF downloaded successfully');
+    } catch {
+      showToast('Failed to generate PDF');
+    } finally {
+      setDownloadingPdfId(null);
+    }
+  }, [showToast]);
 
   const tabs = [
     { key: 'overview' as const, label: 'Overview' },
@@ -140,7 +170,7 @@ export default function CampaignDetailPage() {
           </div>
 
           {/* Metrics Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 glass-card-premium rounded-xl p-3">
             <MetricBox label="Enrolled" value={campaign.enrolledCount} />
             <MetricBox label="Sent" value={detailed.sent} />
             <MetricBox label="Opened" value={detailed.opened} sub={`${detailed.sent > 0 ? Math.round(detailed.opened / detailed.sent * 100) : 0}%`} />
@@ -155,16 +185,17 @@ export default function CampaignDetailPage() {
 
       {/* Tabs */}
       <div className="border-b border-neutral-200 mb-6">
-        <div className="flex gap-6">
+        <div className="flex gap-6 relative">
           {tabs.map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`pb-3 text-sm font-semibold transition-colors border-b-2 ${
+              className={`pb-3 text-sm font-semibold transition-all duration-300 border-b-2 ${
                 activeTab === tab.key
-                  ? 'border-neutral-900 text-neutral-900'
+                  ? 'border-indigo-600 text-neutral-900'
                   : 'border-transparent text-neutral-500 hover:text-neutral-700'
               }`}
+              style={activeTab === tab.key ? { borderImage: 'linear-gradient(to right, #4f46e5, #7c3aed) 1' } : {}}
             >
               {tab.label}
             </button>
@@ -229,6 +260,61 @@ export default function CampaignDetailPage() {
             </div>
           )}
 
+          {/* PDF Companion Documents */}
+          {companions.length > 0 && (
+            <div className="bg-white rounded-xl border border-neutral-200 p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <FileText className="w-5 h-5 text-indigo-600" />
+                <h2 className="text-sm font-semibold text-neutral-900">Companion Documents</h2>
+                <span className="text-xs font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full">{companions.length} PDF{companions.length > 1 ? 's' : ''}</span>
+              </div>
+              <p className="text-sm text-neutral-500 mb-4">Downloadable guides designed to accompany this campaign&apos;s email sequence.</p>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                {companions.map(comp => {
+                  const isDownloading = downloadingPdfId === comp.id;
+                  return (
+                    <div key={comp.id} className="border border-neutral-100 rounded-xl p-4 hover:shadow-md hover:border-neutral-200 transition-all duration-300 bg-gradient-to-br from-neutral-50/50 to-white">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: cfg.bgColor, color: cfg.color }}>
+                          <FileText className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sm font-semibold text-neutral-900 leading-snug">{comp.title}</h3>
+                          <p className="text-xs text-neutral-500 mt-0.5 line-clamp-2">{comp.description}</p>
+                          <div className="flex items-center gap-3 mt-2.5">
+                            <span className="text-[10px] text-neutral-400 font-medium">{comp.pageCount} pages</span>
+                            <span className="text-[10px] text-neutral-400 font-medium">{comp.sections.length} sections</span>
+                            <button
+                              onClick={() => handleDownloadCompanion(comp.id, comp.title)}
+                              disabled={isDownloading}
+                              className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg text-white transition-all disabled:opacity-60"
+                              style={{ background: `linear-gradient(135deg, ${cfg.color}, ${cfg.color}dd)` }}
+                            >
+                              {isDownloading ? (
+                                <>
+                                  <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24" fill="none">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                  </svg>
+                                  Generating...
+                                </>
+                              ) : (
+                                <>
+                                  <Download className="w-3 h-3" />
+                                  Download PDF
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Stage Breakdown */}
           <div className="bg-white rounded-xl border border-neutral-200 p-6">
             <h2 className="text-sm font-semibold text-neutral-900 mb-4">Contact Stage Breakdown</h2>
@@ -261,7 +347,7 @@ export default function CampaignDetailPage() {
             const stepOpened = Math.round(stepSent * (campaign.openRate / 100) * (1 - i * 0.08));
             const stepClicked = Math.round(stepSent * (campaign.clickRate / 100) * (1 + i * 0.1));
             return (
-              <div key={step.id} className="bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-md hover:border-neutral-300 transition-all duration-200">
+              <div key={step.id} className="bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-lg hover:border-neutral-300 transition-all duration-300 card-hover-premium">
                 <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-gradient-to-r from-neutral-50/80 to-white">
                   <div className="flex items-center gap-3">
                     <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold text-white" style={{ backgroundColor: cfg.color }}>
@@ -370,8 +456,8 @@ function MetricBox({ label, value, sub, highlight }: { label: string; value: num
   const rateColor = isRate ? (rateValue >= 20 ? 'text-emerald-600' : rateValue >= 10 ? 'text-amber-600' : 'text-neutral-900') : '';
 
   return (
-    <div className={`rounded-xl p-3 text-center transition-all duration-200 hover:shadow-sm ${
-      isGood ? 'bg-amber-50 border border-amber-100' : 'bg-neutral-50 border border-transparent'
+    <div className={`rounded-xl p-3 text-center transition-all duration-300 hover:shadow-md ${
+      isGood ? 'bg-gradient-to-br from-amber-50 to-amber-100/50 border border-amber-100' : 'bg-gradient-to-br from-neutral-50 to-white border border-neutral-100/50'
     }`}>
       <p className={`text-xl font-semibold ${isGood ? 'text-amber-600' : rateColor || 'text-neutral-900'}`}>{value}</p>
       {sub && <span className={`text-[10px] ${isGood ? 'text-amber-400' : 'text-neutral-400'}`}>{sub}</span>}
