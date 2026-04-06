@@ -7,567 +7,270 @@ import { SERVICE_LINES, SERVICE_LINE_CONFIG } from '@/lib/types';
 
 const INDIGO = { r: 79, g: 70, b: 229 };
 const DARK_NAVY = { r: 30, g: 27, b: 75 };
-const MARGIN = 20;
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/\n{3,}/g, '\n\n').trim();
+const SERVICE_LINE_DESCRIPTIONS: Record<string, string> = {
+  'Insurance Review': 'Helps clients identify coverage gaps, eliminate redundancies, and ensure their insurance portfolio keeps pace with life changes. Target: existing policyholders who haven\'t had a review in 3+ years.',
+  'Under-Serviced Annuities': 'Educates annuity owners on fees, surrender schedules, income riders, and optimization opportunities. Target: clients with existing annuity contracts that may be underperforming.',
+  'Retirement Planning': 'Guides pre-retirees through savings milestones, Social Security timing, income strategies, and tax planning. Target: individuals aged 50-65 planning for retirement.',
+  'Investment Planning': 'Covers core investment principles, asset allocation, fee management, and portfolio discipline. Target: investors seeking a structured, principles-based approach.',
+  'Second-Opinion Positioning': 'Positions FFA North as an independent reviewer of existing financial plans. Target: prospects who may be dissatisfied or uncertain about their current advisor.',
+};
+
+function stripHtml(text: string): string {
+  return text
+    .replace(/<[^>]*>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#39;/g, "'")
+    .replace(/&quot;/g, '"');
 }
 
-function ensureSpace(doc: jsPDF, needed: number, y: number, pw: number, ph: number): number {
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) }
+    : INDIGO;
+}
+
+function ensureSpace(
+  doc: jsPDF,
+  needed: number,
+  y: number,
+  pw: number,
+  ph: number
+): number {
   if (y + needed > ph - 25) {
     doc.addPage();
     drawPageHeader(doc, pw);
-    return 28;
+    return 25;
   }
   return y;
 }
 
-function drawPageHeader(doc: jsPDF, pw: number) {
+function drawPageHeader(doc: jsPDF, pw: number): void {
   doc.setFillColor(INDIGO.r, INDIGO.g, INDIGO.b);
-  doc.rect(0, 0, pw, 2.5, 'F');
+  doc.rect(0, 0, pw, 2, 'F');
   doc.setTextColor(180, 180, 195);
   doc.setFontSize(7);
   doc.setFont('helvetica', 'bold');
-  doc.text('FFA NORTH  |  CONTENT LIBRARY & PRODUCTION GUIDELINES', MARGIN, 10);
+  doc.text('FFA NORTH', 20, 10);
 }
 
-function drawPageFooter(doc: jsPDF, pageNum: number, pw: number, ph: number) {
+function drawPageFooter(
+  doc: jsPDF,
+  pageNum: number,
+  totalPages: number,
+  pw: number,
+  ph: number
+): void {
   doc.setDrawColor(220, 220, 230);
   doc.setLineWidth(0.2);
-  doc.line(MARGIN, ph - 16, pw - MARGIN, ph - 16);
+  doc.line(20, ph - 16, pw - 20, ph - 16);
   doc.setTextColor(170, 170, 190);
   doc.setFontSize(6);
   doc.setFont('helvetica', 'normal');
-  doc.text('CONFIDENTIAL — FFA North', MARGIN, ph - 10);
-  doc.text(`Page ${pageNum}`, pw - MARGIN, ph - 10, { align: 'right' });
+  doc.text('CONFIDENTIAL', 20, ph - 10);
+  doc.text(`${pageNum} / ${totalPages}`, pw - 20, ph - 10, { align: 'right' });
 }
 
-function drawSectionTitle(doc: jsPDF, num: number, title: string, y: number, pw: number, ph: number): number {
-  y = ensureSpace(doc, 18, y, pw, ph);
-  const cw = pw - MARGIN * 2;
-  doc.setFillColor(INDIGO.r, INDIGO.g, INDIGO.b);
-  doc.roundedRect(MARGIN, y - 4, cw, 14, 2, 2, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(13);
-  doc.setFont('helvetica', 'bold');
-  doc.text(`${num}. ${title}`, MARGIN + 6, y + 5);
-  return y + 20;
-}
-
-function drawSubHeading(doc: jsPDF, text: string, y: number, pw: number, ph: number): number {
-  y = ensureSpace(doc, 12, y, pw, ph);
-  doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text(text, MARGIN, y);
-  doc.setDrawColor(INDIGO.r, INDIGO.g, INDIGO.b);
-  doc.setLineWidth(0.5);
-  doc.line(MARGIN, y + 2, MARGIN + 30, y + 2);
-  return y + 8;
-}
-
-function drawBody(doc: jsPDF, text: string, y: number, pw: number, ph: number): number {
-  const cw = pw - MARGIN * 2;
-  doc.setFontSize(9);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(55, 55, 70);
-  const lines = doc.splitTextToSize(text, cw);
-  for (let i = 0; i < lines.length; i++) {
-    y = ensureSpace(doc, 5, y, pw, ph);
-    doc.text(lines[i], MARGIN, y);
-    y += 4;
-  }
-  return y + 3;
-}
-
-function drawBullets(doc: jsPDF, bullets: string[], y: number, pw: number, ph: number, indent = 0): number {
-  const cw = pw - MARGIN * 2 - indent - 8;
-  doc.setFontSize(9);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(55, 55, 70);
-  for (const bullet of bullets) {
-    const bLines = doc.splitTextToSize(bullet, cw);
-    y = ensureSpace(doc, bLines.length * 4 + 2, y, pw, ph);
-    doc.setFillColor(INDIGO.r, INDIGO.g, INDIGO.b);
-    doc.circle(MARGIN + indent + 2, y - 1, 1, 'F');
-    doc.text(bLines, MARGIN + indent + 7, y);
-    y += bLines.length * 4 + 3;
-  }
-  return y + 2;
-}
-
-function drawCover(doc: jsPDF, pw: number, ph: number) {
-  const hh = ph * 0.48;
+function drawCover(doc: jsPDF, pw: number, ph: number): void {
+  const hh = ph * 0.50;
   doc.setFillColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
   doc.rect(0, 0, pw, hh, 'F');
+
   doc.setFillColor(INDIGO.r, INDIGO.g, INDIGO.b);
   doc.rect(0, 0, pw, 3, 'F');
 
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
-  doc.text('FFA NORTH  |  Advantage Portal', MARGIN, 18);
+  doc.text('FFA NORTH  |  Advantage Portal', 20, 20);
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);
   doc.setTextColor(180, 180, 210);
-  doc.text(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), pw - MARGIN, 18, { align: 'right' });
+  const dateStr = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+  doc.text(dateStr, pw - 20, 20, { align: 'right' });
 
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(26);
   doc.setFont('helvetica', 'bold');
   const titleLines = doc.splitTextToSize('Content Library & Production Guidelines', pw - 50);
-  doc.text(titleLines, MARGIN, 55);
+  doc.text(titleLines, 20, 60);
 
+  const subtitleY = 60 + titleLines.length * 10 + 6;
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(180, 180, 210);
-  doc.text('A comprehensive reference for content development partners', MARGIN, 55 + titleLines.length * 11 + 6);
+  doc.text('A comprehensive reference for content development partners', 20, subtitleY);
 
   doc.setDrawColor(INDIGO.r, INDIGO.g, INDIGO.b);
   doc.setLineWidth(0.8);
-  doc.line(MARGIN, 55 + titleLines.length * 11 + 14, MARGIN + 50, 55 + titleLines.length * 11 + 14);
+  doc.line(20, subtitleY + 8, 70, subtitleY + 8);
 
   doc.setFillColor(248, 248, 252);
   doc.rect(0, hh, pw, ph - hh, 'F');
 
-  doc.setTextColor(80, 80, 100);
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Prepared for External Content Partner', MARGIN, hh + 20);
-
-  const totalEmails = campaigns.reduce((s, c) => s + c.emailSequence.length, 0);
-  const stats = [
-    `${campaigns.length} Email Campaigns`,
-    `${totalEmails} Email Templates`,
-    `${PRESENTATIONS.length} Presentation Decks`,
-    `${PDF_COMPANIONS.length} Companion Guides`,
-    `${SERVICE_LINES.length} Service Lines`,
-  ];
-
-  doc.setFontSize(9);
   doc.setTextColor(100, 100, 120);
-  let sy = hh + 35;
-  for (const stat of stats) {
-    doc.setFillColor(INDIGO.r, INDIGO.g, INDIGO.b);
-    doc.circle(MARGIN + 2, sy - 1, 1.2, 'F');
-    doc.text(stat, MARGIN + 8, sy);
-    sy += 6;
-  }
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text(dateStr, 20, hh + 16);
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
+  doc.text('Prepared for External Content Partner', 20, hh + 28);
 
   doc.setTextColor(170, 170, 190);
   doc.setFontSize(7);
-  doc.setFont('helvetica', 'italic');
-  doc.text('CONFIDENTIAL — For intended recipient only', MARGIN, ph - 12);
-  doc.text('Florida Financial Advisors North', pw - MARGIN, ph - 12, { align: 'right' });
-}
-
-const SERVICE_LINE_DESCRIPTIONS: Record<string, { audience: string; goal: string; desc: string }> = {
-  'Insurance Review': {
-    desc: 'Helps clients identify coverage gaps, eliminate redundancies, and ensure their insurance portfolio keeps pace with life changes.',
-    audience: 'Existing policyholders who have not had a review in 3+ years',
-    goal: 'Book a 15-minute complimentary coverage review',
-  },
-  'Under-Serviced Annuities': {
-    desc: 'Educates annuity owners on fees, surrender schedules, income riders, and optimization opportunities.',
-    audience: 'Clients with existing annuity contracts that may be underperforming',
-    goal: 'Book a 20-minute annuity health check',
-  },
-  'Retirement Planning': {
-    desc: 'Guides pre-retirees through savings milestones, Social Security timing, income strategies, and tax planning.',
-    audience: 'Individuals aged 50-65 planning for retirement',
-    goal: 'Schedule a 30-minute retirement readiness assessment',
-  },
-  'Investment Planning': {
-    desc: 'Covers core investment principles, asset allocation, fee management, and portfolio discipline.',
-    audience: 'Investors seeking a structured, principles-based approach',
-    goal: 'Book a 30-minute complimentary portfolio analysis',
-  },
-  'Second-Opinion Positioning': {
-    desc: 'Positions FFA North as an independent reviewer of existing financial plans for prospects who may be uncertain about their current advisor.',
-    audience: 'Prospects who may be dissatisfied or uncertain about their current advisor',
-    goal: 'Book a free, no-obligation second opinion review',
-  },
-};
-
-function renderExecutiveSummary(doc: jsPDF, y: number, pw: number, ph: number): number {
-  y = drawSectionTitle(doc, 1, 'Executive Summary', y, pw, ph);
-  const totalEmails = campaigns.reduce((s, c) => s + c.emailSequence.length, 0);
-  y = drawBody(doc, 'FFA North (Florida Financial Advisors North) is a financial advisory firm that uses automated email campaigns, educational presentation decks, and downloadable companion guides to nurture prospects through a 5-stage pipeline: Dormant, Education, Intent Signal, Qualified, and Licensed Rep. This document catalogs all existing marketing content and provides production guidelines for creating additional compliant content.', y, pw, ph);
-  y += 2;
-  y = drawSubHeading(doc, 'Current Content Inventory', y, pw, ph);
-  y = drawBullets(doc, [
-    `${campaigns.length} email campaigns with ${totalEmails} total email templates across 5 service lines`,
-    `${PRESENTATIONS.length} compliance-ready presentation decks (${PRESENTATIONS.reduce((s, p) => s + p.slideCount, 0)} total slides)`,
-    `${PDF_COMPANIONS.length} downloadable PDF companion guides (~${PDF_COMPANIONS.reduce((s, p) => s + p.pageCount, 0)} total pages)`,
-    `All content spans 5 service lines: Insurance Review, Under-Serviced Annuities, Retirement Planning, Investment Planning, and Second-Opinion Positioning`,
-    'All content is FINRA-compliant, educational in tone, and designed to generate warm leads without hard-sell tactics',
-  ], y, pw, ph);
-  return y;
-}
-
-function renderServiceLines(doc: jsPDF, y: number, pw: number, ph: number): number {
-  y = drawSectionTitle(doc, 2, 'Service Line Definitions', y, pw, ph);
-  y = drawBody(doc, 'Every piece of content maps to one of five service lines. Each service line has a distinct audience, messaging approach, and conversion goal.', y, pw, ph);
-  y += 2;
-
-  for (const sl of SERVICE_LINES) {
-    const cfg = SERVICE_LINE_CONFIG[sl];
-    const info = SERVICE_LINE_DESCRIPTIONS[sl];
-    if (!info) continue;
-
-    y = ensureSpace(doc, 30, y, pw, ph);
-    doc.setFillColor(cfg.color.startsWith('#') ? parseInt(cfg.color.slice(1, 3), 16) : 0, cfg.color.startsWith('#') ? parseInt(cfg.color.slice(3, 5), 16) : 0, cfg.color.startsWith('#') ? parseInt(cfg.color.slice(5, 7), 16) : 0);
-    doc.circle(MARGIN + 2, y - 1, 2, 'F');
-    doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.text(sl, MARGIN + 8, y);
-    y += 5;
-
-    y = drawBody(doc, info.desc, y, pw, ph);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(100, 100, 115);
-    y = ensureSpace(doc, 10, y, pw, ph);
-    doc.text(`Target Audience: `, MARGIN + 4, y);
-    doc.setFont('helvetica', 'normal');
-    doc.text(info.audience, MARGIN + 4 + doc.getTextWidth('Target Audience: '), y);
-    y += 4;
-    doc.setFont('helvetica', 'bold');
-    doc.text(`Conversion Goal: `, MARGIN + 4, y);
-    doc.setFont('helvetica', 'normal');
-    doc.text(info.goal, MARGIN + 4 + doc.getTextWidth('Conversion Goal: '), y);
-    y += 8;
-  }
-  return y;
-}
-
-function renderCampaignInventory(doc: jsPDF, y: number, pw: number, ph: number): number {
-  y = drawSectionTitle(doc, 3, 'Email Campaign Inventory', y, pw, ph);
-  const totalEmails = campaigns.reduce((s, c) => s + c.emailSequence.length, 0);
-  y = drawBody(doc, `FFA North currently operates ${campaigns.length} email campaigns containing ${totalEmails} total email templates. Each campaign is a multi-touch drip sequence designed to educate prospects and generate warm leads over a 30-70 day period.`, y, pw, ph);
-  y += 2;
-
-  for (const camp of campaigns) {
-    const lastDay = camp.emailSequence[camp.emailSequence.length - 1]?.sendDay || 0;
-    y = ensureSpace(doc, 20, y, pw, ph);
-
-    // Campaign header bar
-    doc.setFillColor(245, 245, 250);
-    doc.roundedRect(MARGIN, y - 4, pw - MARGIN * 2, 12, 2, 2, 'F');
-    doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.text(camp.name, MARGIN + 4, y + 3);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 100, 115);
-    doc.text(`${camp.serviceLine} | ${camp.emailSequence.length} emails | ${lastDay}-day sequence`, pw - MARGIN - 4, y + 3, { align: 'right' });
-    y += 14;
-
-    // Subject lines
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
-    y = ensureSpace(doc, 6, y, pw, ph);
-    doc.text('Email Subjects:', MARGIN + 4, y);
-    y += 5;
-
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(55, 55, 70);
-    doc.setFontSize(8);
-    for (let i = 0; i < camp.emailSequence.length; i++) {
-      const step = camp.emailSequence[i];
-      y = ensureSpace(doc, 5, y, pw, ph);
-      doc.text(`${i + 1}. Day ${step.sendDay}: "${step.subject}"`, MARGIN + 8, y);
-      y += 4;
-    }
-    y += 2;
-
-    // Sample email (first email body)
-    const firstEmail = camp.emailSequence[0];
-    if (firstEmail) {
-      y = ensureSpace(doc, 30, y, pw, ph);
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(INDIGO.r, INDIGO.g, INDIGO.b);
-      doc.text('Sample Email (Email #1):', MARGIN + 4, y);
-      y += 5;
-
-      const bodyText = firstEmail.bodyFormat === 'html' ? stripHtml(firstEmail.body) : firstEmail.body;
-      const truncated = bodyText.length > 600 ? bodyText.substring(0, 600) + '...' : bodyText;
-      const cw = pw - MARGIN * 2 - 12;
-      const bodyLines = doc.splitTextToSize(truncated, cw);
-
-      const boxH = Math.min(bodyLines.length * 3.5 + 10, 60);
-      y = ensureSpace(doc, boxH + 4, y, pw, ph);
-
-      doc.setFillColor(248, 248, 252);
-      doc.setDrawColor(220, 220, 230);
-      doc.setLineWidth(0.3);
-      doc.roundedRect(MARGIN + 4, y - 3, pw - MARGIN * 2 - 8, boxH, 2, 2, 'FD');
-
-      doc.setFontSize(7.5);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(70, 70, 85);
-      const visibleLines = bodyLines.slice(0, Math.floor((boxH - 6) / 3.5));
-      doc.text(visibleLines, MARGIN + 10, y + 2);
-      y += boxH + 6;
-    }
-    y += 4;
-  }
-  return y;
-}
-
-function renderPresentationInventory(doc: jsPDF, y: number, pw: number, ph: number): number {
-  y = drawSectionTitle(doc, 4, 'Presentation Deck Inventory', y, pw, ph);
-  y = drawBody(doc, `FFA North has ${PRESENTATIONS.length} compliance-ready presentation decks, one for each service line. Each deck contains 10 slides and is designed for use in client meetings, seminars, and webinars.`, y, pw, ph);
-  y += 2;
-
-  for (const deck of PRESENTATIONS) {
-    y = ensureSpace(doc, 16, y, pw, ph);
-    doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.text(deck.title, MARGIN, y);
-    y += 4;
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 100, 115);
-    doc.text(`${deck.serviceLine} | ${deck.slideCount} slides`, MARGIN, y);
-    y += 5;
-
-    doc.setFontSize(8);
-    doc.setTextColor(55, 55, 70);
-    for (let i = 0; i < deck.slides.length; i++) {
-      y = ensureSpace(doc, 5, y, pw, ph);
-      const typeLabel = deck.slides[i].type !== 'content' ? ` (${deck.slides[i].type})` : '';
-      doc.text(`${i + 1}. ${deck.slides[i].title}${typeLabel}`, MARGIN + 6, y);
-      y += 3.8;
-    }
-    y += 6;
-  }
-  return y;
-}
-
-function renderCompanionInventory(doc: jsPDF, y: number, pw: number, ph: number): number {
-  y = drawSectionTitle(doc, 5, 'Companion Guide Inventory', y, pw, ph);
-  y = drawBody(doc, `FFA North has ${PDF_COMPANIONS.length} downloadable PDF companion guides that accompany email campaigns. These are educational documents designed to be attached to emails or offered as downloads after a prospect shows interest.`, y, pw, ph);
-  y += 2;
-
-  for (const guide of PDF_COMPANIONS) {
-    y = ensureSpace(doc, 16, y, pw, ph);
-    doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.text(guide.title, MARGIN, y);
-    y += 4;
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 100, 115);
-    doc.text(`${guide.serviceLine} | ${guide.pageCount} pages | ${guide.sections.length} sections`, MARGIN, y);
-    y += 5;
-
-    doc.setFontSize(8);
-    doc.setTextColor(55, 55, 70);
-    for (const section of guide.sections) {
-      y = ensureSpace(doc, 5, y, pw, ph);
-      doc.text(`- ${section.title} (${section.type})`, MARGIN + 6, y);
-      y += 3.8;
-    }
-    y += 6;
-  }
-  return y;
-}
-
-function renderProductionGuidelines(doc: jsPDF, y: number, pw: number, ph: number): number {
-  y = drawSectionTitle(doc, 6, 'Content Production Guidelines', y, pw, ph);
-  y = drawBody(doc, 'All content produced for FFA North must follow these voice, tone, and formatting standards. Consistency across all materials is critical for brand trust and compliance.', y, pw, ph);
-  y += 2;
-
-  y = drawSubHeading(doc, 'Voice & Tone Standards', y, pw, ph);
-  y = drawBullets(doc, [
-    'Warm, consultative, and educational — never pushy, salesy, or aggressive',
-    'First-person voice: "I noticed," "we see regularly," "our team has found"',
-    'Acknowledges complexity and respects the reader\'s autonomy and timeline',
-    'Soft calls-to-action: "Would it be helpful to...?", "Just reply", "no cost, no obligation"',
-    'Avoids jargon — explains financial concepts in plain, accessible language',
-    'Every piece of content should leave the reader feeling informed, not pressured',
-    'Use story-driven examples with anonymized client scenarios to illustrate points',
-  ], y, pw, ph);
-
-  y = drawSubHeading(doc, 'Email Format Specifications', y, pw, ph);
-  y = drawBullets(doc, [
-    'Subject lines: curiosity-driven, under 50 characters, no spam trigger words (FREE, ACT NOW, LIMITED TIME, URGENT)',
-    'Body length: 150-300 words per email — concise and scannable',
-    'Structure: personal greeting with {{first_name}} token > educational hook > 2-3 key points or story > soft CTA',
-    'Short paragraphs: 2-3 sentences maximum, with bullet points for lists of 3+ items',
-    'Sign-off: "Warm regards," or "Best regards," followed by "The FFA North Team"',
-    'Footer: firm name and address + topic-specific disclaimer (see Compliance section)',
-    'HTML formatting: clean semantic tags, no complex inline styles, no embedded images in body',
-    'Personalization: always use {{first_name}} in greeting, optionally {{company}} in body',
-  ], y, pw, ph);
-
-  y = drawSubHeading(doc, 'Presentation Format Specifications', y, pw, ph);
-  y = drawBullets(doc, [
-    '10 slides per deck, landscape layout, branded with FFA North colors',
-    'Slide structure: Title > The Challenge > Our Approach > Key Benefits > Case Study > Process Overview > Common Questions > Next Steps (CTA) > Disclaimer > Contact',
-    '4-5 bullet points per content slide — concise, actionable, jargon-free',
-    'Case studies: use anonymized client stories with specific but fictional numbers and outcomes',
-    'CTA slides: offer a specific, low-commitment next step (e.g., "15-minute no-obligation call")',
-    'Every deck must include a compliance disclaimer slide and firm contact information',
-  ], y, pw, ph);
-
-  y = drawSubHeading(doc, 'Companion Guide Format Specifications', y, pw, ph);
-  y = drawBullets(doc, [
-    '3-4 pages per guide, portrait layout, branded cover page',
-    'Section types to use: heading (intro paragraph), body (bullet points), checklist (actionable items with checkboxes), table (comparison data), callout (highlighted CTA box with accent border)',
-    'Always end with a callout CTA section and a compliance disclaimer page',
-    'Use tables for fee comparisons, milestone timelines, and risk profile breakdowns',
-    'Checklists should have 5-7 actionable, specific items the reader can self-assess',
-    'Each guide should complement a specific email campaign and expand on the campaign\'s educational content',
-  ], y, pw, ph);
-
-  return y;
-}
-
-function renderComplianceRequirements(doc: jsPDF, y: number, pw: number, ph: number): number {
-  y = drawSectionTitle(doc, 7, 'Compliance Requirements', y, pw, ph);
-  y = drawBody(doc, 'All content produced for FFA North must comply with FINRA regulations and CAN-SPAM requirements. Content that fails compliance review will be returned for revision. Non-compliant content must never be distributed.', y, pw, ph);
-  y += 2;
-
-  y = drawSubHeading(doc, 'FINRA Rule 2210 — Communications with the Public', y, pw, ph);
-  y = drawBullets(doc, [
-    'All content must be fair, balanced, and not misleading',
-    'No exaggerated claims or guarantees of results',
-    'The firm (FFA North) must be clearly identified in all materials',
-    'No predictions of future investment performance',
-    'Benefits must be balanced with risks and limitations — never present only the upside',
-  ], y, pw, ph);
-
-  y = drawSubHeading(doc, 'FINRA Rule 2111 — Suitability', y, pw, ph);
-  y = drawBullets(doc, [
-    'Content must be educational, not advisory — position as information, not personalized recommendations',
-    'No specific product recommendations (do not name specific funds, policies, or carriers)',
-    'Avoid directive language: never use "you should," "we recommend," or "you need to"',
-    'Use educational framing: "many clients find," "one approach is," "it may be worth considering"',
-  ], y, pw, ph);
-
-  y = drawSubHeading(doc, 'FINRA Rule 3110 — Supervision', y, pw, ph);
-  y = drawBullets(doc, [
-    'All content requires appropriate disclaimers at the bottom of every piece',
-    'Materials must pass principal review before distribution to any prospect or client',
-  ], y, pw, ph);
-
-  y = drawSubHeading(doc, 'FINRA Rule 4511 — Books and Records', y, pw, ph);
-  y = drawBullets(doc, [
-    'All content must be suitable for 3-year retention and regulatory audit',
-    'Professional tone, accurate information, and verifiable claims only',
-  ], y, pw, ph);
-
-  y = drawSubHeading(doc, 'CAN-SPAM Compliance (for all emails)', y, pw, ph);
-  y = drawBullets(doc, [
-    'Must include an unsubscribe mechanism or reference to one',
-    'Sender must be clearly identified with accurate From name and email',
-    'Subject lines must accurately reflect the content of the email (no deception)',
-    'Physical mailing address required in every email footer',
-  ], y, pw, ph);
-
-  y = drawSubHeading(doc, 'Required Disclaimer Format', y, pw, ph);
-  y = drawBody(doc, 'Every piece of content must include a disclaimer footer. The standard format is:', y, pw, ph);
-  y = ensureSpace(doc, 22, y, pw, ph);
-  doc.setFillColor(248, 247, 255);
-  doc.setFillColor(INDIGO.r, INDIGO.g, INDIGO.b);
-  doc.rect(MARGIN, y - 2, 2.5, 18, 'F');
-  doc.setFillColor(248, 247, 255);
-  doc.rect(MARGIN + 2.5, y - 2, pw - MARGIN * 2 - 2.5, 18, 'F');
-  doc.setFontSize(7.5);
-  doc.setFont('helvetica', 'italic');
-  doc.setTextColor(80, 75, 110);
-  doc.text('Florida Financial Advisors North · 1200 N Federal Hwy, Boca Raton, FL 33432.', MARGIN + 8, y + 2);
-  doc.text('[Topic-specific qualifier — see below]. Individual situations vary.', MARGIN + 8, y + 6);
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7);
-  doc.text('Insurance: "Insurance products involve risk and may not be suitable for all individuals."', MARGIN + 8, y + 10);
-  doc.text('Investments: "Past performance is not indicative of future results. Diversification does not ensure a profit."', MARGIN + 8, y + 13);
-  y += 22;
-
-  y = drawSubHeading(doc, 'Prohibited Language — Never Use', y, pw, ph);
-  y = drawBullets(doc, [
-    '"Guaranteed returns" or "risk-free" — these are strictly prohibited in financial marketing',
-    '"You should" or "We recommend" — use "you may want to consider" or "many clients find it helpful to"',
-    'Specific product names (fund names, carrier names, policy numbers) without full disclosures',
-    'Performance predictions or promises of specific outcomes ("you will earn," "expect returns of")',
-    'Superlatives: "best," "safest," "only option," "#1 rated" without verifiable third-party source',
-    '"Act now," "limited time," "don\'t miss out" — urgency-based pressure language',
-  ], y, pw, ph);
-
-  y = drawBody(doc, 'Compliance Scoring: All content is scored on a 100-point scale. 90-100 = Pass (compliant). 70-89 = Warning (minor issues, revise before use). 0-69 = Fail (significant issues, must be rewritten).', y, pw, ph);
-  return y;
+  doc.text('CONFIDENTIAL', 20, ph - 12);
+  doc.text('FFA North', pw - 20, ph - 12, { align: 'right' });
 }
 
-function renderContentGaps(doc: jsPDF, y: number, pw: number, ph: number): number {
-  y = drawSectionTitle(doc, 8, 'Content Gaps & New Content Needed', y, pw, ph);
-  y = drawBody(doc, 'The following areas represent opportunities for content expansion. These should be prioritized based on business goals and seasonal relevance.', y, pw, ph);
-  y += 2;
-
-  y = drawSubHeading(doc, 'Additional Campaigns Needed', y, pw, ph);
-  y = drawBullets(doc, [
-    'Under-Serviced Annuities: a second campaign focused on 1035 exchanges and annuity modernization',
-    'Second-Opinion Positioning: a follow-up campaign for prospects who did not respond to the initial sequence',
-    'Estate Planning: a dedicated campaign (new service line opportunity) covering wills, trusts, and beneficiary planning',
-    'Tax Season Campaign (January-April): tax-efficient strategies, IRA contributions, Roth conversions, year-end planning',
-  ], y, pw, ph);
-
-  y = drawSubHeading(doc, 'Cross-Sell Bridge Campaigns', y, pw, ph);
-  y = drawBullets(doc, [
-    'Insurance Review to Investment Planning: bridge campaign for insurance clients ready for investment guidance',
-    'Retirement Planning to Under-Serviced Annuities: bridge campaign for retirees with underperforming annuities',
-    'Any Service Line to Second Opinion: re-engagement campaign targeting clients of competing firms',
-  ], y, pw, ph);
-
-  y = drawSubHeading(doc, 'New Content Formats', y, pw, ph);
-  y = drawBullets(doc, [
-    'One-pager fact sheets for each service line (printable, leave-behind format for in-person meetings)',
-    'Seminar and webinar slide decks (60-minute educational presentations with speaker notes)',
-    'Social media content calendar (LinkedIn posts, compliance-approved snippets, weekly posting schedule)',
-    'Video scripts for 2-3 minute educational explainer videos per service line',
-    'Client testimonial templates with FINRA-compliant anonymization guidelines',
-    'Seasonal content packages: tax season, open enrollment, year-end planning, new year financial resolutions',
-  ], y, pw, ph);
-
-  y = drawSubHeading(doc, 'Expansion of Existing Content', y, pw, ph);
-  y = drawBullets(doc, [
-    'Each campaign should have 2-3 companion guides (currently most have only 1)',
-    'Presentation decks need industry-specific variants (e.g., healthcare professionals, small business owners, educators)',
-    'Email sequences should have A/B test variants for subject lines to optimize open rates',
-    'All companion guides should have a "quick reference" one-page summary version',
-  ], y, pw, ph);
-
-  return y;
-}
-
-function renderDisclaimer(doc: jsPDF, pw: number, ph: number) {
-  doc.addPage();
-  drawPageHeader(doc, pw);
-  let y = 28;
+function drawSectionTitle(
+  doc: jsPDF,
+  title: string,
+  y: number,
+  pw: number
+): number {
   doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
-  doc.setFontSize(14);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.text('Important Disclosures', MARGIN, y);
-  doc.setDrawColor(INDIGO.r, INDIGO.g, INDIGO.b);
-  doc.setLineWidth(0.4);
-  doc.line(MARGIN, y + 4, MARGIN + 35, y + 4);
-  y += 14;
+  const lines = doc.splitTextToSize(title, pw - 40);
+  doc.text(lines, 20, y);
+  y += lines.length * 7 + 3;
 
-  const disclaimer = 'This document and all content described herein are the proprietary materials of Florida Financial Advisors North (FFA North), 1200 N Federal Hwy, Boca Raton, FL 33432. This material is provided to authorized content development partners for the sole purpose of producing compliant marketing materials on behalf of FFA North. All content produced must adhere to the compliance guidelines specified in this document and is subject to review and approval by FFA North\'s compliance team before distribution. Securities and advisory services offered through FFA North. Past performance is not indicative of future results. All examples are hypothetical or anonymized and do not represent any specific client outcome. Please consult with a qualified financial professional before making any financial decisions. Insurance products are offered through licensed insurance agencies. FFA North and its representatives are not tax or legal advisors. Guarantees are backed by the claims-paying ability of the issuing insurance company.';
+  doc.setDrawColor(INDIGO.r, INDIGO.g, INDIGO.b);
+  doc.setLineWidth(0.7);
+  doc.line(20, y, 60, y);
+  y += 10;
+
+  return y;
+}
+
+function drawSubHeading(
+  doc: jsPDF,
+  text: string,
+  y: number,
+  pw: number
+): number {
+  doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  const lines = doc.splitTextToSize(text, pw - 40);
+  doc.text(lines, 20, y);
+  y += lines.length * 5.5 + 4;
+  return y;
+}
+
+function drawBody(
+  doc: jsPDF,
+  text: string,
+  y: number,
+  pw: number,
+  ph: number
+): number {
+  const cw = pw - 40;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(60, 60, 75);
+  const lines = doc.splitTextToSize(text, cw);
+
+  for (let i = 0; i < lines.length; i++) {
+    y = ensureSpace(doc, 5, y, pw, ph);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(60, 60, 75);
+    doc.text(lines[i], 20, y);
+    y += 4.5;
+  }
+  y += 4;
+  return y;
+}
+
+function drawBullets(
+  doc: jsPDF,
+  bullets: string[],
+  y: number,
+  pw: number,
+  ph: number
+): number {
+  const cw = pw - 40;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(55, 55, 70);
+
+  for (const bullet of bullets) {
+    const bulletLines = doc.splitTextToSize(bullet, cw - 12);
+    y = ensureSpace(doc, bulletLines.length * 4.5 + 4, y, pw, ph);
+
+    doc.setFillColor(INDIGO.r, INDIGO.g, INDIGO.b);
+    doc.circle(22.5, y - 1.2, 1.2, 'F');
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(55, 55, 70);
+    doc.text(bulletLines, 28, y);
+    y += bulletLines.length * 4.5 + 4;
+  }
+  y += 2;
+  return y;
+}
+
+function drawSampleEmail(
+  doc: jsPDF,
+  subject: string,
+  body: string,
+  y: number,
+  pw: number,
+  ph: number
+): number {
+  const cw = pw - 40;
+  const cleanBody = stripHtml(body).trim();
+  const truncated = cleanBody.length > 600 ? cleanBody.substring(0, 600) + '...' : cleanBody;
+
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'bold');
+  const subjectLines = doc.splitTextToSize('Subject: ' + subject, cw - 16);
+  doc.setFont('helvetica', 'normal');
+  const bodyLines = doc.splitTextToSize(truncated, cw - 16);
+  const boxHeight = subjectLines.length * 4 + bodyLines.length * 3.8 + 16;
+
+  y = ensureSpace(doc, boxHeight + 8, y, pw, ph);
+
+  doc.setFillColor(240, 240, 245);
+  doc.roundedRect(20, y - 2, cw, boxHeight, 2, 2, 'F');
+
+  doc.setFillColor(INDIGO.r, INDIGO.g, INDIGO.b);
+  doc.rect(20, y - 2, 2.5, boxHeight, 'F');
+
+  let innerY = y + 4;
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
+  doc.text('Sample Draft Email (shows tone & style to follow):', 28, innerY);
+  innerY += 5;
+
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(60, 55, 100);
+  doc.text(subjectLines, 28, innerY);
+  innerY += subjectLines.length * 4 + 3;
 
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(100, 100, 115);
-  const lines = doc.splitTextToSize(disclaimer, pw - MARGIN * 2);
-  doc.text(lines, MARGIN, y);
+  doc.setTextColor(70, 70, 85);
+  doc.text(bodyLines, 28, innerY);
+
+  y += boxHeight + 6;
+  return y;
 }
 
 export async function POST() {
@@ -576,61 +279,396 @@ export async function POST() {
     const pw = doc.internal.pageSize.getWidth();
     const ph = doc.internal.pageSize.getHeight();
 
-    // Cover page
+    // ── Cover Page ──────────────────────────────────────────
     drawCover(doc, pw, ph);
 
-    // Section 1: Executive Summary
+    // ── Section 1: Executive Summary ────────────────────────
     doc.addPage();
     drawPageHeader(doc, pw);
-    let y = 28;
-    y = renderExecutiveSummary(doc, y, pw, ph);
+    let y = 25;
 
-    // Section 2: Service Lines
-    y += 4;
-    y = renderServiceLines(doc, y, pw, ph);
+    y = drawSectionTitle(doc, '1. Executive Summary', y, pw);
 
-    // Section 3: Email Campaign Inventory
+    const totalEmails = campaigns.reduce((sum, c) => sum + c.emailSequence.length, 0);
+    const execSummary =
+      'FFA North (Florida Financial Advisors North) is a financial advisory firm that nurtures prospects through a 5-stage pipeline: Dormant, Education, Intent Signal, Qualified, and Licensed Rep. We have developed the strategy, messaging framework, and draft content for all campaigns. We need your team to take these materials and produce the final, send-ready deliverables.';
+    y = drawBody(doc, execSummary, y, pw, ph);
+
+    y = ensureSpace(doc, 30, y, pw, ph);
+    y = drawSubHeading(doc, 'What We Have (Drafts & Outlines)', y, pw);
+    const inventoryBullets = [
+      `${campaigns.length} email campaigns with ${totalEmails} draft emails — subject lines, body copy, and sequence timing are written but need final HTML production, design polish, and QA`,
+      `${PRESENTATIONS.length} presentation outlines (${PRESENTATIONS.reduce((s, p) => s + p.slideCount, 0)} slides) — titles, bullet points, and structure are defined but need full PowerPoint/Keynote design and build`,
+      `${PDF_COMPANIONS.length} companion guide outlines (~${PDF_COMPANIONS.reduce((s, p) => s + p.pageCount, 0)} pages) — sections, checklists, and tables are written but need full graphic design and PDF production`,
+      '5 service lines: Insurance Review, Under-Serviced Annuities, Retirement Planning, Investment Planning, and Second-Opinion Positioning',
+    ];
+    y = drawBullets(doc, inventoryBullets, y, pw, ph);
+
+    y = ensureSpace(doc, 30, y, pw, ph);
+    y = drawSubHeading(doc, 'What We Need You to Build', y, pw);
+    const buildBullets = [
+      'EMAILS: Take our draft copy and produce final, responsive HTML email templates ready for SendGrid deployment. Mobile-friendly layout, proper {{first_name}} merge tags, and compliant footers required.',
+      'PRESENTATIONS: Take our slide outlines and build professionally designed PowerPoint decks with branded visuals, charts, icons, and speaker notes. 10 slides per deck, 5 decks total.',
+      'COMPANION GUIDES: Take our section outlines and produce professionally designed, print-ready PDF guides with branded layout, infographics, styled checklists, and formatted tables. 3-4 pages per guide, 7 guides total.',
+      'NEW CONTENT: Develop additional campaigns, formats, and materials as outlined in Section 8 of this document.',
+    ];
+    y = drawBullets(doc, buildBullets, y, pw, ph);
+
+    // ── Section 2: Service Line Definitions ─────────────────
     doc.addPage();
     drawPageHeader(doc, pw);
-    y = 28;
-    y = renderCampaignInventory(doc, y, pw, ph);
+    y = 25;
 
-    // Section 4: Presentation Deck Inventory
+    y = drawSectionTitle(doc, '2. Service Line Definitions', y, pw);
+
+    for (const sl of SERVICE_LINES) {
+      const config = SERVICE_LINE_CONFIG[sl];
+      const rgb = hexToRgb(config.color);
+      const desc = SERVICE_LINE_DESCRIPTIONS[sl] || '';
+
+      y = ensureSpace(doc, 20, y, pw, ph);
+
+      doc.setFillColor(rgb.r, rgb.g, rgb.b);
+      doc.circle(23, y - 1.5, 2, 'F');
+
+      doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text(sl, 28, y);
+      y += 6;
+
+      y = drawBody(doc, desc, y, pw, ph);
+      y += 2;
+    }
+
+    // ── Section 3: Email Campaign Inventory ─────────────────
     doc.addPage();
     drawPageHeader(doc, pw);
-    y = 28;
-    y = renderPresentationInventory(doc, y, pw, ph);
+    y = 25;
 
-    // Section 5: Companion Guide Inventory
-    y += 4;
-    y = renderCompanionInventory(doc, y, pw, ph);
+    y = drawSectionTitle(doc, '3. Email Campaigns — Draft Copy (Needs Final HTML Production)', y, pw);
+    y = drawBody(doc, 'The subject lines, body copy, send timing, and sequence structure are complete. Your team needs to produce these as final, responsive HTML email templates ready for SendGrid deployment. Each email must be mobile-friendly, include proper merge tags, and have a compliant footer. A sample draft email from each campaign is included to show the tone and style.', y, pw, ph);
+    y += 3;
 
-    // Section 6: Production Guidelines
+    for (const campaign of campaigns) {
+      y = ensureSpace(doc, 40, y, pw, ph);
+
+      doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      const campaignTitle = doc.splitTextToSize(campaign.name, pw - 40);
+      doc.text(campaignTitle, 20, y);
+      y += campaignTitle.length * 5 + 2;
+
+      const lastEmail = campaign.emailSequence[campaign.emailSequence.length - 1];
+      const duration = lastEmail ? lastEmail.sendDay : 0;
+      const metaText = `Service Line: ${campaign.serviceLine}  |  Emails: ${campaign.emailSequence.length}  |  Duration: ${duration} days`;
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 100, 115);
+      doc.text(metaText, 20, y);
+      y += 6;
+
+      // Email subject lines
+      for (let i = 0; i < campaign.emailSequence.length; i++) {
+        const email = campaign.emailSequence[i];
+        const line = `${i + 1}. ${email.subject} (Day ${email.sendDay})`;
+        const wrappedLine = doc.splitTextToSize(line, pw - 48);
+
+        y = ensureSpace(doc, wrappedLine.length * 4 + 2, y, pw, ph);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(55, 55, 70);
+        doc.text(wrappedLine, 24, y);
+        y += wrappedLine.length * 4 + 2;
+      }
+      y += 3;
+
+      // Sample email (first email body)
+      const firstEmail = campaign.emailSequence[0];
+      if (firstEmail && firstEmail.body) {
+        y = drawSampleEmail(doc, firstEmail.subject, firstEmail.body, y, pw, ph);
+      }
+
+      y += 6;
+    }
+
+    // ── Section 4: Presentation Deck Inventory ──────────────
     doc.addPage();
     drawPageHeader(doc, pw);
-    y = 28;
-    y = renderProductionGuidelines(doc, y, pw, ph);
+    y = 25;
 
-    // Section 7: Compliance Requirements
+    y = drawSectionTitle(doc, '4. Presentation Decks — Outlines Only (Needs Full PPT Design & Build)', y, pw);
+    y = drawBody(doc, 'Each outline below includes slide titles, bullet points, and content structure. Your team needs to design and build these as fully branded PowerPoint (or Keynote) decks with professional visuals, charts, icons, and speaker notes. Deliverable: 5 finished presentation files, 10 slides each.', y, pw, ph);
+    y += 3;
+
+    for (const deck of PRESENTATIONS) {
+      y = ensureSpace(doc, 30, y, pw, ph);
+
+      doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      const deckTitle = doc.splitTextToSize(deck.title, pw - 40);
+      doc.text(deckTitle, 20, y);
+      y += deckTitle.length * 5 + 2;
+
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 100, 115);
+      doc.text(`Service Line: ${deck.serviceLine}  |  Slides: ${deck.slideCount}`, 20, y);
+      y += 6;
+
+      for (let i = 0; i < deck.slides.length; i++) {
+        const slide = deck.slides[i];
+        const line = `${i + 1}. ${slide.title}`;
+        const wrappedLine = doc.splitTextToSize(line, pw - 48);
+
+        y = ensureSpace(doc, wrappedLine.length * 4 + 2, y, pw, ph);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(55, 55, 70);
+        doc.text(wrappedLine, 24, y);
+        y += wrappedLine.length * 4 + 2;
+      }
+      y += 8;
+    }
+
+    // ── Section 5: Companion Guide Inventory ────────────────
     doc.addPage();
     drawPageHeader(doc, pw);
-    y = 28;
-    y = renderComplianceRequirements(doc, y, pw, ph);
+    y = 25;
 
-    // Section 8: Content Gaps
+    y = drawSectionTitle(doc, '5. Companion Guides — Outlines Only (Needs Full PDF Design & Build)', y, pw);
+    y = drawBody(doc, 'Each outline below includes section titles, body text, checklists, comparison tables, and callout boxes. Your team needs to design and produce these as professionally branded, print-ready PDF documents with infographics, styled layouts, and visual hierarchy. Deliverable: 7 finished PDF guides, 3-4 pages each.', y, pw, ph);
+    y += 3;
+
+    for (const guide of PDF_COMPANIONS) {
+      y = ensureSpace(doc, 30, y, pw, ph);
+
+      doc.setTextColor(DARK_NAVY.r, DARK_NAVY.g, DARK_NAVY.b);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      const guideTitle = doc.splitTextToSize(guide.title, pw - 40);
+      doc.text(guideTitle, 20, y);
+      y += guideTitle.length * 5 + 2;
+
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 100, 115);
+      doc.text(`Service Line: ${guide.serviceLine}  |  Pages: ${guide.pageCount}`, 20, y);
+      y += 6;
+
+      for (const section of guide.sections) {
+        const line = `${section.title} (${section.type})`;
+        const wrappedLine = doc.splitTextToSize(line, pw - 48);
+
+        y = ensureSpace(doc, wrappedLine.length * 4 + 2, y, pw, ph);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(55, 55, 70);
+        doc.text(wrappedLine, 24, y);
+        y += wrappedLine.length * 4 + 2;
+      }
+      y += 8;
+    }
+
+    // ── Section 6: Content Production Guidelines ────────────
     doc.addPage();
     drawPageHeader(doc, pw);
-    y = 28;
-    y = renderContentGaps(doc, y, pw, ph);
+    y = 25;
 
-    // Final disclaimer page
-    renderDisclaimer(doc, pw, ph);
+    y = drawSectionTitle(doc, '6. Content Production Guidelines', y, pw);
 
-    // Add page footers to all pages except cover
+    // Voice & Tone Standards
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'Voice & Tone Standards', y, pw);
+    y = drawBullets(doc, [
+      'Warm, consultative, educational — never pushy or salesy',
+      'First-person voice: "I noticed," "we see regularly," "our team"',
+      'Acknowledges complexity and respects the reader\'s autonomy',
+      'Soft calls-to-action: "Would it be helpful to...", "Just reply", "no cost, no obligation"',
+      'Avoids jargon; explains financial concepts in plain language',
+      'Every piece of content should leave the reader feeling informed, not pressured',
+    ], y, pw, ph);
+
+    // Email Format Specifications
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'Email Format Specifications', y, pw);
+    y = drawBullets(doc, [
+      'Subject lines: curiosity-driven, under 50 characters, no spam trigger words (FREE, ACT NOW, LIMITED TIME)',
+      'Body length: 150-300 words per email',
+      'Structure: personal greeting with {{first_name}} \u2192 educational hook \u2192 2-3 key points or story \u2192 soft CTA',
+      'Short paragraphs (2-3 sentences max), bullet points for lists',
+      'Sign-off: "Warm regards," or "Best regards," followed by "The FFA North Team"',
+      'Footer: firm name and address + topic-specific disclaimer (see Compliance section)',
+      'HTML formatting: clean semantic tags, no inline styles, no images in body',
+    ], y, pw, ph);
+
+    // Presentation Format Specifications
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'Presentation Format Specifications', y, pw);
+    y = drawBullets(doc, [
+      '10 slides per deck, landscape layout',
+      'Slide structure: Title \u2192 The Challenge \u2192 Our Approach \u2192 Key Benefits \u2192 Case Study \u2192 Process Overview \u2192 Common Questions \u2192 Next Steps (CTA) \u2192 Disclaimer \u2192 Contact',
+      '4-5 bullet points per content slide',
+      'Case studies use anonymized client stories with specific (but fictional) numbers',
+      'CTA slides offer a specific, low-commitment next step',
+    ], y, pw, ph);
+
+    // Companion Guide Format Specifications
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'Companion Guide Format Specifications', y, pw);
+    y = drawBullets(doc, [
+      '3-4 pages per guide, portrait layout',
+      'Section types to use: heading (intro paragraph), body (bullet points), checklist (actionable items with checkboxes), table (comparison data), callout (highlighted CTA box)',
+      'Always end with a callout CTA section and a compliance disclaimer page',
+      'Use tables for fee comparisons, milestone timelines, and risk profile breakdowns',
+      'Checklists should have 5-7 actionable, specific items',
+    ], y, pw, ph);
+
+    // ── Section 7: Compliance Requirements ──────────────────
+    doc.addPage();
+    drawPageHeader(doc, pw);
+    y = 25;
+
+    y = drawSectionTitle(doc, '7. Compliance Requirements', y, pw);
+
+    // FINRA Rule 2210
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'FINRA Rule 2210 — Communications with the Public', y, pw);
+    y = drawBullets(doc, [
+      'All content must be fair, balanced, and not misleading',
+      'No exaggerated claims or guarantees of results',
+      'The firm must be clearly identified in all materials',
+      'No predictions of future investment performance',
+      'Benefits must be balanced with risks and limitations',
+    ], y, pw, ph);
+
+    // FINRA Rule 2111
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'FINRA Rule 2111 — Suitability', y, pw);
+    y = drawBullets(doc, [
+      'Content must be educational, not advisory',
+      'No specific product recommendations',
+      'Avoid directive language: "you should," "we recommend," "you need to"',
+      'Use educational framing: "many clients find," "one approach is," "it may be worth considering"',
+    ], y, pw, ph);
+
+    // FINRA Rule 3110
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'FINRA Rule 3110 — Supervision', y, pw);
+    y = drawBullets(doc, [
+      'All content requires appropriate disclaimers',
+      'Materials must pass principal review before distribution',
+    ], y, pw, ph);
+
+    // FINRA Rule 4511
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'FINRA Rule 4511 — Books and Records', y, pw);
+    y = drawBullets(doc, [
+      'All content must be suitable for 3-year retention',
+      'Professional tone and accurate information required',
+    ], y, pw, ph);
+
+    // CAN-SPAM Compliance
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'CAN-SPAM Compliance (for emails)', y, pw);
+    y = drawBullets(doc, [
+      'Must include unsubscribe mechanism',
+      'Sender must be clearly identified',
+      'Subject lines must accurately reflect content (no deception)',
+      'Physical mailing address required in footer',
+    ], y, pw, ph);
+
+    // Required Disclaimer Format
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'Required Disclaimer Format', y, pw);
+    y = drawBody(doc, '"Florida Financial Advisors North \u00b7 1200 N Federal Hwy, Boca Raton, FL 33432"', y, pw, ph);
+    y = drawBody(doc, 'Topic-specific qualifiers:', y, pw, ph);
+    y = drawBullets(doc, [
+      'Insurance: "Insurance products involve risk and may not be suitable for all individuals."',
+      'Investments: "Past performance is not indicative of future results. Diversification does not ensure a profit or protect against loss."',
+      'General: "This is educational content and does not constitute investment, tax, or legal advice."',
+      'Always include: "Individual situations vary."',
+    ], y, pw, ph);
+
+    // Prohibited Language
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'Prohibited Language — Never Use', y, pw);
+    y = drawBullets(doc, [
+      '"Guaranteed returns" or "risk-free"',
+      '"You should" or "We recommend" (use "you may want to consider")',
+      'Specific product names without full disclosures',
+      'Performance predictions or promises of specific outcomes',
+      'Superlatives: "best," "safest," "only option"',
+    ], y, pw, ph);
+
+    // ── Section 8: Content Gaps & New Content Needed ────────
+    doc.addPage();
+    drawPageHeader(doc, pw);
+    y = 25;
+
+    y = drawSectionTitle(doc, '8. Content Gaps & New Content Needed', y, pw);
+
+    // Additional Campaigns Needed
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'Additional Campaigns Needed', y, pw);
+    y = drawBullets(doc, [
+      'Under-Serviced Annuities needs a second campaign focused on 1035 exchanges and annuity modernization',
+      'Second-Opinion Positioning needs a follow-up campaign for prospects who did not respond to the first',
+      'A dedicated estate planning campaign (new service line opportunity)',
+      'Tax season campaign (January-April): tax-efficient strategies, IRA contributions, Roth conversions',
+    ], y, pw, ph);
+
+    // Cross-Sell Campaigns
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'Cross-Sell Campaigns', y, pw);
+    y = drawBullets(doc, [
+      'Insurance Review \u2192 Investment Planning bridge campaign',
+      'Retirement Planning \u2192 Under-Serviced Annuities bridge campaign',
+      'Any service line \u2192 Second Opinion (for clients of other firms)',
+    ], y, pw, ph);
+
+    // New Content Formats
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'New Content Formats', y, pw);
+    y = drawBullets(doc, [
+      'One-pager fact sheets for each service line (printable, leave-behind format)',
+      'Seminar/webinar slide decks (60-minute educational presentations)',
+      'Social media content calendar (LinkedIn posts, compliance-approved snippets)',
+      'Video scripts for 2-3 minute educational explainers',
+      'Client testimonial templates (with FINRA-compliant anonymization guidelines)',
+      'Seasonal content packages: tax season, open enrollment, year-end planning, new year financial resolutions',
+    ], y, pw, ph);
+
+    // Expansion of Existing Content
+    y = ensureSpace(doc, 20, y, pw, ph);
+    y = drawSubHeading(doc, 'Expansion of Existing Content', y, pw);
+    y = drawBullets(doc, [
+      'Each campaign should have 2-3 companion guides (currently 1 per campaign)',
+      'Presentation decks need industry-specific variants (e.g., healthcare professionals, small business owners)',
+      'Email sequences should have A/B test variants for subject lines',
+    ], y, pw, ph);
+
+    // ── Final Page: Disclaimer ──────────────────────────────
+    doc.addPage();
+    drawPageHeader(doc, pw);
+    y = 25;
+
+    y = drawSectionTitle(doc, 'Important Disclosures', y, pw);
+
+    const disclaimerText =
+      'This document and all content described herein are the proprietary materials of Florida Financial Advisors North (FFA North), 1200 N Federal Hwy, Boca Raton, FL 33432. This material is provided to authorized content development partners for the sole purpose of producing compliant marketing materials on behalf of FFA North. All content produced must adhere to the compliance guidelines specified in this document and is subject to review and approval by FFA North\'s compliance team before distribution. Securities and advisory services offered through FFA North. Past performance is not indicative of future results. Insurance products are offered through licensed insurance agencies. FFA North and its representatives are not tax or legal advisors.';
+
+    y = drawBody(doc, disclaimerText, y, pw, ph);
+
+    // ── Add footers to all pages ────────────────────────────
     const totalPages = doc.getNumberOfPages();
-    for (let i = 2; i <= totalPages; i++) {
+    for (let i = 1; i <= totalPages; i++) {
       doc.setPage(i);
-      drawPageFooter(doc, i - 1, pw, ph);
+      if (i > 1) {
+        drawPageFooter(doc, i - 1, totalPages - 1, pw, ph);
+      }
     }
 
     const pdfBuffer = doc.output('arraybuffer');
@@ -638,12 +676,15 @@ export async function POST() {
     return new NextResponse(pdfBuffer, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="FFA_North_Content_Library_and_Production_Guidelines.pdf"',
+        'Content-Disposition': 'attachment; filename="FFA_North_Vendor_Content_Brief.pdf"',
       },
     });
   } catch (error) {
     console.error('Vendor brief PDF generation error:', error);
     const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: `Failed to generate vendor brief: ${message}` }, { status: 500 });
+    return NextResponse.json(
+      { error: `Failed to generate vendor brief PDF: ${message}` },
+      { status: 500 }
+    );
   }
 }
